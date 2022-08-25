@@ -1,5 +1,6 @@
 import type { NavMenuItem } from '@/components/core/navbar/navbar';
 import { defineStore } from 'pinia';
+import axiosClient from '@/services/httpService';
 
 type menuItems = NavMenuItem[];
 
@@ -19,5 +20,10 @@ export const useNavMenuItemStore = defineStore({
     add(menuItem: NavMenuItem) {
       this.navMenutItems.push(menuItem);
     },
+
+    fetchMenuItems(): NavMenuItem[] {
+      
+    }
   }
 });
+``

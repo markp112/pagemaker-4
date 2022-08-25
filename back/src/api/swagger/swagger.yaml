@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  title: Pagemaker API.
+  version: 0.1.0
+servers:
+  - url: http://localhost:4200/api/v1.0
+    description: Pagemaker API V1.0
+paths:
+  /private/menus/navmenu/{isLoggedIn}:
+    get:
+      tags:
+        - navmenu
+      summary: returns list of navmenu items
+      description: if the user is logged in then full list of options are returned otherwise options to register and login are returned
+      parameters:
+        - name: isLoggedIn
+          in: path
+          required: true
+          description: status of logged in user
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: 'JSON array of menu items'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  $ref: '#/components/schemas/NavMenuItem'
+
+components:
+  schemas:
+    NavMenuItem:
+      type: object
+      title: Nav Menu Item
+      properties:
+        id:
+          type: string
+          title: unique identifier for this menu item
+        navText:
+          type: string
+          description:  text to appear in the menu
+        navLink:
+          type: string
+          description: page url to link to
+        isVisible:
+          type: boolean
+          description: Toggle to show hide the menu item
+        isLoggedIn:
+          type: boolean
+          description: Chooses if the menu option is available according to whether the user is logged in or not, set to false to show on the logged out menu, to true to show when user is logged in
+        

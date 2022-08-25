@@ -57,7 +57,9 @@ export default {
     const store = useNavMenuItemStore();
 
     async function menuItems(): NavMenuItem[] {
-      if (store.getMenuItems(false).length === 0)
+      if (store.getMenuItems(false).length === 0) {
+        store.fetchMenuItems();
+      }
     }
 
     return { store };
