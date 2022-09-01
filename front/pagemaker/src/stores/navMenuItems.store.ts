@@ -1,6 +1,6 @@
 import type { NavMenuItem } from '@/components/core/navbar/navbar';
 import { defineStore } from 'pinia';
-import axiosClient from '@/services/httpService';
+import { axiosClient } from '@/services/httpService';
 
 type menuItems = NavMenuItem[];
 
@@ -11,8 +11,8 @@ export const useNavMenuItemStore = defineStore({
   }),
 
   getters: {
-    getMenuItems: (state) => (isLoggedIn: boolean): NavMenuItem[] | void => {
-      return state.navMenutItems.forEach(menuItem => menuItem.isLoggedIn === isLoggedIn)
+    getMenuItems: (state) => {
+      return state.navMenutItems;
     },
   },
   
@@ -21,9 +21,15 @@ export const useNavMenuItemStore = defineStore({
       this.navMenutItems.push(menuItem);
     },
 
-    fetchMenuItems(): NavMenuItem[] {
-      
+    async fetchMenuItems(isLoggedIn: boolean) {
+      const route = `/private/menus/navmenu/${isLoggedIn}`;
+      try {
+        const menu = await axiosClient().get<NavMenuItem[]>(route)
+          this.$state.navMenutItems = menu;
+      } catch(err) {
+        console.log(err);
+        throw(err);
+      }
     }
   }
 });
-``
