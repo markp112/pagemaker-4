@@ -5,7 +5,6 @@ export type HttpResponse = {
   data?: {}
 };
 
-const API = 'api/v1.0/';
 
 const backEndClient = axios.create({
   baseURL: import.meta.env.BASE_URL,
@@ -26,17 +25,18 @@ type Response = {
 };
 
 function getRoute(path: string): string {
-  return `${import.meta.env.BASE_URL}${import.meta.env.API}${import.meta.env.API_VERSION}${path}`;
+  return `${import.meta.env.VITE_BACKEND_API}${import.meta.env.VITE_API}${import.meta.env.VITE_API_VERSION}${path}`;
 }
 
 async function performGet<T>(path: string): Promise<T> {
   const route = getRoute(path);
   const response = await backEndClient.get(route);
+  console.log('%c⧭', 'color: #e50000', response.data);
   return new Promise((resolve, reject) => {
     if (response.status !== 200) {
       reject(response.data.err);
     } else {
-      resolve(response.data.data);
+      resolve(response.data);
     }
   });
 }

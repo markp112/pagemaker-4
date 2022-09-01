@@ -1,7 +1,7 @@
 <template>
-  <div class="py-2 bg-site-primary shadow-lg h-16 z-20">
+  <div class="py-2 bg-site-primary shadow-lg h-16 z-20 w-full">
     <nav class="text-on-primary flex items-center justify-between">
-      <div class="ml-8">
+      <div class="">
         <img
           src="@/assets/icons/layout-48.png"
           class="ml-2 text-primary-200 cursor-pointer hover:text-primary-100 self-start"
@@ -23,7 +23,7 @@
             @mouseleave="toggleMenu = !toggleMenu"
           >
             <li
-              v-for="(menuItem, idx) in menuItems"
+              v-for="(menuItem, idx) in navMenuItems"
               :key="idx"
               @click="menuItemClick(idx)"
               v-show="menuItem.isVisible"
@@ -38,46 +38,38 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
-import { storeToRefs } from 'pinia';
+<script lang="ts">
+import type { PropType } from 'vue';
+import { defineComponent, } from 'vue';
 import type { NavMenuItem } from './navbar';
 
+export default defineComponent({
+  name: 'navbar',
+  props: {
+    navMenuItems: {
+      type: Object as PropType<NavMenuItem[]>,
+    }
+  },
 
-export default {
+  mounted() {
+  },
+
   data() {
-    const store = useNavMenuItemStore();
     return {
       toggleMenu: false,
-      store,
     }
   },
 
-  setup() {
-    const store = useNavMenuItemStore();
-
-    async function menuItems(): NavMenuItem[] {
-      if (store.getMenuItems(false).length === 0) {
-        store.fetchMenuItems();
+  methods: {
+    menuItemClick(id: number) {
+      if (this.navMenuItems) {
+        this.$emit(this.navMenuItems[id].navLink);
+        // this.$router.push(this.navMenuItems[id].navLink);
+        this.toggleMenu = !this.toggleMenu;
       }
     }
-
-    return { store };
-  },
-  // name = "NavMenuComponent";
-  // store = useStore();
-
-  computed: {
-    menuItems(): NavMenuItem[] {
-      return s
-    } 
-  },
-
-
-  menuItemClick(id: number) {
-    this.$router.push(this.menuItems[id].navLink);
-    this.toggleMenu = !this.toggleMenu;
   }
 
-}
+});
+
 </script>

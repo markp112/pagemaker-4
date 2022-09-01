@@ -1,0 +1,102 @@
+
+.page-heading {
+  @apply font-bold;
+  @apply text-on-surface;
+  @apply text-left;
+  @apply ml-2;
+}
+
+.form-page-wrapper {
+  @apply flex;
+  @apply flex-row;
+  @apply justify-center;
+  @apply items-center;
+  @apply h-auto;
+  @apply mt-32;
+}
+
+.sidebar-panel {
+  @apply mt-3;
+  @apply bg-site-primary-dark;
+  @apply h-full;
+  @apply p-2;
+  @apply px-2;
+  @apply flex;
+  @apply flex-col;
+  @apply justify-start;
+  @apply text-on-primary;
+  @apply shadow-lg;
+}
+
+.sidebar-button-panel {
+  @apply flex;
+  @apply flex-row;
+  @apply justify-between;
+  @apply items-center;
+  @apply flex-wrap;
+  @apply w-full;
+}
+
+.sidebar-button-container {
+  @apply h-10;
+  @apply ml-2;
+  @apply flex;
+  @apply flex-row;
+  @apply justify-center;
+  @apply items-center;
+}
+
+.sidebar-radio-container {
+  @apply h-auto;
+  @apply flex;
+  @apply flex-row;
+  @apply justify-between;
+  @apply items-center;
+  @apply mt-1;
+  @apply p-1;
+  @apply w-3/4;
+}
+
+.sidebar-radio-container input {
+  @apply w-4;
+}
+
+
+@screen md {
+  .sidebar-button-panel {
+    @apply justify-between ml-2 mt-1;
+  }
+
+  .sidebar-button-container {
+    @apply mr-1 mt-1;
+  }
+
+}
+
+@screen sm {
+  .sidebar-button-panel {
+    @apply justify-start ml-1 mt-1;
+  }
+  .sidebar-button-container {
+    @apply mr-1 mt-2;
+  }
+}
+
+
+.dropdown-menu-background {
+  @apply bg-site-surface;
+}
+
+.dropdown-menu-item {
+  @apply text-on-surface;
+}
+
+.dropdown-menu-selected {
+  @apply text-on-primary;
+  @apply bg-site-primary-light;
+}
+
+.dropdown-menu-item:hover {
+  @apply  bg-site-primary-dark;
+  @apply  text-on-primary;
+}
