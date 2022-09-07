@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white-50 w-full h-screen flex flex-row justify-center mt-4 overflow-auto">
+  <div class="bg-accent-3 w-90 h-screen flex flex-row justify-center mt-4 overflow-auto">
     <Page :page="page" :scale="1"/>
   </div>
 </template>

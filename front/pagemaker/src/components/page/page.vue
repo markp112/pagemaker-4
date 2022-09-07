@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-gray-800 page-shadow" :style="getScaledPageSize">
+  <div class="border border-gray-800 page-shadow overflow-hidden bg-white" :style="getScaledPageSize">
 heloe
   </div>
 </template>

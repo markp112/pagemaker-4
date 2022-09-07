@@ -26,6 +26,7 @@ module.exports = {
         'site-surface': "#ffffff",
         'accent-1': "#D9C4B8",
         'accent-2': "#F2E3D5",
+        'accent-3': "#F6F6F6",
       },
     },
     width: (theme) => ({
@@ -81,6 +82,7 @@ module.exports = {
       '4/6': '66.666667%',
       '5/6': '83.333333%',
       full: '100%',
+      90: '90vh',
       screen: '100vh',
     }),
   },
