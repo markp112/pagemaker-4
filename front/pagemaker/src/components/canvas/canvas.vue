@@ -1,16 +1,17 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="bg-white-50 w-full h-screen flex flex-row justify-center mt-4 overflow-auto">
+  <div
+    class="bg-white-50 w-full h-screen flex flex-row justify-center mt-4 overflow-auto"
+  >
     <Page :page="page" :scale="1"/>
   </div>
 </template>
-
 
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent, } from 'vue';
 import type { Page } from '../page/model/model';
-import pageVue from '../page/page.vue';
-
+import pageVue from "../page/page.vue";
 
   export default defineComponent({
     name: 'page',

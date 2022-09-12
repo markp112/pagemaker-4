@@ -11,6 +11,7 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: "latest",
+    singleQuote: true,
   },
   overrides: [
     {
