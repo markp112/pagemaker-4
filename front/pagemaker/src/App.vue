@@ -1,7 +1,7 @@
 
 <template>
   <div
-    class="w-screen border-box font-body flex flex-col h-screen overflow-hidden"
+    class="w-screen border-box font-body h-screen overflow-hidden"
   >
     <HomeView />
   </div>

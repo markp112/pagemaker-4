@@ -1,11 +1,15 @@
 import express from 'express';
+import { privateRouter } from './private';
 
-const router = express.Router();
+const V1 = '/v1.0';
+const routerV1 = express.Router();
 
-router.get('/', function(req,res, next) {
-  res.send('v1.0 is working');
-})
+
+routerV1.use(V1, privateRouter);
+routerV1.get(V1, function(req,res, next) {
+  res.send('V1 route is working');
+});
 
 export {
-  router,
+  routerV1,
 }
