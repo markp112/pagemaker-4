@@ -20,9 +20,4 @@ type Page = {
   colour: string,
 };
 
-export {
-  Units,
-  Unit,
-  Dimension,
-  Page
-}
+export { Units, Unit, Dimension, Page };
