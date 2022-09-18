@@ -1,7 +1,7 @@
-import { UserCredential } from '@firebase/auth';
 import express from 'express';
 import { logger } from '../../../logger';
-import { auth, Credentials } from './controller/login';
+import { auth } from './controller';
+import type { Credentials }  from './controller/index';
 
 import { GenericError } from '../../../common/errors/customErrors';
 
@@ -13,6 +13,7 @@ authRouter.post(`${ROUTE_PATH}/login`, async (req, res, next) => {
     logger.info(`Route Called: auth/login`, req.body);
     const credentials: Credentials = req.body;
     const response = await auth().login(credentials);
+    console.log('%c⧭', 'color: #aa00ff', response);
     res.status(response.status).send(response);
   } catch (error) { 
     if (error instanceof GenericError) {

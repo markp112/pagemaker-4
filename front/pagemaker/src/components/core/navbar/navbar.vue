@@ -45,11 +45,14 @@ import type { NavMenuItem } from './navbar';
 
 export default defineComponent({
   name: 'navbar',
+
   props: {
     navMenuItems: {
       type: Object as PropType<NavMenuItem[]>,
     }
   },
+
+  emits: ['navMenuClicked',],
 
   mounted() {
   },
@@ -62,9 +65,10 @@ export default defineComponent({
 
   methods: {
     menuItemClick(id: number) {
+      console.log('%c⧭', 'color: #ffa640', id)
       if (this.navMenuItems) {
-        this.$emit(this.navMenuItems[id].navLink);
-        // this.$router.push(this.navMenuItems[id].navLink);
+        console.log('%c⧭', 'color: #00b300', this.navMenuItems)
+        this.$emit('navMenuClicked', this.navMenuItems[id].navLink);
         this.toggleMenu = !this.toggleMenu;
       }
     }

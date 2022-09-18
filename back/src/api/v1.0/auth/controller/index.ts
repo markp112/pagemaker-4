@@ -16,7 +16,7 @@ function auth() {
 		try {
 			const user = await signInWithEmailAndPassword(firebaseAuth, credentials.email, credentials.password);
 			response = {
-				data: user,
+				data: user.user.uid,
 				status: 200,
 			};
 			return response;

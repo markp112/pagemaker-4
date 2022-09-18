@@ -1,25 +1,21 @@
 
 
 <template>
-  <main class="w-full flex flex-col drop-shadow-lg">
-    <Navbar :nav-menu-items="menuItems"/>
-    <div class="flex flex-row justify-center w-100 relative ">
-      <div class="h-screen mr-4 absolute left-0 top-2 slide" :class="getToolbarClasses" >
-        <Toolbar @toggle-clicked="toolbarToggleClicked"/>
-      </div>
-      <div class="mt-4 bg-white" >
-        <Canvas />
-      </div>
-
+  <div class="flex flex-row justify-center w-100 relative ">
+    <div class="h-screen mr-4 absolute left-0 top-2 slide" :class="getToolbarClasses" >
+      <Toolbar @toggle-clicked="toolbarToggleClicked"/>
     </div>
-  </main>
+    <div class="mt-4 bg-white" >
+      <Canvas />
+    </div>
+
+  </div>
 </template>
 
 <script lang="ts">
 import type { NavMenuItem } from '@/components/core/navbar/navbar';
 import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
 import { defineComponent } from 'vue';
-import Navbar from "../components/core/navbar/navbar.vue";
 import Canvas from '@/components/canvas/canvas.vue';
 import Toolbar from '../components/core/toolbar/toolbar.vue';
 
@@ -27,10 +23,9 @@ import Toolbar from '../components/core/toolbar/toolbar.vue';
     name: 'main',
     
     components: {
-    Navbar,
-    Canvas,
-    Toolbar
-},
+      Canvas,
+      Toolbar
+    },
     
     data() {
       return {
@@ -63,12 +58,7 @@ import Toolbar from '../components/core/toolbar/toolbar.vue';
           this.toolbarWidth = 'w-2';
         }
         this.toolbarHidden = !this.toolbarHidden;
-      }
-    },
-
-    async mounted() {
-      await this.store.fetchMenuItems(true);
-      this.menuItems = this.store.getMenuItems;
+      },
     },
 
   })

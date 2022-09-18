@@ -41,13 +41,14 @@ async function performGet<T>(path: string): Promise<T> {
   });
 }
 
-async function getBase64(url: string) {
-  return backEndClient.get(url, { responseType: 'arraybuffer' })
-  .then(response => Buffer.from(response.data, 'binary').toString('base64'));
-}
+// async function getBase64(url: string) {
+//   return backEndClient.get(url, { responseType: 'arraybuffer' })
+//   .then(response => Buffer.from(response.data, 'binary').toString('base64'));
+// }
 
 async function performPost<T>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<Record<string, unknown> | undefined> {
   const route = getRoute(path);
+  console.log('%c⧭', 'color: #807160', route);
   const response: Response = await backEndClient.post(route, payload, config);
   console.log('%c⧭', 'color: #33cc99', response);
   return new Promise((resolve, reject) => {
@@ -68,7 +69,6 @@ async function performPost<T>(path: string, payload: T, config: AxiosRequestConf
 async function performPut<T>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<Record<string, unknown> | undefined> {
   const route = getRoute(path);
   const response: Response = await backEndClient.put(route, payload, config);
-  console.log('%c⧭', 'color: #33cc99', {response});
   return new Promise((resolve, reject) => {
     switch(response.status) {
       case 200:
@@ -101,11 +101,11 @@ function axiosClient() {
     return await performPut<T>(path, payload, config);
   }
 
-  async function get64(path: string): Promise<string> {
-    return await getBase64(path);
-  }
+  // async function get64(path: string): Promise<string> {
+  //   return await getBase64(path);
+  // }
 
-  return { get, post, put, get64 };
+  return { get, post, put, };
 } 
 
 export {
