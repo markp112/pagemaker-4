@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore/lite';
 import { default as secret } from '../secrets/firebase-config.json';
 
@@ -8,4 +9,6 @@ const app = initializeApp(firebaseConfig);
 
 const firebaseDb = getFirestore(app);
 
-export default firebaseDb;
+const auth = getAuth(app);
+
+export { firebaseDb, auth };
