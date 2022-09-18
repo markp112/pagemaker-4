@@ -6,6 +6,25 @@ servers:
   - url: http://localhost:4200/api/v1.0
     description: Pagemaker API V1.0
 paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+        - login
+      summary: log the user in
+      description: Post the login credentials to the auth service to log the user in
+      requestBody:
+        description: user name and password
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/login'
+      responses:
+        '200': 
+          description: user has successfully logged in
+        
+
   /private/menus/navmenu/{isLoggedIn}:
     get:
       tags:
@@ -52,3 +71,13 @@ components:
           type: boolean
           description: Chooses if the menu option is available according to whether the user is logged in or not, set to false to show on the logged out menu, to true to show when user is logged in
         
+    login:
+      type: object
+      title: Login credentials
+      properties:
+        email:
+          title: email of user
+          type: string
+        password:
+          title: password for user
+          type: string
