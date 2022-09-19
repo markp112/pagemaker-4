@@ -22,7 +22,7 @@ class DomainError extends Error {
 }
 
 class ResourceNotFoundError extends DomainError {
-  constructor(resource: string, status: string) {
+  constructor(resource: string) {
     super(`Resource ${resource} was not found`, 404);
   }
 }

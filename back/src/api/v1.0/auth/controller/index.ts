@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
-import { GenericError } from '../../../../common/errors/customErrors';
+import { GenericError, ResourceNotFoundError } from '../../../../common/errors/customErrors';
 import { auth as firebaseAuth } from '../../../../firebase/initFirebase';
 import { logger } from '../../../../logger';
 import type { Response } from '../../../types/index';
@@ -16,13 +16,19 @@ function auth() {
 		try {
 			const user = await signInWithEmailAndPassword(firebaseAuth, credentials.email, credentials.password);
 			response = {
-				data: user.user.uid,
+				data: { uid: user.user.uid, email: user.user.email, displayName: user.user.displayName },
 				status: 200,
 			};
 			return response;
 		} catch (error) {
-			logger.error(error.message);
-			throw new GenericError(error.message);
+			logger.error(error);
+			switch(error.code) {
+				case 'auth/user-not-found':
+				case 'auth/wrong-password':
+					throw new ResourceNotFoundError(credentials.email);
+				default:
+					throw new GenericError(error.message);
+			}
 		}
 	}
 

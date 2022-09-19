@@ -43,7 +43,19 @@ export default defineComponent({
     },
 
     async submitClicked(credential: Credentials) {
-      await auth().login(credential);
+      this.formErrors = [];
+      try {
+        const loggedIn = await auth().login(credential);
+        if (loggedIn) {
+          this.$router.push('/');
+        } else {
+          this.formErrors.push('Login failed !');
+        }
+      } 
+      catch (err) {
+        console.log('%c⧭', 'color: #007300', err)
+        this.formErrors.push(err as string);
+      }
     }
   }
 })
