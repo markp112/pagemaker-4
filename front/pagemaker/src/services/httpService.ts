@@ -1,4 +1,4 @@
-import axios, { type AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
 
 export type HttpResponse = {
   status: number,
@@ -15,13 +15,15 @@ const backEndClient = axios.create({
   },
 });
 
+type ResponseError =  {
+  msg: string,
+  systemErr: string,
+};
+
 type Response = {
   status: number,
   data?: Record<string, unknown>,
-  err?: {
-    msg: string,
-    systemErr: string,
-  },
+  err?: ResponseError,
 };
 
 function getRoute(path: string): string {
@@ -41,34 +43,31 @@ async function performGet<T>(path: string): Promise<T> {
   });
 }
 
-async function getBase64(url: string) {
-  return backEndClient.get(url, { responseType: 'arraybuffer' })
-  .then(response => Buffer.from(response.data, 'binary').toString('base64'));
-}
+// async function getBase64(url: string) {
+//   return backEndClient.get(url, { responseType: 'arraybuffer' })
+//   .then(response => Buffer.from(response.data, 'binary').toString('base64'));
+// }
 
 async function performPost<T>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<Record<string, unknown> | undefined> {
   const route = getRoute(path);
-  const response: Response = await backEndClient.post(route, payload, config);
-  console.log('%c⧭', 'color: #33cc99', response);
-  return new Promise((resolve, reject) => {
-    switch(response.status) {
-      case 200:
-        resolve(response.data);
-        break;
-      case 201: 
-        resolve(response.data);
-        break;
-      default: 
-        console.log(response, ' - resolved with')
-        reject('error')
-    }
-  })
+  console.log('%c⧭', 'color: #807160', route);
+  try {
+    const response: Response = await backEndClient.post(route, payload, config);
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError;
+    const errContent = err.response?.data;
+    const errMsg = errContent as Response;
+    console.log('%c⧭', 'color: #997326', errMsg);
+    
+  console.log('%c⧭', 'color: #731d6d', err.response?.data);
+    throw new Error(errMsg.err?.msg as string);
+  }
 }
 
 async function performPut<T>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<Record<string, unknown> | undefined> {
   const route = getRoute(path);
   const response: Response = await backEndClient.put(route, payload, config);
-  console.log('%c⧭', 'color: #33cc99', {response});
   return new Promise((resolve, reject) => {
     switch(response.status) {
       case 200:
@@ -101,13 +100,15 @@ function axiosClient() {
     return await performPut<T>(path, payload, config);
   }
 
-  async function get64(path: string): Promise<string> {
-    return await getBase64(path);
-  }
+  // async function get64(path: string): Promise<string> {
+  //   return await getBase64(path);
+  // }
 
-  return { get, post, put, get64 };
+  return { get, post, put, };
 } 
 
 export {
   axiosClient,
 };
+
+export type { ResponseError }

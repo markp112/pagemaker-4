@@ -1,9 +1,9 @@
-import { UserCredential } from '@firebase/auth';
 import express from 'express';
 import { logger } from '../../../logger';
-import { auth, Credentials } from './controller/login';
+import { auth } from './controller';
+import type { Credentials }  from './controller/index';
 
-import { GenericError } from '../../../common/errors/customErrors';
+import { GenericError, ResourceNotFoundError } from '../../../common/errors/customErrors';
 
 const authRouter = express.Router();
 const ROUTE_PATH = '/auth';
@@ -15,11 +15,11 @@ authRouter.post(`${ROUTE_PATH}/login`, async (req, res, next) => {
     const response = await auth().login(credentials);
     res.status(response.status).send(response);
   } catch (error) { 
-    if (error instanceof GenericError) {
+    if (error instanceof GenericError || error instanceof ResourceNotFoundError) {
       const response = error.getResponse();
       res.status(error._status).send(response);
     } else {
-      logger.log(error);
+      logger.info(error);
     }
   }
 })
