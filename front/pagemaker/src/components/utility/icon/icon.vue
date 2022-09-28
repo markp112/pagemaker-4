@@ -18,7 +18,7 @@ import { getImageUrl } from '@/common/getIcon';
 import errorMessages from '@/globals/errors/error-messqges';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import tootlipVue from '../notifications/tooltip/tootlip.vue';
+import tootlipVue from '../notifications/tooltip/toolTip.vue';
 import type { Icon } from './model/model';
 
 export default defineComponent ({
@@ -34,7 +34,6 @@ export default defineComponent ({
   },
 
   setup() {
-    
     return { getImageUrl }
   },
 

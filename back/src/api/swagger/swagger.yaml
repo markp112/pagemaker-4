@@ -29,6 +29,7 @@ paths:
     get:
       tags:
         - navmenu
+        - private
       summary: returns list of navmenu items
       description: if the user is logged in then full list of options are returned otherwise options to register and login are returned
       parameters:
@@ -48,6 +49,24 @@ paths:
                 items: 
                   type: object
                   $ref: '#/components/schemas/NavMenuItem'
+
+  /private/toolbar/toolbar-items/elements:
+    get:
+      tags:
+        - toolbar-elements
+        - private
+      summary: returns a list of elements for use in the right hand toolbar
+      description: returns a list of elements for use in the right hand toolbar
+      responses:
+        '200':
+          description: JSON array of toolbar-elements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#components/schemas/toolbar-elements'
 
 components:
   schemas:
@@ -81,3 +100,65 @@ components:
         password:
           title: password for user
           type: string
+    
+    toolbar-elements:
+      type: object
+      title: a toolbar element
+      properties:
+        classes:
+          title: list of tailwind classes that format this item on the screen
+          type: string
+          example: 'bg-gray-200 flex flex-row flex-wrap'
+        componentName:
+          title: unique name for this component
+          type: string
+        dimension:
+          title: initial dimensions of this object on the screen when dropped on a page
+          type: object
+          properties:
+            height:
+              title: height of item
+              type: object
+              $ref: '#components/schemas/unit-and-value'
+            width:
+              title: initial width
+              type: object
+              $ref: '#components/schemas/unit-and-value'
+        isContainer:
+          title: Can this element contain other elements
+          type: boolean
+        location:
+          title: Initial location of this item on the page
+          type: object
+          properties:
+            left:
+              title: left position of element
+              type: object
+              $ref: '#components/schemas/unit-and-value'
+            top:
+              title: top position of element
+              type: object
+              $ref: '#components/schemas/unit-and-value'
+        toolbarIcon:
+          title: icon shown in the toolbar, name of an image to display
+          type: string
+        tooltip:
+          title: tooltip to display
+          type: string
+        type:
+          title: type of element
+          type: string
+
+
+
+    unit-and-value:
+      type: object
+      title: CSS unit with value and type
+      properties:
+        unit:
+          title: unit to be used
+          type: string
+          example: 'px % em rem'
+        value:
+          title: numeric value assigned to the unit
+          type: number

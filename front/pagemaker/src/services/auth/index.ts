@@ -1,5 +1,4 @@
 import { useAuthStore, type User } from '@/stores/auth.store';
-import loginFormVue from '@/views/auth/loginForm.vue';
 import type { Credentials } from '@/views/auth/types';
 import { axiosClient } from '../httpService';
 

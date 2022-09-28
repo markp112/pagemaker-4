@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { auth } from '@/services/auth';
+import { auth } from '@/services/auth/';
 import  { defineComponent } from 'vue';
 import loginFormVue from './loginForm.vue';
 import type { Credentials } from './types';

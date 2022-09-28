@@ -17,14 +17,14 @@ import type { NavMenuItem } from '@/components/core/navbar/navbar';
 import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
 import { defineComponent } from 'vue';
 import Canvas from '@/components/canvas/canvas.vue';
-import Toolbar from '../components/core/toolbar/toolbar.vue';
+import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
 
   export default defineComponent({
     name: 'main',
     
     components: {
       Canvas,
-      Toolbar
+      Toolbar: toolbarPanelVue,
     },
     
     data() {

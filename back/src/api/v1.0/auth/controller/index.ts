@@ -12,11 +12,10 @@ export type Credentials = {
 function auth() {
 
 	async function login(credentials: Credentials): Promise<Response>  {
-		let response: Response;
 		try {
 			const user = await signInWithEmailAndPassword(firebaseAuth, credentials.email, credentials.password);
-			response = {
-				data: { uid: user.user.uid, email: user.user.email, displayName: user.user.displayName },
+			const response = {
+				data: { uid: user.user.uid, email: user.user.email, displayName: user.user.displayName, tokenId: user.user.getIdToken },
 				status: 200,
 			};
 			return response;

@@ -7,7 +7,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "resolveJsonModule": true,
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
       "@api/*": ["api/*"],
       "@common/*": ["common/*"],
