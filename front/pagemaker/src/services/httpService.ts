@@ -38,7 +38,7 @@ async function performGet<T>(path: string): Promise<T> {
     if (response.status !== 200) {
       reject(response.data.err);
     } else {
-      resolve(response.data);
+      resolve(response.data.data);
     }
   });
 }

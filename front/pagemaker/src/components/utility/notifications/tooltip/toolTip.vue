@@ -34,7 +34,7 @@ export default defineComponent({
 
   props: {
     showToolTip: Boolean,
-    tooltip: String
+    tooltip: String,
   },
 
   computed: {

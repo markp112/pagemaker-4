@@ -1,6 +1,11 @@
 <template>
-  <div class="border border-r-1 border-gray-400 h-full relative">
-    toolbar
+  <div class="border border-r-1 border-gray-400 h-full relative sidebar-panel">
+    <ToolbarContainer :toolbar-items="containerItems"
+      title="Containers"
+    />
+    <ToolbarContainer :toolbar-items="elementItems"
+      title="Elements"
+    />
     <span class="absolute -right-10 w-10 p-1 bottom-40 border border-gray-400 rounded-r-full z-10">
       <Icon-Image :icon-image="activeIcon" @icon-click="toggleToolbar($event as string)"></Icon-Image>
     </span>
@@ -26,10 +31,15 @@
 
 import iconVue from '@/components/utility/icon/icon.vue';
 import type { Icon } from '@/components/utility/icon/model/model';
+import { toolbarService } from '@/services/toolbar/toolbar.service';
+import { useToolbarStore } from '@/stores/toolbars.store';
 import { defineComponent } from 'vue';
+import ToolbarItem from './toolbarItem.vue';
+import ToolbarContainer from './toolbarContainer.vue';
+import type { Toolbar } from './model';
 
 export default defineComponent({
-  name: 'toolbar', 
+  name: 'toolbarPanel', 
 
   emits: ['toggle-clicked'],
 
@@ -37,17 +47,39 @@ export default defineComponent({
     return {
       activeIcon: TOOLBAR_ICON_HIDE,
       showToolbar: true,
+      store: useToolbarStore(),
     }
   },
 
+  async mounted() {
+    await toolbarService().getToolBarItems();
+    console.log(this.store.toolbarItems)
+  },
+
   components: {
-    'Icon-Image': iconVue,
+    "Icon-Image": iconVue,
+    ToolbarItem,
+    ToolbarContainer
+  },
+
+  computed: {
+    containerItems(): Toolbar[] {
+      return this.containerElements(true);
+    },
+
+    elementItems(): Toolbar[] {
+      return this.containerElements(false);
+    }
   },
 
   methods: {
     toggleToolbar(event: string): void {
       this.activeIcon = event === 'hideToolbar' ? TOOLBAR_ICON_UNHIDE : TOOLBAR_ICON_HIDE;
       this.$emit('toggle-clicked')
+    },
+
+    containerElements(isContainer: boolean): Toolbar[] {
+      return this.store.toolbarItems.filter(toolbarItem => toolbarItem.isContainer === isContainer);
     }
 
   },
