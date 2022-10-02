@@ -109,6 +109,7 @@
   @apply mt-3;
   @apply bg-site-primary-dark;
   @apply h-full;
+  @apply w-full;
   @apply p-2;
   @apply px-2;
   @apply flex;
@@ -132,6 +133,7 @@
   @apply ml-2;
   @apply flex;
   @apply flex-row;
-  @apply justify-center;
+  @apply flex-wrap;
+  @apply justify-start;
   @apply items-center;
 }

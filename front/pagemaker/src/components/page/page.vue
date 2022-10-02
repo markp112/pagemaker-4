@@ -9,7 +9,6 @@ import type { PropType } from 'vue';
 import { defineComponent, } from 'vue';
 import type { Page } from './model/model';
 
-
   export default defineComponent({
     name: 'page',
     props: {
