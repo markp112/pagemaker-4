@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-r-1 border-gray-400 h-full relative sidebar-panel">
+  <div class="sidebar-panel">
     <ToolbarContainer :toolbar-items="containerItems"
       title="Containers"
     />

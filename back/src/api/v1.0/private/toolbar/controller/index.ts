@@ -34,14 +34,11 @@ function toolbarElements() {
   
   async function get(): Promise<Response> {
 		try {
-
-      console.log('%c⧭', 'color: #00bf00', firebaseDb);
 			const firebaseResponse = await getDocs(collection(firebaseDb, COLLECTION));
       let toolbarElements: Toolbar[] = []; 
       firebaseResponse.docs.forEach(doc => {
         const toolbarElement = doc.data() as unknown as Toolbar;
         toolbarElements.push(toolbarElement);
-        console.log('%c⧭', 'color: #ffa640', toolbarElements);
       });
       const response: Response = {
 				data: toolbarElements,

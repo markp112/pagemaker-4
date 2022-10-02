@@ -2,10 +2,10 @@
 
 <template>
   <div class="flex flex-row justify-center w-100 relative ">
-    <div class="h-screen mr-4 absolute left-0 top-2 slide" :class="getToolbarClasses" >
+    <div class="h-screen mr-4 absolute left-0 top-2 slide w-1/12" :class="getToolbarClasses" >
       <Toolbar @toggle-clicked="toolbarToggleClicked"/>
     </div>
-    <div class="mt-4 bg-white" >
+    <div class="mt-4 bg-white w-10/12" >
       <Canvas />
     </div>
 
