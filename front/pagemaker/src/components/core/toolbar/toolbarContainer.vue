@@ -1,14 +1,11 @@
 <template>
-
-  <section class="mt-2">
-    <h4 class="text-siteSurface mb-8">{{ $props.title }}</h4>
-    <div class="sidebar-button-container">
+  <section class="sidebar-button-container">
+    <h4 class="text-siteSurface mb-2 block">{{ $props.title }}</h4>
       <ToolbarItem v-for="toolbarItem in toolbarItems"
         :key="toolbarItem.componentRef"
-        class="m-2"
+        class="sidebar-container-items"
         :toolbar-item="toolbarItem"
       />
-    </div>
   </section>
   </template>
 

@@ -1,13 +1,17 @@
 <template>
-  <div class="sidebar-panel">
-    <ToolbarContainer :toolbar-items="containerItems"
+  <div class="mt-3 bg-white h-full p-2 flex flex-col justify-start">
+    <ToolbarContainer v-if="!toolbarHidden"
+      :toolbar-items="containerItems"
       title="Containers"
     />
-    <ToolbarContainer :toolbar-items="elementItems"
+    <ToolbarContainer v-if="!toolbarHidden"
+      :toolbar-items="elementItems"
       title="Elements"
     />
-    <span class="absolute -right-10 w-10 p-1 bottom-40 border border-gray-400 rounded-r-full z-10">
-      <Icon-Image :icon-image="activeIcon" @icon-click="toggleToolbar($event as string)"></Icon-Image>
+    <span class="absolute -right-10 w-10 p-1 bottom-40 border border-gray-400 rounded-r-full z-10 bg-white">
+      <Icon-Image :icon-image="activeIcon" 
+        @icon-click="toggleToolbar($event as string)" 
+      />
     </span>
   </div>
 </template>
@@ -42,6 +46,13 @@ export default defineComponent({
   name: 'toolbarPanel', 
 
   emits: ['toggle-clicked'],
+  
+  props: {
+    toolbarHidden: {
+      type: Boolean,
+      required: true,
+    },
+  },
 
   data() {
     return {
@@ -53,7 +64,6 @@ export default defineComponent({
 
   async mounted() {
     await toolbarService().getToolBarItems();
-    console.log(this.store.toolbarItems)
   },
 
   components: {
@@ -69,7 +79,8 @@ export default defineComponent({
 
     elementItems(): Toolbar[] {
       return this.containerElements(false);
-    }
+    },
+    
   },
 
   methods: {

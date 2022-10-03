@@ -1,8 +1,8 @@
 <template>
-  <div class="relative">
+  <span class="relative p-1">
     <img
       :src="getIcon"
-      class="cursor-pointer hover:bg-secondary-100 w-12"
+      class="cursor-pointer hover:bg-secondary-100 w-12 inline-block py-2"
       @click="iconClick(toolbarItem.componentName)"
       @mouseover="showToolTip=true"
       @mouseleave="showToolTip=false"
@@ -12,7 +12,7 @@
       :tooltip="toolbarItem.tooltip"
       :showToolTip="getShowToolTip"
     ></ToolTip>
-  </div>
+  </span>
 </template>
 
 <script lang="ts">

@@ -3,5 +3,10 @@ export type SliderSettings = {
   min: number,
   max: number,
   initialValue: number,
-  width: string,
+  width: number,
+};
+
+export type SliderPosition = {
+  left: string,
+  top: string,
 };

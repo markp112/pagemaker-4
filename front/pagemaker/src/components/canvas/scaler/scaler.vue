@@ -1,5 +1,5 @@
 <template>
-  <div  :style="getWidth()">
+  <div :style="{'width': slider.width + 'px' }" :class="getPosition" class="z-50">
     <label for="" class="block">{{ slider.label }}</label>
     <span class="rangeValue">{{ slider.min }}</span>
     <Input class="range" 
@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
-import type { SliderSettings } from './model';
+import type { SliderPosition, SliderSettings } from './model';
 
 export default defineComponent({
     name:'slider',
@@ -26,6 +26,9 @@ export default defineComponent({
       slider: {
         type: Object as PropType<SliderSettings>,
         required: true
+      },
+      position: {
+        type: Object as PropType<SliderPosition>
       }
     },
 
@@ -39,17 +42,23 @@ export default defineComponent({
       }
     },
 
+    computed: {
+      getWidth() {
+        return `width:${this.$props.slider.width};`;
+      },
+
+      getPosition() {
+        return `${this.$props.position?.left} ${this.$props.position?.top}`;
+      }
+    },
+
     methods: {
 
       rangeSlide(value: string) {
-        console.log('%c%s', 'color: #7f7700', value)
+        console.log('%c⧭', 'color: #33cc99', value)
         this.sliderValue = parseInt(value);
         this.$emit('sliderChange', this.sliderValue)
       },
-
-      getWidth() {
-        return `width:${this.$props.slider.width}`;
-      }
     },
   })
 </script>
@@ -57,8 +66,6 @@ export default defineComponent({
 <style scoped>
 div {
   @apply absolute;
-  @apply top-0;
-  @apply left-2;
 }
 .rangeValue {
   @apply relative;
@@ -76,6 +83,7 @@ div {
   @apply appearance-none;
   @apply rounded-lg;
   @apply truncate;
+  @apply w-8/12
   /* box-shadow: inset 0 0 5px rgba(0, 0, 0, 1); */
 }
 .range::-webkit-slider-thumb {
