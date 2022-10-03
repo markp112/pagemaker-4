@@ -1,9 +1,8 @@
 <template>
-  <div class="w-8">
+  <div class="w-8 inline-block">
     <img
       :id="iconImage.id"
       class="hover: cursor-pointer"
-      :class="iconImage.classDef"
       :src="getIcon"
       @click="iconClick"
       @mouseover="displayTooltip(true)"

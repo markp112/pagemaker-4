@@ -1,11 +1,6 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div
-    class="bg-white-50 w-full h-screen flex flex-row justify-center mt-4 overflow-auto"
-  >
-    <Scaler :slider="sliderSettings" 
-      @slider-change="sliderChange($event)"
-    />
+  <div class="bg-gray-100 w-full h-screen flex flex-row justify-center mt-4 overflow-auto relative">
     <Page :page="page" :scale="zoomPage" v-if="zoomPage !== 0" />
   </div>
 </template>
@@ -14,24 +9,21 @@
 import { defineComponent, } from 'vue';
 import type { Page } from '../page/model/model';
 import pageVue from "../page/page.vue";
-import type { SliderSettings } from './scaler/model';
-import Scaler from "./scaler/scaler.vue";
 
-const scalerSettings: SliderSettings = {
-  min: 0,
-  max: 200,
-  initialValue: 0,
-  width: '200px',
-  label: 'Zoom',
-};
   export default defineComponent({
     name: 'page',
     
     components: {
       Page: pageVue,
-      Scaler
     },
 
+    props: {
+      zoomPage: {
+        type: Number,
+        required: true,
+      }
+    },
+    
     data() {
       return {
         page: {
@@ -41,16 +33,12 @@ const scalerSettings: SliderSettings = {
           width: { unit: 'px', value: 1024 },
           name: 'test'
         } as Page,
-        sliderSettings: scalerSettings,
-        zoomPage: 1,
       }
     },
 
     methods: {
 
-      sliderChange(newValue: number) {
-        this.zoomPage = newValue / 100;;
-      }
+     
     }
 
   });

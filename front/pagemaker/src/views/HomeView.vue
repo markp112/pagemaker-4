@@ -1,14 +1,23 @@
 
 
 <template>
-  <div class="flex flex-row justify-center w-100 relative ">
-    <div class="h-screen mr-4 absolute left-0 top-2 slide w-1/12" :class="getToolbarClasses" >
-      <Toolbar @toggle-clicked="toolbarToggleClicked"/>
+  <div class="relative">
+    <Scaler :slider="sliderSettings"
+    :position="sliderPosition"
+    @slider-change="sliderChange($event)"
+    />
+  </div>
+  <div class="flex flex-row justify-center w-100 relative">
+    <div class="mt-8 w-full">
+      <div class="h-screen absolute left-0 top-4 border-r border-gray-400 mr-2 z-50" :class="getToolbarClasses" >
+        <Toolbar @toggle-clicked="toolbarToggleClicked"
+        :toolbarHidden="toolbarHidden"
+        /> 
+      </div>
+      <div class="mt-4 bg-white w-full z-0" >
+        <Canvas :zoom-page="zoomPage"/>
+      </div>
     </div>
-    <div class="mt-4 bg-white w-10/12" >
-      <Canvas />
-    </div>
-
   </div>
 </template>
 
@@ -18,6 +27,21 @@ import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
 import { defineComponent } from 'vue';
 import Canvas from '@/components/canvas/canvas.vue';
 import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
+import type { SliderPosition, SliderSettings } from '@/components/canvas/scaler/model';
+import Scaler from '@/components/canvas/scaler/scaler.vue';
+
+const scalerSettings: SliderSettings = {
+  min: 0,
+  max: 200,
+  initialValue: 0,
+  width: 400,
+  label: 'Zoom',
+};
+
+const sliderPosition: SliderPosition = {
+  left: 'left-64',
+  top: 'top-0',
+};
 
   export default defineComponent({
     name: 'main',
@@ -25,26 +49,28 @@ import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
     components: {
       Canvas,
       Toolbar: toolbarPanelVue,
+      Scaler,
     },
     
     data() {
       return {
         store: useNavMenuItemStore(),
         menuItems: [] as NavMenuItem[],
-        toolbarWidth: 'w-2/12',
+        toolbarWidth: 'w-64',
         toolbarHidden: false,
+        sliderSettings: scalerSettings,
+        sliderPosition: sliderPosition,
+        zoomPage: 1,
       }
     },
 
     computed: {
       getToolbarClasses(): string {
         let classDef = '';
-
         if (this.toolbarHidden) {
           classDef = `${this.toolbarWidth}`
         } else {
           classDef = `${this.toolbarWidth}`
-
         }
         return classDef 
       }
@@ -53,11 +79,15 @@ import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
     methods: {
       toolbarToggleClicked() {
         if (this.toolbarHidden) {
-          this.toolbarWidth = 'w-2/12';
+          this.toolbarWidth = 'w-64';
         }  else {
           this.toolbarWidth = 'w-2';
         }
         this.toolbarHidden = !this.toolbarHidden;
+      },
+
+      sliderChange(newValue: number) {
+        this.zoomPage = newValue / 100;;
       },
     },
 

@@ -18,17 +18,16 @@
 .sidebar-panel {
   @apply mt-3;
   @apply h-full;
-  @apply p-2;
-  @apply px-2;
+  @apply w-full;
+  @apply p-1;
   @apply flex;
   @apply flex-col;
   @apply justify-start;
+  @apply bg-site-surface;
   @apply text-on-surface;
-  @apply shadow-lg;
-  @apply relative;
+  @apply shadow-xl;
   @apply border;
   @apply border-gray-400;
-  @apply bg-site-surface;
 }
 
 .sidebar-button-panel {
@@ -41,12 +40,15 @@
 }
 
 .sidebar-button-container {
-  @apply h-10;
+  @apply w-full;
+  @apply h-auto;
   @apply ml-2;
-  @apply flex;
-  @apply flex-row;
-  @apply justify-center;
-  @apply items-center;
+  @apply px-1;
+}
+
+.sidebar-container-items {
+ 
+  @apply p-24
 }
 
 .sidebar-radio-container {
@@ -55,7 +57,7 @@
   @apply flex-row;
   @apply justify-between;
   @apply items-center;
-  @apply mt-1;
+  @apply mt-2;
   @apply p-1;
   @apply w-3/4;
 }
@@ -67,11 +69,14 @@
 
 @screen md {
   .sidebar-button-panel {
-    @apply justify-between ml-2 mt-1;
+    @apply justify-between;
+    @apply ml-2;
+    @apply mt-1;
   }
 
   .sidebar-button-container {
-    @apply mr-1 mt-1;
+    @apply mr-1; 
+    @apply mt-2;
   }
 
 }
@@ -81,10 +86,10 @@
     @apply justify-start ml-1 mt-1;
   }
   .sidebar-button-container {
-    @apply mr-1 mt-2;
+    @apply mr-1;
+    @apply mt-2;
   }
 }
-
 
 .dropdown-menu-background {
   @apply bg-site-surface;
@@ -105,19 +110,6 @@
 }
 
 
-.sidebar-panel {
-  @apply mt-3;
-  @apply bg-site-primary-dark;
-  @apply h-full;
-  @apply w-full;
-  @apply p-2;
-  @apply px-2;
-  @apply flex;
-  @apply flex-col;
-  @apply justify-start;
-  @apply text-on-primary;
-  @apply shadow-lg;
-}
 
 .sidebar-button-panel {
   @apply flex;
@@ -128,12 +120,4 @@
   @apply w-full;
 }
 
-.sidebar-button-container {
-  @apply h-10;
-  @apply ml-2;
-  @apply flex;
-  @apply flex-row;
-  @apply flex-wrap;
-  @apply justify-start;
-  @apply items-center;
-}
+
