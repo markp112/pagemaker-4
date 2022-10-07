@@ -5,6 +5,8 @@ export const useToolbarStore = defineStore({
   id: 'toolbarStore',
   state: () => ({
     _toolbarItems: [] as Toolbar[],
+    _isDragging: false,
+
   }),
 
   getters: {
@@ -25,5 +27,11 @@ export const useToolbarStore = defineStore({
     clear() {
       this._toolbarItems = [];
     },
+
+    setIsDragging(isDragging: boolean) {
+      this._isDragging = isDragging;
+    },
+    
+
   }
 });

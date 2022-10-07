@@ -65,9 +65,7 @@ export default defineComponent({
 
   methods: {
     menuItemClick(id: number) {
-      console.log('%c⧭', 'color: #ffa640', id)
       if (this.navMenuItems) {
-        console.log('%c⧭', 'color: #00b300', this.navMenuItems)
         this.$emit('navMenuClicked', this.navMenuItems[id].navLink);
         this.toggleMenu = !this.toggleMenu;
       }

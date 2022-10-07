@@ -9,12 +9,10 @@ function toolbarService() {
   async function getToolBarItems() {
     try {
       const toolbar = await axiosClient().get<Toolbar[]>(`${baseRoute}`);
-      console.log('%c⧭', 'color: #99adcc', toolbar);
       if (toolbar.length > 0) {
-        console.log('%c⧭', 'color: #408059', toolbar);
         store.clear();
-        toolbar.forEach(toolbarItem => store.add(toolbarItem));
-        // store.setItems(toolbar);
+        // toolbar.forEach(toolbarItem => store.add(toolbarItem));
+        store.setItems(toolbar);
       }
     } catch (error) {
       console.log('%c⧭', 'color: #1d3f73', error);

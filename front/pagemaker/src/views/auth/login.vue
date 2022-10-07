@@ -14,7 +14,7 @@
         />
       </div>
     </div>
-  </div>  
+  </div> 
 </template>
 
 <script lang="ts">
@@ -29,7 +29,6 @@ export default defineComponent({
   data() {
     return {
       formErrors: [] as string[],
-
     }
   },
 
@@ -47,7 +46,9 @@ export default defineComponent({
       try {
         const loggedIn = await auth().login(credential);
         if (loggedIn) {
+          this
           this.$router.push('/');
+
         } else {
           this.formErrors.push('Login failed !');
         }
