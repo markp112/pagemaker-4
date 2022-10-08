@@ -11,7 +11,7 @@
     <div class="mt-8 w-full">
       <div class="h-screen absolute left-0 top-4 border-r border-gray-400 mr-2 z-50" :class="getToolbarClasses" >
         <Toolbar @toggle-clicked="toolbarToggleClicked"
-        :toolbarHidden="toolbarHidden"
+          :toolbarHidden="toolbarHidden"
         /> 
       </div>
       <div class="mt-4 bg-white w-full z-0" >
@@ -29,6 +29,7 @@ import Canvas from '@/components/canvas/canvas.vue';
 import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
 import type { SliderPosition, SliderSettings } from '@/components/canvas/scaler/model';
 import Scaler from '@/components/canvas/scaler/scaler.vue';
+import { auth } from '@/services/auth';
 
 const scalerSettings: SliderSettings = {
   min: 0,

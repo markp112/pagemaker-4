@@ -19,12 +19,14 @@ import type { NavMenuItem } from './components/core/navbar/navbar';
 import Navbar from "@/components/core/navbar/navbar.vue";
 import { useNavMenuItemStore } from './stores/navMenuItems.store';
 import router from './router';
+import { auth } from './services/auth';
 
 export default defineComponent({
   name: 'app',
 
   components: {
       Navbar,
+      RouterView,
     },
 
   data() {
@@ -39,7 +41,14 @@ export default defineComponent({
   async mounted() {
     await this.store.fetchMenuItems(true);
     this.menuItems = this.store.getMenuItems;
-    router.push('/login')
+    const user = auth().getCachedUser();
+    // if (user) {
+    //   auth().cacheUser(user);
+    //   this.$router.push('/');
+    // }
+    // else {
+      router.push('/login');
+    // } 
   },
 
   methods: {

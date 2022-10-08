@@ -8,8 +8,8 @@ import "./assets/main.css";
 import "./assets/styles/custom-styles.css";
 import './index.css'
 
+const pinia = createPinia();
 const app = createApp(App);
-
-app.use(createPinia());
+app.use(pinia);
 app.use(router);
 app.mount("#app");

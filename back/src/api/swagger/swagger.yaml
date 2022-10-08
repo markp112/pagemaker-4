@@ -23,6 +23,38 @@ paths:
       responses:
         '200': 
           description: user has successfully logged in
+
+  /settings/colours:
+    get:
+      tags:
+        - public
+        - settings
+        - site
+      summary: get the default colour palette for a site
+      description: returns the default colour palette for a given site
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: logged in user id
+          schema:
+            type: string
+        - name: siteId
+          in: path
+          required: true
+          description: The current site user is working on
+          schema:
+            type: string
+      responses:
+        '200':
+          description: array containing a list of the colours for the palette
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/colour'
         
 
   /private/menus/navmenu/{isLoggedIn}:
@@ -149,8 +181,6 @@ components:
           title: type of element
           type: string
 
-
-
     unit-and-value:
       type: object
       title: CSS unit with value and type
@@ -162,3 +192,16 @@ components:
         value:
           title: numeric value assigned to the unit
           type: number
+
+    colour:
+      type: object
+      title: colours
+      properties:
+        colourName:
+          title: colour name
+          description: material design colour name
+          type: string
+        value:
+          title: value
+          description: hex value assigned to the colour
+          type: string
