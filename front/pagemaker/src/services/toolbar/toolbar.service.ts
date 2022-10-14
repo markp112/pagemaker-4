@@ -11,7 +11,6 @@ function toolbarService() {
       const toolbar = await axiosClient().get<Toolbar[]>(`${baseRoute}`);
       if (toolbar.length > 0) {
         store.clear();
-        // toolbar.forEach(toolbarItem => store.add(toolbarItem));
         store.setItems(toolbar);
       }
     } catch (error) {

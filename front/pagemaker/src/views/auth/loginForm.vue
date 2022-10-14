@@ -94,7 +94,7 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .input-control {
-  @apply block border-2 rounded-md w-full p-1;
+  @apply block border-2 rounded-md w-full p-1 text-on-surface;
 }
 
 .error {
