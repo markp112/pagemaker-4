@@ -1,17 +1,19 @@
-import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models';
+import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models/colours.model';
+import type { SiteSettings } from '@/classes/sites/siteColours/models/siteSetting.model';
 import { useSiteStore } from '@/stores/site.store';
 import { axiosClient } from '../httpService';
 
 
-function site() {
+function siteService() {
   const BASE_ROUTE = '/sites/';
   const store = useSiteStore();
 
-  async function getSiteColours(userId: string, siteId: string):Promise<void> {
+  async function getSiteSettings(userId: string, siteId: string):Promise<void> {
     try {
-      const siteColours = await axiosClient().get<MaterialColoursInterface>(`${BASE_ROUTE}/{userId}/{siteId}`);
-      if (siteColours) {
-        store.setColourPalette(siteColours);
+      const siteSettings = await axiosClient().get<SiteSettings>(`${BASE_ROUTE}${userId}/${siteId}`);
+      if (siteSettings) {
+        store.setColourPalette(siteSettings.colours);
+        store.setTypography(siteSettings.typography)
       }
     }
     catch (err) {
@@ -19,6 +21,8 @@ function site() {
 
     }
   }
+
+  return { getSiteSettings }
 }
 
-export { site };
+export { siteService };

@@ -1,4 +1,4 @@
-import type { AColour, ColourProperties } from '../models';
+import type { AColour, ColourProperties } from '../models/colours.model';
 
 export type ColourStyle =
   | 'background-color'

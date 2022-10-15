@@ -1,5 +1,5 @@
 import type { Site } from '@/classes/sites'
-import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models';
+import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models/colours.model';
 import type { TypographyInterface } from '@/classes/sites/typography/model';
 import { defineStore } from 'pinia';
 
@@ -23,7 +23,7 @@ const useSiteStore = defineStore({
       return state._colourPalette;
     },
 
-    typeography: (state) => {
+    typography: (state) => {
       return state._typography;
     },
   },

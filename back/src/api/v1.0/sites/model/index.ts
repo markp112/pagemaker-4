@@ -9,7 +9,7 @@ interface Site {
 
 interface SiteSettings {
   colours: Record<string, string>[];
-  Typogrqphy: Record<string, string>[];
+  typography: Record<string, string>[];
 };
 
 export type { Site, SiteSettings };

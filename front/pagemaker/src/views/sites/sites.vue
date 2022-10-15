@@ -24,6 +24,7 @@
 <script lang="ts">
 
 import type { Site } from '@/classes/sites';
+import { siteService } from '@/services/site/site.service';
 import { sitesService } from '@/services/sites/sites.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useSiteStore } from '@/stores/site.store';
@@ -44,12 +45,13 @@ import SiteCard from './components/siteCard/siteCard.vue';
         store: useSitesStore(),
         siteStore: useSiteStore(),
         userStore: useAuthStore(),
+        userId: '',
       }
     },
 
     async mounted() {
-      const userId = this.userStore.userUid;
-      await sitesService().getSites(userId);
+      this.userId = this.userStore.userUid;
+      await sitesService().getSites(this.userId);
     },
 
     methods: {
@@ -58,10 +60,12 @@ import SiteCard from './components/siteCard/siteCard.vue';
       },
 
       
-      siteClicked(siteId: string) {
+      async siteClicked(siteId: string) {
         console.log('%c%s', 'color: #99614d', siteId);
         this.store.setCurrentSite(siteId);
         this.siteStore.setSite(this.store.currentSite);
+        await siteService().getSiteSettings(this.userId, siteId);
+        console.log(this.siteStore.colourPalette)
         // const siteDefaultSettings = SiteDefaults.getInstance();
         // // move to pageList
         //   siteDefaultSettings.loadDefaults()
