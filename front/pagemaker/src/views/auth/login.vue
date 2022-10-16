@@ -46,9 +46,7 @@ export default defineComponent({
       try {
         const loggedIn = await auth().login(credential);
         if (loggedIn) {
-          this
-          this.$router.push('/');
-
+          this.$router.push('/sites');
         } else {
           this.formErrors.push('Login failed !');
         }

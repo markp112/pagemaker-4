@@ -1,6 +1,6 @@
 
 <template>
-  <main class="w-full flex flex-col drop-shadow-lg">
+  <main class="w-full flex flex-col drop-shadow-lg bg-site-background text-site-primary-dark">
     <Navbar :nav-menu-items="menuItems"
       @nav-menu-clicked="navMenuClicked"
     />
@@ -41,10 +41,10 @@ export default defineComponent({
   async mounted() {
     await this.store.fetchMenuItems(true);
     this.menuItems = this.store.getMenuItems;
-    const user = auth().getCachedUser();
+    // const user = auth().getCachedUser();
     // if (user) {
     //   auth().cacheUser(user);
-    //   this.$router.push('/');
+    //   this.$router.push('/sites');
     // }
     // else {
       router.push('/login');

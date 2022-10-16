@@ -1,6 +1,6 @@
 <template>
   <section class="sidebar-button-container">
-    <h4 class="text-siteSurface mb-2 block">{{ $props.title }}</h4>
+    <h4 class="text-siteSurface mb-2 block">{{ title }}</h4>
       <ToolbarItem v-for="toolbarItem in toolbarItems"
         :key="toolbarItem.componentRef"
         class="sidebar-container-items"

@@ -23,15 +23,14 @@ function colourSettings() {
         const colour = doc.data() as unknown as Colour;
         defaultColours.push(colour);
       });
-
-      return constructResponse<Colour[]>(defaultColours, 200);
+        return constructResponse<Colour[]>(defaultColours, 200);
     } catch (err) {
       logger.error(err);
       throw new GenericError(err);
     }
-    }
-
-    return { getDefaultColours }
   }
+
+  return { getDefaultColours }
+}
 
   export { colourSettings };

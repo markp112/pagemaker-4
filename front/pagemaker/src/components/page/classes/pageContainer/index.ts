@@ -1,131 +1,134 @@
-export type PageElementClasses =
-  | ButtonElement
-  | TextElement
-  | ImageElement
-  | PageContainer;
+// import type { PageContainerInterface } from '../../model/pageContainer';
+// import { APageElement } from '../pageElement';
 
-export const ROOT = 'ROOT';
+// type PageElementClasses =
+//   | ButtonElement
+//   | TextElement
+//   | ImageElement
+//   | PageContainer;
 
-export class PageContainer extends PageElement
-implements PageContainerInterface {
+// export const ROOT = 'ROOT';
 
-  private _elements: PageElementClasses[];
+// export class PageContainer extends APageElement
+// implements PageContainerInterface {
 
-  constructor(pageElementBuilder: PageElementBuilder) {
-    super(pageElementBuilder);
-    this._elements = [];
-  }
+//   private _elements: PageElementClasses[];
 
-  checkDimensionRelativeToContainerElements(
-    string: string,
-    dimensionToCheck: number
-  ) {
-    let totalDimensionOfOtherComponent = 0;
-    let totalHeightOrWidth = 0;
-    if (this.containerOrientation === 'row') {
-      totalHeightOrWidth = this.dimension.width.value;
-      this.elements
-        .filter(element => { element.ref !== string })
-        .forEach(element => {
-          const dimension = element.dimension;
-          const units = dimension.width.unit;
-          if (units === '%') {
-            const divisor: number = dimension.width.value / 100;
-            totalDimensionOfOtherComponent +=
-              this.dimension.width.value * divisor;
-          } else {
-            totalDimensionOfOtherComponent +=
-              element.dimension.width.value;
-          }
-        });
-    } else {
-      totalHeightOrWidth = this.dimension.height.value;
-      this.elements
-        .filter(element => {
-          return element ? element.ref !== string : undefined;
-        })
-        .forEach(element =>
-            totalDimensionOfOtherComponent += element.dimension.height.value
-        );
-    }
-    return dimensionToCheck + totalDimensionOfOtherComponent >=
-      totalHeightOrWidth
-      ? totalHeightOrWidth - totalDimensionOfOtherComponent - 4
-      : dimensionToCheck;
-  }
+//   constructor(pageElementBuilder: PageElementBuilder) {
+//     super(pageElementBuilder);
+//     this._elements = [];
+//   }
 
-  getWidthOfAllComponents(): number {
-    let width = 0;
-    this._elements.forEach(element =>
-        width += element.dimension.width.value
-    );
-    return width;
-  }
+//   checkDimensionRelativeToContainerElements(
+//     string: string,
+//     dimensionToCheck: number
+//   ) {
+//     let totalDimensionOfOtherComponent = 0;
+//     let totalHeightOrWidth = 0;
+//     if (this.containerOrientation === 'row') {
+//       totalHeightOrWidth = this.dimension.width.value;
+//       this.elements
+//         .filter(element => { element.ref !== string })
+//         .forEach(element => {
+//           const dimension = element.dimension;
+//           const units = dimension.width.unit;
+//           if (units === '%') {
+//             const divisor: number = dimension.width.value / 100;
+//             totalDimensionOfOtherComponent +=
+//               this.dimension.width.value * divisor;
+//           } else {
+//             totalDimensionOfOtherComponent +=
+//               element.dimension.width.value;
+//           }
+//         });
+//     } else {
+//       totalHeightOrWidth = this.dimension.height.value;
+//       this.elements
+//         .filter(element => {
+//           return element ? element.ref !== string : undefined;
+//         })
+//         .forEach(element =>
+//             totalDimensionOfOtherComponent += element.dimension.height.value
+//         );
+//     }
+//     return dimensionToCheck + totalDimensionOfOtherComponent >=
+//       totalHeightOrWidth
+//       ? totalHeightOrWidth - totalDimensionOfOtherComponent - 4
+//       : dimensionToCheck;
+//   }
 
-  getHeightOfAllComponents(): number {
-    let height = 0;
-    this._elements.forEach(element =>
-        height += element.dimension.width.value
-    );
-    return height;
-  }
+//   getWidthOfAllComponents(): number {
+//     let width = 0;
+//     this._elements.forEach(element =>
+//         width += element.dimension.width.value
+//     );
+//     return width;
+//   }
 
-  get elements(): PageElementClasses[] {
-    return this._elements;
-  }
+//   getHeightOfAllComponents(): number {
+//     let height = 0;
+//     this._elements.forEach(element =>
+//         height += element.dimension.width.value
+//     );
+//     return height;
+//   }
 
-  set elements(pageElements: PageElementClasses[]) {
-    this._elements = pageElements;
-  }
+//   get elements(): PageElementClasses[] {
+//     return this._elements;
+//   }
 
-  get containerOrientation(): ContainerOrientation {
-    return this.classDefinition.includes('flex-row') ? 'row' : 'column';
-  }
+//   set elements(pageElements: PageElementClasses[]) {
+//     this._elements = pageElements;
+//   }
 
-  setDefaultStyle() {
-    if (this.styles.length === 0) {
-      const siteDefaults = SiteDefaults.getInstance();
-      this.addStyle(
-        this.constructStyle('font-family', siteDefaults.typography.fontName)
-      );
-      this.addStyle(
-        this.constructStyle('font-size', siteDefaults.typography.fontSizeBody)
-      );
-      const siteColours = siteDefaults.colours;
-      this.addStyle(
-        this.constructStyle('background-color', siteColours.surface)
-      );
-      this.addStyle(this.constructStyle('color', siteColours.textOnSurface));
-    }
-  }
+//   get containerOrientation(): ContainerOrientation {
+//     return this.classDefinition.includes('flex-row') ? 'row' : 'column';
+//   }
 
-  addNewElement(newElement: PageElementClasses) {
-    if (newElement) {
-      const existingElement = this._elements.filter(element =>
-        element.ref === newElement.ref
-        )[0];
-      if (!existingElement) {
-        this._elements.push(newElement);
-      } else {
-        this._elements = this._elements.filter(element =>
-            element.ref !== newElement.ref
-        );
-        this._elements.push(newElement);
-      }
-    }
-  }
+//   setDefaultStyle() {
+//     if (this.styles.length === 0) {
+//       const siteDefaults = SiteDefaults.getInstance();
+//       this.addStyle(
+//         this.constructStyle('font-family', siteDefaults.typography.fontName)
+//       );
+//       this.addStyle(
+//         this.constructStyle('font-size', siteDefaults.typography.fontSizeBody)
+//       );
+//       const siteColours = siteDefaults.colours;
+//       this.addStyle(
+//         this.constructStyle('background-color', siteColours.surface)
+//       );
+//       this.addStyle(this.constructStyle('color', siteColours.textOnSurface));
+//     }
+//   }
 
-  getAnElement(ref: string): PageElementClasses {
-    return this._elements.filter(element => element.ref === ref)[0];
-  }
+//   addNewElement(newElement: PageElementClasses) {
+//     if (newElement) {
+//       const existingElement = this._elements.filter(element =>
+//         element.ref === newElement.ref
+//         )[0];
+//       if (!existingElement) {
+//         this._elements.push(newElement);
+//       } else {
+//         this._elements = this._elements.filter(element =>
+//             element.ref !== newElement.ref
+//         );
+//         this._elements.push(newElement);
+//       }
+//     }
+//   }
 
-  deleteElement(ref: string) {
-    this._elements = this._elements.filter(element => element.ref !== ref);
-  }
+//   getAnElement(ref: string): PageElementClasses {
+//     return this._elements.filter(element => element.ref === ref)[0];
+//   }
 
-  getElementContent(): FirebasePageDataTypes {
-    return Object.assign(this.getBaseElementContent(), {
-      elements: this._elements
-    });
-  }
-}
+//   deleteElement(ref: string) {
+//     this._elements = this._elements.filter(element => element.ref !== ref);
+//   }
+
+//   getElementContent(): FirebasePageDataTypes {
+//     return Object.assign(this.getBaseElementContent(), {
+//       elements: this._elements
+//     });
+//   }
+// }
