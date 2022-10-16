@@ -18,7 +18,6 @@ function siteService() {
     }
     catch (err) {
       console.log('%c⧭', 'color: #cc0036', err);
-
     }
   }
 
