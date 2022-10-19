@@ -11,7 +11,6 @@ sitesRouter
     logger.info('sites.get called');
     try {
       const response = await sitesController().getSites(userId);
-      console.log('%c⧭', 'color: #1d5673', response);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();

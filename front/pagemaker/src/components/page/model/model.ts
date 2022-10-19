@@ -13,11 +13,15 @@ type Dimension = {
 };
 
 type Page = {
+  pageId: string,
   name: string,
-  width: Unit,
-  height: Unit,
+  width: string,
+  height: string,
   backgroundColour: string,
   colour: string,
+  created: Date,
+  edited: Date,
+  icon: string,
 };
 
 export type {

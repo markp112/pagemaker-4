@@ -33,4 +33,4 @@ class GenericError extends DomainError {
   }
 };
 
-export { ResourceNotFoundError, GenericError };
+export { DomainError, ResourceNotFoundError, GenericError };

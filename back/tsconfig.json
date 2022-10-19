@@ -10,9 +10,9 @@
     "baseUrl": "./src",
     "paths": {
       "@api/*": ["api/*"],
+      "@database/*": ["database/*"],
       "@common/*": ["common/*"],
-      "@logger/*": ["logger/*"],
-      "@database/*": ["database/*"]
+      "@logger/*": ["logger/*"]
     }
   },
   "lib": ["es2015"]

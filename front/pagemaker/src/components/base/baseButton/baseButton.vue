@@ -40,7 +40,6 @@ export default defineComponent({
   data() {
     return {
       colour: '',
-
     }
   },
 
@@ -63,7 +62,7 @@ export default defineComponent({
     },
 
     getStyling(): string {
-      const baseStyling = `${this.getSize} flex items-center justify-center p-2`;
+      const baseStyling = `${this.getSize} flex items-center justify-center p-2 bg-site-site-primary-dark`;
       const active = `cursor-pointer hover:bg-site-${this.buttonType} hover:text-accent-2`;
       const activeOutline = `cursor-pointer hover:bg-border-${this.buttonType} hover:text-accent-1`;
       const activeText = `cursor-pointer hover:text-accent-1 text-site-${this.buttonType}`;

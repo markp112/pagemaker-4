@@ -15,7 +15,10 @@
     </div>
     <ul class="flex flex-row justify-evenly w-full mt-20">
       <li class="ml-3" v-for="site in sites" :key="site.siteId">
-        <SiteCard :site="site" @site-clicked="siteClicked($event)" />
+        <SiteCard :site="site"
+          @site-clicked="siteClicked($event)"
+          @edit-clicked="siteEditClick($event)"
+        />
       </li>
     </ul>
   </section>
@@ -59,34 +62,36 @@ import SiteCard from './components/siteCard/siteCard.vue';
         this.$router.push({ name: 'newSite', params: { title: 'New Site' } });
       },
 
-      
-      async siteClicked(siteId: string) {
-        console.log('%c%s', 'color: #99614d', siteId);
+      async getSiteDefaults(siteId: string, route: string) {
         this.store.setCurrentSite(siteId);
         this.siteStore.setSite(this.store.currentSite);
         await siteService().getSiteSettings(this.userId, siteId);
-        console.log(this.siteStore.colourPalette)
-        // const siteDefaultSettings = SiteDefaults.getInstance();
-        // // move to pageList
-        //   siteDefaultSettings.loadDefaults()
-        //     .then(() => {
-          //       this.$router.push({ name: "pageList" });
-          //     })
-          //     .catch(err => {
-            //       console.log('%c⧭', 'color: #514080', err)
-            //       // showTheSnackbar('Warning', 'Site defaults load failed, - defaults applied', 'warning')
-            //     });
-            //   }
-            
-          },
-        },
-
-        computed: {
-          sites(): Site[] {
-            console.log('%c⧭', 'color: #d0bfff', this.store.sites)
-            return this.store.sites;
-          }
+        this.$router.push(route);
+      },
+      
+      siteClicked(siteId: string) {
+        try {
+          this.getSiteDefaults(siteId, `/pagelist` );
+        } catch (error) {
+            console.log('%c⧭', 'color: #5200cc', error)
         }
+      },
+
+      siteEditClick(siteId: string) {
+        try {
+          this.getSiteDefaults(siteId, `/editSite` );
+        } catch (error) {
+            console.log('%c⧭', 'color: #5200cc', error)
+        }
+      }
+
+    },
+
+    computed: {
+      sites(): Site[] {
+        return this.store.sites;
+      },
+    },
 
   })
 
