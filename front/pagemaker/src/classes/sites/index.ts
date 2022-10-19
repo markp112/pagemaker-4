@@ -7,8 +7,7 @@ interface Site {
   url: string;
   image: string;
   published: Date;
+  hostRepo: string;
 };
-
-
 
 export type { Site };

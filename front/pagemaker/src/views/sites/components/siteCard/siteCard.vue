@@ -4,8 +4,8 @@
     <div class="flex flex-row justify-between p-5">
       <p>{{ site.name }}</p>
       <img
-        :src="getIcon('pencil32.png')"
-        alt=""
+        :src="getIcon('pencil-32.png')"
+        alt="edit"
         class="cursor-pointer"
         @click="editSiteClick()"
       />

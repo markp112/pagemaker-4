@@ -81,6 +81,25 @@ paths:
                   type: object
                   $ref: '#/components/schemas/colour'
 
+  /pages/{userId}/{siteId}:
+    get:
+      tags:
+        - public
+        - pages
+      summary: returns an array of pages for the given user and site
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/siteId"
+      responses:
+        '200':
+          description: returns an array of the pages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/components/schemas/pages"
 
   /settings/colours:
     get:
@@ -91,18 +110,8 @@ paths:
       summary: get the default colour palette for a site
       description: returns the default colour palette for a given site
       parameters:
-        - name: userId
-          in: path
-          required: true
-          description: logged in user id
-          schema:
-            type: string
-        - name: siteId
-          in: path
-          required: true
-          description: The current site user is working on
-          schema:
-            type: string
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/siteId"
       responses:
         '200':
           description: array containing a list of the colours for the palette
@@ -160,6 +169,23 @@ paths:
                   $ref: '#components/schemas/toolbar-elements'
 
 components:
+
+  parameters:
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: logged in user id
+      schema:
+        type: string
+    siteId:
+      name: siteId
+      in: path
+      required: true
+      description: The current site user is working on
+      schema:
+        type: string
+
   schemas:
     NavMenuItem:
       type: object
@@ -208,7 +234,7 @@ components:
         name: 
           title: The name of the site
           type: string
-    
+
     toolbar-elements:
       type: object
       title: a toolbar element
@@ -280,4 +306,45 @@ components:
         value:
           title: value
           description: hex value assigned to the colour
+          type: string
+
+    pages:
+      type: object
+      title: A page
+      properties:
+        pageId:
+          title: pageId
+          description: unique id of this page
+          type: string
+        name:
+          title: Page name
+          description: the page name e.g. home page
+          type: string
+        width:
+          title: pqge width
+          description: css class defining the page width
+          type: string
+        height:
+          title: Page height
+          description: css class defining page height
+          type: string
+        backgroundColour:
+          title: Background Colour
+          description: Background Colour for the page
+          type: string
+        colour:
+          title: text colour
+          description: text colour for the page
+          type: string
+        icon:
+          title: icon
+          description: Icon for the page
+          type: string  
+        created:
+          title: Date created
+          description: date the page was created
+          type: string
+        edited:
+          title: Date edited
+          description: date the page was kast edited
           type: string

@@ -1,0 +1,37 @@
+import { GenericError } from '../../../../common/errors/customErrors';
+import { constructResponse } from '../../../../common/functions/constructResponse';
+import { getUserAndSiteId } from '../../../../common/functions/userAndSiteId';
+import { collection, getDocs } from '@firebase/firestore';
+import { logger } from '../../../../logger/logger';
+import { firebaseDb } from '../../../../firebase/initFirebase';
+import { Page } from '../model/model';
+import { formatTimeStampAsDate } from '../../../../common/functions/dateFunctions';
+
+function pagesController() {
+
+  async function getPages(userId: string, siteId: string) {
+    console.log('%c%s', 'color: #007300', siteId);
+    console.log('%c%s', 'color: #807160', userId);
+    try {
+      const pagesCollection = getUserAndSiteId(userId, siteId, 'pages');
+      const firebaseResponse = await getDocs(collection(firebaseDb, pagesCollection));
+      const pages: Page[] = [];
+      firebaseResponse.docs.forEach(doc => {
+        console.log('%c⧭', 'color: #731d1d', doc.data);
+        const page = doc.data() as unknown as Page;
+        page.created = formatTimeStampAsDate(doc.data().created);
+        page.edited = formatTimeStampAsDate(doc.data().edited);
+        pages.push(page);
+      });
+      return constructResponse<Page[]>(pages, 200);
+    } catch (err) {
+      logger.error('error:',err);
+      throw new GenericError(err);
+    }
+  }
+  return {
+    getPages,
+  }
+}
+
+export { pagesController };

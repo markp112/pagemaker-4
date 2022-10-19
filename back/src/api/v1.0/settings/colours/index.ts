@@ -1,6 +1,6 @@
 import { logger } from '../../../../logger/index';
 import express from 'express';
-import { colourSettings } from './controller';
+import { colourSettings } from './controller/index'
 
 const colourSettingsRouter = express.Router();
 const ROUTE_PATH = '/colours';
