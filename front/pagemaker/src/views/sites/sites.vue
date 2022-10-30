@@ -79,7 +79,8 @@ import SiteCard from './components/siteCard/siteCard.vue';
 
       siteEditClick(siteId: string) {
         try {
-          this.getSiteDefaults(siteId, `/editSite` );
+          this.getSiteDefaults(siteId, `/editSite`);
+          this.$router.push({ name: 'editSite', params: { title: 'edit site' }})
         } catch (error) {
             console.log('%c⧭', 'color: #5200cc', error)
         }

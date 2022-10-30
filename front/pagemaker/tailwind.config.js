@@ -22,7 +22,7 @@ module.exports = {
         'on-primary': "#fffffe",
         'on-surface': "#000000",
         'on-secondary': "#ffeefb",
-        'site-background': "#ffeeff",
+        'site-background': "#ffffff",
         'site-surface': "#ffffff",
         'accent-1': "#D9C4B8",
         'accent-2': "#F2E3D5",

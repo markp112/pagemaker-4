@@ -14,8 +14,9 @@ function auth() {
 	async function login(credentials: Credentials): Promise<Response>  {
 		try {
 			const user = await signInWithEmailAndPassword(firebaseAuth, credentials.email, credentials.password);
+			const token = await  user.user.getIdToken();
 			const response = {
-				data: { uid: user.user.uid, email: user.user.email, displayName: user.user.displayName, tokenId: user.user.getIdToken },
+				data: { uid: user.user.uid, email: user.user.email, displayName: user.user.displayName, tokenId: token },
 				status: 200,
 			};
 			return response;

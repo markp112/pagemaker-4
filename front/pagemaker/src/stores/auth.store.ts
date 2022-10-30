@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
-import { useRoute } from 'vue-router';
 
 type User = {
   email: string,
   uid: string,
   displayName: string,
+  tokenId: string,
 };
 
 export const useAuthStore = defineStore({
@@ -30,7 +30,8 @@ export const useAuthStore = defineStore({
         const user: User = {
           email: window.localStorage.getItem('PMemail')!,
           uid: window.localStorage.getItem('PMuid')!,
-          displayName: window.localStorage.getItem('PMemail')!
+          displayName: window.localStorage.getItem('PMemail')!,
+          tokenId: window.localStorage.getItem('PMToken')!
         } 
         return user;
       } else {
@@ -52,6 +53,7 @@ export const useAuthStore = defineStore({
       window.localStorage.setItem('PMdisplayName', this.$state._user.displayName);
       window.localStorage.setItem('PMuid', this.$state._user.uid);
       window.localStorage.setItem('PMdemail', this.$state._user.email);
+      window.localStorage.setItem('PMtoken', this.$state._user.tokenId);
     }
   }
 

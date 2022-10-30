@@ -19,8 +19,8 @@ function auth() {
     try {
       const response = await axiosClient().post(`${baseRoute}login`, credential);
       if (response) {
-        const user: User = response.data as User;
-        console.log('%c⧭', 'color: #00736b', user);
+        const user: User = response as User;
+        console.log('%c⧭', 'color: #9c66cc', user);
         store.setUser(user);
         store.cacheUser();
         return true;

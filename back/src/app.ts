@@ -4,6 +4,7 @@ import swaggerUI from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { logger, morganMiddleware } from './logger';
+import { authMiddleware } from './middleware';
 import { router } from './api';
 
 
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 const swaggerDoc = YAML.load('./src/api/swagger/swagger.yaml');
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(morganMiddleware);
+app.use(authMiddleware);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));

@@ -13,6 +13,7 @@ authRouter.post(`${ROUTE_PATH}/login`, async (req, res, next) => {
     logger.info(`Route Called: auth/login`, req.body);
     const credentials: Credentials = req.body;
     const response = await auth().login(credentials);
+    console.log('%c⧭', 'color: #e57373', response);
     res.status(response.status).send(response);
   } catch (error) { 
     if (error instanceof GenericError || error instanceof ResourceNotFoundError) {
