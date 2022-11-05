@@ -1,6 +1,5 @@
 import type { BucketImage, ImageCardProps, UsersBucket } from '@/components/base/pickers/imageGallery/types';
 import { useImagesStore } from '@/stores/images.store';
-import { storeToRefs } from 'pinia';
 import { axiosClient } from '../httpService';
 
 function userService() {
@@ -24,7 +23,7 @@ function userService() {
   async function getImageMetaData(userId: string, fileNames: string[]): Promise<ImageCardProps[]> {
     try {
       const route = `${baseRoute}${userId}/${imagesRoute}metadata/bucket/${IMAGE_FOLDER}`;
-      return axiosClient().post<ImageCardProps[], string[]>(route, fileNames);
+      return axiosClient().post<string[], ImageCardProps[]>(route, fileNames);
     } catch(err) {
       console.log('%c⧭', 'color: #1d3f73', err);
       throw (err);

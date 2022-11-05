@@ -10,7 +10,6 @@ toolBarRouter
     logger.info('toolbarMenu.get callled');
     try {
       const response = await toolbarElements().get();
-      console.log('%c⧭', 'color: #00b300', response);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();

@@ -48,9 +48,9 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: '#/components/schemas/sites'
+                  $ref: '#/components/schemas/site'
                   
-  /sites/{userId}/{siteId}:
+  /sites/{userId}/{siteId}/colours:
     get:
       tags:
         - public
@@ -80,6 +80,44 @@ paths:
                 items:
                   type: object
                   $ref: '#/components/schemas/colour'
+
+  /sites/{userId}/{siteId}:
+    post:
+      tags:
+        - sites
+      summary: Save details of a new site
+      requestBody:
+        description: details of the site
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+      responses:
+        '201':
+          description: Site was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+    put:
+      tags:
+        - sites
+      summary: Save details of a new site
+      requestBody:
+        description: details of the site
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+      responses:
+        '201':
+          description: Site was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
 
   /pages/{userId}/{siteId}:
     get:
@@ -266,12 +304,15 @@ components:
           title: password for user
           type: string
 
-    sites:
+    site:
       type: object
       title: A site
       properties:
         siteId:
           title: unique id for the site
+          type: string
+        userId:
+          title: id of the user
           type: string
         description:
           title: description of the site

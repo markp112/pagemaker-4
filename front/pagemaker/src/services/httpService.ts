@@ -26,7 +26,7 @@ type Response = {
   err?: ResponseError,
 };
 
-const token = useAuthStore().user.tokenId;
+const getToken = () => useAuthStore().user.tokenId;
 
 function getRoute(path: string): string {
   return `${import.meta.env.VITE_BACKEND_API}${import.meta.env.VITE_API}${import.meta.env.VITE_API_VERSION}${path}`;
@@ -36,7 +36,7 @@ async function performGet<T>(path: string): Promise<T> {
   const route = getRoute(path);
   const response = await backEndClient.get(route, {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${getToken()}`,
     }
   });
   console.log('%c⧭', 'color: #e50000', response.data);
@@ -44,22 +44,24 @@ async function performGet<T>(path: string): Promise<T> {
     if (response.status !== 200) {
       reject(response.data.err);
     } else {
-      resolve(response.data.data);
+      resolve(response.data);
     }
   });
 }
 
-async function performPost<T, U>(path: string, payload: U, config: AxiosRequestConfig = {}): Promise<T> {
+async function performPost<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
   const route = getRoute(path);
-  console.log('%c⧭', 'color: #807160', route);
   try {
+    const configOptions = config; 
+    configOptions.headers = {
+        'Authorization': `Bearer ${getToken()}`,
+    };
     const response = await backEndClient.post(route, payload, config);
     return new Promise((resolve, reject) => {
-      if (response.status !== 200) {
+      if (response.status >= 400) {
         reject(response.data.err);
-      } else {
-        resolve(response.data.data);
-      }
+      } 
+      resolve(response.data.data);
     })
   } catch (error) {
     const err = error as AxiosError;
@@ -71,39 +73,33 @@ async function performPost<T, U>(path: string, payload: U, config: AxiosRequestC
   }
 }
 
-async function performPut<T>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<Record<string, unknown> | undefined> {
+async function performPut<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
   const route = getRoute(path);
-  const response: Response = await backEndClient.put(route, payload, config);
+  const configOptions = config; 
+  configOptions.headers = {
+      'Authorization': `Bearer ${getToken()}`,
+  };
+  const response = await backEndClient.put(route, payload, config);
   return new Promise((resolve, reject) => {
-    switch(response.status) {
-      case 200:
-        resolve(response.data );
-        break;
-      case 201: 
-        resolve(response.data);
-        break;
-      case 204: 
-        resolve(response.data)
-        break;
-      default: 
-        console.log(response, ' - resolved with')
-        reject('error')
+    if (response.status >= 400) {
+      reject(response.data.err);
     }
+    resolve(response.data );
   })
 }
 
-function axiosClient() {
+function  axiosClient() {
 
   async function get<T>(path: string): Promise<T> {
     return await performGet<T>(path);
   }
 
-  async function post<T,U>(path: string, payload: U, config: AxiosRequestConfig = {}): Promise<T> {
+  async function post<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
     return await performPost<T, U>(path, payload, config);
   }
 
-  async function put<T>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<Record<string, unknown> | undefined> {
-    return await performPut<T>(path, payload, config);
+  async function put<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
+    return await performPut<T, U>(path, payload, config);
   }
 
   // async function get64(path: string): Promise<string> {

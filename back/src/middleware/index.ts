@@ -1,13 +1,19 @@
 import { admin } from '../firebase/initFirebase';
 
-function authMiddleware(req, res, next) {
-  const LOGIN_ROUTE = '/api/v1.0/auth/login';
-  const headerToken = req.headers.authorization;
-  if (req.originalUrl === LOGIN_ROUTE) {
-    next()
-  } else {
+const nonAuthRoutes = {
+  '/api/v1.0/auth/login': true,
+  '/api/v1.0/private/menus/navmenu/true': true,
+};
 
-    console.log('%c⧭', 'color: #cc0088', req.originalUrl, 'route');
+const routeDoesNotRequireAuth = (requestedUrl: string): boolean => {
+  return nonAuthRoutes[requestedUrl];
+};
+
+function authMiddleware(req, res, next) {
+  const headerToken = req.headers.authorization;
+  if (routeDoesNotRequireAuth(req.originalUrl)) {
+    next();
+  } else {
     if (!headerToken) {
       return res.send({ message: 'No token provided' }).status(401);
     }

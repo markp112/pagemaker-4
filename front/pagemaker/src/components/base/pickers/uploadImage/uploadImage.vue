@@ -15,7 +15,7 @@
       v-model="url"
     />
     <div
-      class="image-drop flex flex-col justify-start"
+      class="image-drop flex flex-col justify-start "
       :class="{ 'is-dragging': isDragging }"
       @dragstart.prevent="dragOver()"
       @dragover.prevent="dragOver()"
@@ -29,7 +29,7 @@
         Upload a file by dropping it here
       </h3>
       <img
-        :src="getImage"
+        :src="url"
         class="border object-contain h-32 mt-2"
         ref="imagePlaceholder"
         @load="onImageLoad()"
@@ -48,7 +48,7 @@
     <div class="my-2 w-16">
       <BaseButton
         size="small"
-        buttonType="secondary"
+        buttonType="primary"
         variant="solid"
         @onClick="showImageGallery"
 
@@ -57,15 +57,15 @@
       </BaseButton>
     </div>
     <div
-      class="absolute image-picker z-20 left-4 top-12 bg-s"
+      class="image-picker w-full relative"
       v-if="showImagePicker"
-    >
-        <ImageGallery
-          :userId="userId"
-          :image-details="images"
-          @closeClicked="showImagePicker=false"
-          @imageClicked="imageClicked($event)"
-        />
+      >
+      <ImageGallery
+        :userId="userId"
+        :image-details="images"
+        @closeClicked="showImagePicker=false"
+        @imageClicked="imageClicked($event)"
+      />
     </div>
   </div>
 </template>
@@ -77,6 +77,8 @@ import { defineComponent } from 'vue';
 import { getImageUrl } from '@/common/getIcon';
 import { userService } from '@/services/user/userService';
 import { useImagesStore } from '@/stores/images.store';
+import type { ImageCardProps } from '../imageGallery/types';
+import { Image } from '@/classes/image/image';
 
 export default defineComponent({
   name:'upload-image',
@@ -91,6 +93,8 @@ export default defineComponent({
       required: true,
     },
   },
+
+  emits: ['imageChanged'],
 
   components: {
     ImageGallery,
@@ -108,6 +112,7 @@ export default defineComponent({
       showImagePicker: false,
       userService: userService(),
       imageStore: useImagesStore(),
+      images: [] as ImageCardProps[],
     }
   },
 
@@ -116,25 +121,26 @@ export default defineComponent({
   },
 
   computed: {
-    images() {
-      return this.imageStore.imageDisplayList;
-    }
+    getImages() {
+      return this.images;
+    },
   },
 
   methods: {
 
     updateImage() {
       const img = this.$refs.imagePlaceholder as HTMLImageElement;
-      // const image = new Image();
-      // image.maintainRatio = this.maintainRatio;
-      // image.content = this.url;
-      // image.naturalSize.width.value = img.naturalWidth;
-      // image.naturalSize.height.value = img.naturalHeight;
-      // this.$emit('imageUrl', image);
+      const image = new Image();
+      image.maintainRatio = this.maintainRatio;
+      image.content = this.url;
+      image.naturalSize.width.value = img.naturalWidth;
+      image.naturalSize.height.value = img.naturalHeight;
+      this.$emit('imageChanged', image);
     },
 
-    showImageGallery() {
-      userService().retrieveImages(this.$props.userId);
+    async showImageGallery() {
+      await userService().retrieveImages(this.$props.userId);
+      this.images = this.imageStore.imageDisplayList;
       this.showImagePicker = true;
     },
     
@@ -211,24 +217,26 @@ export default defineComponent({
     },
   },   
 })
-  </script>
+</script>
   
-  <style lang="postcss">
-.image-drop {
-  width: 100%;
-  @apply h-full;
-  background-color: #eee;
-  @apply flex;
-  @apply flex-row;
-  @apply justify-center;
-}
+<style lang="postcss">
+  .image-drop {
+    width: 100%;
+    @apply h-full;
+    background-color: #eee;
+    @apply flex;
+    @apply flex-row;
+    @apply justify-center;
+  }
 
-.is-dragging {
-  background-color: rgba(217, 196, 184);
-}
+  .is-dragging {
+    background-color: rgba(217, 196, 184);
+  }
 
-.image-picker {
-  width: 640px;
-  height: 240px;
-}
+  .image-picker {
+    width: 100%;
+    height: 240px;
+    top: -0px;
+    left: 0px;
+  }
 </style>

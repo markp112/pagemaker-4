@@ -19,7 +19,7 @@ type BucketImage = {
 type MetaData = {
   name: string,
   tags: string[],
-  fullPath: string,
+  url: string,
 };
 
 function userImages() {
@@ -32,7 +32,6 @@ function userImages() {
       const files: BucketImage[] = [];
       const bucketRef = storageRef(storage, path);
       const fileList = await listAll(bucketRef);
-      console.log('%c⧭', 'color: #997326', fileList);
       fileList.items.forEach(item => {
         const bucketImage: BucketImage = {
           bucket: item.bucket,
@@ -49,11 +48,12 @@ function userImages() {
     }
   }
 
-  async function getImageUrl(userId: string, userBucket: UsersBucket): Promise<Response> {
-    const path = getStorageRef(userId, userBucket.bucket);
+  async function getImageUrl(userId: string, bucket: string, fileName: string): Promise<string> {
+    const path = getStorageRef(userId, bucket);
     try {
-      const url = await getDownloadURL(storageRef(storage, path));
-      return constructResponse<string>(url, 200);
+      const url = await getDownloadURL(storageRef(storage, `${path}/${fileName}`));
+      console.log('%c⧭', 'color: #408059', url, 'url');
+      return url;
     } catch (err) {
       logger.error(err);
       throw new GenericError(err);
@@ -72,13 +72,12 @@ function userImages() {
   }
 
   async function buildMetaData(userId: string, bucket: string, fileList: string[]): Promise<MetaData[]> {
-    
     const props = fileList.map( async (file) => {
       const metaData = await getMetaData(userId, bucket, file);
-      console.log('%c⧭', 'color: #bfffc8', metaData);
+      const url = await getImageUrl(userId, bucket, file);
       const imageFile: MetaData = {
         name: metaData.name,
-        fullPath: metaData.fullPath,
+        url: await getImageUrl(userId, bucket, file),
         tags: metaData.customMetadata?.tags.split(',')
       };
       return imageFile;

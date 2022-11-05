@@ -36,11 +36,11 @@
         <label for="image">Site Image</label>
         <div class="w-10/12">
           <UploadImage
-            url-edited=""
+            :url-edited="site.image"
             :user-id="userId"
             class="mt-4 mb-2"
-            v-on:image-url="updateImageUrl"
-          ></UploadImage>
+            v-on:imageChange="updateImageUrl"
+          />
         </div>
       </div>
       <div class="field-wrapper">
@@ -110,7 +110,8 @@ import { defineComponent } from 'vue';
 import baseButtonVue from '@/components/base/baseButton/baseButton.vue';
 import UploadImage from '@/components/base/pickers/uploadImage/uploadImage.vue';
 import { useAuthStore } from '@/stores/auth.store';
-
+import { siteService } from '@/services/site/site.service';
+import { useSnackbarStore } from '@/stores/snackbar.store';
 
 export default defineComponent({
     name: 'SiteEditor',
@@ -121,54 +122,80 @@ export default defineComponent({
     },
 
     data() {
-        return {
-            formErrors: [] as string[],
-            pageTitle: "",
-            userId: useAuthStore().user.uid,
-            store: useSiteStore(),
-            site: Object as unknown as Site,
-        };
+      return {
+          formErrors: [] as string[],
+          pageTitle: "",
+          userId: useAuthStore().user.uid,
+          store: useSiteStore(),
+          siteService: siteService(),
+          snackbarStore: useSnackbarStore(),
+          site: Object as unknown as Site,
+      };
     },
 
     created() {
-        this.formErrors = [];
-        this.pageTitle = this.$route.params.title as string;
-        const siteId = this.store.site.siteId;
-        if (siteId !== undefined && siteId !== "") {
-            this.site = this.store.site;
-        }
+      this.formErrors = [];
+      this.pageTitle = this.$route.params.title as string;
+      this.site = this.store.site;
     },
 
     methods: {
-        updateImageUrl(url: string): void {
-            this.site.image = url;
-        },
-        cancelClicked() {
-            this.$router.push("/sites");
-        },
-        saveClicked() {
-            this.formErrors = [];
-            const errors: string[] = this.validateForm();
-            // if (errors.length === 0) {
-            //   // this.store.dispatch(AllActionTypes.SAVE_SITE, this.site)
-            //   // .then(() => {
-            //   //   showTheSnackbar('Site Record Saved',  `The site ${this.site.name} has been created`, 'success');
-            //   // })
-            //   // .catch((err: Notification) => {
-            //   //   showTheSnackbar('Error', err.message, 'error');
-            //   // })
-            //   // ;
-            // } else {
-            //   this.formErrors = errors;
-            // }
-        },
-        validateForm(): string[] {
-            const errors: string[] = [];
-            if (this.site.name.length < 5) {
-                errors.push("Site name must be more than 5 characters");
-            }
-            return errors;
+      updateImageUrl(url: string): void {
+          this.site.image = url;
+      },
+
+      cancelClicked() {
+          this.$router.push("/sites");
+      },
+      
+      async saveClicked() {
+        if (!this.isFormCompletedCorrectly(this.validateForm())) {
+          return;
         }
+        try {
+          if (this.site.siteId === '') {
+            await siteService().saveNewSite(this.site);
+          } else {
+            await siteService().saveExistingSite(this.site);
+          }
+          this.snackbarStore.setSnackbarMessage(
+            { 
+              type: 'success',
+              payload: {
+                message: `The site ${this.site.name} has been created`,
+                title: 'Site Record Saved' 
+              }
+            }); 
+        } catch (err) {
+          console.log('%c⧭', 'color: #0088cc', err)
+          this.snackbarStore.setSnackbarMessage(
+            { 
+              type: 'error',
+              payload: {
+                message: 'Failed to save site',
+                title: 'Error' 
+              }
+            }); 
+
+        }
+    
+      },
+
+      isFormCompletedCorrectly(errors: string[]): boolean {
+        if (errors.length > 0) {
+          this.formErrors = errors;
+          return false;
+        }
+        return true
+      },
+
+      validateForm(): string[] {
+          const errors: string[] = [];
+          if (this.site.name.length < 5) {
+              errors.push("Site name must be more than 5 characters");
+          }
+          return errors;
+      },
     },
 })
 </script>

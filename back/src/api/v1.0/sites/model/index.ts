@@ -5,6 +5,7 @@ interface Site {
   description: string;
   url: string;
   image: string;
+  userId: string;
 };
 
 interface SiteSettings {
