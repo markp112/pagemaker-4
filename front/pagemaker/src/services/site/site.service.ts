@@ -1,6 +1,7 @@
 import type { Site } from '@/classes/sites';
 import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models/colours.model';
 import type { SiteSettings } from '@/classes/sites/siteColours/models/siteSetting.model';
+import type { TypographyInterface } from '@/classes/sites/typography/model';
 import { useSiteStore } from '@/stores/site.store';
 import { axiosClient } from '../httpService';
 
@@ -8,14 +9,25 @@ import { axiosClient } from '../httpService';
 function siteService() {
   const BASE_ROUTE = '/sites/';
   const store = useSiteStore();
-  const getRoute = (userId: string, siteId: String) => `${BASE_ROUTE}/${userId}/${siteId}`;
+  const getRoute = (userId: string, siteId: String) => `${BASE_ROUTE}${userId}/${siteId}`;
 
-  async function getSiteSettings(userId: string, siteId: string):Promise<void> {
+  async function getSiteMaterialColours(userId: string, siteId: string):Promise<void> {
     try {
-      const siteSettings = await axiosClient().get<SiteSettings>(getRoute(userId, siteId));
-      if (siteSettings) {
-        store.setColourPalette(siteSettings.colours);
-        store.setTypography(siteSettings.typography)
+      const materialColours = await axiosClient().get<MaterialColoursInterface>(`${getRoute(userId, siteId)}/materialcolours`);
+      if (materialColours) {
+        store.setMaterialColours(materialColours);
+      }
+    }
+    catch (err) {
+      console.log('%c⧭', 'color: #cc0036', err);
+    }
+  }
+
+  async function getSiteTypography(userId: string, siteId: string):Promise<void> {
+    try {
+      const typography = await axiosClient().get<TypographyInterface>(`${getRoute(userId, siteId)}/materialcolours`);
+      if (typography) {
+        store.setTypography(typography)
       }
     }
     catch (err) {
@@ -31,7 +43,7 @@ function siteService() {
       return await axiosClient().put<Site, Site>(getRoute(site.userId, site.siteId), site);
   }
 
-  return { getSiteSettings, saveNewSite, saveExistingSite }
+  return { getSiteMaterialColours, saveNewSite, saveExistingSite }
 }
 
 export { siteService };

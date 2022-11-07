@@ -38,14 +38,14 @@ function sitesController() {
     }
   }
 
-  async function getSiteColours(userId: string, siteId: string) {
+  async function getSiteMaterialColours(userId: string, siteId: string) {
     try {
       const coloursCollection = `${userId}${siteId}::settings`;
       const docRef = doc(firebaseDb, coloursCollection, 'siteSettings')
       const firebaseResponse = await getDoc(docRef);
       if (firebaseResponse.exists()) {
         const siteSettings = firebaseResponse.data() as unknown as SiteSettings;
-        return constructResponse<SiteSettings>(siteSettings, 200);
+        return constructResponse<Record<string, string>[]>(siteSettings.colours, 200);
       }
     } catch (err) {
       logger.error(err);
@@ -54,7 +54,7 @@ function sitesController() {
     
   }
 
-  return { getSites, getSiteColours, saveSite };
+  return { getSites, getSiteMaterialColours, saveSite };
 }
 
 export { sitesController };

@@ -44,7 +44,7 @@ async function performGet<T>(path: string): Promise<T> {
     if (response.status !== 200) {
       reject(response.data.err);
     } else {
-      resolve(response.data);
+      resolve(response.data.data);
     }
   });
 }
@@ -84,7 +84,7 @@ async function performPut<T, U>(path: string, payload: T, config: AxiosRequestCo
     if (response.status >= 400) {
       reject(response.data.err);
     }
-    resolve(response.data );
+    resolve(response.data.data);
   })
 }
 

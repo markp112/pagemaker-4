@@ -15,12 +15,18 @@ function auth() {
     store.cacheUser();
   }
 
+  function isTokenExpired(tokenDate: string) {
+    const tokenDateTime = new Date(tokenDate);
+    const expiryTime = tokenDateTime.setTime(tokenDateTime.getTime() + 59 * 60 * 60 * 1000);
+    return new Date() > new Date(expiryTime);
+  }
+
   async function login(credential: Credentials): Promise<boolean> {
     try {
       const response = await axiosClient().post(`${baseRoute}login`, credential);
       if (response) {
         const user: User = response as User;
-        console.log('%c⧭', 'color: #9c66cc', user);
+        user.expiry = new Date().toLocaleDateString();
         store.setUser(user);
         store.cacheUser();
         return true;
@@ -33,7 +39,7 @@ function auth() {
     }
   }
 
-  return { login, getCachedUser, cacheUser };
+  return { login, getCachedUser, cacheUser, isTokenExpired };
 }
 
 export { auth };

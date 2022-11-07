@@ -65,7 +65,7 @@ import SiteCard from './components/siteCard/siteCard.vue';
       async getSiteDefaults(siteId: string, route: string) {
         this.store.setCurrentSite(siteId);
         this.siteStore.setSite(this.store.currentSite);
-        await siteService().getSiteSettings(this.userId, siteId);
+        await siteService().getSiteMaterialColours(this.userId, siteId);
         this.$router.push(route);
       },
       

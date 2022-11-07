@@ -9,7 +9,7 @@ const useSiteStore = defineStore({
   state: () => {
     return {
       _site: {} as Site,
-      _colourPalette: {} as MaterialColoursInterface,
+      _materialColours: {} as MaterialColoursInterface,
       _typography: {} as TypographyInterface,
     }
   },
@@ -19,8 +19,8 @@ const useSiteStore = defineStore({
       return state._site;
     },
 
-    colourPalette: (state) => {
-      return state._colourPalette;
+    getMaterialColours: (state) => {
+      return state._materialColours;
     },
 
     typography: (state) => {
@@ -34,8 +34,8 @@ const useSiteStore = defineStore({
       this._site = site;
     },
 
-    setColourPalette(colourPalette: MaterialColoursInterface) {
-      this._colourPalette = colourPalette;
+    setMaterialColours(colourPalette: MaterialColoursInterface) {
+      this._materialColours = colourPalette;
     },
 
     setTypography(typeography: TypographyInterface) {

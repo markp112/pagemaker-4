@@ -50,12 +50,12 @@ paths:
                   type: object
                   $ref: '#/components/schemas/site'
                   
-  /sites/{userId}/{siteId}/colours:
+  /sites/{userId}/{siteId}/materialcolours:
     get:
       tags:
         - public
         - site
-      summary: get the default colours for this site
+      summary: get the current material colour assignments for this site
       description: returns the default colour palette defined for the site
       parameters:
         - name: userId
@@ -195,7 +195,6 @@ paths:
       summary: get the default colour palette for a site
       description: returns the default colour palette for a given site
       parameters:
-        
         - $ref: "#/components/parameters/siteId"
       responses:
         '200':

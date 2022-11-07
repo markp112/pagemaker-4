@@ -37,22 +37,29 @@ export default defineComponent({
     return {
       store: useNavMenuItemStore(),
       authStore: useAuthStore(),
+      authService: auth(),
       toolbarWidth: 'w-2/12',
       toolbarHidden: false,
     }
   },
 
   async mounted() {
+    router.push('/login');
     // if (this.authStore.user.tokenId === undefined) {
     //   const user = auth().getCachedUser();
     //   console.log('%c⧭', 'color: #733d00', user)
-    //   if (user?.tokenId !== null) {
-    //     auth().cacheUser(user);
-    //     this.$router.push('/sites');
+    //   if (user === null) {
+    //     router.push('/login');
+    //   } else {
+    //     if (user.tokenId !== null) {
+    //       if (this.authService.isTokenExpired(user.expiry)) {
+    //         router.push('login');
+    //       } else {
+    //         auth().cacheUser(user);
+    //         this.$router.push('/sites');
+    //       }
+    //     }
     //   }
-    //   else {
-        router.push('/login');
-      // } 
     // }
     await this.store.fetchMenuItems(true);
   },

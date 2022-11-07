@@ -5,6 +5,7 @@ type User = {
   uid: string,
   displayName: string,
   tokenId: string,
+  expiry: string,
 };
 
 export const useAuthStore = defineStore({
@@ -31,7 +32,8 @@ export const useAuthStore = defineStore({
           email: window.localStorage.getItem('PMEmail')!,
           uid: window.localStorage.getItem('PMuid')!,
           displayName: window.localStorage.getItem('PMemail')!,
-          tokenId: window.localStorage.getItem('PMToken')!
+          tokenId: window.localStorage.getItem('PMToken')!,
+          expiry: window.localStorage.getItem('PMTokenExpiry')!
         } 
         return user;
       } else {
@@ -55,6 +57,7 @@ export const useAuthStore = defineStore({
       window.localStorage.setItem('PMuid', this.$state._user.uid);
       window.localStorage.setItem('PMEmail', this.$state._user.email);
       window.localStorage.setItem('PMToken', this.$state._user.tokenId);
+      window.localStorage.setItem('PMTokenExpiry', this.$state._user.tokenId);
     }
   }
 
