@@ -65,7 +65,7 @@ import SiteCard from './components/siteCard/siteCard.vue';
       async getSiteDefaults(siteId: string, route: string) {
         this.store.setCurrentSite(siteId);
         this.siteStore.setSite(this.store.currentSite);
-        await siteService().getSiteSettings(this.userId, siteId);
+        await siteService().getSiteMaterialColours(this.userId, siteId);
         this.$router.push(route);
       },
       
@@ -79,7 +79,8 @@ import SiteCard from './components/siteCard/siteCard.vue';
 
       siteEditClick(siteId: string) {
         try {
-          this.getSiteDefaults(siteId, `/editSite` );
+          this.getSiteDefaults(siteId, `/editSite`);
+          this.$router.push({ name: 'editSite', params: { title: 'edit site' }})
         } catch (error) {
             console.log('%c⧭', 'color: #5200cc', error)
         }

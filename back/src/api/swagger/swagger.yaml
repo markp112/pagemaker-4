@@ -48,14 +48,14 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: '#/components/schemas/sites'
+                  $ref: '#/components/schemas/site'
                   
-  /sites/{userId}/{siteId}:
+  /sites/{userId}/{siteId}/materialcolours:
     get:
       tags:
         - public
         - site
-      summary: get the default colours for this site
+      summary: get the current material colour assignments for this site
       description: returns the default colour palette defined for the site
       parameters:
         - name: userId
@@ -81,6 +81,44 @@ paths:
                   type: object
                   $ref: '#/components/schemas/colour'
 
+  /sites/{userId}/{siteId}:
+    post:
+      tags:
+        - sites
+      summary: Save details of a new site
+      requestBody:
+        description: details of the site
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+      responses:
+        '201':
+          description: Site was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+    put:
+      tags:
+        - sites
+      summary: Save details of a new site
+      requestBody:
+        description: details of the site
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+      responses:
+        '201':
+          description: Site was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+
   /pages/{userId}/{siteId}:
     get:
       tags:
@@ -101,6 +139,53 @@ paths:
                   type: object
                   $ref: "#/components/schemas/pages"
 
+  /users/{userId}/images/url/${userBucket}:
+    get:
+      tags:
+        - public
+        - images
+      summary: returns the download url for an image
+      description: returns the download url for an image
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - name: userBucket
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/user-bucket"
+      responses:
+        '200':
+          description: string url for the file long lived
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /users/{userId}/images/list/${userBucket}:
+    get:
+      tags:
+        - public
+        - users
+        - images
+      summary: return a list of images for a given bucket
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - name: userBucket
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/user-bucket"
+      responses:
+        '200':
+          description: Returns a list of images in the bucket
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref:  "#/components/schemas/bucket-image"
+
   /settings/colours:
     get:
       tags:
@@ -110,7 +195,6 @@ paths:
       summary: get the default colour palette for a site
       description: returns the default colour palette for a given site
       parameters:
-        - $ref: "#/components/parameters/userId"
         - $ref: "#/components/parameters/siteId"
       responses:
         '200':
@@ -178,6 +262,7 @@ components:
       description: logged in user id
       schema:
         type: string
+    
     siteId:
       name: siteId
       in: path
@@ -218,12 +303,15 @@ components:
           title: password for user
           type: string
 
-    sites:
+    site:
       type: object
       title: A site
       properties:
         siteId:
           title: unique id for the site
+          type: string
+        userId:
+          title: id of the user
           type: string
         description:
           title: description of the site
@@ -348,3 +436,31 @@ components:
           title: Date edited
           description: date the page was kast edited
           type: string
+
+    user-bucket:
+      type: object
+      title: userBucket
+      description: information about a users storage bucket for images and the name of the file required
+      properties:
+        bucket:
+          title: Bucket name
+          type: string
+        userId:
+          title: filename
+          type: string
+    
+    bucket-image:
+      type: object
+      title: Bucket Image
+      description: Details of a single image
+      properties:
+        bucket:
+          title: bucket name
+          type: string
+        fullpath: 
+          title: full path to the image
+          type: string
+        name:
+          title: filename of the image
+          type: string
+  

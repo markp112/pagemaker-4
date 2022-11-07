@@ -14,7 +14,7 @@ import { defineComponent } from 'vue';
 import BaseButton from '../baseButton.vue';
 
 export default defineComponent({
-  name = 'CloseButton',
+  name: 'CloseButton',
   
   emits: ['onClick'],
 
@@ -28,5 +28,5 @@ export default defineComponent({
       this.$emit('onClick');
     },
   },
-}
+})
 </script>

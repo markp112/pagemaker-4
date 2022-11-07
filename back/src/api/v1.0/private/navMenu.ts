@@ -1,6 +1,8 @@
+import { constructResponse } from '../../../common/functions/constructResponse';
 import express from 'express';
 import { logger } from '../../../logger';
 import { navMenu } from './data/navMenuData';
+import { NavMenuItemInterface } from './data/navMenuModel';
 
 
 const navMenuRouter = express.Router();
@@ -17,10 +19,9 @@ navMenuRouter.get(`${ROUTE_PATH}/:isLoggedIn`, (req,res) => {
     whichMenu = loggedInMenu;
   } else {
     whichMenu = loggedOutMenu;
-  }
-  res.statusCode = 200;
-  logger.info(`sending menu: ${whichMenu}`)
-  res.send(whichMenu);
+  } 
+  const response = constructResponse<NavMenuItemInterface[]>(whichMenu, 200);
+  res.status(response.status).send(response);
 });
 
 export { navMenuRouter };

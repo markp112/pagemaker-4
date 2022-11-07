@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
-import { useRoute } from 'vue-router';
 
 type User = {
   email: string,
   uid: string,
   displayName: string,
+  tokenId: string,
+  expiry: string,
 };
 
 export const useAuthStore = defineStore({
@@ -28,9 +29,11 @@ export const useAuthStore = defineStore({
     getCachedUser: (): User | null => {
       if (window.localStorage.getItem('PMuid')) {
         const user: User = {
-          email: window.localStorage.getItem('PMemail')!,
+          email: window.localStorage.getItem('PMEmail')!,
           uid: window.localStorage.getItem('PMuid')!,
-          displayName: window.localStorage.getItem('PMemail')!
+          displayName: window.localStorage.getItem('PMemail')!,
+          tokenId: window.localStorage.getItem('PMToken')!,
+          expiry: window.localStorage.getItem('PMTokenExpiry')!
         } 
         return user;
       } else {
@@ -42,6 +45,7 @@ export const useAuthStore = defineStore({
 
   actions: {
     setUser(user: User) {
+      console.log('%c⧭', 'color: #aa00ff', user);
       this.$state._user = user;
     },
 
@@ -51,7 +55,9 @@ export const useAuthStore = defineStore({
       }
       window.localStorage.setItem('PMdisplayName', this.$state._user.displayName);
       window.localStorage.setItem('PMuid', this.$state._user.uid);
-      window.localStorage.setItem('PMdemail', this.$state._user.email);
+      window.localStorage.setItem('PMEmail', this.$state._user.email);
+      window.localStorage.setItem('PMToken', this.$state._user.tokenId);
+      window.localStorage.setItem('PMTokenExpiry', this.$state._user.tokenId);
     }
   }
 

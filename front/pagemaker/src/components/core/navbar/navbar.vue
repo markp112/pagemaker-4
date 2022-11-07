@@ -1,7 +1,7 @@
 <template>
-  <div class="py-2 bg-site-primary shadow-lg h-16 z-20 w-full">
+  <div class="py-2 bg-site-primary shadow-lg h-16 z-20 w-full pr-5">
     <nav class="text-on-primary flex items-center justify-between">
-      <div class="">
+      <div class="pr-10">
         <img
           src="@/assets/icons/layout-48.png"
           class="ml-2 text-primary-200 cursor-pointer hover:text-primary-100 self-start"
@@ -15,11 +15,11 @@
         />
 
         <div id="menu"
-          class="flex justify-end toggleable z-30 absolute top-12 right-0 bg-white border-gray-100 border-2"
+          class="flex justify-end toggleable z-30 absolute top-12 right2 bg-white border-gray-100 border-2"
           v-if="toggleMenu"
         >
           <ul
-            class="w-20 mr-1 dropdown-menu-background z-10 rounded-lg shadow-lg text-sm"
+            class="w-20 mr-1 dropdown-menu-background z-10 rounded-lg shadow-lg text-sm h-auto"
             @mouseleave="toggleMenu = !toggleMenu"
           >
             <li
@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts">
+import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
 import type { PropType } from 'vue';
 import { defineComponent, } from 'vue';
 import type { NavMenuItem } from './navbar';
@@ -49,17 +50,16 @@ export default defineComponent({
   props: {
     navMenuItems: {
       type: Object as PropType<NavMenuItem[]>,
+      required: true,
     }
   },
-
+  
   emits: ['navMenuClicked',],
-
-  mounted() {
-  },
-
+  
   data() {
     return {
       toggleMenu: false,
+      store: useNavMenuItemStore(),
     }
   },
 

@@ -10,14 +10,11 @@ import { formatTimeStampAsDate } from '../../../../common/functions/dateFunction
 function pagesController() {
 
   async function getPages(userId: string, siteId: string) {
-    console.log('%c%s', 'color: #007300', siteId);
-    console.log('%c%s', 'color: #807160', userId);
     try {
       const pagesCollection = getUserAndSiteId(userId, siteId, 'pages');
       const firebaseResponse = await getDocs(collection(firebaseDb, pagesCollection));
       const pages: Page[] = [];
       firebaseResponse.docs.forEach(doc => {
-        console.log('%c⧭', 'color: #731d1d', doc.data);
         const page = doc.data() as unknown as Page;
         page.created = formatTimeStampAsDate(doc.data().created);
         page.edited = formatTimeStampAsDate(doc.data().edited);

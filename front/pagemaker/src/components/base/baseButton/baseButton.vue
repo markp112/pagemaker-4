@@ -62,7 +62,7 @@ export default defineComponent({
     },
 
     getStyling(): string {
-      const baseStyling = `${this.getSize} flex items-center justify-center p-2 bg-site-site-primary-dark`;
+      const baseStyling = `${this.getSize} flex items-center justify-center p-2`;
       const active = `cursor-pointer hover:bg-site-${this.buttonType} hover:text-accent-2`;
       const activeOutline = `cursor-pointer hover:bg-border-${this.buttonType} hover:text-accent-1`;
       const activeText = `cursor-pointer hover:text-accent-1 text-site-${this.buttonType}`;
@@ -73,7 +73,7 @@ export default defineComponent({
         return `bg-gray-200 text-dark ${baseStyling} ${style}`;
       }
       if (this.variant === 'solid') {
-        return `bg-site-${this.buttonType}-light text-on-${this.buttonType} ${baseStyling} ${active} shadow-md ${style}`;
+        return `bg-site-${this.buttonType}-light text-on-${this.buttonType} ${baseStyling} ${active} shadow-md ${style} bg-site-${this.buttonType}-dark`;
       }
       if (this.variant === 'outline') {
         return `border border-site-${this.buttonType}-light ${baseStyling} ${activeOutline} shadow-md ${style}`;

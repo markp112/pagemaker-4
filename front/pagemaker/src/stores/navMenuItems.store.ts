@@ -6,26 +6,29 @@ type menuItems = NavMenuItem[];
 
 export const useNavMenuItemStore = defineStore({
   id: 'navMenuItems',  
-  state: () => ({
-    navMenutItems: [] as menuItems,
-  }),
+
+  state: () => {
+    return {
+      _navMenuItems: [] as menuItems,
+    }
+  },
 
   getters: {
     getMenuItems: (state) => {
-      return state.navMenutItems;
+      return state._navMenuItems;
     },
   },
   
   actions: {
     add(menuItem: NavMenuItem) {
-      this.navMenutItems.push(menuItem);
+      this._navMenuItems.push(menuItem);
     },
 
     async fetchMenuItems(isLoggedIn: boolean) {
       const route = `/private/menus/navmenu/${isLoggedIn}`;
       try {
-        const menu = await axiosClient().get<NavMenuItem[]>(route)
-          this.$state.navMenutItems = menu;
+        this._navMenuItems = await axiosClient().get<NavMenuItem[]>(route)
+        console.log('%c⧭', 'color: #f200e2', this._navMenuItems);
       } catch(err) {
         console.log(err);
         throw(err);

@@ -31,6 +31,7 @@ import type { SliderPosition, SliderSettings } from '@/components/canvas/scaler/
 import Scaler from '@/components/canvas/scaler/scaler.vue';
 import { auth } from '@/services/auth';
 
+
 const scalerSettings: SliderSettings = {
   min: 0,
   max: 200,
