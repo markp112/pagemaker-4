@@ -66,7 +66,6 @@ export default defineComponent ({
   methods: {
 
     iconClick(): void {
-      console.log('%c⧭', 'color: #731d6d', this.$props.iconImage.id)
       return this.$emit('iconClick', this.$props.iconImage.id);
     },
 
