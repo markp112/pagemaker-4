@@ -20,27 +20,17 @@
 </style>
 
 <script lang="ts">
-  const TOOLBAR_ICON_HIDE: Icon = {
-    classDef: '',
-    icon: 'left-grey-24.png',
-    id: 'hideToolbar',
-    tooltip: 'Hide toolbar'
-  };
-  const TOOLBAR_ICON_UNHIDE: Icon = {
-    classDef: '',
-    icon: 'right-grey-24.png',
-    id: 'showToolbar',
-    tooltip: 'Show toolbar'
-  };
+  const TOOLBAR_ICON_HIDE = LEFT_ARROW;
+  const TOOLBAR_ICON_UNHIDE = RIGHT_ARROW;
 
 import iconVue from '@/components/utility/icon/icon.vue';
-import type { Icon } from '@/components/utility/icon/model/model';
 import { toolbarService } from '@/services/toolbar/toolbar.service';
 import { useToolbarStore } from '@/stores/toolbars.store';
 import { defineComponent } from 'vue';
 import ToolbarItem from './toolbarItem.vue';
 import ToolbarContainer from './toolbarContainer.vue';
 import type { Toolbar } from './model';
+import { LEFT_ARROW, RIGHT_ARROW } from '../common/models/showHideIcons';
 
 export default defineComponent({
   name: 'toolbarPanel', 

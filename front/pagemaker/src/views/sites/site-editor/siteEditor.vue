@@ -1,106 +1,109 @@
 <template>
-  <div class="form-page-wrapper mt-16 w-full flex-wrap">
-    <div class="w-7/12 bg-secondary-100 text-accent1 text-3xl flex flex-row">
-      <img
-        src="@/assets/images/website-building.png"
-        alt="picture of lined paper"
-      />
-      <p class="mt-4">{{ pageTitle }}</p>
-    </div>
-    <form
-      @submit.prevent="saveClicked"
-      class="w-7/12 border-2 p-5 bg-secondary-900"
-    >
-      <div class="field-wrapper">
-        <label for="name">Site Name:</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          v-model="site.name"
-          placeholder="The name of your site"
-          required
+  <div class="flex justify-between h-screen relative">
+    <div class="form-page-wrapper mt-16 w-full flex-wrap">
+      <div class="w-7/12 bg-secondary-100 text-accent1 text-3xl flex flex-row">
+        <img
+          src="@/assets/images/website-building.png"
+          alt="picture of lined paper"
         />
+        <p class="mt-4">{{ pageTitle }}</p>
       </div>
-      <div class="field-wrapper">
-        <label for="description">Description</label>
-        <textarea
-          rows="4"
-          name="name"
-          id="name"
-          v-model="site.description"
-          placeholder="Description of your site"
-        ></textarea>
-      </div>
-      <div class="field-wrapper">
-        <label for="image">Site Image</label>
-        <div class="w-10/12">
-          <UploadImage
-            :url-edited="site.image"
-            :user-id="userId"
-            class="mt-4 mb-2"
-            v-on:imageChange="updateImageUrl"
+      <form
+        @submit.prevent="saveClicked"
+        class="w-7/12 border-2 p-5 bg-secondary-900"
+      >
+        <div class="field-wrapper">
+          <label for="name">Site Name:</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            v-model="site.name"
+            placeholder="The name of your site"
+            required
           />
         </div>
-      </div>
-      <div class="field-wrapper">
-        <label for="created">Created:</label>
-        <input type="date" name="created" id="created" v-model="site.created" />
-      </div>
-      <div class="field-wrapper">
-        <label for="Url">Url:</label>
-        <input
-          type="text"
-          name="Url"
-          id="url"
-          v-model="site.url"
-          placeholder="url for website"
-        />
-      </div>
-      <div class="field-wrapper">
-        <label for="published">Published:</label>
-        <input
-          type="date"
-          name="published"
-          id="published"
-          v-model="site.published"
-          placeholder="url for website"
-        />
-      </div>
-      <div class="field-wrapper">
-        <label for="host-repo">Host URL:</label>
-        <input
-          type="text"
-          name="host-repo"
-          id="host-repo"
-          v-model="site.hostRepo"
-          placeholder="url for website"
-        />
-      </div>
-      <div class="flex justify-between flex-row mt-8">
-        <p class="w-16">
-          <BaseButton
-            buttonType="primary"
-            variant="outline"
-            size="small"
-            @onClick="cancelClicked()"
-          >
-              Cancel
-          </BaseButton>
-        </p>
-        <p class="w-16">
-          <BaseButton
-            buttonType="primary"
-            variant="solid"
-            size="small"
-            @onClick="saveClicked()"
-          >
-            Save
-          </BaseButton>
-        </p>
-      </div>
-    </form>
-  </div>
+        <div class="field-wrapper">
+          <label for="description">Description</label>
+          <textarea
+            rows="4"
+            name="name"
+            id="name"
+            v-model="site.description"
+            placeholder="Description of your site"
+          ></textarea>
+        </div>
+        <div class="field-wrapper">
+          <label for="image">Site Image</label>
+          <div class="w-10/12">
+            <UploadImage
+              :url-edited="site.image"
+              :user-id="userId"
+              class="mt-4 mb-2"
+              v-on:imageChange="updateImageUrl"
+            />
+          </div>
+        </div>
+        <div class="field-wrapper">
+          <label for="created">Created:</label>
+          <input type="date" name="created" id="created" v-model="site.created" />
+        </div>
+        <div class="field-wrapper">
+          <label for="Url">Url:</label>
+          <input
+            type="text"
+            name="Url"
+            id="url"
+            v-model="site.url"
+            placeholder="url for website"
+          />
+        </div>
+        <div class="field-wrapper">
+          <label for="published">Published:</label>
+          <input
+            type="date"
+            name="published"
+            id="published"
+            v-model="site.published"
+            placeholder="url for website"
+          />
+        </div>
+        <div class="field-wrapper">
+          <label for="host-repo">Host URL:</label>
+          <input
+            type="text"
+            name="host-repo"
+            id="host-repo"
+            v-model="site.hostRepo"
+            placeholder="url for website"
+          />
+        </div>
+        <div class="flex justify-between flex-row mt-8">
+          <p class="w-16">
+            <BaseButton
+              buttonType="primary"
+              variant="outline"
+              size="small"
+              @onClick="cancelClicked()"
+            >
+                Cancel
+            </BaseButton>
+          </p>
+          <p class="w-16">
+            <BaseButton
+              buttonType="primary"
+              variant="solid"
+              size="small"
+              @onClick="saveClicked()"
+            >
+              Save
+            </BaseButton>
+          </p>
+        </div>
+      </form>
+    </div>
+  <settingsPanelVue :toolbar-hidden="false" class="w-3/12 h-full"></settingsPanelVue>
+</div>
 </template>
 
 <script lang="ts">
@@ -112,6 +115,7 @@ import UploadImage from '@/components/base/pickers/uploadImage/uploadImage.vue';
 import { useAuthStore } from '@/stores/auth.store';
 import { siteService } from '@/services/site/site.service';
 import { useSnackbarStore } from '@/stores/snackbar.store';
+import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 
 export default defineComponent({
     name: 'SiteEditor',
@@ -119,6 +123,7 @@ export default defineComponent({
     components: {
       BaseButton: baseButtonVue,
       UploadImage,
+      settingsPanelVue,
     },
 
     data() {
