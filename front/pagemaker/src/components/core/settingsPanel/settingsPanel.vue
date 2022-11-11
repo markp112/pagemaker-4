@@ -60,9 +60,7 @@ export default defineComponent({
 
   methods: {
     toggleToolbar(event: string): void {
-      console.log('%c⧭', 'color: #007300', event)
       this.activeIcon = event === 'hideToolbar' ? TOOLBAR_ICON_UNHIDE : TOOLBAR_ICON_HIDE;
-      console.log('%c⧭', 'color: #807160', this.activeIcon )
       this.width = this.width === 'full' ? 'w-1' : 'full';
       this.$emit('toggleClicked');
     },

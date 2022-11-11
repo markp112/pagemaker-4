@@ -102,7 +102,10 @@
         </div>
       </form>
     </div>
-  <settingsPanelVue :toolbar-hidden="false" class="w-3/12 h-full"></settingsPanelVue>
+  <settingsPanelVue :toolbar-hidden="false" class="w-3/12 h-full">
+    <ColourDropDown colour="#d3eeff" tooltip="select colour"/>
+    <MaterialColours :material-colours="getMaterialColours"/>
+  </settingsPanelVue>
 </div>
 </template>
 
@@ -116,6 +119,9 @@ import { useAuthStore } from '@/stores/auth.store';
 import { siteService } from '@/services/site/site.service';
 import { useSnackbarStore } from '@/stores/snackbar.store';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
+import SiteMaterialColour from '@/components/base/pickers/colour/sidePanel/materialColours/siteMaterialColour.vue';
+import ColourDropDown from '@/components/base/pickers/colour/colourPicker/colourDropdown/colourDropDown.vue';
+
 
 export default defineComponent({
     name: 'SiteEditor',
@@ -124,6 +130,8 @@ export default defineComponent({
       BaseButton: baseButtonVue,
       UploadImage,
       settingsPanelVue,
+      MaterialColours: SiteMaterialColour,
+      ColourDropDown,
     },
 
     data() {
@@ -142,6 +150,16 @@ export default defineComponent({
       this.formErrors = [];
       this.pageTitle = this.$route.params.title as string;
       this.site = this.store.site;
+    },
+
+    computed: {
+      getMaterialColours() {
+        return this.store.getMaterialColours;
+      },
+
+      async getSitePalette() {
+        return this.store.getColourPalette;
+      }
     },
 
     methods: {

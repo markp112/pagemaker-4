@@ -2,9 +2,10 @@ import { constructResponse } from '../../../../common/functions/constructRespons
 import { collection, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '../../../../firebase/initFirebase';
 import { Response } from '@api/types';
-import { Site, SiteSettings } from '../model';
+import { Site, SiteSettings } from '../model/site';
 import { GenericError } from '../../../../common/errors/customErrors';
 import { logger } from '../../../../logger/logger';
+import { ColourPalette } from '../model/colourPalette';
 
 function sitesController() {
 
@@ -51,10 +52,28 @@ function sitesController() {
       logger.error(err);
       throw new GenericError(err);
     }
-    
   }
 
-  return { getSites, getSiteMaterialColours, saveSite };
+  async function getSiteColourPalette(userId: string, siteId: string) {
+    try {
+      const paletteCollection = `${userId}${siteId}::settings`;
+      const docRef = doc(firebaseDb, paletteCollection, 'siteColourPalette')
+      const firebaseResponse = await getDoc(docRef);
+      if (firebaseResponse.exists()) {
+        const colourPalette = firebaseResponse.data() as unknown as ColourPalette;
+        return constructResponse<ColourPalette>(colourPalette, 200);
+      }
+    } catch (err) {
+      logger.error(err);
+      throw new GenericError(err);
+    }
+  }
+
+  return { 
+    getSites,
+    getSiteMaterialColours,
+    getSiteColourPalette,
+    saveSite };
 }
 
 export { sitesController };

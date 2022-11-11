@@ -1,7 +1,7 @@
 import { logger } from '../../../logger/logger';
 import express from 'express';
 import { sitesController } from './controller';
-import { Site } from './model';
+import { Site } from './model/site';
 import { Guid } from '../../../common/classes/guid';
 
 const sitesRouter = express.Router();
@@ -26,6 +26,19 @@ sitesRouter
     const siteId = req.params.siteId;
     try {
       const response = await sitesController().getSiteMaterialColours(userId, siteId);
+      res.status(response.status).send(response);
+    } catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response);
+    }
+  })
+  
+  .get(`${ROUTE_PATH}/:userId/:siteId/colourpalette`, async (req, res) => {
+    logger.info('material colours called');
+    const userId = req.params.userId;
+    const siteId = req.params.siteId;
+    try {
+      const response = await sitesController().getSiteColourPalette(userId, siteId);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
