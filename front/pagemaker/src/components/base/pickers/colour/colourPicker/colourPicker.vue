@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="flex flex-row justify-start z-50" @mouseleave="onMouseLeave">
-      <ColourPalette :hue="hue" @colour="setColour"/>
-      <ColourSlider @colour="setHue"/>
+      <ColourPalette :hue="sliderHue" @colour-click="setColour"/>
+      <ColourSlider @colour-click="setHue"/>
     </div>
   </div>
 </template>
@@ -17,6 +17,13 @@ export default defineComponent({
   
   emits: [ 'colourClicked', 'onMouseLeave' ],
   
+  props: {
+    hue: { 
+      type: String,
+      required: true,
+    }
+  },
+
   components: {
     ColourSlider,
     ColourPalette,
@@ -24,7 +31,7 @@ export default defineComponent({
 
   data() {
     return {
-      hue: '#000000',
+      sliderHue: this.$props.hue.toString(),
     }
   },
 
@@ -40,7 +47,7 @@ export default defineComponent({
     },
     
     setHue(hue: string) {
-      this.hue = hue;
+      this.sliderHue = hue;
     },
   }
 })

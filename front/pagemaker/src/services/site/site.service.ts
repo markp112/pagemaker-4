@@ -48,12 +48,21 @@ function siteService() {
     }
   }
 
-  async function getSiteColourPalette(siteAndUser: SiteAndUser): Promise<ColourPalette> {
-    if (store.getColourPalette) {
-      return store.getColourPalette;
-    }
+  async function getSiteColourPalette(siteAndUser: SiteAndUser): Promise<void> {
     await fetchSiteColourPalette(siteAndUser);
-    return store.getColourPalette;
+  }
+
+  async function saveSitePalette(colourPalette: ColourPalette, siteAndUser: SiteAndUser) {
+    try {
+      const savedPalette = await axiosClient().post<ColourPalette, ColourPalette>(`${getRoute(siteAndUser.userId, siteAndUser.siteId)}/colourpalette`,colourPalette);
+      if (savedPalette) {
+        store.setColourPalette(savedPalette);
+      }
+    } 
+    catch (err) {
+      console.log(err);
+    }
+
   }
 
   async function saveNewSite(site: Site): Promise<Site> {
@@ -64,7 +73,14 @@ function siteService() {
       return await axiosClient().put<Site, Site>(getRoute(site.userId, site.siteId), site);
   }
 
-  return { getSiteMaterialColours, saveNewSite, saveExistingSite, getSiteColourPalette }
+
+
+  return { getSiteMaterialColours,
+    saveNewSite,
+    saveExistingSite,
+    getSiteColourPalette,
+    saveSitePalette,
+  }
 }
 
 export { siteService };

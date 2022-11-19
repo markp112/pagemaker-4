@@ -14,7 +14,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-
 export default defineComponent({
   name: 'colour-palette',
 
@@ -29,39 +28,36 @@ export default defineComponent({
 
   data() {
     return {
-      hue: '#ffffff',
+      hueLocal: this.$props.hue.toString(),
       colour: '#eeeeff',
-      canvas: this.$refs.canvasPalette as HTMLCanvasElement,
-      ctx: new CanvasRenderingContext2D(),
+      canvas: {} as HTMLCanvasElement,
+      ctx: {} as  CanvasRenderingContext2D,
       mousedown: false,
       selectedPosition: { x: 0, y: 0 },
     }
   },
 
-
   mounted() {
+    this.canvas = this.$refs.canvasPalette as HTMLCanvasElement;
+    // this.ctx = new CanvasRenderingContext2D();
     if (this.canvas) {
       this.ctx = this.canvas.getContext('2d')!;
       this.draw();
     }
   },
 
+  updated() {
+    this.draw();
+  },
+
   methods: {
 
-    updated() {
-      this.draw();
-    },
-    
-    onHueChange() {
-      this.draw();
-    },
-    
     draw() {
-      // if (!this.ctx) {
-      //   if (this.canvas) {
-      //     this.ctx = this.canvas.getContext("2d");
-      //   }
-      // }
+      if (!this.ctx) {
+        if (this.canvas) {
+          this.ctx = this.canvas.getContext("2d")!;
+        }
+      }
       if (this.ctx && this.canvas) {
         const width = this.canvas.width;
         const height = this.canvas.height;

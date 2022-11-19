@@ -1,10 +1,11 @@
 <template>
-  <div class="w-full flex flex-row flex-wrap">
+  <div class="w-full flex flex-col">
     <p class="w-1/12">
       {{ $props.label }}
     </p>
+    <p class="flex flex-row flex-wrap">
     <span
-      class="h-16 w-16 text-xs text-center flex flex-col justify-end cursor-pointer"
+      class="h-16 w-12 text-xs text-center flex flex-col justify-end cursor-pointer"
       v-for="(colour, index) in $props.palette"
       :key="`${index}${colour}`"
       :style="{ backgroundColor: colour, color: getFontColour(index) }"
@@ -12,10 +13,12 @@
     >
       {{ colour }}
     </span>
+  </p>
   </div>
 </template>
 
 <script lang="ts">
+import type { Colours } from '@/classes/sites/siteColours/colour/colourPalette';
 import { defineComponent, type PropType } from 'vue';
 
 export default defineComponent ({
@@ -25,7 +28,7 @@ export default defineComponent ({
 
   props: {
     palette: {
-      type: [] as PropType<string[]>,
+      type: Object as PropType<Colours>,
       required: true,
     },
     label: {

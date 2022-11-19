@@ -46,26 +46,32 @@ export default defineComponent({
   computed: {
 
     getSize(): string {
-      if (this.size === 'small' && this.buttonShape === 'rectangular')
-      return 'h-8 w-auto text-xs';
-      if (this.size === 'small' && this.buttonShape === 'circle')
-      return 'h-8 w-8 text-xs';
-      if (this.size === 'medium' && this.buttonShape === 'rectangular')
-      return 'h-10 w-auto text-sm';
-      if (this.size === 'medium' && this.buttonShape === 'circle')
-      return 'w-12 h-12 text-sm';
-      if (this.size === 'large' && this.buttonShape === 'rectangular')
-      return 'h-12 w-auto text-md';
-      if (this.size === 'large' && this.buttonShape === 'circle')
-      return 'h-16 w-16 text-md';
+      if (this.size === 'small' && this.buttonShape === 'rectangular') {
+        return 'h-6 w-auto px-2 text-xs';
+      }
+      if (this.size === 'small' && this.buttonShape === 'circle') {
+        return 'h-8 w-8 text-xs';
+      }
+      if (this.size === 'medium' && this.buttonShape === 'rectangular') {
+        return 'h-8 w-auto px-4  text-sm';
+      }
+      if (this.size === 'medium' && this.buttonShape === 'circle') {
+        return 'w-12 h-12 text-sm';
+      }
+      if (this.size === 'large' && this.buttonShape === 'rectangular') {
+        return 'h-10 w-auto px-6 text-md';
+      }
+      if (this.size === 'large' && this.buttonShape === 'circle') {
+        return 'h-16 w-16 text-md';
+      }
       return 'h-10 w-24';
     },
 
     getStyling(): string {
       const baseStyling = `${this.getSize} flex items-center justify-center p-2`;
-      const active = `cursor-pointer hover:bg-site-${this.buttonType} hover:text-accent-2`;
-      const activeOutline = `cursor-pointer hover:bg-border-${this.buttonType} hover:text-accent-1`;
-      const activeText = `cursor-pointer hover:text-accent-1 text-site-${this.buttonType}`;
+      const active = `cursor-pointer hover:bg-site-${this.buttonType} hover:text-site-primary-dark`;
+      const activeOutline = `cursor-pointer hover:bg-border-${this.buttonType} hover:text-site-primary-dark`;
+      const activeText = `cursor-pointer hover:text-site-primary-dark text-site-${this.buttonType}`;
       const inActiveText = `cursor-pointer hover:text-accent-1 text-gray-400`;
       const style = this.getStyle();
 

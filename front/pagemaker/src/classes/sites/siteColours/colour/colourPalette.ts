@@ -1,11 +1,13 @@
+import type { SupportedColourModels } from '@/classes/colourPalette/colourModels';
+
 type Colours = string[];
 
 type ColourPalette = {
   accent: Colours,
-  baseColour: string,
-  colourScheme: string,
+  colour: string,
+  colourScheme: SupportedColourModels,
   primary: Colours,
-  secondary: Colours[],
+  secondary: Colours,
 };
 
-export type { ColourPalette };
+export type { ColourPalette, Colours };

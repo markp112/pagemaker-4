@@ -8,7 +8,7 @@ export type HttpResponse = {
 
 const backEndClient = axios.create({
   baseURL: import.meta.env.BASE_URL,
-  timeout: 1000,
+  timeout: 1500,
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',

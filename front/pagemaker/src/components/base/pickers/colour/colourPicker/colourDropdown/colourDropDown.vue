@@ -5,7 +5,7 @@
         v-bind:style="{ backgroundColor: getColour() }"
         @click="emitColour()"
         @mouseover="showTooltip=true"
-        @mouseleave="showTooltip=false"
+        @mouseleave="onMouseLeave()"
       >
         <ToolTip
           style="top:20px"
@@ -19,18 +19,23 @@
           @click="show=!show"
       />
     </div>
-    <slot
-      :show="show"
-      class="absolute v-10"
-    ></slot>
+    <div class="relative">
+      <component :is="whichComponent"
+        v-if="show" 
+        v-bind="getProps()" 
+        @colour-clicked="setColor($event)" 
+        class="absolute top-1 shadow-lg"
+        ></component>
+    </div>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, setTransitionHooks } from 'vue';
 import ToolTip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import { getImageUrl } from '@/common/getIcon';
 import IconVue from '@/components/utility/icon/icon.vue';
+import ColourPicker from '../colourPicker.vue';
 
 export default defineComponent({
   name: 'colour-dropdown',
@@ -48,27 +53,47 @@ export default defineComponent({
   components: {
     ToolTip,
     IconVue,
+    ColourPicker,
   },
+
 
   data() {
     return {
       show: false,
       showTooltip: false,
+      whichComponent: 'ColourPicker',
+      colour: this.$props.colour,
     }
   },
 
   methods: {
+
     emitColour() {
       this.show = false;
-      this.$emit('onColourClick', this.$props.colour)
+      this.$emit('onColourClick', this.colour)
     },
 
     getColour(): string {
-      return this.$props.colour.toString();
+      if (this.$props.colour) {
+        return this.colour;
+      }
+      return '#00'
     },
 
     getPath(img: string) {
       return getImageUrl(img);
+    },
+
+    setColor(colour: string) {
+      this.colour = colour;
+    },
+
+    getProps() {
+      return { hue: this.$props.colour };
+    },
+
+    onMouseLeave() {
+      this.showTooltip = false;
     }
   }
 })

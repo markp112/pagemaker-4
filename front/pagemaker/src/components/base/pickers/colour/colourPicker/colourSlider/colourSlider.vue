@@ -4,7 +4,7 @@
     width="40"
     height="250"
     class="z-50"
-    @mouseDown="onmouseDown"
+    @mousedown="onMouseDown"
     @mousemove="onMouseMove"
     @mouseup="onMouseUp"
   >
@@ -17,18 +17,19 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'colour-slider',
 
-  emits: ['colourClicked'],
+  emits: ['colourClick'],
 
   data() {
     return {
-      canvas: this.$refs.canvas as HTMLCanvasElement,
-      ctx: new CanvasRenderingContext2D(),
+      canvas:  {} as HTMLCanvasElement,
+      ctx: {} as CanvasRenderingContext2D,
       mouseDown: false,
       selectedHeight: 20,
     }
   },
 
   mounted() {
+    this.canvas = this.$refs.canvas as HTMLCanvasElement;
     if(this.canvas) {
       this.ctx = this.canvas.getContext("2d")!;
       this.draw();
@@ -71,7 +72,7 @@ export default defineComponent({
     }
   },
   
-  onmouseDown(evt: MouseEvent) {
+  onMouseDown(evt: MouseEvent) {
     evt.stopPropagation();
     this.mouseDown = true;
     this.selectedHeight = evt.offsetY;
@@ -93,7 +94,7 @@ export default defineComponent({
   
   emitColor(x: number, y: number) {
     const rgbaColor = this.getColorAtPosition(x, y);
-    this.$emit('colourClicked', rgbaColor);
+    this.$emit('colourClick', rgbaColor);
   },
   
   getColorAtPosition(x: number, y: number) {
@@ -103,7 +104,8 @@ export default defineComponent({
         `rgba(${imageData[0]},${imageData[1]},${imageData[2]},1)`
         );
       }
-    }
+    },
+    
   },
 })
   </script>

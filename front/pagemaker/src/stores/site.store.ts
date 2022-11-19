@@ -12,7 +12,7 @@ const useSiteStore = defineStore({
       _site: {} as Site,
       _materialColours: {} as MaterialColoursInterface,
       _typography: {} as TypographyInterface,
-      _colourPalette: [] as ColourPalette,
+      _colourPalette: {} as ColourPalette,
     }
   },
 
@@ -49,6 +49,7 @@ const useSiteStore = defineStore({
     },
 
     setColourPalette(colourPalette: ColourPalette) {
+      console.log('%c⧭', 'color: #bfffc8', colourPalette);
       this._colourPalette = colourPalette;
     }
   }

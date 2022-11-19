@@ -103,7 +103,7 @@
       </form>
     </div>
   <settingsPanelVue :toolbar-hidden="false" class="w-3/12 h-full">
-    <ColourDropDown colour="#d3eeff" tooltip="select colour"/>
+    <ColourPalettes :site-palette="getSitePalette"/>
     <MaterialColours :material-colours="getMaterialColours"/>
   </settingsPanelVue>
 </div>
@@ -121,6 +121,7 @@ import { useSnackbarStore } from '@/stores/snackbar.store';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import SiteMaterialColour from '@/components/base/pickers/colour/sidePanel/materialColours/siteMaterialColour.vue';
 import ColourDropDown from '@/components/base/pickers/colour/colourPicker/colourDropdown/colourDropDown.vue';
+import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPlatettes/colourPalettes.vue';
 
 
 export default defineComponent({
@@ -132,6 +133,7 @@ export default defineComponent({
       settingsPanelVue,
       MaterialColours: SiteMaterialColour,
       ColourDropDown,
+      ColourPalettes,
     },
 
     data() {
@@ -157,7 +159,7 @@ export default defineComponent({
         return this.store.getMaterialColours;
       },
 
-      async getSitePalette() {
+      getSitePalette() {
         return this.store.getColourPalette;
       }
     },
