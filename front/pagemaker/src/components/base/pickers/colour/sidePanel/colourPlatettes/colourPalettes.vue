@@ -9,21 +9,21 @@
             size="medium"
             variant="outline"
             @on-click="resetPalette()"
-          >
-          reset
+            >
+            reset
           </BaseButton>
-        <img
+          <img
           v-show="!showDefaultIcon"
           :src="getPath(SAVE_ICON_HOVER)"
           class="w-10 h-10 shadow cursor-pointer"
           @mouseenter="showDefaultIcon = !showDefaultIcon"
-          @click="savePaletteSelection()"
-        />
-        <img
+          />
+          <img
           v-show="showDefaultIcon"
           :src="getPath(SAVE_ICON)"
           class="w-10 h-10 shadow cursor-pointer"
           @mouseleave="showDefaultIcon = !showDefaultIcon"
+          @click="savePaletteSelection()"
         />
       </p>
   
@@ -48,7 +48,6 @@
           @input="onSaturationChange()"
         >
       </div>
-      
     </div>
     <p class="ml-1">scheme</p>
     <div class="flex flex-row flex-wrap justify-start w-full ml-4 mb-6 mt-0">
@@ -132,8 +131,8 @@ import type { SupportedColourModels } from '@/classes/colourPalette/colourModels
 import type { ColourPalette } from '@/classes/sites/siteColours/colour/colourPalette';
 import { useSiteStore } from '@/stores/site.store';
 import { siteService } from '@/services/site/site.service';
-import { useAuthStore } from '@/stores/auth.store';
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
+import { useSnackbarStore } from '@/stores/snackbar.store';
 
 export default defineComponent({
   name: 'colour-palettes',
@@ -160,6 +159,7 @@ export default defineComponent({
       saturationValue: 0,
       colourPalettes: new ColourPalettes('#12443e', 'complementary'),
       store: useSiteStore(),
+      snackbarStore: useSnackbarStore(),
     }
   },
 
@@ -167,18 +167,15 @@ export default defineComponent({
     this.resetPalette();
   },
   
-  computed: {
-    
-  },
-
   methods: {
     getPath(img: string) {
       return getImageUrl(img);
     },
     
     isThisColourScheme(colourScheme: SupportedColourModels): boolean {
-      return this.colourPalettes.colourModel === colourScheme;
+      return this.colourPalettes.isTheSameColourModel(colourScheme);
     },
+
     getPrimary() {
       return this.colourPalettes.primary.palette;
     },
@@ -190,7 +187,11 @@ export default defineComponent({
     getAccent() {
       return this.colourPalettes.accent.palette;
     },
-    
+
+    paletteColourClicked(colour: string) {
+      this.onColourChange(colour);
+    },
+
     onColourChange(colour: string) {
       this.saturationValue = 0;
       this.saturationPreviousValue = 0;
@@ -208,13 +209,26 @@ export default defineComponent({
       this.colourPalettes = new ColourPalettes(palette.colour, palette.colourScheme, existingPalettes);
     },
 
-    savePaletteSelection() {
+    async savePaletteSelection() {
       try {
-        siteService().saveSitePalette(this.colourPalettes.toColourPalette(), getSiteAndUser())
+        await siteService().saveSitePalette(this.colourPalettes.toColourPalette(), getSiteAndUser());
+        this.displayMessage('Palette saved', 'success');
       } 
       catch (err) {
         console.log(err);
+        this.displayMessage('Something went wrong when saving the colour palette, please retry', 'error');
       }
+    },
+
+    displayMessage(msg: string, type: 'success' | 'error' ) {
+      this.snackbarStore.setSnackbarMessage(
+        { 
+          type: type,
+          payload: {
+            message: msg,
+            title: 'Site Record Saved' 
+          }
+        }); 
     },
     
     onSaturationChange() {
@@ -231,28 +245,8 @@ export default defineComponent({
       this.colourPalettes.colourModel = scheme;
       this.colourPalettes.buildANewPalette();
     },
-    
-    // saveColourPalette() {
-    //   const siteAndUserId = this.getSiteAndUserID(); 
-    //   this.colourPalettes.savePalette(siteAndUserId)
-    //   .then (response => {
-    //     const notification = response as Notification;
-    //     this.showSnackbar(notification, 'Palettes Saved');
-    //   })
-    //   .catch((err) => {
-    //     const notification = err as Notification;
-    //     this.showSnackbar(notification, 'Error saving Palettes');
-    //   });
-    // },
-    
-    // loadPalette() {
-    //   const siteAndUserId = this.getSiteAndUserID();
-    //   this.colourPalettes.loadPalette(siteAndUserId);
-    // }
-    
-    paletteColourClicked(colour: string) {
-      this.onColourChange(colour);
-    },
+
+
     
   },
   })

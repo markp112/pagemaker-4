@@ -1,11 +1,12 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
 import { collection, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '../../../../firebase/initFirebase';
-import { Response } from '@api/types';
+import { Response } from '../../../../api/types';
 import { Site, SiteSettings } from '../model/site';
-import { GenericError } from '../../../../common/errors/customErrors';
-import { logger } from '../../../../logger/logger';
+import { GenericError } from '../../../../common/errors/';
+import { logger } from '../../../../logger';
 import { ColourPalette } from '../model/colourPalette';
+import { httpStatusCodes } from '../../../../api/httpStatusCodes';
 
 function sitesController() {
 
@@ -20,7 +21,7 @@ function sitesController() {
         const site = doc.data() as unknown as Site;
         sites.push(site);
       });
-      return constructResponse<Site[]>(sites, 200);
+      return constructResponse<Site[]>(sites, httpStatusCodes.OK);
     } catch (err) {
       logger.error(err);
       throw new GenericError(err);
@@ -31,7 +32,7 @@ function sitesController() {
     try {
       const userId = site.userId;
       await setDoc(doc(firebaseDb, sitesCollection(userId), site.siteId), site);
-      const statusCode = isPost ? 201 : 200
+      const statusCode = isPost ? 201 : httpStatusCodes.OK
       return constructResponse<Site>(site, statusCode);
     }  catch (err) {
       logger.error(err);
@@ -46,7 +47,7 @@ function sitesController() {
       const firebaseResponse = await getDoc(docRef);
       if (firebaseResponse.exists()) {
         const siteSettings = firebaseResponse.data() as unknown as SiteSettings;
-        return constructResponse<Record<string, string>[]>(siteSettings.colours, 200);
+        return constructResponse<Record<string, string>[]>(siteSettings.colours, httpStatusCodes.OK);
       }
     } catch (err) {
       logger.error(err);
@@ -61,7 +62,7 @@ function sitesController() {
       const firebaseResponse = await getDoc(docRef);
       if (firebaseResponse.exists()) {
         const colourPalette = firebaseResponse.data() as unknown as ColourPalette;
-        return constructResponse<ColourPalette>(colourPalette, 200);
+        return constructResponse<ColourPalette>(colourPalette, httpStatusCodes.OK);
       }
     } catch (err) {
       logger.error(err);
@@ -69,11 +70,27 @@ function sitesController() {
     }
   }
 
+  async function saveColourPalette(userId: string, siteId: string, colourPalette: ColourPalette) {
+    try {
+      const paletteCollection = `${userId}${siteId}::settings`;
+      const docRef = doc(firebaseDb, paletteCollection, 'siteColourPalette')
+      await setDoc(docRef, colourPalette);
+      return constructResponse<ColourPalette>(colourPalette, httpStatusCodes.OK)
+    }
+    catch (err) {
+      logger.error(err);
+      throw new GenericError(err);
+    }
+    
+  }
+
   return { 
     getSites,
     getSiteMaterialColours,
     getSiteColourPalette,
-    saveSite };
+    saveColourPalette,
+    saveSite,
+  };
 }
 
 export { sitesController };

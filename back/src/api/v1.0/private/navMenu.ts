@@ -4,7 +4,6 @@ import { logger } from '../../../logger';
 import { navMenu } from './data/navMenuData';
 import { NavMenuItemInterface } from './data/navMenuModel';
 
-
 const navMenuRouter = express.Router();
 const ROUTE_PATH = '/menus/navmenu';
 

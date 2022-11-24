@@ -2,7 +2,7 @@ import { constructResponse } from '../../../../../common/functions/constructResp
 import { Response } from '@api/types';
 import { FullMetadata, getDownloadURL, getMetadata, listAll } from '@firebase/storage';
 import { storage, storageRef } from '../../../../../firebase/initFirebase';
-import { GenericError } from '../../../../../common/errors/customErrors';
+import { GenericError } from '../../../../../common/errors';
 import { logger } from '../../../../../logger';
 
 type UsersBucket = {

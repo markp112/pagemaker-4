@@ -7,7 +7,10 @@
     <div class="w-screen border-box font-body h-screen overflow-hidden">
       <RouterView></RouterView>
     </div>
-    <Snackbar/>
+    <div class="w-80">
+      <Snackbar/>
+
+    </div>
   </main>
 
 </template>

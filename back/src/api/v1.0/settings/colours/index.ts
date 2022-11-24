@@ -1,4 +1,4 @@
-import { logger } from '../../../../logger/index';
+import { logger } from '../../../../logger';
 import express from 'express';
 import { colourSettings } from './controller/index'
 

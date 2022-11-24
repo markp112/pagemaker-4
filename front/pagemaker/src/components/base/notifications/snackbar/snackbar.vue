@@ -1,16 +1,16 @@
 <template>
   <div
-    class="snackbar-wrapper z-50 w-full snackbar-show "
+    class="snackbar-wrapper z-50 w-80 snackbar-show bg-site-surface"
     :class="{
       'snackbar-show': showSnackbar,
       'snackbar-hide': !showSnackbar
     }"
   >
-    <div class="flex flex-row w-4/12 shadow-xl border-gray-500 border">
-      <div class="w-2/12" :class="getIndicatorColour">
+    <div class="flex flex-row shadow-xl border-gray-500 border rounded-sm">
+      <div class="w-3/12" :class="getIndicatorColour">
         .
       </div>
-      <div class="w-8/12 p-2 flex flex-col">
+      <div class="w-9/12 p-2 flex flex-col">
         <div class="self-center font-semibold">
           {{ snackbarContent.title }}
         </div>

@@ -1,3 +1,4 @@
+import { httpStatusCodes } from '../../api/httpStatusCodes/index';
 import type { Response } from '../../api/types';
 import { logger } from '../../logger';
 
@@ -23,14 +24,14 @@ class DomainError extends Error {
 
 class ResourceNotFoundError extends DomainError {
   constructor(resource: string) {
-    super(`Resource ${resource} was not found`, 404);
+    super(`Resource ${resource} was not found`, httpStatusCodes.RESOURCE_NOT_FOUND);
   }
 }
 
 class GenericError extends DomainError {
   constructor(error: string) {
-    super(error, 500);
+    super(error, httpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
 
-export { DomainError, ResourceNotFoundError, GenericError };
+export {DomainError, ResourceNotFoundError, GenericError };

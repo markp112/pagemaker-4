@@ -106,13 +106,18 @@ export class ColourPalettes {
     this._accent.decreaseSaturation(saturationMuliplier);
   }
 
-  private convertHexColourToRGB(hexColour: string): string {
+  public isTheSameColourModel(colourModel: SupportedColourModels): boolean {
+    return this._currentColourModel === colourModel;
+  } 
 
+  private convertHexColourToRGB(hexColour: string): string {
     const red = parseInt(hexColour.substring(0,1),16);
     const green = parseInt(hexColour.substring(2,3),16);
     const blue = parseInt(hexColour.substring(4,5),16);
     return `rgb(${red},${green},${blue})`;
   }
+
+  
   // public savePalette(): Promise<Notification> {
 
   //   const selectedPalette: PalettesInterface = {
