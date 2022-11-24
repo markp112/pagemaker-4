@@ -1,8 +1,6 @@
 <template>
   <div class="nav-container mt-3 bg-white max-h-screen shadow-lg shadow-gray-400 p-2 flex flex-col justify-start absolute top-0 right-0 border border-gray-400 rounded-md" :class="getWidth()">
     <div class="nav-content">
-
-      
       <slot></slot>
     </div>
     <span class="absolute -left-10 w-10 p-1 pr-0 bottom-40 border border-gray-400 rounded-l-full z-10 bg-white">
@@ -60,9 +58,7 @@ export default defineComponent({
 
   methods: {
     toggleToolbar(event: string): void {
-      console.log('%c⧭', 'color: #007300', event)
       this.activeIcon = event === 'hideToolbar' ? TOOLBAR_ICON_UNHIDE : TOOLBAR_ICON_HIDE;
-      console.log('%c⧭', 'color: #807160', this.activeIcon )
       this.width = this.width === 'full' ? 'w-1' : 'full';
       this.$emit('toggleClicked');
     },

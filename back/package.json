@@ -3,6 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+
+  "nodemonConfig": {
+    "ignore":
+      [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        ".git",
+        "node_modules"
+      ],
+    "watch": [
+      "src"
+    ],
+    "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/app.ts",
+    "ext": "ts, js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx dist/app.js",
@@ -41,6 +56,7 @@
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.5.0",
+    "tsconfig-paths": "^4.1.0",
     "tspath": "^2.6.8",
     "winston": "^3.8.1",
     "yamljs": "^0.3.0"

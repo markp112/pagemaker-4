@@ -26,6 +26,7 @@
 
 <script lang="ts">
 
+import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { Site } from '@/classes/sites';
 import { siteService } from '@/services/site/site.service';
 import { sitesService } from '@/services/sites/sites.service';
@@ -64,8 +65,15 @@ import SiteCard from './components/siteCard/siteCard.vue';
 
       async getSiteDefaults(siteId: string, route: string) {
         this.store.setCurrentSite(siteId);
-        this.siteStore.setSite(this.store.currentSite);
-        await siteService().getSiteMaterialColours(this.userId, siteId);
+        this.siteStore.setSite(this.store.currentSite); 
+        const siteAndUser: SiteAndUser = {
+          siteId: siteId,
+          userId: this.userId,
+        };
+        await Promise.all([
+          siteService().getSiteMaterialColours(siteAndUser),
+          siteService().getSiteColourPalette(siteAndUser),
+        ]);
         this.$router.push(route);
       },
       
@@ -77,9 +85,9 @@ import SiteCard from './components/siteCard/siteCard.vue';
         }
       },
 
-      siteEditClick(siteId: string) {
+      async siteEditClick(siteId: string) {
         try {
-          this.getSiteDefaults(siteId, `/editSite`);
+          await this.getSiteDefaults(siteId, `/editSite`);
           this.$router.push({ name: 'editSite', params: { title: 'edit site' }})
         } catch (error) {
             console.log('%c⧭', 'color: #5200cc', error)

@@ -1,8 +1,9 @@
-import { logger } from '../../../logger/logger';
+import { logger } from '../../../logger';
 import express from 'express';
-import { sitesController } from './controller';
-import { Site } from './model';
+import { Site } from './model/site';
 import { Guid } from '../../../common/classes/guid';
+import { ColourPalette } from './model/colourPalette';
+import { sitesController } from './controller/';
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
@@ -30,6 +31,34 @@ sitesRouter
     } catch (error) {
       const response = error.getResponse();
       res.status(error._status).send(response);
+    }
+  })
+  
+  .get(`${ROUTE_PATH}/:userId/:siteId/colourpalette`, async (req, res) => {
+    logger.info('GET: site colour palette called');
+    const userId = req.params.userId;
+    const siteId = req.params.siteId;
+    try {
+      const response = await sitesController().getSiteColourPalette(userId, siteId);
+      res.status(response.status).send(response);
+    } catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response);
+    }
+  })
+
+  .post(`${ROUTE_PATH}/:userId/:siteId/colourpalette`, async (req, res) => {
+    try {
+      logger.info('POST: site colour palette called');
+      const userId = req.params.userId;
+      const siteId = req.params.siteId;
+      const colourPalette: ColourPalette = req.body.colourPalette;
+      const response = await sitesController().saveColourPalette(userId, siteId, colourPalette);
+      res.status(response.status).send(response);
+    }
+    catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response); 
     }
   })
 

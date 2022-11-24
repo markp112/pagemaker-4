@@ -1,9 +1,9 @@
 import { constructResponse } from '../../../../../common/functions/constructResponse';
-import { Response } from '@api/types';
+import { Response } from '../../../../../api/types';
 import { collection, getDocs } from 'firebase/firestore';
 import { firebaseDb } from '../../../../../firebase/initFirebase';
-import { GenericError } from '../../../../../common/errors/customErrors';
-import { logger } from '../../../../../logger/logger';
+import { GenericError } from '../../../../../common/errors';
+import { logger } from '../../../../../logger';
 
 type Colour = {
   colourName: string;

@@ -1,4 +1,4 @@
-import { DomainError } from './customErrors';
+import { DomainError } from './';
 
 type errorOrDomainError = Error | DomainError;
 

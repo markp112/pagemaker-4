@@ -1,11 +1,11 @@
-import { GenericError } from '../../../../common/errors/customErrors';
 import { constructResponse } from '../../../../common/functions/constructResponse';
 import { getUserAndSiteId } from '../../../../common/functions/userAndSiteId';
 import { collection, getDocs } from '@firebase/firestore';
-import { logger } from '../../../../logger/logger';
+import { logger } from '../../../..//logger';
 import { firebaseDb } from '../../../../firebase/initFirebase';
 import { Page } from '../model/model';
 import { formatTimeStampAsDate } from '../../../../common/functions/dateFunctions';
+import { GenericError } from '../../../../common/errors';
 
 function pagesController() {
 

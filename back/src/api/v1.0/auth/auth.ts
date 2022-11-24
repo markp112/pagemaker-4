@@ -1,9 +1,8 @@
 import express from 'express';
 import { logger } from '../../../logger';
-import { auth } from './controller';
-import type { Credentials }  from './controller/index';
+import { auth, type Credentials } from './controller';
+import { GenericError, ResourceNotFoundError } from '../../../common/errors';
 
-import { GenericError, ResourceNotFoundError } from '../../../common/errors/customErrors';
 
 const authRouter = express.Router();
 const ROUTE_PATH = '/auth';

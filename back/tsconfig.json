@@ -7,12 +7,14 @@
     "sourceMap": true,
     "outDir": "dist",
     "resolveJsonModule": true,
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
       "@api/*": ["api/*"],
       "@database/*": ["database/*"],
+      "@errors/*": ["common/errors/*"],
       "@common/*": ["common/*"],
-      "@logger/*": ["logger/*"]
+      "@logger/*": ["logger/*"],
+      "@firebase/*": ["firebase/*"]
     }
   },
   "lib": ["es2015"]

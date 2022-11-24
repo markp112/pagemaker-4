@@ -1,9 +1,9 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
-import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
-import { GenericError, ResourceNotFoundError } from '../../../../common/errors/customErrors';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth as firebaseAuth } from '../../../../firebase/initFirebase';
-import { logger } from '../../../../logger';
-import type { Response } from '../../../types/index';
+import { logger } from '../../../../logger/index';
+import type { Response } from 'api/types';
+import { ResourceNotFoundError, GenericError } from '../../../../common/errors';
 
 export type Credentials = {
   email: string;
