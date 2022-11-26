@@ -103,8 +103,14 @@
       </form>
     </div>
   <settingsPanelVue :toolbar-hidden="false" class="w-3/12 h-full">
-    <ColourPalettes :site-palette="getSitePalette"/>
-    <MaterialColours :material-colours="getMaterialColours"/>
+    <tabstripContainer :labels="['Palette Editor', 'Material colours']">
+      <template v-slot:tab-0 >
+        <ColourPalettes :site-palette="getSitePalette"/> 
+      </template>
+      <template v-slot:tab-1>
+        <MaterialColours :material-colours="getMaterialColours"/>
+      </template>
+    </tabstripContainer>
   </settingsPanelVue>
 </div>
 </template>
@@ -122,7 +128,7 @@ import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue'
 import SiteMaterialColour from '@/components/base/pickers/colour/sidePanel/materialColours/siteMaterialColour.vue';
 import ColourDropDown from '@/components/base/pickers/colour/colourPicker/colourDropdown/colourDropDown.vue';
 import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPlatettes/colourPalettes.vue';
-
+import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 
 export default defineComponent({
     name: 'SiteEditor',
@@ -134,6 +140,7 @@ export default defineComponent({
       MaterialColours: SiteMaterialColour,
       ColourDropDown,
       ColourPalettes,
+      tabstripContainer,
     },
 
     data() {
