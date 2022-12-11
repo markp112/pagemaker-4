@@ -1,7 +1,9 @@
-import type { SupportedColourModels } from '@/classes/colourPalette/colourModels';
+import type { SupportedColourModels } from '@/classes/colourPalette/colourModel';
 
 type Colours = string[];
 
+
+//Todo delete this once new format is saved
 type ColourPalette = {
   accent: Colours,
   colour: string,
@@ -10,4 +12,18 @@ type ColourPalette = {
   secondary: Colours,
 };
 
-export type { ColourPalette, Colours };
+type SwatchName = 'primary' | 'secondary' | 'accent' | 'utility';
+
+
+type ColourSwatch = {
+  swatch: Colours;
+  swatchName: SwatchName;
+};
+
+type ColourSwatches = {
+  baseColourHex: string;
+  colourSwatches: ColourSwatch[];
+  colourScheme: SupportedColourModels;
+};
+
+export type { ColourSwatch, Colours, ColourSwatches, ColourPalette, SwatchName };

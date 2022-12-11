@@ -102,15 +102,21 @@
         </div>
       </form>
     </div>
-  <settingsPanelVue :toolbar-hidden="false" class="w-3/12 h-full">
-    <tabstripContainer :labels="['Palette Editor', 'Material colours']">
-      <template v-slot:tab-0 >
-        <ColourPalettes :site-palette="getSitePalette"/> 
+  <settingsPanelVue :toolbar-hidden="false" 
+    class="h-full"
+    :class="sidePanelWidth"
+    @toggle-clicked="resizePanel()"
+  >
+    <TabstripContainer :labels="['Palette Editor', 'Material colours']">
+      <template v-slot:tab-0>
+        <ColourPalettes :sitePalette="getSitePalette()" 
+          @reset-clicked="resetColourSwatches"
+        /> 
       </template>
       <template v-slot:tab-1>
-        <MaterialColours :material-colours="getMaterialColours"/>
+        <MaterialColours :materialColours="getMaterialColours()" :siteSwatches="getSitePalette()"/>
       </template>
-    </tabstripContainer>
+    </TabstripContainer>
   </settingsPanelVue>
 </div>
 </template>
@@ -126,9 +132,10 @@ import { siteService } from '@/services/site/site.service';
 import { useSnackbarStore } from '@/stores/snackbar.store';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import SiteMaterialColour from '@/components/base/pickers/colour/sidePanel/materialColours/siteMaterialColour.vue';
-import ColourDropDown from '@/components/base/pickers/colour/colourPicker/colourDropdown/colourDropDown.vue';
 import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPlatettes/colourPalettes.vue';
-import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
+import TabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
+import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
+import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 
 export default defineComponent({
     name: 'SiteEditor',
@@ -138,9 +145,8 @@ export default defineComponent({
       UploadImage,
       settingsPanelVue,
       MaterialColours: SiteMaterialColour,
-      ColourDropDown,
       ColourPalettes,
-      tabstripContainer,
+      TabstripContainer,
     },
 
     data() {
@@ -152,6 +158,7 @@ export default defineComponent({
           siteService: siteService(),
           snackbarStore: useSnackbarStore(),
           site: Object as unknown as Site,
+          sidePanelWidth: 'w-3/12',
       };
     },
 
@@ -161,23 +168,28 @@ export default defineComponent({
       this.site = this.store.site;
     },
 
-    computed: {
+    methods: {
       getMaterialColours() {
         return this.store.getMaterialColours;
       },
+      getSitePalette(): ColourSwatches {
+        return this.store.getColourSwatches;
+      },
 
-      getSitePalette() {
-        return this.store.getColourPalette;
-      }
-    },
-
-    methods: {
       updateImageUrl(url: string): void {
           this.site.image = url;
       },
 
       cancelClicked() {
           this.$router.push("/sites");
+      },
+
+      async resetColourSwatches() {
+        await this.siteService.getSiteColourPalette(getSiteAndUser());
+      },
+
+      resizePanel() {
+        this.sidePanelWidth=this.sidePanelWidth === 'w-1' ? 'w-3/12' : 'w-1';
       },
       
       async saveClicked() {

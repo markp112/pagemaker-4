@@ -1,4 +1,3 @@
-import 'module-alias/register';
 import express from 'express';
 import YAML from 'yamljs';
 import swaggerUI from 'swagger-ui-express';

@@ -2,7 +2,7 @@ import { logger } from '../../../logger';
 import express from 'express';
 import { Site } from './model/site';
 import { Guid } from '../../../common/classes/guid';
-import { ColourPalette } from './model/colourPalette';
+import { ColourSwatches } from './model/colourPalette';
 import { sitesController } from './controller/';
 
 const sitesRouter = express.Router();
@@ -52,7 +52,7 @@ sitesRouter
       logger.info('POST: site colour palette called');
       const userId = req.params.userId;
       const siteId = req.params.siteId;
-      const colourPalette: ColourPalette = req.body.colourPalette;
+      const colourPalette: ColourSwatches = req.body.colourSwatches;
       const response = await sitesController().saveColourPalette(userId, siteId, colourPalette);
       res.status(response.status).send(response);
     }

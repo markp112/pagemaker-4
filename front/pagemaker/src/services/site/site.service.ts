@@ -1,6 +1,6 @@
 import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { Site } from '@/classes/sites';
-import type { ColourPalette } from '@/classes/sites/siteColours/colour/colourPalette';
+import type { ColourPalette, ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models/colours.model';
 import type { TypographyInterface } from '@/classes/sites/typography/model';
 import { useSiteStore } from '@/stores/site.store';
@@ -38,12 +38,19 @@ function siteService() {
 
   async function fetchSiteColourPalette(siteAndUser: SiteAndUser): Promise<void> {
     try {
-      const siteColourPalette = await axiosClient().get<ColourPalette>(`${getRoute(siteAndUser.userId, siteAndUser.siteId)}/colourpalette`);
+      const siteColourPalette = await axiosClient().get<ColourSwatch[]>(`${getRoute(siteAndUser.userId, siteAndUser.siteId)}/colourpalette`);
+      console.log('%c⧭', 'color: #00e600', siteColourPalette);
       if (siteColourPalette) {
-        store.setColourPalette(siteColourPalette);
+        const colourSwatches: ColourSwatches = {
+          colourScheme: 'complementary',
+          baseColourHex: '#2e237e',
+          colourSwatches: siteColourPalette, 
+        }
+        store.setColourPalette(colourSwatches);
       }
     } 
     catch (err) {
+      // store.initialisePalettes();
       console.log(err);
     }
   }
@@ -52,9 +59,10 @@ function siteService() {
     await fetchSiteColourPalette(siteAndUser);
   }
 
-  async function saveSitePalette(colourPalette: ColourPalette, siteAndUser: SiteAndUser) {
+  async function saveSitePalette(siteAndUser: SiteAndUser) {
     try {
-      const savedPalette = await axiosClient().post<ColourPalette, ColourPalette>(`${getRoute(siteAndUser.userId, siteAndUser.siteId)}/colourpalette`,colourPalette);
+      const colourPalette: ColourSwatches = store.getColourSwatches;
+      const savedPalette = await axiosClient().post<ColourSwatches, ColourSwatches>(`${getRoute(siteAndUser.userId, siteAndUser.siteId)}/colourpalette`, colourPalette);
       if (savedPalette) {
         store.setColourPalette(savedPalette);
       }

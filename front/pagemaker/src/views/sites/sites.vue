@@ -3,14 +3,14 @@
     <div class="flex flex-row justify-between text-accent1 mt-8 bg-site-background overflow-hidden">
       <h2 class="page-heading ml-4 text-on-secondary">My Sites</h2>
       <div class="w-32 h-4/6">
-        <!-- <base-button
+        <base-button
           class="mr-4 w-32"
           buttonType="primary"
           variant="solid"
           @onClick="createNewSite()"
         >
           Create New
-        </base-button> -->
+        </base-button>
       </div>
     </div>
     <ul class="flex flex-row justify-evenly w-full mt-20">
@@ -35,6 +35,7 @@ import { useSiteStore } from '@/stores/site.store';
 import { useSitesStore } from '@/stores/sites.store';
 import { defineComponent } from 'vue';
 import SiteCard from './components/siteCard/siteCard.vue';
+import baseButton from '@/components/base/baseButton/baseButton.vue';
 
 
   export default defineComponent({
@@ -42,6 +43,7 @@ import SiteCard from './components/siteCard/siteCard.vue';
 
     components: {
       SiteCard: SiteCard,
+      'base-button': baseButton,
     },
 
     data() {

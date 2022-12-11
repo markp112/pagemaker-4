@@ -5,7 +5,7 @@ import { Response } from '../../../../api/types';
 import { Site, SiteSettings } from '../model/site';
 import { GenericError } from '../../../../common/errors/';
 import { logger } from '../../../../logger';
-import { ColourPalette } from '../model/colourPalette';
+import { ColourPalette, ColourSwatches, ColourSwatchesFirebaseObject } from '../model/colourPalette';
 import { httpStatusCodes } from '../../../../api/httpStatusCodes';
 
 function sitesController() {
@@ -61,8 +61,9 @@ function sitesController() {
       const docRef = doc(firebaseDb, paletteCollection, 'siteColourPalette')
       const firebaseResponse = await getDoc(docRef);
       if (firebaseResponse.exists()) {
-        const colourPalette = firebaseResponse.data() as unknown as ColourPalette;
-        return constructResponse<ColourPalette>(colourPalette, httpStatusCodes.OK);
+        const colourPalette = firebaseResponse.data() as unknown as ColourSwatchesFirebaseObject;
+        const colourSwatches: ColourSwatches = JSON.parse(colourPalette.colourSwatches);
+        return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK);
       }
     } catch (err) {
       logger.error(err);
@@ -70,18 +71,19 @@ function sitesController() {
     }
   }
 
-  async function saveColourPalette(userId: string, siteId: string, colourPalette: ColourPalette) {
+  async function saveColourPalette(userId: string, siteId: string, colourSwatches: ColourSwatches) {
     try {
       const paletteCollection = `${userId}${siteId}::settings`;
       const docRef = doc(firebaseDb, paletteCollection, 'siteColourPalette')
+      const colourSwatchAsString = JSON.stringify(colourSwatches);
+      const colourPalette: ColourSwatchesFirebaseObject  = { colourSwatches: colourSwatchAsString };
       await setDoc(docRef, colourPalette);
-      return constructResponse<ColourPalette>(colourPalette, httpStatusCodes.OK)
+      return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK)
     }
     catch (err) {
       logger.error(err);
       throw new GenericError(err);
     }
-    
   }
 
   return { 

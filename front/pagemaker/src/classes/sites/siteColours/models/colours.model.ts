@@ -17,10 +17,27 @@ type ColourProperties =
 | "textOnAccent"
 | "textOnError";
 
-
 interface AColour {
   colourName: ColourProperties;
   value: string;
+};
+
+type ColourLabel =  'Neutral' | 'Light' | 'Dark' ;
+type PaletteName = 'Primary' | 'Secondary' | 'Accent' | 'Error' | 'Surface';
+
+type ColourValue = {
+  name: ColourLabel,
+  hexColourText: string;
+  hexColourBackground: string
+}; 
+
+type MaterialColour = { 
+  paletteName: PaletteName,
+  colours: ColourValue[],
+};
+
+type MaterialColours = {
+  materialColour: MaterialColour[];
 };
 
 interface MaterialColoursInterface {
@@ -42,4 +59,22 @@ interface MaterialColoursInterface {
   textOnError: string;
 };
 
-export type { MaterialColoursInterface, AColour, ColourProperties };
+type ColourElement = {
+  colour: string;
+  colourDark: string;
+  colourLight: string;
+  textOnColour: string;
+};
+
+
+export type { 
+  MaterialColoursInterface, 
+  AColour,
+  ColourProperties,
+  ColourElement,
+  MaterialColour,
+  MaterialColours,
+  ColourValue,
+  ColourLabel,
+  PaletteName,
+};

@@ -4,22 +4,26 @@
       {{ $props.label }}
     </p>
     <p class="flex flex-row flex-wrap">
-    <span
-      class="h-16 w-12 text-xs text-center flex flex-col justify-end cursor-pointer"
+    <span class="text-xs text-center flex flex-col justify-end cursor-pointer"
+      :class="getHeightAndWidth()"
       v-for="(colour, index) in $props.palette"
       :key="`${index}${colour}`"
       :style="{ backgroundColor: colour, color: getFontColour(index) }"
       @click="colourClicked(colour)"
     >
+    <span v-if="colour === selectedColour.toString()" class="bg-white rounded-full w-2 h-2 p-2 block mb-2 ml-2">
+    </span>
+    <span v-if="showColourValue">
       {{ colour }}
+    </span>
     </span>
   </p>
   </div>
 </template>
 
 <script lang="ts">
-import type { Colours } from '@/classes/sites/siteColours/colour/colourPalette';
 import { defineComponent, type PropType } from 'vue';
+import type { Colours } from '@/classes/sites/siteColours/colour/colourPalette';
 
 export default defineComponent ({
   name: 'Palette-strip',
@@ -32,6 +36,24 @@ export default defineComponent ({
       required: true,
     },
     label: {
+      type: String,
+      required: true,
+    },
+    heightAndWidth: {
+      type: Object as PropType<{
+        height: string,
+        width: string,
+      }>,
+      default: {
+        height: 'h-16',
+        width: 'w-12',
+      }
+    },
+    showColourValue: {
+      type: Boolean,
+      required: true,
+    },
+    selectedColour: {
       type: String,
       required: true,
     }
@@ -47,6 +69,10 @@ export default defineComponent ({
 
     colourClicked(colour: string) {
       this.$emit('colourClicked', colour);
+    },
+
+    getHeightAndWidth() {
+      return `${this.heightAndWidth?.height} ${this.heightAndWidth?.width}`
     },
 
   }

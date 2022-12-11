@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, setTransitionHooks } from 'vue';
+import { defineComponent } from 'vue';
 import ToolTip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import { getImageUrl } from '@/common/getIcon';
 import IconVue from '@/components/utility/icon/icon.vue';
@@ -74,6 +74,9 @@ export default defineComponent({
     },
 
     getColour(): string {
+      if (this.colour) {
+        return this.colour;
+      }
       if (this.$props.colour) {
         return this.colour;
       }

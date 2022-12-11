@@ -31,8 +31,12 @@ import pageVue from "../page/page.vue";
           colour: 'white',
           height: { unit: 'px', value: 1024 },
           width: { unit: 'px', value: 1024 },
-          name: 'test'
-        } as Page,
+          name: 'test',
+          created: undefined,
+          edited: undefined,
+          icon: '',
+          pageId: '',
+        } as unknown as Page,
       }
     },
 

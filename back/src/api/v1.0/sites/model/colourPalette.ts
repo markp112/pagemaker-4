@@ -8,4 +8,25 @@ type ColourPalette = {
   secondary: Colours[],
 };
 
-export type { ColourPalette };
+type SwatchName = 'primary' | 'secondary' | 'accent' | 'utility';
+
+type SupportedColourModels = 
+  | 'complementary'
+  | 'analogous'
+  | 'triadic'
+  | 'compound';
+
+type ColourSwatch = {
+  swatch: Colours;
+  swatchName: SwatchName;
+};
+
+type ColourSwatches = {
+  baseColourHex: string;
+  colourSwatches: ColourSwatch[];
+  colourScheme: SupportedColourModels;
+};
+
+type ColourSwatchesFirebaseObject = { colourSwatches: string };
+
+export type { ColourPalette, ColourSwatches, ColourSwatch, ColourSwatchesFirebaseObject, Colours };

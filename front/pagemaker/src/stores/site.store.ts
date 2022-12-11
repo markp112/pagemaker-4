@@ -1,9 +1,13 @@
 import type { Site } from '@/classes/sites'
-import type { ColourPalette } from '@/classes/sites/siteColours/colour/colourPalette';
+import type { ColourPalette, Colours, ColourSwatch, ColourSwatches, SwatchName } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models/colours.model';
 import type { TypographyInterface } from '@/classes/sites/typography/model';
 import { defineStore } from 'pinia';
 
+const utility: ColourSwatch = {
+  swatch: ['#e6003c', '#ffffff', '#000000'],
+  swatchName: 'utility'
+};
 const useSiteStore = defineStore({
   id: 'siteStore',
 
@@ -12,7 +16,7 @@ const useSiteStore = defineStore({
       _site: {} as Site,
       _materialColours: {} as MaterialColoursInterface,
       _typography: {} as TypographyInterface,
-      _colourPalette: {} as ColourPalette,
+      _colourSwatches: {} as ColourSwatches,
     }
   },
 
@@ -29,8 +33,8 @@ const useSiteStore = defineStore({
       return state._typography;
     },
 
-    getColourPalette: (state) => {
-      return state._colourPalette;
+    getColourSwatches: (state): ColourSwatches => {
+      return state._colourSwatches;
     },
   },
 
@@ -48,10 +52,16 @@ const useSiteStore = defineStore({
       this._typography = typeography;
     },
 
-    setColourPalette(colourPalette: ColourPalette) {
-      console.log('%c⧭', 'color: #bfffc8', colourPalette);
-      this._colourPalette = colourPalette;
-    }
+    setColourPalette(siteSwatches: ColourSwatches) {
+      this._colourSwatches = siteSwatches;
+    },
+
+    updateColourSwatches(colourSwatches: ColourSwatch[]) {
+      const swatch = this._colourSwatches;
+      swatch.colourSwatches = colourSwatches;
+      this.setColourPalette(swatch);
+    },
+
   }
 });
 
