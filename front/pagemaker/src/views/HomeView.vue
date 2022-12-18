@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="relative">
     <Scaler :slider="sliderSettings"

@@ -4,8 +4,13 @@
     <Navbar :nav-menu-items="getMenuItems"
       @nav-menu-clicked="navMenuClicked"
     />
+    <div class="w-full">
+      <Breadcumb/>
+    </div>
     <div class="w-screen border-box font-body h-screen overflow-hidden">
-      <RouterView></RouterView>
+      <RouterView>
+
+      </RouterView>
     </div>
     <div class="w-80">
       <Snackbar/>
@@ -26,15 +31,17 @@ import router from './router';
 import { auth } from './services/auth';
 import { useAuthStore } from './stores/auth.store';
 import SnackbarVue from '@/components/base/notifications/snackbar/snackbar.vue';
+import Breadcumb from './components/base/breadcrumb/breadcumb.vue';
 
 export default defineComponent({
   name: 'app',
 
   components: {
-      Navbar,
-      RouterView,
-      Snackbar: SnackbarVue,
-    },
+    Navbar,
+    RouterView,
+    Snackbar: SnackbarVue,
+    Breadcumb
+},
 
   data() {
     return {
