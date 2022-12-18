@@ -12,6 +12,7 @@
         <BaseButton buttonType="primary" 
           variant="solid"
           class="ml-24"
+          size="medium"
           @onClick="saveMaterialColours"
         >
           Save

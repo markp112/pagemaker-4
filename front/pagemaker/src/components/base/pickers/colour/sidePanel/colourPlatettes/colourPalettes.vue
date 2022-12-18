@@ -12,19 +12,13 @@
             >
             reset
           </BaseButton>
-          <img
-            v-show="!showDefaultIcon"
-            :src="getPath(SAVE_ICON_HOVER)"
-            class="w-10 h-10 shadow cursor-pointer"
-            @mouseenter="showDefaultIcon = !showDefaultIcon"
-          />
-          <img
-          v-show="showDefaultIcon"
-          :src="getPath(SAVE_ICON)"
-          class="w-10 h-10 shadow cursor-pointer"
-          @mouseleave="showDefaultIcon = !showDefaultIcon"
-          @click="savePaletteSelection()"
-        />
+          <BaseButton button-type="primary"
+            size="medium"
+            variant="solid"
+            @on-click="savePaletteSelection()"
+            >
+            save
+          </BaseButton>
       </p>
   
 
@@ -112,7 +106,6 @@ import { type PropType, defineComponent} from 'vue';
 import PaletteStrip from './paletteStrip/paletteStrip.vue';
 import ColourDropdown from '../../colourPicker/colourDropdown/colourDropDown.vue';
 import BaseButton from '@/components/base/baseButton/baseButton.vue';
-import { getImageUrl } from '@/common/getIcon';
 import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import { siteService } from '@/services/site/site.service';
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
@@ -153,9 +146,6 @@ export default defineComponent({
   },
 
   methods: {
-    getPath(img: string) {
-      return getImageUrl(img);
-    },
     
     isThisColourScheme(colourScheme: SupportedColourModels): boolean {
       return this.scheme === colourScheme;
