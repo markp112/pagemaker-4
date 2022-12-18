@@ -1,5 +1,5 @@
 <template>
-  <span :class="getClasses" @click="buttonClick($event)">
+  <span :class="getClasses" @click="buttonClick($event)" class="bg-site ">
     <slot />
   </span>
 </template>
@@ -69,7 +69,7 @@ export default defineComponent({
 
     getStyling(): string {
       const baseStyling = `${this.getSize} flex items-center justify-center p-2`;
-      const active = `cursor-pointer hover:bg-site-${this.buttonType} hover:text-site-primary-dark`;
+      const active = `cursor-pointer hover:bg-site-primary-dark hover:text-gray-200 transition ease-in-out delay-150`;
       const activeOutline = `cursor-pointer hover:bg-border-${this.buttonType} hover:text-site-primary-dark`;
       const activeText = `cursor-pointer hover:text-site-primary-dark text-site-${this.buttonType}`;
       const inActiveText = `cursor-pointer hover:text-accent-1 text-gray-400`;
@@ -79,7 +79,7 @@ export default defineComponent({
         return `bg-gray-200 text-dark ${baseStyling} ${style}`;
       }
       if (this.variant === 'solid') {
-        return `bg-site-${this.buttonType}-light text-on-${this.buttonType} ${baseStyling} ${active} shadow-md ${style} bg-site-${this.buttonType}-dark`;
+        return `bg-site-${this.buttonType}-light text-site-${this.buttonType} ${baseStyling} ${active} shadow-md ${style}`;
       }
       if (this.variant === 'outline') {
         return `border border-site-${this.buttonType}-light ${baseStyling} ${activeOutline} shadow-md ${style}`;

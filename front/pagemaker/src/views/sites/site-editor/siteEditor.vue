@@ -1,16 +1,16 @@
 <template>
-  <div class="flex justify-between h-screen relative">
-    <div class="form-page-wrapper mt-16 w-full flex-wrap">
+  <div class="flex justify-between h-full relative">
+    <div class="form-page-wrapper mt-4 w-full flex-wrap">
       <div class="w-7/12 bg-secondary-100 text-accent1 text-3xl flex flex-row">
         <img
           src="@/assets/images/website-building.png"
           alt="picture of lined paper"
         />
-        <p class="mt-4">{{ pageTitle }}</p>
+        <p class="mt-2">{{ pageTitle }}</p>
       </div>
       <form
         @submit.prevent="saveClicked"
-        class="w-7/12 border-2 p-5 bg-secondary-900"
+        class="w-7/12 border-2 p-5 bg-secondary-900 h-2/3"
       >
         <div class="field-wrapper">
           <label for="name">Site Name:</label>
@@ -114,7 +114,7 @@
         /> 
       </template>
       <template v-slot:tab-1>
-        <MaterialColours :materialColours="getMaterialColours()" :siteSwatches="getSitePalette()"/>
+        <MaterialColours :materialColours="getMaterialColours()" :siteSwatches="getSitePalette()" @save-clicked="saveMaterialColours($event)"/>
       </template>
     </TabstripContainer>
   </settingsPanelVue>
@@ -136,6 +136,7 @@ import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPla
 import TabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
+import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 
 export default defineComponent({
     name: 'SiteEditor',
@@ -223,6 +224,11 @@ export default defineComponent({
 
         }
     
+      },
+
+      async saveMaterialColours(materialColours: MaterialColours) {
+        const siteAndUser = getSiteAndUser();
+        await siteService().saveMaterialColours(siteAndUser, materialColours);
       },
 
       isFormCompletedCorrectly(errors: string[]): boolean {

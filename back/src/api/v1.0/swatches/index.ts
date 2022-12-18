@@ -2,17 +2,9 @@ import { logger } from '../../../logger';
 import express from 'express';
 import { swatchesController } from './controller';
 import { ColourSwatch, ColourSwatches } from '../sites/model/colourPalette';
-import { SupportedColourSwatchTypes } from './controller/utils/models';
 
 const swatchesRouter = express.Router();
 const ROUTE_PATH = '/swatches';
-
-function isKeyOfObject<T>(
-  key: string | number | symbol,
-  obj: T,
-): key is keyof T {
-  return key in obj;
-}
 
 swatchesRouter
   .post(`${ROUTE_PATH}/saturation/increase/`, async (req, res) => {

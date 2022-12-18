@@ -1,9 +1,22 @@
 <template>
   <div class="flex flex-col justify-start w-full">
     <h3 class="text-3xl ">Assign Site Colours</h3>
-    <div class="w-0/12">
-      <label for="textOn" class="my-4 ">Text On</label>
-      <input type="checkbox" name="textOn" id="textOn" @click="textOnSelected = !textOnSelected">
+    <div class="w-full flex flex-auto">
+      <div class="w-6/12">
+        <label for="textOn" class="container mt-4">Text On
+          <input type="checkbox" name="textOn" id="textOn" @click="textOnSelected = !textOnSelected">
+          <span class="mark"></span>
+        </label>
+      </div>
+      <div>
+        <BaseButton buttonType="primary" 
+          variant="solid"
+          class="ml-24"
+          @onClick="saveMaterialColours"
+        >
+          Save
+        </BaseButton>
+      </div>
     </div>
     <div>
       <PaletteStrip v-for="swatch in getColourSwatches()" 
@@ -15,34 +28,11 @@
         :selectedColour="selectedColour"
       />
     </div>
-    <div class="flex flex-row justify-start w-full mt-6">
-      <div class="flex flex-col justify-start w-6/12">
-        <MaterialElement label="Primary" 
-          :colourElement="primaryColours" 
-          :selectedElement="materialElementSelected" 
-        @selectedElementClicked="setSelectedMaterialElement($event)"
-        />
-        <MaterialElement label="Secondary" 
-          :colourElement="secondaryColours" 
-          :selectedElement="materialElementSelected"
-        />
-      </div>
-      <div class="flex flex-col justify-start w-6/12">
-        <MaterialElement 
-          label="Error" 
-          :colourElement="errorColours" 
-          :selectedElement="materialElementSelected"
-          @selectedElementClicked="setSelectedMaterialElement($event)"
-        />
-        <MaterialElement 
-          label="Surface" 
-          :colourElement="surfaceColours" 
-          :selectedElement="materialElementSelected"
-          @selectedElementClicked="setSelectedMaterialElement($event)"
-        />
-        <MaterialElement 
-          label="Accent" 
-          :colourElement="accentColours" 
+    <div class="mt-6">
+      <div class="flex flex-row justify-between w-full flex-wrap">
+        <MaterialElement v-for="materialColour in materialColours"
+          :label="materialColour.paletteName"
+          :colourElement="materialColour" 
           :selectedElement="materialElementSelected"
           @selectedElementClicked="setSelectedMaterialElement($event)"
         />
@@ -54,37 +44,27 @@
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
-import type { ColourLabel, MaterialColour, MaterialColoursInterface, PaletteName } from '@/classes/sites/siteColours/models/colours.model';
+import type { ColourLabel, MaterialColour, MaterialColours, PaletteName, ColourValue } from '@/classes/sites/siteColours/models/colours.model';
 import MaterialElement from './materialElement/materialElement.vue';
 import PaletteStrip from '../colourPlatettes/paletteStrip/paletteStrip.vue';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import DropDown from '../../../dropDown/dropDown.vue';
-
-const defaultColours = {
-        paletteName: 'Primary',
-        colours: [
-          { name: 'Neutral', hexColourBackground: '#000000', hexColourText: '#ff'},
-          { name: 'Dark', hexColourBackground: '#000000', hexColourText: '#ff'},
-          { name: 'Light', hexColourBackground: '#000000', hexColourText: '#ff'},
-          { name: 'textOnDark', hexColourBackground: '#000000', hexColourText: '#ff'},
-          { name: 'textOnLight', hexColourBackground: '#000000', hexColourText: '#ff'},
-          { name: 'textOnNeutral', hexColourBackground: '#000000', hexColourText: '#ff'},
-      ]
-      } as MaterialColour;
-
+import BaseButton from '@/components/base/baseButton/baseButton.vue';
 
 export default defineComponent({
   name: 'siteMaterialColour',
+  emits: ['saveClicked'],
 
   components: {
     MaterialElement,
     PaletteStrip,
     DropDown,
+    BaseButton
   },
 
   props: {
     materialColours: {
-      type: Object as PropType<MaterialColoursInterface>,
+      type: Object as PropType<MaterialColours>,
       required: true,
     },
     siteSwatches: {
@@ -95,64 +75,20 @@ export default defineComponent({
 
   data() {
     return {
-      primaryColours: defaultColours as MaterialColour,
-      secondaryColours: defaultColours as MaterialColour,
-      errorColours: defaultColours as MaterialColour,
-      accentColours: defaultColours as MaterialColour,
-      surfaceColours: defaultColours as MaterialColour,
       stripHeightAndWidth: { height: 'h-8', width: 'w-8'},
       selectedColour: '',
       materialElementSelected: '',
+      MaterialElementNative: {} as { palette: PaletteName, colourElement: string },
       colourCategories: ['Primary', 'Secondary', 'Accent', 'Error', 'Surface'],
       colourElements: ['Dark', 'Light', 'Neutral', 'Text On'],
       paletteSelected: '',
       paletteElementSelected: '',
       textOnSelected: false,
+      materialColours: this.$props.materialColours,
     }
   },
 
-  mounted() {
-    this.setColours();
-  },
-
   methods: {
-    setColours() {
-      this.primaryColours = {
-        paletteName: 'Primary',
-        colours: [
-          { name: 'Dark', hexColourBackground: this.materialColours.primaryDark, hexColourText: this.materialColours.textOnBackground },
-          { name: 'Neutral', hexColourBackground: this.materialColours.primary, hexColourText: this.materialColours.textOnBackground },
-          { name: 'Light', hexColourBackground: this.materialColours.primaryLight, hexColourText: this.materialColours.textOnBackground },
-        ],
-      };
-      this.secondaryColours = {
-        paletteName: 'Secondary',
-        colours: [
-          { name: 'Dark', hexColourBackground: this.materialColours.secondaryDark, hexColourText: this.materialColours.textOnBackground },
-          { name: 'Neutral', hexColourBackground: this.materialColours.secondary, hexColourText: this.materialColours.textOnBackground },
-          { name: 'Light', hexColourBackground: this.materialColours.secondaryLight, hexColourText: this.materialColours.textOnBackground },
-        ],
-      };
-      this.errorColours = {
-        paletteName: 'Error',
-        colours: [
-          { name: 'Neutral', hexColourBackground: this.materialColours.error, hexColourText: this.materialColours.textOnError }, 
-        ]
-      };
-      this.surfaceColours = {
-        paletteName: 'Surface',
-        colours: [
-          { name: 'Neutral', hexColourBackground: this.materialColours.surface, hexColourText: this.materialColours.textOnSurface }, 
-        ]
-      };
-      this.accentColours = {
-        paletteName: 'Accent',
-        colours: [
-          { name: 'Neutral', hexColourBackground: this.materialColours.accent, hexColourText: this.materialColours.textOnAccent }, 
-        ]
-      };
-
-    },
 
     colourPaletteClicked(colour: string) {
       this.selectedColour = this.selectedColour === colour ? '' : colour;
@@ -162,18 +98,42 @@ export default defineComponent({
     },
 
     setMaterialElementColour(colour: string) {
-      const key = this.materialElementSelected.charAt(0).toLowerCase().slice();
-      console.log('%c⧭', 'color: #00a3cc', key);
-      (this.materialColours as any)[key] = colour;
-      this.setColours();
+      const newColours = this.materialColours.map(paletteElement => {
+        if(paletteElement.paletteName === this.MaterialElementNative.palette) {
+          paletteElement = this.updateColourElementForPalette(colour, paletteElement)
+        }
+          return paletteElement
+        })
+      this.materialColours = newColours;
     },
 
-    setSelectedMaterialElement(selectedElement: {colour: ColourLabel, palette: PaletteName}) {
-      console.log('%c⧭', 'color: #aa00ff', selectedElement)
-      if (selectedElement.palette === 'Primary') {
-        this.primaryColours.colours.filter(colourLabel => colourLabel.name === selectedElement.colour)[0].hexColourBackground = this.selectedColour;
+    updateColourElementForPalette(colour: string, paletteElement: MaterialColour): MaterialColour {
+        paletteElement.colours = paletteElement.colours.map(colourElement => {
+          if (colourElement.name === this.MaterialElementNative.colourElement) {
+            colourElement = this.updateColourElement(colour, colourElement);
+          }
+          return colourElement;
+        });
+        return paletteElement;
+      },
+        
+    updateColourElement(colour: string, colourElement: ColourValue): ColourValue {
+      const updatedColourElement = {...colourElement }
+      if(this.textOnSelected) {
+        updatedColourElement.hexColourText = colour;
+      } else {
+        updatedColourElement.hexColourBackground = colour;
       }
-      const combinedPaletteAndColour = `${selectedElement.palette}${selectedElement.colour}`;
+      return updatedColourElement;
+    },
+
+    getMaterialColourCategory(paletteName: PaletteName, palette: string): MaterialColour {
+      return this.materialColours.filter(palette => palette.paletteName === paletteName)[0];
+    },
+
+    setSelectedMaterialElement(selectedElement: { colourElement: ColourLabel, palette: PaletteName}) {
+      const combinedPaletteAndColour = `${selectedElement.palette}${selectedElement.colourElement}`;
+      this.MaterialElementNative = selectedElement;
       this.materialElementSelected = this.materialElementSelected === combinedPaletteAndColour ? '' : combinedPaletteAndColour;
     },
 
@@ -184,6 +144,10 @@ export default defineComponent({
     getColourSwatches() {
       return this.$props.siteSwatches.colourSwatches;
     },
+
+    saveMaterialColours() {
+      this.$emit('saveClicked', this.materialColours);
+    }
   }
 
 })
@@ -207,4 +171,60 @@ export default defineComponent({
 .section-wrapper-long {
   @apply h-80;
 }
+
+.container {  
+  display: block;  
+  position: relative;  
+  padding-left: 35px;  
+  margin-bottom: 1rem;  
+  cursor: pointer;  
+  font-size: 1rem;  
+}  
+  
+/* Hide the default checkbox */  
+.container input {  
+  visibility: hidden;  
+  cursor: pointer;  
+}  
+  
+/* Create a custom checkbox */  
+.mark {  
+  position: absolute;  
+  top: 0;  
+  left: 0;  
+  height: 1.2rem;  
+  width: 1.2rem;  
+  background-color: lightgray;  
+}  
+  
+.container:hover input ~ .mark {  
+  background-color: gray;  
+}  
+  
+.container input:checked ~ .mark {  
+  background-color: blue;  
+}  
+  
+/* Create the mark/indicator (hidden when not checked) */  
+.mark:after {  
+  content: "";  
+  position: absolute;  
+  display: none;  
+}  
+  
+/* Show the mark when checked */  
+.container input:checked ~ .mark:after {  
+  display: block;  
+}  
+  
+/* Style the mark/indicator */  
+.container .mark:after {  
+  left: 5px;  
+  top: 3px;  
+  width: 7px;  
+  height: 10px;  
+  border: solid white;  
+  border-width: 0 3px 3px 0;  
+  transform: rotate(45deg);  
+}  
 </style>

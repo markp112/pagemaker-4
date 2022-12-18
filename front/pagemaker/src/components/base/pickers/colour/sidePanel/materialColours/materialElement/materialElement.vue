@@ -1,17 +1,15 @@
 <template>
-  <div class="flex flex-col justify-start w-full">
-    <div class="section-wrapper">
-      <p class="w-full p-1" v-for="colour in colourElement.colours"
-        :style="{
-          color: colour.hexColourText,
-          backgroundColor: colour.hexColourBackground,
-        }"
-        @click="setSelected(colour.name)"
-        >
-        <span v-if="selectedElement === `${colourElement.paletteName}${colour.name}`" class="rounded-full bg-white w-2 h-2 p-2 float-right"></span>
-        {{ colourElement.paletteName }} {{ colour.name }}
-      </p>
-    </div>
+  <div class="flex flex-col justify-start w-6/12 p-1">
+    <p class="w-full p-1" v-for="colour in colourElement.colours"
+      :style="{
+        color: colour.hexColourText,
+        backgroundColor: colour.hexColourBackground,
+      }"
+      @click="setSelected(colour.name)"
+      >
+      <span v-if="selectedElement === `${colourElement.paletteName}${colour.name}`" class="rounded-full bg-white w-2 h-2 p-2 float-right"></span>
+      {{ colourElement.paletteName }} {{ colour.name }}
+    </p>
   </div>
 </template>
 
@@ -41,7 +39,7 @@ export default defineComponent({
   methods: { 
 
     setSelected(colour: ColourLabel) {
-      const colourItem = {colour: colour, palette: this.label };
+      const colourItem = { colourElement: colour, palette: this.label };
       this.$emit('selectedElementClicked', colourItem)
     },
 

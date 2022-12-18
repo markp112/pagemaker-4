@@ -4,6 +4,7 @@ import { Site } from './model/site';
 import { Guid } from '../../../common/classes/guid';
 import { ColourSwatches } from './model/colourPalette';
 import { sitesController } from './controller/';
+import { MaterialColours } from './model/materialColours';
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
@@ -29,11 +30,27 @@ sitesRouter
       const response = await sitesController().getSiteMaterialColours(userId, siteId);
       res.status(response.status).send(response);
     } catch (error) {
+      console.log('%c⧭', 'color: #733d00', error);
       const response = error.getResponse();
       res.status(error._status).send(response);
     }
   })
   
+  .post(`${ROUTE_PATH}/:userId/:siteId/materialcolours`, async (req, res) => {
+    logger.info('post material colours called');
+    try {
+      const materialcolours = req.body as MaterialColours;
+      const userId = req.params.userId;
+      const siteId = req.params.siteId;
+      const response = await sitesController().saveMaterialColours(userId, siteId, materialcolours);
+      res.status(response.status).send(response);
+    } catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response);
+    }
+
+  })
+
   .get(`${ROUTE_PATH}/:userId/:siteId/colourpalette`, async (req, res) => {
     logger.info('GET: site colour palette called');
     const userId = req.params.userId;

@@ -109,11 +109,32 @@ paths:
                 type: array
                 items:
                   type: string
+  
+    post:
+      tags:
+        - sites
+          - site
+      summary: stores the selected material colours for the site
+      description: Based on the material framework this saves the colours chosen by the user for things like the primary colour, surface text etc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/material-colours'
+      responses:
+        '201':
+          description: 'Material colours were saved'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/material-colours'
 
   /sites/{userId}/{siteId}:
     post:
       tags:
         - sites
+        - site
       summary: Save details of a new site
       requestBody:
         description: details of the site
@@ -492,4 +513,27 @@ components:
         name:
           title: filename of the image
           type: string
+    
+    material-colours:
+      type: object
+      title: Material colours
+      description: contains the material colour settings for a users site
+      properties:
+        paletteName:
+          title: Palette Name - can be one of Primary, secondary, accent, error, surface
+          type: string
+        colours:
+          title: array of colour values
+          type: object
+          properties:
+            name: 
+              title: name of the colour values can be neutral, light or dark
+              type: string
+            hexColourText:
+              title: the hex colour value for text linked to this item
+              type: string
+            hexColourBackground:
+              title: the colour to be applied to the background of the element
+              type:  string
+
   

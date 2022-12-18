@@ -15,11 +15,6 @@ type MaterialColour = {
 
 type MaterialColours = MaterialColour[];
 
+type FirebaseMaterialColours = { materialColours: MaterialColours };
 
-export type { 
-  MaterialColour,
-  MaterialColours,
-  ColourValue,
-  ColourLabel,
-  PaletteName,
-};
+export { MaterialColours, FirebaseMaterialColours };

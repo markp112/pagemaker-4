@@ -10,9 +10,6 @@
   @apply flex;
   @apply flex-row;
   @apply justify-center;
-  @apply items-center;
-  @apply h-auto;
-  @apply mt-32;
 }
 
 .sidebar-panel {

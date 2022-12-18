@@ -7,6 +7,7 @@ import { GenericError } from '../../../../common/errors/';
 import { logger } from '../../../../logger';
 import { ColourPalette, ColourSwatches, ColourSwatchesFirebaseObject } from '../model/colourPalette';
 import { httpStatusCodes } from '../../../../api/httpStatusCodes';
+import { FirebaseMaterialColours, MaterialColours } from '../model/materialColours';
 
 function sitesController() {
 
@@ -43,16 +44,30 @@ function sitesController() {
   async function getSiteMaterialColours(userId: string, siteId: string) {
     try {
       const coloursCollection = `${userId}${siteId}::settings`;
-      const docRef = doc(firebaseDb, coloursCollection, 'siteSettings')
+      const docRef = doc(firebaseDb, coloursCollection, 'materialcolours')
       const firebaseResponse = await getDoc(docRef);
       if (firebaseResponse.exists()) {
-        const siteSettings = firebaseResponse.data() as unknown as SiteSettings;
-        return constructResponse<Record<string, string>[]>(siteSettings.colours, httpStatusCodes.OK);
+        const returnedData = firebaseResponse.data() as unknown as FirebaseMaterialColours;
+        const materialColours = returnedData.materialColours; 
+        return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
       }
     } catch (err) {
       logger.error(err);
       throw new GenericError(err);
     }
+  }
+
+  async function saveMaterialColours(userId: string, siteId: string, materialcolours: MaterialColours) {
+    try {
+      const coloursCollection = `${userId}${siteId}::settings`;
+      const docRef = doc(firebaseDb, coloursCollection, 'materialcolours');
+      const colourPalette: FirebaseMaterialColours  = { materialColours: materialcolours };
+      await setDoc(docRef, colourPalette);
+      return constructResponse<MaterialColours>(materialcolours, httpStatusCodes.OK)
+    } catch (err) {
+        logger.info(err);
+        throw new GenericError(err);
+      }
   }
 
   async function getSiteColourPalette(userId: string, siteId: string) {
@@ -89,6 +104,7 @@ function sitesController() {
   return { 
     getSites,
     getSiteMaterialColours,
+    saveMaterialColours,
     getSiteColourPalette,
     saveColourPalette,
     saveSite,
