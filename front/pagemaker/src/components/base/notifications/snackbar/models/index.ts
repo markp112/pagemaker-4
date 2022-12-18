@@ -30,11 +30,12 @@ type SnackbarTypes =
   readonly show: false
 };
 
+type SnackbarType = 'success' | 'warning' | 'error' | 'info';
 
 type SnackbarActions = 
 |
   {
-    type: 'success' | 'warning' | 'error' | 'info',
+    type: SnackbarType
     payload: {
       message: string,
       title: string,
@@ -45,4 +46,4 @@ type SnackbarActions =
     type: 'hidden',
   };
 
-export type { SnackbarTypes, SnackbarActions };
+export type { SnackbarTypes, SnackbarActions, SnackbarType };

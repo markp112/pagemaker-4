@@ -109,8 +109,8 @@ function  axiosClient() {
   return { get, post, put, };
 } 
 
+export type { ResponseError };
+
 export {
   axiosClient,
 };
-
-export type { ResponseError }

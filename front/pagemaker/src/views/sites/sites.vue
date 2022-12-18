@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="flex flex-row justify-between text-accent1 mt-8 bg-site-background overflow-hidden">
-      <h2 class="page-heading ml-4 text-on-secondary">My Sites</h2>
+      <h2 class="page-heading ml-4 text-site-primary-dark">My Sites</h2>
       <div class="w-32 h-4/6">
         <base-button
           class="mr-4 w-32"
@@ -89,8 +89,8 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
 
       async siteEditClick(siteId: string) {
         try {
-          await this.getSiteDefaults(siteId, `/editSite`);
-          this.$router.push({ name: 'editSite', params: { title: 'edit site' }})
+          await this.getSiteDefaults(siteId, `/site-editor`);
+          this.$router.push({ name: 'site-editor', params: { title: 'edit site' }})
         } catch (error) {
             console.log('%c⧭', 'color: #5200cc', error)
         }

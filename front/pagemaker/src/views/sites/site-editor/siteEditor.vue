@@ -197,35 +197,13 @@ export default defineComponent({
         if (!this.isFormCompletedCorrectly(this.validateForm())) {
           return;
         }
-        try {
-          if (this.site.siteId === '') {
-            await siteService().saveNewSite(this.site);
-          } else {
-            await siteService().saveExistingSite(this.site);
+        if (this.site.siteId === '') {
+          await siteService().saveNewSite(this.site);
+        } else {
+          await siteService().saveExistingSite(this.site);
           }
-          this.snackbarStore.setSnackbarMessage(
-            { 
-              type: 'success',
-              payload: {
-                message: `The site ${this.site.name} has been created`,
-                title: 'Site Record Saved' 
-              }
-            }); 
-        } catch (err) {
-          console.log('%c⧭', 'color: #0088cc', err)
-          this.snackbarStore.setSnackbarMessage(
-            { 
-              type: 'error',
-              payload: {
-                message: 'Failed to save site',
-                title: 'Error' 
-              }
-            }); 
-
-        }
+        },
     
-      },
-
       async saveMaterialColours(materialColours: MaterialColours) {
         const siteAndUser = getSiteAndUser();
         await siteService().saveMaterialColours(siteAndUser, materialColours);

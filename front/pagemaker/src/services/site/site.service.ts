@@ -4,14 +4,26 @@ import { siteDefaultColours } from '@/classes/sites/siteColours/colour';
 import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import type { TypographyInterface } from '@/classes/sites/typography/model';
+import type { SnackbarType } from '@/components/base/notifications/snackbar/models';
 import { useSiteStore } from '@/stores/site.store';
-import { axiosClient } from '../httpService';
-
+import { useSnackbarStore } from '@/stores/snackbar.store';
+import { axiosClient, type ResponseError } from '../httpService';
 
 function siteService() {
   const BASE_ROUTE = '/sites/';
   const store = useSiteStore();
   const getRoute = (siteAndUser: SiteAndUser) => `${BASE_ROUTE}${siteAndUser.userId}/${siteAndUser.siteId}`;
+
+  function displayMessage(msg: string, type: SnackbarType, title: string) {
+    useSnackbarStore().setSnackbarMessage(
+      { 
+        type: type,
+        payload: {
+          message: msg,
+          title: title 
+        }
+      });
+  }
 
   async function getSiteMaterialColours(siteAndUser: SiteAndUser):Promise<void> {
     try {
@@ -28,7 +40,13 @@ function siteService() {
   }
 
   async function saveMaterialColours(siteAndUser: SiteAndUser, materialColours: MaterialColours) {
-    await axiosClient().post<MaterialColours, MaterialColours>(`${getRoute(siteAndUser)}/materialColours`, materialColours);
+    try {
+      await axiosClient().post<MaterialColours, MaterialColours>(`${getRoute(siteAndUser)}/materialColours`, materialColours);
+      displayMessage('Saved Ok', 'success', 'Material Colours');
+    } catch (error) {
+      const err = error as ResponseError;
+      displayMessage(err.msg, 'error', 'Material Colours');
+    }
   };
 
   async function getSiteTypography(userId: string, siteId: string):Promise<void> {
@@ -71,10 +89,13 @@ function siteService() {
       const savedPalette = await axiosClient().post<ColourSwatches, ColourSwatches>(`${getRoute(siteAndUser)}/colourpalette`, colourPalette);
       if (savedPalette) {
         store.setColourPalette(savedPalette);
+        displayMessage('Saved Ok', 'success', 'Colour Swatches');
       }
     } 
-    catch (err) {
-      console.log(err);
+    catch (error) {
+      console.log(error);
+      const err = error as ResponseError;
+      displayMessage(err.msg, 'error', 'Material Colours');
     }
 
   }

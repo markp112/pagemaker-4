@@ -22,16 +22,25 @@ const router = createRouter({
       path: '/sites',
       name: 'sites',
       component: sitesVue,
+      meta: {
+        breadcrumb: [{ name: 'sites' }]
+      }
     },
     {
-      path: '/editsite',
-      name: 'editSite',
-      component: SiteEditor,
+      path: '/site-editor',
+      name: 'site-editor',
+      component: SiteEditor, 
+      meta: {
+        breadcrumb: [{ name: 'sites', link: 'sites' }, {name: 'site-editor'}]
+      }
     },
     {
       path: '/pagelist',
       name: 'pageList',
-      component: pageListVue, 
+      component: pageListVue,
+      meta: {
+        breadcrumb: [{ name: 'sites', link: 'sites' }]
+      }
 
     },
   ],
