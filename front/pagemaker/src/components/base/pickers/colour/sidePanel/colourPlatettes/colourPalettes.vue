@@ -13,10 +13,10 @@
             reset
           </BaseButton>
           <img
-          v-show="!showDefaultIcon"
-          :src="getPath(SAVE_ICON_HOVER)"
-          class="w-10 h-10 shadow cursor-pointer"
-          @mouseenter="showDefaultIcon = !showDefaultIcon"
+            v-show="!showDefaultIcon"
+            :src="getPath(SAVE_ICON_HOVER)"
+            class="w-10 h-10 shadow cursor-pointer"
+            @mouseenter="showDefaultIcon = !showDefaultIcon"
           />
           <img
           v-show="showDefaultIcon"
@@ -33,14 +33,14 @@
       <span class="px-2">Select base colour</span>
       <ColourDropdown 
         @onColourClick="onColourChange($event)"
-        :colour="sitePalette.colour"
+        :colour="$props.sitePalette.baseColourHex"
       >
       </ColourDropdown>
       <div class="ml-12 flex flex-col justify-start">
         <label for="saturation">saturation</label>
         <input
           type="range"
-          min="-100"
+          min="0"
           max="100"
           class="slider"
           id="saturation"
@@ -93,27 +93,14 @@
       </span>
     </div>
     <div class="flex flex-col justify-start ml-8">
-      <PaletteStrip
-        :palette="getPrimary()"
-        label="Primary"
+      <PaletteStrip v-for="swatch in getColourSwatches()" 
+        :palette="swatch.swatch"
+        :label="swatch.swatchName"
         @colourClicked="paletteColourClicked($event)"
-      >
-      </PaletteStrip>
-      <PaletteStrip
-        class="mt-8"
-        :palette="getSecondary()"
-        label="Secondary"
-        @colourClicked="paletteColourClicked($event)"
-      >
-      </PaletteStrip>
-      <PaletteStrip
-        class="mt-8"
-        :palette="getAccent()"
-        label="Accent"
-        @colourClicked="paletteColourClicked($event)"
-      >
-      </PaletteStrip>
-
+        :heightAndWidth="stripHeightAndWidth"
+        showColourValue
+        :selectedColour="selectedColour"
+      />
     </div>
   </section>
   
@@ -126,17 +113,18 @@ import PaletteStrip from './paletteStrip/paletteStrip.vue';
 import ColourDropdown from '../../colourPicker/colourDropdown/colourDropDown.vue';
 import BaseButton from '@/components/base/baseButton/baseButton.vue';
 import { getImageUrl } from '@/common/getIcon';
-import { ColourPalettes, type PaletteCollection } from '@/classes/colourPalette/colourPalette';
-import type { SupportedColourModels } from '@/classes/colourPalette/colourModels';
-import type { ColourPalette } from '@/classes/sites/siteColours/colour/colourPalette';
-import { useSiteStore } from '@/stores/site.store';
+import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import { siteService } from '@/services/site/site.service';
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import { useSnackbarStore } from '@/stores/snackbar.store';
+import type { SupportedColourModels } from '@/classes/colourPalette/colourModel';
+import { swatchesService } from '@/services/swatches/swatches.service';
 
 export default defineComponent({
   name: 'colour-palettes',
   
+  emits: ['resetClicked'],
+
   components: {
     ColourDropdown,
     PaletteStrip,
@@ -145,7 +133,7 @@ export default defineComponent({
 
   props: {
     sitePalette: {
-      type: Object as PropType<ColourPalette>,
+      type: Object as PropType<ColourSwatches>,
       required: true,
     },
   },
@@ -154,64 +142,52 @@ export default defineComponent({
     return {
       SAVE_ICON: 'diskette-dark-48.png',
       SAVE_ICON_HOVER: 'diskette-light-48.png',
+      scheme: this.$props.sitePalette.colourScheme,
       showDefaultIcon: true,
       saturationPreviousValue: 0,
-      saturationValue: 0,
-      colourPalettes: new ColourPalettes('#12443e', 'complementary'),
-      store: useSiteStore(),
+      saturationValue: 50,
       snackbarStore: useSnackbarStore(),
-    }
+      stripHeightAndWidth: { height: 'h-16', width: 'w-16' },
+      selectedColour: '',
+    };
   },
 
-  mounted() {
-    this.resetPalette();
-  },
-  
   methods: {
     getPath(img: string) {
       return getImageUrl(img);
     },
     
     isThisColourScheme(colourScheme: SupportedColourModels): boolean {
-      return this.colourPalettes.isTheSameColourModel(colourScheme);
+      return this.scheme === colourScheme;
     },
 
-    getPrimary() {
-      return this.colourPalettes.primary.palette;
-    },
-
-    getSecondary() {
-      return this.colourPalettes.secondary.palette;
-    },
-
-    getAccent() {
-      return this.colourPalettes.accent.palette;
+    getColourSwatches(): ColourSwatch[] {
+      return this.$props.sitePalette.colourSwatches;
     },
 
     paletteColourClicked(colour: string) {
       this.onColourChange(colour);
     },
 
-    onColourChange(colour: string) {
-      this.saturationValue = 0;
-      this.saturationPreviousValue = 0;
-      this.colourPalettes.colour = colour;
-      this.colourPalettes.buildANewPalette();
+    async onColourChange(colour: string) {
+      const swatches: ColourSwatches = {
+        baseColourHex: colour,
+        colourScheme: this.$props.sitePalette.colourScheme,
+        colourSwatches: this.$props.sitePalette.colourSwatches,
+      };
+      await swatchesService().getNewSwatchesFromColour(swatches);
+      this.saturationValue = 50;
+      this.saturationPreviousValue = 50;
+      this.selectedColour = colour;
     },
     
     resetPalette() {
-      const palette = this.$props.sitePalette;
-      const existingPalettes: PaletteCollection = {
-        primaryPalette: palette.primary,
-        secondaryPalette: palette.secondary,
-        accentPalette: palette.accent
-      };
-      this.colourPalettes = new ColourPalettes(palette.colour, palette.colourScheme, existingPalettes);
+      this.$emit('resetClicked');
     },
 
     async savePaletteSelection() {
       try {
-        await siteService().saveSitePalette(this.colourPalettes.toColourPalette(), getSiteAndUser());
+        await siteService().saveSitePalette(getSiteAndUser());
         this.displayMessage('Palette saved', 'success');
       } 
       catch (err) {
@@ -231,26 +207,27 @@ export default defineComponent({
         }); 
     },
     
-    onSaturationChange() {
-      const value = this.saturationValue > this.saturationPreviousValue ? 0.1 : -0.1;
-      if(value > 0) {
-        this.colourPalettes.increaseSaturation(value);
-      } else {
-        this.colourPalettes.decreaseSaturation(value);
-      }
+    async onSaturationChange() {
+      const value = this.saturationValue > this.saturationPreviousValue ? 1 : -1;
       this.saturationPreviousValue = this.saturationValue;
+      const swatches = this.$props.sitePalette.colourSwatches;
+      if(value > 0) {
+        await swatchesService().increaseSaturation(swatches);
+      } else {
+        await swatchesService().decreaseSaturation(swatches);
+      }
     },
     
-    changeScheme(scheme: SupportedColourModels) {
-      this.colourPalettes.colourModel = scheme;
-      this.colourPalettes.buildANewPalette();
+    async changeScheme(scheme: SupportedColourModels) {
+      this.scheme = scheme;
+      const swatches = this.$props.sitePalette;
+      swatches.colourScheme = scheme;
+      await swatchesService().changeColourModel(swatches);
     },
 
-
-    
   },
-  })
-  </script>
+})
+</script>
 
 <style scoped>
 .slider {

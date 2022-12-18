@@ -100,7 +100,6 @@ export default defineComponent({
   @apply cursor-pointer;
   @apply top-0;
   transition: all 0.25s;
-
 }
 .tab-label:hover {
   top: -0.30rem;

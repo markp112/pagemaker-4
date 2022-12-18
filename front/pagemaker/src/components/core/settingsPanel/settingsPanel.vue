@@ -1,6 +1,8 @@
 <template>
-  <div class="nav-container mt-3 bg-white max-h-screen shadow-lg shadow-gray-400 p-2 flex flex-col justify-start absolute top-0 right-0 border border-gray-400 rounded-md" :class="getWidth()">
-    <div class="nav-content">
+  <div class="nav-container mt-3 bg-white max-h-screen shadow-lg shadow-gray-400 p-4 flex flex-col justify-start absolute top-0 right-2 border border-gray-400 rounded-md transition-all"
+    :class="getWidth()"
+  >
+    <div class="nav-content" v-if="width==='w-full'">
       <slot></slot>
     </div>
     <span class="absolute -left-10 w-10 p-1 pr-0 bottom-40 border border-gray-400 rounded-l-full z-10 bg-white">
@@ -18,7 +20,7 @@ import { LEFT_ARROW, RIGHT_ARROW } from '../common/models/showHideIcons';
 
 const TOOLBAR_ICON_UNHIDE = LEFT_ARROW;
 const TOOLBAR_ICON_HIDE = RIGHT_ARROW;
-type WIDTHS = 'full' | 'w-1';
+type WIDTHS = 'w-full' | 'w-1';
 
 export default defineComponent({
   name: 'settingsPanel',
@@ -39,7 +41,7 @@ export default defineComponent({
     return {
       activeIcon: TOOLBAR_ICON_HIDE,
       showToolbar: true,
-      width: 'full' as WIDTHS,
+      width: 'w-full' as WIDTHS,
     }
   },
 
@@ -58,12 +60,15 @@ export default defineComponent({
 
   methods: {
     toggleToolbar(event: string): void {
+      console.log('%c⧭', 'color: #00736b', 'toggleToolbar')
       this.activeIcon = event === 'hideToolbar' ? TOOLBAR_ICON_UNHIDE : TOOLBAR_ICON_HIDE;
-      this.width = this.width === 'full' ? 'w-1' : 'full';
+      this.width = this.width === 'w-full' ? 'w-1' : 'w-full';
+      console.log('%c⧭', 'color: #99614d', this.width)
       this.$emit('toggleClicked');
     },
 
     getWidth() {
+      console.log('%c⧭', 'color: #d0bfff', this.width)
       return this.width;
     }
   },

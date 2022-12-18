@@ -31,14 +31,13 @@ export default defineComponent({
 
   data() {
     return {
-      sliderHue: this.$props.hue.toString(),
+      sliderHue: this.$props.hue ? this.$props.hue.toString() : '#ff',
     }
   },
 
   methods: {
     
     setColour(rgbColour: string) {
-      // this.colourStore.rgbColour = rgbColour;
       this.$emit('colourClicked', rgbColour)
     },
     

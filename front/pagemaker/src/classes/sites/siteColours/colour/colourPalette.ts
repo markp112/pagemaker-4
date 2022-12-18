@@ -1,13 +1,18 @@
-import type { SupportedColourModels } from '@/classes/colourPalette/colourModels';
+import type { SupportedColourModels } from '@/classes/colourPalette/colourModel';
 
 type Colours = string[];
 
-type ColourPalette = {
-  accent: Colours,
-  colour: string,
-  colourScheme: SupportedColourModels,
-  primary: Colours,
-  secondary: Colours,
+type SwatchName = 'primary' | 'secondary' | 'accent' | 'utility';
+
+type ColourSwatch = {
+  swatch: Colours;
+  swatchName: SwatchName;
 };
 
-export type { ColourPalette, Colours };
+type ColourSwatches = {
+  baseColourHex: string;
+  colourSwatches: ColourSwatch[];
+  colourScheme: SupportedColourModels;
+};
+
+export type { ColourSwatch, Colours, ColourSwatches, SwatchName };

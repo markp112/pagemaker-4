@@ -5,8 +5,9 @@ import { Response } from '../../../../api/types';
 import { Site, SiteSettings } from '../model/site';
 import { GenericError } from '../../../../common/errors/';
 import { logger } from '../../../../logger';
-import { ColourPalette } from '../model/colourPalette';
+import { ColourPalette, ColourSwatches, ColourSwatchesFirebaseObject } from '../model/colourPalette';
 import { httpStatusCodes } from '../../../../api/httpStatusCodes';
+import { FirebaseMaterialColours, MaterialColours } from '../model/materialColours';
 
 function sitesController() {
 
@@ -43,16 +44,30 @@ function sitesController() {
   async function getSiteMaterialColours(userId: string, siteId: string) {
     try {
       const coloursCollection = `${userId}${siteId}::settings`;
-      const docRef = doc(firebaseDb, coloursCollection, 'siteSettings')
+      const docRef = doc(firebaseDb, coloursCollection, 'materialcolours')
       const firebaseResponse = await getDoc(docRef);
       if (firebaseResponse.exists()) {
-        const siteSettings = firebaseResponse.data() as unknown as SiteSettings;
-        return constructResponse<Record<string, string>[]>(siteSettings.colours, httpStatusCodes.OK);
+        const returnedData = firebaseResponse.data() as unknown as FirebaseMaterialColours;
+        const materialColours = returnedData.materialColours; 
+        return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
       }
     } catch (err) {
       logger.error(err);
       throw new GenericError(err);
     }
+  }
+
+  async function saveMaterialColours(userId: string, siteId: string, materialcolours: MaterialColours) {
+    try {
+      const coloursCollection = `${userId}${siteId}::settings`;
+      const docRef = doc(firebaseDb, coloursCollection, 'materialcolours');
+      const colourPalette: FirebaseMaterialColours  = { materialColours: materialcolours };
+      await setDoc(docRef, colourPalette);
+      return constructResponse<MaterialColours>(materialcolours, httpStatusCodes.OK)
+    } catch (err) {
+        logger.info(err);
+        throw new GenericError(err);
+      }
   }
 
   async function getSiteColourPalette(userId: string, siteId: string) {
@@ -61,8 +76,9 @@ function sitesController() {
       const docRef = doc(firebaseDb, paletteCollection, 'siteColourPalette')
       const firebaseResponse = await getDoc(docRef);
       if (firebaseResponse.exists()) {
-        const colourPalette = firebaseResponse.data() as unknown as ColourPalette;
-        return constructResponse<ColourPalette>(colourPalette, httpStatusCodes.OK);
+        const colourPalette = firebaseResponse.data() as unknown as ColourSwatchesFirebaseObject;
+        const colourSwatches: ColourSwatches = JSON.parse(colourPalette.colourSwatches);
+        return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK);
       }
     } catch (err) {
       logger.error(err);
@@ -70,23 +86,25 @@ function sitesController() {
     }
   }
 
-  async function saveColourPalette(userId: string, siteId: string, colourPalette: ColourPalette) {
+  async function saveColourPalette(userId: string, siteId: string, colourSwatches: ColourSwatches) {
     try {
       const paletteCollection = `${userId}${siteId}::settings`;
       const docRef = doc(firebaseDb, paletteCollection, 'siteColourPalette')
+      const colourSwatchAsString = JSON.stringify(colourSwatches);
+      const colourPalette: ColourSwatchesFirebaseObject  = { colourSwatches: colourSwatchAsString };
       await setDoc(docRef, colourPalette);
-      return constructResponse<ColourPalette>(colourPalette, httpStatusCodes.OK)
+      return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK)
     }
     catch (err) {
       logger.error(err);
       throw new GenericError(err);
     }
-    
   }
 
   return { 
     getSites,
     getSiteMaterialColours,
+    saveMaterialColours,
     getSiteColourPalette,
     saveColourPalette,
     saveSite,

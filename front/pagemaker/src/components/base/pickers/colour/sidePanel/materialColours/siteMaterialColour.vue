@@ -1,169 +1,154 @@
 <template>
   <div class="flex flex-col justify-start w-full">
-    <div class="flex flex-row justify-start w-full mt-6">
-      <div class="flex flex-col justify-start w-6/12">
-        <div
-          class="section-wrapper"
-          :style="{ backgroundColor: materialColours.primary }"
-        >
-          <p
-            class="w-full p-1"
-            :style="{
-              color: materialColours.textOnPrimary,
-              backgroundColor: materialColours.primaryDark,
-            }"
-          >
-            Primary Dark
-          </p>
-          <p
-            class="w-full p-1"
-            :style="{ color: materialColours.textOnPrimary }"
-          >
-            Primary
-          </p>
-          <p
-            class="self-end w-full p-1"
-            :style="{
-              color: materialColours.textOnPrimary,
-              backgroundColor: materialColours.primaryLight,
-            }"
-          >
-            Primary Light
-          </p>
-        </div>
-        <div
-          class="section-wrapper"
-          :style="{ backgroundColor: materialColours.secondary }"
-        >
-          <p
-            class="w-full p-1"
-            :style="{
-              color: materialColours.textOnSecondary,
-              backgroundColor: materialColours.secondaryDark,
-            }"
-          >
-            Secondary Dark
-          </p>
-          <p
-            class="w-full p-1"
-            :style="{ color: materialColours.textOnSecondary }"
-          >
-            Secondary
-          </p>
-          <p
-            class="self-end w-full p-1"
-            :style="{
-              color: materialColours.textOnSecondary,
-              backgroundColor: materialColours.secondaryLight,
-            }"
-          >
-            Secondary Light
-          </p>
-        </div>
+    <h3 class="text-3xl ">Assign Site Colours</h3>
+    <div class="w-full flex flex-auto">
+      <div class="w-6/12">
+        <label for="textOn" class="container mt-4">Text On
+          <input type="checkbox" name="textOn" id="textOn" @click="textOnSelected = !textOnSelected">
+          <span class="mark"></span>
+        </label>
       </div>
-      <div class="flex flex-col justify-start w-6/12">
-        <div
-          class="section-wrapper section-wrapper-short"
-          :style="{ backgroundColor: materialColours.error }"
+      <div>
+        <BaseButton buttonType="primary" 
+          variant="solid"
+          class="ml-24"
+          @onClick="saveMaterialColours"
         >
-          <p
-            class="w-full p-1"
-            :style="{
-              color: materialColours.textOnError,
-              backgroundColor: materialColours.error,
-            }"
-          >
-            Error
-          </p>
-        </div>
-        <div class="section-wrapper section-wrapper-long">
-          <div
-            class="h-84"
-            :style="{
-              backgroundColor: materialColours.background,
-            }"
-          >
-            <p
-              class="p-1"
-              :style="{
-                color: materialColours.textOnBackground,
-              }"
-            >
-              Text on background
-            </p>
-            <div class="p-5 flex flex-row justify-center">
-              <div class="w-8/12 shadow-lg">
-                <div
-                  class="p-1"
-                  :style="{
-                    backgroundColor: materialColours.primary,
-                  }"
-                >
-                  <h2
-                    :style="{
-                      color: materialColours.textOnPrimary,
-                    }">
-                    Text on primary
-                  </h2>
-                </div> 
-                <div
-                  class="h-32 p-1 relative"
-                  :style="{
-                    backgroundColor: materialColours.surface,
-                    color: materialColours.textOnSurface,
-                  }"
-                >
-                  Text on surface
-                  <div
-                    class="absolute bottom-1 left-1/3 h-16 w-16 rounded-full ml-2"
-                    :style="{
-                      backgroundColor: materialColours.surface
-                    }"
-                  >
-                    <p
-                      class="absolute bottom-0 ml-2 mb-1 rounded-full h-12 w-12 flex items-center justify-center shadow-lg"
-                      :style="{
-                        backgroundColor: materialColours.accent,
-                        color: materialColours.textOnSurface,
-                      }"
-                    >
-                      accent
-                    </p>
-                  </div>
-                </div>
-                <div
-                  class="p-1"
-                  :style="{
-                    backgroundColor: materialColours.secondary,
-                    color: materialColours.textOnSecondary,
-                  }"
-                >
-                  Text on secondary
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          Save
+        </BaseButton>
       </div>
+    </div>
+    <div>
+      <PaletteStrip v-for="swatch in getColourSwatches()" 
+        :palette="swatch.swatch"
+        :label="swatch.swatchName"
+        @colourClicked="colourPaletteClicked($event)"
+        :heightAndWidth="stripHeightAndWidth"
+        :showColourValue="false"
+        :selectedColour="selectedColour"
+      />
+    </div>
+    <div class="mt-6">
+      <div class="flex flex-row justify-between w-full flex-wrap">
+        <MaterialElement v-for="materialColour in materialColours"
+          :label="materialColour.paletteName"
+          :colourElement="materialColour" 
+          :selectedElement="materialElementSelected"
+          @selectedElementClicked="setSelectedMaterialElement($event)"
+        />
+
+      </div> 
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models/colours.model';
 import { defineComponent, type PropType } from 'vue';
-
+import type { ColourLabel, MaterialColour, MaterialColours, PaletteName, ColourValue } from '@/classes/sites/siteColours/models/colours.model';
+import MaterialElement from './materialElement/materialElement.vue';
+import PaletteStrip from '../colourPlatettes/paletteStrip/paletteStrip.vue';
+import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
+import DropDown from '../../../dropDown/dropDown.vue';
+import BaseButton from '@/components/base/baseButton/baseButton.vue';
 
 export default defineComponent({
-  name: 'siteMaterialColours',
+  name: 'siteMaterialColour',
+  emits: ['saveClicked'],
+
+  components: {
+    MaterialElement,
+    PaletteStrip,
+    DropDown,
+    BaseButton
+  },
 
   props: {
     materialColours: {
-      type: Object as PropType<MaterialColoursInterface>,
+      type: Object as PropType<MaterialColours>,
       required: true,
     },
-    
+    siteSwatches: {
+      type: Object as PropType<ColourSwatches>,
+      required: true,
+    },
   },
+
+  data() {
+    return {
+      stripHeightAndWidth: { height: 'h-8', width: 'w-8'},
+      selectedColour: '',
+      materialElementSelected: '',
+      MaterialElementNative: {} as { palette: PaletteName, colourElement: string },
+      colourCategories: ['Primary', 'Secondary', 'Accent', 'Error', 'Surface'],
+      colourElements: ['Dark', 'Light', 'Neutral', 'Text On'],
+      paletteSelected: '',
+      paletteElementSelected: '',
+      textOnSelected: false,
+      materialColours: this.$props.materialColours,
+    }
+  },
+
+  methods: {
+
+    colourPaletteClicked(colour: string) {
+      this.selectedColour = this.selectedColour === colour ? '' : colour;
+      if(this.materialElementSelected !== '') {
+        this.setMaterialElementColour(colour);
+      }
+    },
+
+    setMaterialElementColour(colour: string) {
+      const newColours = this.materialColours.map(paletteElement => {
+        if(paletteElement.paletteName === this.MaterialElementNative.palette) {
+          paletteElement = this.updateColourElementForPalette(colour, paletteElement)
+        }
+          return paletteElement
+        })
+      this.materialColours = newColours;
+    },
+
+    updateColourElementForPalette(colour: string, paletteElement: MaterialColour): MaterialColour {
+        paletteElement.colours = paletteElement.colours.map(colourElement => {
+          if (colourElement.name === this.MaterialElementNative.colourElement) {
+            colourElement = this.updateColourElement(colour, colourElement);
+          }
+          return colourElement;
+        });
+        return paletteElement;
+      },
+        
+    updateColourElement(colour: string, colourElement: ColourValue): ColourValue {
+      const updatedColourElement = {...colourElement }
+      if(this.textOnSelected) {
+        updatedColourElement.hexColourText = colour;
+      } else {
+        updatedColourElement.hexColourBackground = colour;
+      }
+      return updatedColourElement;
+    },
+
+    getMaterialColourCategory(paletteName: PaletteName, palette: string): MaterialColour {
+      return this.materialColours.filter(palette => palette.paletteName === paletteName)[0];
+    },
+
+    setSelectedMaterialElement(selectedElement: { colourElement: ColourLabel, palette: PaletteName}) {
+      const combinedPaletteAndColour = `${selectedElement.palette}${selectedElement.colourElement}`;
+      this.MaterialElementNative = selectedElement;
+      this.materialElementSelected = this.materialElementSelected === combinedPaletteAndColour ? '' : combinedPaletteAndColour;
+    },
+
+    paletteSelectionChange(selectedPalette: string) {
+      this.paletteSelected = selectedPalette;
+    },
+
+    getColourSwatches() {
+      return this.$props.siteSwatches.colourSwatches;
+    },
+
+    saveMaterialColours() {
+      this.$emit('saveClicked', this.materialColours);
+    }
+  }
 
 })
 </script>
@@ -186,4 +171,60 @@ export default defineComponent({
 .section-wrapper-long {
   @apply h-80;
 }
+
+.container {  
+  display: block;  
+  position: relative;  
+  padding-left: 35px;  
+  margin-bottom: 1rem;  
+  cursor: pointer;  
+  font-size: 1rem;  
+}  
+  
+/* Hide the default checkbox */  
+.container input {  
+  visibility: hidden;  
+  cursor: pointer;  
+}  
+  
+/* Create a custom checkbox */  
+.mark {  
+  position: absolute;  
+  top: 0;  
+  left: 0;  
+  height: 1.2rem;  
+  width: 1.2rem;  
+  background-color: lightgray;  
+}  
+  
+.container:hover input ~ .mark {  
+  background-color: gray;  
+}  
+  
+.container input:checked ~ .mark {  
+  background-color: blue;  
+}  
+  
+/* Create the mark/indicator (hidden when not checked) */  
+.mark:after {  
+  content: "";  
+  position: absolute;  
+  display: none;  
+}  
+  
+/* Show the mark when checked */  
+.container input:checked ~ .mark:after {  
+  display: block;  
+}  
+  
+/* Style the mark/indicator */  
+.container .mark:after {  
+  left: 5px;  
+  top: 3px;  
+  width: 7px;  
+  height: 10px;  
+  border: solid white;  
+  border-width: 0 3px 3px 0;  
+  transform: rotate(45deg);  
+}  
 </style>

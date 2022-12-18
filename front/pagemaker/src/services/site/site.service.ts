@@ -1,7 +1,8 @@
 import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { Site } from '@/classes/sites';
-import type { ColourPalette } from '@/classes/sites/siteColours/colour/colourPalette';
-import type { MaterialColoursInterface } from '@/classes/sites/siteColours/models/colours.model';
+import { siteDefaultColours } from '@/classes/sites/siteColours/colour';
+import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
+import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import type { TypographyInterface } from '@/classes/sites/typography/model';
 import { useSiteStore } from '@/stores/site.store';
 import { axiosClient } from '../httpService';
@@ -10,13 +11,15 @@ import { axiosClient } from '../httpService';
 function siteService() {
   const BASE_ROUTE = '/sites/';
   const store = useSiteStore();
-  const getRoute = (userId: string, siteId: String) => `${BASE_ROUTE}${userId}/${siteId}`;
+  const getRoute = (siteAndUser: SiteAndUser) => `${BASE_ROUTE}${siteAndUser.userId}/${siteAndUser.siteId}`;
 
   async function getSiteMaterialColours(siteAndUser: SiteAndUser):Promise<void> {
     try {
-      const materialColours = await axiosClient().get<MaterialColoursInterface>(`${getRoute(siteAndUser.userId, siteAndUser.siteId)}/materialcolours`);
+      const materialColours = await axiosClient().get<MaterialColours>(`${getRoute(siteAndUser)}/materialcolours`);
       if (materialColours) {
         store.setMaterialColours(materialColours);
+      } else {
+        store.setMaterialColours(siteDefaultColours())
       }
     }
     catch (err) {
@@ -24,9 +27,13 @@ function siteService() {
     }
   }
 
+  async function saveMaterialColours(siteAndUser: SiteAndUser, materialColours: MaterialColours) {
+    await axiosClient().post<MaterialColours, MaterialColours>(`${getRoute(siteAndUser)}/materialColours`, materialColours);
+  };
+
   async function getSiteTypography(userId: string, siteId: string):Promise<void> {
     try {
-      const typography = await axiosClient().get<TypographyInterface>(`${getRoute(userId, siteId)}/materialcolours`);
+      const typography = await axiosClient().get<TypographyInterface>(`${getRoute({userId, siteId})}/materialcolours`);
       if (typography) {
         store.setTypography(typography)
       }
@@ -38,12 +45,18 @@ function siteService() {
 
   async function fetchSiteColourPalette(siteAndUser: SiteAndUser): Promise<void> {
     try {
-      const siteColourPalette = await axiosClient().get<ColourPalette>(`${getRoute(siteAndUser.userId, siteAndUser.siteId)}/colourpalette`);
+      const siteColourPalette = await axiosClient().get<ColourSwatch[]>(`${getRoute(siteAndUser)}/colourpalette`);
       if (siteColourPalette) {
-        store.setColourPalette(siteColourPalette);
+        const colourSwatches: ColourSwatches = {
+          colourScheme: 'complementary',
+          baseColourHex: '#2e237e',
+          colourSwatches: siteColourPalette, 
+        }
+        store.setColourPalette(colourSwatches);
       }
     } 
     catch (err) {
+      // store.initialisePalettes();
       console.log(err);
     }
   }
@@ -52,9 +65,10 @@ function siteService() {
     await fetchSiteColourPalette(siteAndUser);
   }
 
-  async function saveSitePalette(colourPalette: ColourPalette, siteAndUser: SiteAndUser) {
+  async function saveSitePalette(siteAndUser: SiteAndUser) {
     try {
-      const savedPalette = await axiosClient().post<ColourPalette, ColourPalette>(`${getRoute(siteAndUser.userId, siteAndUser.siteId)}/colourpalette`,colourPalette);
+      const colourPalette: ColourSwatches = store.getColourSwatches;
+      const savedPalette = await axiosClient().post<ColourSwatches, ColourSwatches>(`${getRoute(siteAndUser)}/colourpalette`, colourPalette);
       if (savedPalette) {
         store.setColourPalette(savedPalette);
       }
@@ -66,20 +80,19 @@ function siteService() {
   }
 
   async function saveNewSite(site: Site): Promise<Site> {
-    return await axiosClient().post<Site, Site>(getRoute(site.userId, site.siteId), site);
+    return await axiosClient().post<Site, Site>(getRoute(site), site);
   }
 
   async function saveExistingSite(site: Site): Promise<Site> {
-      return await axiosClient().put<Site, Site>(getRoute(site.userId, site.siteId), site);
+      return await axiosClient().put<Site, Site>(getRoute(site), site);
   }
-
-
 
   return { getSiteMaterialColours,
     saveNewSite,
     saveExistingSite,
     getSiteColourPalette,
     saveSitePalette,
+    saveMaterialColours,
   }
 }
 
