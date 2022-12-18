@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-container mt-3 bg-white max-h-screen shadow-lg shadow-gray-400 p-4 flex flex-col justify-start absolute top-0 right-2 border border-gray-400 rounded-md transition-all   ease-in-out duration-1000 transform translate-x-0"
+  <div class="nav-container mt-3 bg-white max-h-screen shadow-lg shadow-gray-400 p-4 flex flex-col justify-start absolute top-0 right-2 border border-gray-400 rounded-md transition-all ease-in-out duration-1000 transform translate-x-0"
     :class="getWidth()"
   >
     <div class="nav-content" v-if="width==='w-full'">
