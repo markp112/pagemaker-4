@@ -9,7 +9,6 @@
 .form-page-wrapper {
   @apply flex;
   @apply flex-row;
-  @apply justify-center;
 }
 
 .sidebar-panel {

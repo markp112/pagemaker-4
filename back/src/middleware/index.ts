@@ -3,6 +3,7 @@ import { admin } from '../firebase/initFirebase';
 const nonAuthRoutes = {
   '/api/v1.0/auth/login': true,
   '/api/v1.0/private/menus/navmenu/true': true,
+  '/api/v1.0/private/fonts': true,
 };
 
 const routeDoesNotRequireAuth = (requestedUrl: string): boolean => {

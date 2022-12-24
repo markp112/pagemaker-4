@@ -53,7 +53,7 @@ export default defineComponent({
         return 'h-8 w-8 text-xs';
       }
       if (this.size === 'medium' && this.buttonShape === 'rectangular') {
-        return 'h-8 w-auto px-4  text-sm';
+        return 'h-8 w-auto px-4 text-sm';
       }
       if (this.size === 'medium' && this.buttonShape === 'circle') {
         return 'w-12 h-12 text-sm';
@@ -68,7 +68,7 @@ export default defineComponent({
     },
 
     getStyling(): string {
-      const baseStyling = `${this.getSize} flex items-center justify-center p-2`;
+      const baseStyling = `${this.getSize} flex items-center justify-center p-2 border border-gray-400`;
       const active = `cursor-pointer hover:bg-site-primary-dark hover:text-gray-200 transition ease-in-out delay-150`;
       const activeOutline = `cursor-pointer hover:bg-border-${this.buttonType} hover:text-site-primary-dark`;
       const activeText = `cursor-pointer hover:text-site-primary-dark text-site-${this.buttonType}`;

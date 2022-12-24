@@ -1,17 +1,12 @@
 <template>
   <div class="flex justify-between h-full relative">
-    <div class="form-page-wrapper mt-4 w-full flex-wrap">
-      <div class="w-7/12 bg-secondary-100 text-accent1 text-3xl flex flex-row">
-        <img
-          src="@/assets/images/website-building.png"
-          alt="picture of lined paper"
-        />
-        <p class="mt-2">{{ pageTitle }}</p>
-      </div>
+    <p class="mt-2 text-site-primary text-lg">{{ pageTitle }}</p>
+    <div class="form-page-wrapper items-center w-full flex-wrap ml-48">
       <form
-        @submit.prevent="saveClicked"
-        class="w-7/12 border-2 p-5 bg-secondary-900 h-2/3"
+      @submit.prevent="saveClicked"
+      class="w-6/12 border-2 p-5 bg-gray-50 h-2/3 relative"
       >
+      
         <div class="field-wrapper">
           <label for="name">Site Name:</label>
           <input
@@ -102,22 +97,25 @@
         </div>
       </form>
     </div>
-  <settingsPanelVue :toolbar-hidden="false" 
-    class="h-full"
-    :class="sidePanelWidth"
-    @toggle-clicked="resizePanel()"
-  >
-    <TabstripContainer :labels="['Palette Editor', 'Material colours']">
-      <template v-slot:tab-0>
-        <ColourPalettes :sitePalette="getSitePalette()" 
-          @reset-clicked="resetColourSwatches"
-        /> 
-      </template>
-      <template v-slot:tab-1>
-        <MaterialColours :materialColours="getMaterialColours()" :siteSwatches="getSitePalette()" @save-clicked="saveMaterialColours($event)"/>
-      </template>
-    </TabstripContainer>
-  </settingsPanelVue>
+    <settingsPanelVue :toolbar-hidden="false" 
+      class="h-full"
+      :class="sidePanelWidth"
+      @toggle-clicked="resizePanel()"
+    >
+      <TabstripContainer :labels="['Palette Editor', 'Material colours', 'Typography']">
+        <template v-slot:tab-0>
+          <ColourPalettes :sitePalette="getSitePalette()" 
+            @reset-clicked="resetColourSwatches"
+          /> 
+        </template>
+        <template v-slot:tab-1>
+          <MaterialColours :materialColours="getMaterialColours()" :siteSwatches="getSitePalette()" @save-clicked="saveMaterialColours($event)"/>
+        </template>
+        <template v-slot:tab-2>
+          <Typography></Typography>
+        </template>
+      </TabstripContainer>
+    </settingsPanelVue>
 </div>
 </template>
 
@@ -137,23 +135,25 @@ import TabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStrip
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
+import Typography from '@/components/base/pickers/typography/typography.vue';
 
 export default defineComponent({
     name: 'SiteEditor',
 
     components: {
-      BaseButton: baseButtonVue,
-      UploadImage,
-      settingsPanelVue,
-      MaterialColours: SiteMaterialColour,
-      ColourPalettes,
-      TabstripContainer,
-    },
+    BaseButton: baseButtonVue,
+    UploadImage,
+    settingsPanelVue,
+    MaterialColours: SiteMaterialColour,
+    ColourPalettes,
+    TabstripContainer,
+    Typography
+},
 
     data() {
       return {
           formErrors: [] as string[],
-          pageTitle: "",
+          pageTitle: "Site Editor",
           userId: useAuthStore().user.uid,
           store: useSiteStore(),
           siteService: siteService(),
