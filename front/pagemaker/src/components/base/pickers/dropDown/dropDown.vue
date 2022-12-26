@@ -43,10 +43,7 @@ export default defineComponent({
   name: 'drop-down',
   
   props: { 
-    itemList: {
-      type: [] as PropType<String[]>,
-      required: true,
-    },
+    itemList: Array as PropType<string[]>,
     label: String,
     selectedItem: String,
   },

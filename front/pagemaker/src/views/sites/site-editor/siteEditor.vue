@@ -135,7 +135,7 @@ import TabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStrip
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
-import Typography from '@/components/base/pickers/typography/typography.vue';
+import typographyVue from '@/components/base/pickers/colour/sidePanel/typography/typography.vue';
 
 export default defineComponent({
     name: 'SiteEditor',
@@ -147,7 +147,7 @@ export default defineComponent({
     MaterialColours: SiteMaterialColour,
     ColourPalettes,
     TabstripContainer,
-    Typography
+    Typography: typographyVue,
 },
 
     data() {

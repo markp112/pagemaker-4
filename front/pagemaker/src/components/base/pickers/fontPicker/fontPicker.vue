@@ -1,6 +1,6 @@
 <template>
-  <div class="sidebar-button-container relative mx-2" >
-    <div class="flex flex-row justify-start w-16 px-2 border border-gray-400" @click="show()">
+  <div class=" relative mx-2" >
+    <div class="flex flex-row justify-start w-16 px-2" @click="show()">
       <img :src="getIconUrl('alphabet_latin-32.png')"
             class="cursor-pointer hover:bg-gray-600"
       />
@@ -14,7 +14,7 @@
       @mouseleave="show()"
       @blur="show()"
     >
-      <div class="flex flex-row justify-start">
+      <div class="flex flex-row justify-start p-1">
         <span class="font-filter" @click="filterFonts('display')">d</span>
         <span class="font-filter" @click="filterFonts('handwriting')">h</span>
         <span class="font-filter" @click="filterFonts('monospace')">m</span>
@@ -40,12 +40,11 @@
 </template>
 
 <script lang="ts">
-import type { FontItemInterface } from '@/classes/base/fonts/models/models';
 import { ScrollInfinite } from '@/classes/scroller/scroller';
-import type { Style } from '@/components/page/model/pageElement/pageElement';
 import { useFontStore } from '@/stores/font.store';
 import { defineComponent } from 'vue';
 import { getImageUrl } from '@/common/getIcon';
+import type { FontItemInterface } from '@/classes/base/fonts/models/models';
 
 export default defineComponent ({
   name: 'font-picker',
@@ -94,12 +93,7 @@ export default defineComponent ({
     
     fontClicked(fontName: string) {
       this.show();
-      const style: Style = {
-        style: 'font-family',
-        value: fontName,
-        unit: 'px',
-      }
-      this.$emit('onChange', style);
+      this.$emit('onChange', fontName);
     },
     
     filterFonts(filterBy: string) {
