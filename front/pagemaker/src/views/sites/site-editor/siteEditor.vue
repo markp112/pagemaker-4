@@ -106,6 +106,7 @@
         <template v-slot:tab-0>
           <ColourPalettes :sitePalette="getSitePalette()" 
             @reset-clicked="resetColourSwatches"
+            @save-clicked="saveColourSwatches($event)"
           /> 
         </template>
         <template v-slot:tab-1>
@@ -208,6 +209,10 @@ export default defineComponent({
         } else {
           await siteService().saveExistingSite(this.site);
           }
+        },
+
+        async saveColourSwatches(colourSwatches: ColourSwatches): Promise<void> {
+            await siteService().saveSitePalette(getSiteAndUser(), colourSwatches);
         },
     
       async saveMaterialColours(materialColours: MaterialColours) {

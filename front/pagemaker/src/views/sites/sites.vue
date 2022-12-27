@@ -61,8 +61,11 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
     },
 
     methods: {
-      createNewSite(): void {
-        this.$router.push({ name: 'newSite', params: { title: 'New Site' } });
+      async createNewSite(): Promise<void> {
+        await Promise.all([
+          siteService().getDefaultSwatches(),
+        ])
+        this.$router.push({ name: 'site-editor', params: { title: 'New Site' } });
       },
 
       async getSiteDefaults(siteId: string, route: string) {

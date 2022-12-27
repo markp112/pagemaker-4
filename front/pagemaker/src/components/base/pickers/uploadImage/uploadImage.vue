@@ -103,7 +103,7 @@ export default defineComponent({
 
   data() {
     return {
-      urlEdited: '',
+      urlEditedLocal: '',
       url: '',
       isDragging: false,
       wrongFile: false,
@@ -117,7 +117,7 @@ export default defineComponent({
   },
 
   mounted() {
-    this.url = this.urlEdited;
+    this.url = this.urlEditedLocal;
   },
 
   computed: {
@@ -207,7 +207,7 @@ export default defineComponent({
     
     getImage() {
       if (this.url === '') {
-        this.url = this.urlEdited;
+        this.url = this.urlEditedLocal;
         return this.url === ''
         ? getImageUrl('imageplaceholder-100x83.png')
         : this.url;

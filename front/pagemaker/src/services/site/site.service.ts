@@ -75,18 +75,12 @@ function siteService() {
 
   async function fetchSiteColourPalette(siteAndUser: SiteAndUser): Promise<void> {
     try {
-      const siteColourPalette = await axiosClient().get<ColourSwatch[]>(`${getRoute(siteAndUser)}/colourpalette`);
+      const siteColourPalette = await axiosClient().get<ColourSwatches>(`${getRoute(siteAndUser)}/colourpalette`);
       if (siteColourPalette) {
-        const colourSwatches: ColourSwatches = {
-          colourScheme: 'complementary',
-          baseColourHex: '#2e237e',
-          colourSwatches: siteColourPalette, 
-        }
-        store.setColourPalette(colourSwatches);
+        store.setColourPalette(siteColourPalette);
       }
     } 
     catch (err) {
-      // store.initialisePalettes();
       console.log(err);
     }
   }
@@ -95,10 +89,9 @@ function siteService() {
     await fetchSiteColourPalette(siteAndUser);
   }
 
-  async function saveSitePalette(siteAndUser: SiteAndUser) {
+  async function saveSitePalette(siteAndUser: SiteAndUser, colourSwatches: ColourSwatches) {
     try {
-      const colourPalette: ColourSwatches = store.getColourSwatches;
-      const savedPalette = await axiosClient().post<ColourSwatches, ColourSwatches>(`${getRoute(siteAndUser)}/colourpalette`, colourPalette);
+      const savedPalette = await axiosClient().post<ColourSwatches, ColourSwatches>(`${getRoute(siteAndUser)}/colourpalette`, colourSwatches);
       if (savedPalette) {
         store.setColourPalette(savedPalette);
         displayMessage(SAVED_OK, 'success', 'Colour Swatches');
@@ -120,6 +113,11 @@ function siteService() {
       return await axiosClient().put<Site, Site>(getRoute(site), site);
   }
 
+  async function getDefaultSwatches(): Promise<void> {
+    const defaultColourPalettes = await axiosClient().get<ColourSwatches>(`${BASE_ROUTE}defaults/default-palette`);
+      store.setColourPalette(defaultColourPalettes);
+  }
+
   return { getSiteMaterialColours,
     saveNewSite,
     saveExistingSite,
@@ -128,6 +126,7 @@ function siteService() {
     saveMaterialColours,
     getSiteTypography,
     saveTypography,
+    getDefaultSwatches,
   }
 }
 

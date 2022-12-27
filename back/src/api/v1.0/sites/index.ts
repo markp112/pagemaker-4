@@ -6,11 +6,13 @@ import { ColourSwatches } from './model/colourPalette';
 import { sitesController } from './controller/';
 import { MaterialColours } from './model/materialColours';
 import { SiteTypography } from './model/typography';
-import { async } from '@firebase/util';
+import { siteDefaultsRouter } from './siteDefaults'
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
 const sitePathBase = (collectionName: string) => `${ROUTE_PATH}/:userId/:siteId/${collectionName}`;
+
+sitesRouter.use(ROUTE_PATH, siteDefaultsRouter);
 
 sitesRouter
   .get(`${ROUTE_PATH}/:userId`, async (req, res) => {
@@ -71,7 +73,7 @@ sitesRouter
       logger.info('POST: site colour palette called');
       const userId = req.params.userId;
       const siteId = req.params.siteId;
-      const colourPalette: ColourSwatches = req.body.colourSwatches;
+      const colourPalette: ColourSwatches = req.body;
       const response = await sitesController().saveColourPalette(userId, siteId, colourPalette);
       res.status(response.status).send(response);
     }
