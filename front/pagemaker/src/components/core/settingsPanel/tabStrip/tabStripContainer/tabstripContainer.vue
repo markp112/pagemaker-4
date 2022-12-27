@@ -17,9 +17,9 @@
   </div>
   <div>
     <slot name="tab-0" v-if="getActiveTab(0)" class="tab-content"></slot>
-    <slot name="tab-1" v-if="getActiveTab(1)"  class="tab-content"></slot>
-    <slot name="tab-2" v-if="getActiveTab(2)"  class="tab-content"></slot>
-    <slot name="tab-3" v-if="getActiveTab(3)"  class="tab-content"></slot>
+    <slot name="tab-1" v-if="getActiveTab(1)" class="tab-content"></slot>
+    <slot name="tab-2" v-if="getActiveTab(2)" class="tab-content"></slot>
+    <slot name="tab-3" v-if="getActiveTab(3)" class="tab-content"></slot>
   </div>
 </template>
 
@@ -46,7 +46,6 @@ export default defineComponent({
   methods: {
 
     setActiveTab(tabClicked: number) {
-      console.log('%c⧭', 'color: #8c0038', tabClicked)
       this.activeTab = tabClicked;
     },
 
@@ -72,8 +71,6 @@ export default defineComponent({
   @apply relative;
   @apply m-1;
   @apply bg-site-surface;
-  @apply border;
-  @apply border-gray-400;
   @apply w-full rounded-md;
   @apply flex flex-row justify-start;
 }
@@ -86,19 +83,20 @@ export default defineComponent({
 }
 .tab {
   @apply w-auto min-w-[4rem];
-  @apply border rounded-md;
+  @apply border rounded-lg;
 }
 .tab-switch {
   display: none;
 }
 .tab-label {
-  @apply relative block shadow-sm;
+  @apply relative; 
   @apply leading-10;
   @apply w-auto h-12 p-1;  
   @apply border-r-2 border-r-site-primary-dark;
-  @apply bg-slate-400;
+  @apply bg-site-primary-light;
   @apply cursor-pointer;
   @apply top-0;
+  @apply text-on-surface;
   transition: all 0.25s;
 }
 .tab-label:hover {
@@ -113,8 +111,6 @@ export default defineComponent({
   z-index: 1;
   left: 0;
   padding: 1rem;
-  @apply bg-site-surface;
-  border-bottom: 0.25rem solid #bdc3c7;
   opacity: 0;
   transition: all 0.35s;
 }
@@ -135,6 +131,7 @@ export default defineComponent({
   transition: all 0.35s;
   z-index: 1;
   top: -0.0625rem;
+  @apply shadow-lg;
 }
 .tab-switch:checked + label + .tab-content {
   z-index: 2;

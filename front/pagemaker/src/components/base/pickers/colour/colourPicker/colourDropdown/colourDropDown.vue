@@ -43,7 +43,7 @@ export default defineComponent({
   emits: ['onColourClick'],
 
   props: {
-    colour: {
+    inputColour: {
       type: String,
       required: true,
     },
@@ -62,7 +62,7 @@ export default defineComponent({
       show: false,
       showTooltip: false,
       whichComponent: 'ColourPicker',
-      colour: this.$props.colour,
+      colour: this.$props.inputColour,
     }
   },
 
@@ -77,7 +77,7 @@ export default defineComponent({
       if (this.colour) {
         return this.colour;
       }
-      if (this.$props.colour) {
+      if (this.$props.inputColour) {
         return this.colour;
       }
       return '#00'
@@ -92,7 +92,7 @@ export default defineComponent({
     },
 
     getProps() {
-      return { hue: this.$props.colour };
+      return { hue: this.$props.inputColour };
     },
 
     onMouseLeave() {

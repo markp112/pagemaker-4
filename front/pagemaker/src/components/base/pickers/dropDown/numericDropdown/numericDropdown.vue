@@ -44,6 +44,12 @@ export default defineComponent({
     }
   },
 
+  mounted() {
+    if(this.selectedItem) {
+      this.inputValue = parseInt(this.selectedItem);
+    }
+  },
+
   methods: {
     onItemSelected(item: string) {
       this.inputValue = parseInt(item);

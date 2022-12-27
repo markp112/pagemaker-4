@@ -3,11 +3,11 @@
     <label for="drop-down" v-if="label" class="w-full block mb-1"> {{ label }}</label>
     <div class="flex flex-row justify-between text-sm relative">
       <input
-        v-model="selectedItem"
+        v-model="currentValue"
         id="drop-down"
         name="drop-down"
         class="p-2 relative bg-site-surface text-on-surface h-6 border border-gray-400 "
-        @change="onInputChange"
+        @change="onInputChange()"
       />
       <img
         :src="getPath('down-24.png')"
@@ -53,6 +53,7 @@ export default defineComponent({
   data() {
     return {
       toggleSelectOptions: false,
+      currentValue: this.$props.selectedItem,
     }
   },
 
@@ -64,7 +65,7 @@ methods: {
   },
   
   onInputChange() {
-    this.$emit('onSelectChange', this.selectedItem);
+    this.$emit('onSelectChange', this.currentValue);
   },
   
   show() {

@@ -1,33 +1,26 @@
 <template> 
   <section>
     <div class="text-primary-800 mb-8">
-      <h3 class="text-3xl ">
-        Colour Palette
-      </h3>
-      <p class="flex flex-row justify-around w-full mt-2">
-          <BaseButton button-type="primary"
-            size="medium"
-            variant="outline"
-            @on-click="resetPalette()"
-            >
-            reset
-          </BaseButton>
-          <BaseButton button-type="primary"
-            size="medium"
-            variant="solid"
-            @on-click="savePaletteSelection()"
-            >
-            save
-          </BaseButton>
-      </p>
-  
+      <div class="flex flex-row justify-between">
+        <h3 class="text-3xl ">
+          Colour Palette
+        </h3>
+        <BaseButton button-type="primary"
+          size="medium"
+          variant="outline"
+          @on-click="resetPalette()"
+          >
+          reset
+        </BaseButton>
+        <SaveButton @onClick="savePaletteSelection()"/>
 
+      </div>
     </div>
     <div class="flex flex-row justify-start mb-4 w-full">
       <span class="px-2">Select base colour</span>
       <ColourDropdown 
         @onColourClick="onColourChange($event)"
-        :colour="$props.sitePalette.baseColourHex"
+        :inputColour="$props.sitePalette.baseColourHex"
       >
       </ColourDropdown>
       <div class="ml-12 flex flex-col justify-start">
@@ -105,6 +98,7 @@
 import { type PropType, defineComponent} from 'vue';
 import PaletteStrip from './paletteStrip/paletteStrip.vue';
 import ColourDropdown from '../../colourPicker/colourDropdown/colourDropDown.vue';
+import saveButtonVue from '@/components/base/baseButton/saveButton/saveButton.vue';
 import BaseButton from '@/components/base/baseButton/baseButton.vue';
 import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import { siteService } from '@/services/site/site.service';
@@ -121,6 +115,7 @@ export default defineComponent({
   components: {
     ColourDropdown,
     PaletteStrip,
+    SaveButton: saveButtonVue,
     BaseButton,
   },
 

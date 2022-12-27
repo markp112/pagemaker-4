@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-between h-full relative">
-    <p class="mt-2 text-site-primary text-lg">{{ pageTitle }}</p>
+  <div class="h-full relative w-full">
+    <p class="m-4 text-site-primary text-3xl w-full">Site Editor</p>
     <div class="form-page-wrapper items-center w-full flex-wrap ml-48">
       <form
       @submit.prevent="saveClicked"
@@ -112,7 +112,7 @@
           <MaterialColours :materialColours="getMaterialColours()" :siteSwatches="getSitePalette()" @save-clicked="saveMaterialColours($event)"/>
         </template>
         <template v-slot:tab-2>
-          <Typography></Typography>
+          <Typography @saveClicked="saveSiteTypography($event)" :site-typography="getSiteTypography()"></Typography>
         </template>
       </TabstripContainer>
     </settingsPanelVue>
@@ -136,6 +136,7 @@ import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import typographyVue from '@/components/base/pickers/colour/sidePanel/typography/typography.vue';
+import type { SiteTypography } from '@/classes/sites/typography/model';
 
 export default defineComponent({
     name: 'SiteEditor',
@@ -173,8 +174,13 @@ export default defineComponent({
       getMaterialColours() {
         return this.store.getMaterialColours;
       },
+
       getSitePalette(): ColourSwatches {
         return this.store.getColourSwatches;
+      },
+
+      getSiteTypography(): SiteTypography {
+        return this.store.getTypography;
       },
 
       updateImageUrl(url: string): void {
@@ -207,6 +213,11 @@ export default defineComponent({
       async saveMaterialColours(materialColours: MaterialColours) {
         const siteAndUser = getSiteAndUser();
         await siteService().saveMaterialColours(siteAndUser, materialColours);
+      },
+
+      async saveSiteTypography(siteTypeography: SiteTypography): Promise<void> {
+        const siteAndUser = getSiteAndUser();
+        await siteService().saveTypography(siteAndUser, siteTypeography);
       },
 
       isFormCompletedCorrectly(errors: string[]): boolean {

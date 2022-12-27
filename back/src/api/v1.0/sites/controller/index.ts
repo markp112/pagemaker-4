@@ -2,20 +2,21 @@ import { constructResponse } from '../../../../common/functions/constructRespons
 import { collection, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '../../../../firebase/initFirebase';
 import { Response } from '../../../../api/types';
-import { Site, SiteSettings } from '../model/site';
+import { Site } from '../model/site';
 import { GenericError } from '../../../../common/errors/';
 import { logger } from '../../../../logger';
-import { ColourPalette, ColourSwatches, ColourSwatchesFirebaseObject } from '../model/colourPalette';
+import {  ColourSwatches, ColourSwatchesFirebaseObject } from '../model/colourPalette';
 import { httpStatusCodes } from '../../../../api/httpStatusCodes';
 import { FirebaseMaterialColours, MaterialColours } from '../model/materialColours';
+import { SiteTypography } from '../model/typography';
 
 function sitesController() {
 
   const sitesCollection = (userId: string) => `${userId}::sites`;
+  const siteCollectionBase = (userId: string, siteId: string) => `${userId}${siteId}::settings`;
 
   async function getSites(userId: string): Promise<Response> {
     try {
-      
       const firebaseResponse = await getDocs(collection(firebaseDb, sitesCollection(userId)));
       const sites: Site[] = [];
       firebaseResponse.docs.forEach(doc => {
@@ -42,24 +43,17 @@ function sitesController() {
   }
 
   async function getSiteMaterialColours(userId: string, siteId: string) {
-    try {
-      const coloursCollection = `${userId}${siteId}::settings`;
-      const docRef = doc(firebaseDb, coloursCollection, 'materialcolours')
-      const firebaseResponse = await getDoc(docRef);
-      if (firebaseResponse.exists()) {
-        const returnedData = firebaseResponse.data() as unknown as FirebaseMaterialColours;
-        const materialColours = returnedData.materialColours; 
-        return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
-      }
-    } catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+    const firebaseResponse = await firebaseGetCollection('materialcolours', userId, siteId);
+    if (firebaseResponse.exists()) {
+      const returnedData = firebaseResponse.data() as unknown as FirebaseMaterialColours;
+      const materialColours = returnedData.materialColours; 
+      return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
     }
   }
 
   async function saveMaterialColours(userId: string, siteId: string, materialcolours: MaterialColours) {
     try {
-      const coloursCollection = `${userId}${siteId}::settings`;
+      const coloursCollection = siteCollectionBase(userId, siteId);
       const docRef = doc(firebaseDb, coloursCollection, 'materialcolours');
       const colourPalette: FirebaseMaterialColours  = { materialColours: materialcolours };
       await setDoc(docRef, colourPalette);
@@ -72,9 +66,7 @@ function sitesController() {
 
   async function getSiteColourPalette(userId: string, siteId: string) {
     try {
-      const paletteCollection = `${userId}${siteId}::settings`;
-      const docRef = doc(firebaseDb, paletteCollection, 'siteColourPalette')
-      const firebaseResponse = await getDoc(docRef);
+      const firebaseResponse = await firebaseGetCollection('siteColourPalette', userId, siteId);
       if (firebaseResponse.exists()) {
         const colourPalette = firebaseResponse.data() as unknown as ColourSwatchesFirebaseObject;
         const colourSwatches: ColourSwatches = JSON.parse(colourPalette.colourSwatches);
@@ -88,7 +80,7 @@ function sitesController() {
 
   async function saveColourPalette(userId: string, siteId: string, colourSwatches: ColourSwatches) {
     try {
-      const paletteCollection = `${userId}${siteId}::settings`;
+      const paletteCollection = siteCollectionBase(userId, siteId);;
       const docRef = doc(firebaseDb, paletteCollection, 'siteColourPalette')
       const colourSwatchAsString = JSON.stringify(colourSwatches);
       const colourPalette: ColourSwatchesFirebaseObject  = { colourSwatches: colourSwatchAsString };
@@ -101,6 +93,37 @@ function sitesController() {
     }
   }
 
+  async function getTypography(userId: string, siteId: string) {
+    const firebaseResponse = await firebaseGetCollection('typography', userId, siteId);
+    if (firebaseResponse.exists()) {
+      const typography = firebaseResponse.data() as unknown as SiteTypography;
+      return constructResponse<SiteTypography>(typography, httpStatusCodes.OK);
+    }
+  }
+
+  async function saveTypography(userId: string, siteId: string, typography: SiteTypography) {
+    try {
+      const typographyCollection = siteCollectionBase(userId, siteId);
+      const docRef = doc(firebaseDb, typographyCollection, 'typography');
+      await setDoc(docRef, typography);
+      return constructResponse<SiteTypography>(typography, httpStatusCodes.OK)
+    } catch (err) {
+      logger.info(err);
+      throw new GenericError(err);
+    }
+  }
+
+  async function firebaseGetCollection(collectionName: string, userId: string, siteId: string) {
+    try {
+      const collection = siteCollectionBase(userId, siteId);
+      const docRef = doc(firebaseDb, collection, collectionName);
+      return await getDoc(docRef);
+    } catch (err) {
+      logger.error(err);
+      throw new GenericError(err);
+    }
+  }
+
   return { 
     getSites,
     getSiteMaterialColours,
@@ -108,6 +131,8 @@ function sitesController() {
     getSiteColourPalette,
     saveColourPalette,
     saveSite,
+    getTypography,
+    saveTypography,
   };
 }
 

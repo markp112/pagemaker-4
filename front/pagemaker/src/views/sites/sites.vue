@@ -75,6 +75,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         await Promise.all([
           siteService().getSiteMaterialColours(siteAndUser),
           siteService().getSiteColourPalette(siteAndUser),
+          siteService().getSiteTypography(siteAndUser),
         ]);
         this.$router.push(route);
       },

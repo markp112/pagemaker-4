@@ -1,7 +1,7 @@
 import type { Site } from '@/classes/sites'
 import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
-import type { TypographyInterface } from '@/classes/sites/typography/model';
+import type { SiteTypography } from '@/classes/sites/typography/model';
 import { defineStore } from 'pinia';
 
 const utility: ColourSwatch = {
@@ -15,7 +15,7 @@ const useSiteStore = defineStore({
     return {
       _site: {} as Site,
       _materialColours: {} as MaterialColours,
-      _typography: {} as TypographyInterface,
+      _typography: {} as SiteTypography,
       _colourSwatches: {} as ColourSwatches,
     }
   },
@@ -48,8 +48,8 @@ const useSiteStore = defineStore({
       this._materialColours = colourPalette;
     },
 
-    setTypography(typeography: TypographyInterface) {
-      this._typography = typeography;
+    setTypography(typography: SiteTypography) {
+      this._typography = typography;
     },
 
     setColourPalette(siteSwatches: ColourSwatches) {

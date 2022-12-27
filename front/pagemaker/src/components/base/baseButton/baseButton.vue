@@ -5,12 +5,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 
 export type ButtonTypes = 'primary' | 'secondary' | 'default';
 export type Variants = 'solid' | 'outline' | 'text';
 export type ButtonSize = 'small' | 'medium' | 'large';
 export type ButtonShape = 'rectangular' | 'circle';
+
+// const ButtonProps = {
+//   buttonSize: Button
+// }
 
 export default defineComponent({
   name: 'BaseButton',
@@ -19,16 +23,23 @@ export default defineComponent({
 
   props: {
     buttonType: {
+      type: String as PropType<ButtonTypes>,
       default: (): ButtonTypes => {
         return 'default';
       },
     },
     disabled: { default: false },
-    variant: (): Variants => {
-      return 'solid';
+    variant: {
+      type: String,
+      default:(): Variants => {
+        return 'solid';
+      },
     },
-    size: (): ButtonSize => {
-      return 'medium';
+    size: {
+      type: String as PropType<ButtonSize>,
+      default: (): ButtonSize => {
+        return 'medium';
+      }
     },
     buttonShape: {
       default: (): ButtonShape => {
