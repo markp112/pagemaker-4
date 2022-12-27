@@ -2,10 +2,10 @@
   <section>
     <div class="flex flex-row justify-between text-accent1 mt-8 bg-site-background overflow-hidden">
       <h2 class="page-heading ml-4 text-site-primary-dark">My Sites</h2>
-      <div class="w-32 h-4/6">
+      <div class="w-32 h-4/6 mr-12">
         <base-button
-          class="mr-4 w-32"
           buttonType="primary"
+          size="medium"
           variant="solid"
           @onClick="createNewSite()"
         >
@@ -75,6 +75,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         await Promise.all([
           siteService().getSiteMaterialColours(siteAndUser),
           siteService().getSiteColourPalette(siteAndUser),
+          siteService().getSiteTypography(siteAndUser),
         ]);
         this.$router.push(route);
       },

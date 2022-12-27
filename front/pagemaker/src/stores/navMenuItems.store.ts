@@ -28,7 +28,6 @@ export const useNavMenuItemStore = defineStore({
       const route = `/private/menus/navmenu/${isLoggedIn}`;
       try {
         this._navMenuItems = await axiosClient().get<NavMenuItem[]>(route)
-        console.log('%c⧭', 'color: #f200e2', this._navMenuItems);
       } catch(err) {
         console.log(err);
         throw(err);

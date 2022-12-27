@@ -7,7 +7,6 @@ import { logger, morganMiddleware } from './logger';
 import { authMiddleware } from './middleware';
 import { router } from './api';
 
-
 const port = 3000;
 const app = express();
 app.use(function(req, res, next) {

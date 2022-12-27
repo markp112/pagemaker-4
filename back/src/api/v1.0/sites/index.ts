@@ -5,9 +5,12 @@ import { Guid } from '../../../common/classes/guid';
 import { ColourSwatches } from './model/colourPalette';
 import { sitesController } from './controller/';
 import { MaterialColours } from './model/materialColours';
+import { SiteTypography } from './model/typography';
+import { async } from '@firebase/util';
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
+const sitePathBase = (collectionName: string) => `${ROUTE_PATH}/:userId/:siteId/${collectionName}`;
 
 sitesRouter
   .get(`${ROUTE_PATH}/:userId`, async (req, res) => {
@@ -22,7 +25,7 @@ sitesRouter
     }
   })
 
-  .get(`${ROUTE_PATH}/:userId/:siteId/materialcolours`, async (req, res) => {
+  .get(sitePathBase(`materialcolours`), async (req, res) => {
     logger.info('material colours called');
     const userId = req.params.userId;
     const siteId = req.params.siteId;
@@ -30,13 +33,12 @@ sitesRouter
       const response = await sitesController().getSiteMaterialColours(userId, siteId);
       res.status(response.status).send(response);
     } catch (error) {
-      console.log('%c⧭', 'color: #733d00', error);
       const response = error.getResponse();
       res.status(error._status).send(response);
     }
   })
   
-  .post(`${ROUTE_PATH}/:userId/:siteId/materialcolours`, async (req, res) => {
+  .post(sitePathBase(`materialcolours`), async (req, res) => {
     logger.info('post material colours called');
     try {
       const materialcolours = req.body as MaterialColours;
@@ -51,7 +53,7 @@ sitesRouter
 
   })
 
-  .get(`${ROUTE_PATH}/:userId/:siteId/colourpalette`, async (req, res) => {
+  .get(sitePathBase(`colourpalette`), async (req, res) => {
     logger.info('GET: site colour palette called');
     const userId = req.params.userId;
     const siteId = req.params.siteId;
@@ -64,7 +66,7 @@ sitesRouter
     }
   })
 
-  .post(`${ROUTE_PATH}/:userId/:siteId/colourpalette`, async (req, res) => {
+  .post(sitePathBase(`colourpalette`), async (req, res) => {
     try {
       logger.info('POST: site colour palette called');
       const userId = req.params.userId;
@@ -74,6 +76,32 @@ sitesRouter
       res.status(response.status).send(response);
     }
     catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response); 
+    }
+  })
+
+  .get(sitePathBase(`typography`), async (req, res) => {
+    const userId = req.params.userId;
+    const siteId = req.params.siteId;
+    try {
+      const response = await sitesController().getTypography(userId, siteId);
+      res.status(response.status).send(response);
+    } catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response);
+    }
+  })
+
+  .post(sitePathBase(`typography`), async (req, res) => {
+    try {
+      logger.info('POST: site typography called');
+      const userId = req.params.userId;
+      const siteId = req.params.siteId;
+      const typeography: SiteTypography = req.body;
+      const response = await sitesController().saveTypography(userId, siteId, typeography);
+      res.status(response.status).send(response);
+    } catch (error) {
       const response = error.getResponse();
       res.status(error._status).send(response); 
     }

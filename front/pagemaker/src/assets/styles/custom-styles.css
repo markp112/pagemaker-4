@@ -1,3 +1,7 @@
+.standard-border {
+  @apply border border-gray-400;
+}
+
 
 .page-heading {
   @apply font-bold;
@@ -9,7 +13,6 @@
 .form-page-wrapper {
   @apply flex;
   @apply flex-row;
-  @apply justify-center;
 }
 
 .sidebar-panel {
@@ -44,7 +47,6 @@
 }
 
 .sidebar-container-items {
- 
   @apply p-24
 }
 

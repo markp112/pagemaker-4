@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-col justify-start w-full">
-    <h3 class="text-3xl ">Assign Site Colours</h3>
+    <div class="flex flex-row justify-between items-center mb-2">
+      <h3 class="text-3xl ">Site Colours</h3>
+      <SaveButton class="ml-24" @onClick="saveMaterialColours"/>
+    </div>
     <div class="w-full flex flex-auto">
       <div class="w-6/12">
         <label for="textOn" class="container mt-4">Text On
@@ -9,14 +12,6 @@
         </label>
       </div>
       <div>
-        <BaseButton buttonType="primary" 
-          variant="solid"
-          class="ml-24"
-          size="medium"
-          @onClick="saveMaterialColours"
-        >
-          Save
-        </BaseButton>
       </div>
     </div>
     <div>
@@ -31,13 +26,12 @@
     </div>
     <div class="mt-6">
       <div class="flex flex-row justify-between w-full flex-wrap">
-        <MaterialElement v-for="materialColour in materialColours"
+        <MaterialElement v-for="materialColour in materialColoursLocal"
           :label="materialColour.paletteName"
           :colourElement="materialColour" 
           :selectedElement="materialElementSelected"
           @selectedElementClicked="setSelectedMaterialElement($event)"
         />
-
       </div> 
     </div>
   </div>
@@ -50,7 +44,7 @@ import MaterialElement from './materialElement/materialElement.vue';
 import PaletteStrip from '../colourPlatettes/paletteStrip/paletteStrip.vue';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import DropDown from '../../../dropDown/dropDown.vue';
-import BaseButton from '@/components/base/baseButton/baseButton.vue';
+import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
 
 export default defineComponent({
   name: 'siteMaterialColour',
@@ -60,7 +54,7 @@ export default defineComponent({
     MaterialElement,
     PaletteStrip,
     DropDown,
-    BaseButton
+    SaveButton,
   },
 
   props: {
@@ -85,7 +79,7 @@ export default defineComponent({
       paletteSelected: '',
       paletteElementSelected: '',
       textOnSelected: false,
-      materialColours: this.$props.materialColours,
+      materialColoursLocal: this.$props.materialColours,
     }
   },
 
@@ -99,13 +93,13 @@ export default defineComponent({
     },
 
     setMaterialElementColour(colour: string) {
-      const newColours = this.materialColours.map(paletteElement => {
+      const newColours = this.materialColoursLocal.map(paletteElement => {
         if(paletteElement.paletteName === this.MaterialElementNative.palette) {
           paletteElement = this.updateColourElementForPalette(colour, paletteElement)
         }
           return paletteElement
         })
-      this.materialColours = newColours;
+      this.materialColoursLocal = newColours;
     },
 
     updateColourElementForPalette(colour: string, paletteElement: MaterialColour): MaterialColour {
@@ -129,7 +123,7 @@ export default defineComponent({
     },
 
     getMaterialColourCategory(paletteName: PaletteName, palette: string): MaterialColour {
-      return this.materialColours.filter(palette => palette.paletteName === paletteName)[0];
+      return this.materialColoursLocal.filter(palette => palette.paletteName === paletteName)[0];
     },
 
     setSelectedMaterialElement(selectedElement: { colourElement: ColourLabel, palette: PaletteName}) {
@@ -147,7 +141,7 @@ export default defineComponent({
     },
 
     saveMaterialColours() {
-      this.$emit('saveClicked', this.materialColours);
+      this.$emit('saveClicked', this.materialColoursLocal);
     }
   }
 

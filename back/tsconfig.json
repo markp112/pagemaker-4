@@ -17,5 +17,6 @@
       "@firebase/*": ["firebase/*"]
     }
   },
+  "include": ["src"],
   "lib": ["es2015"]
 }

@@ -1,17 +1,12 @@
 <template>
-  <div class="flex justify-between h-full relative">
-    <div class="form-page-wrapper mt-4 w-full flex-wrap">
-      <div class="w-7/12 bg-secondary-100 text-accent1 text-3xl flex flex-row">
-        <img
-          src="@/assets/images/website-building.png"
-          alt="picture of lined paper"
-        />
-        <p class="mt-2">{{ pageTitle }}</p>
-      </div>
+  <div class="h-full relative w-full">
+    <p class="m-4 text-site-primary text-3xl w-full">Site Editor</p>
+    <div class="form-page-wrapper items-center w-full flex-wrap ml-48">
       <form
-        @submit.prevent="saveClicked"
-        class="w-7/12 border-2 p-5 bg-secondary-900 h-2/3"
+      @submit.prevent="saveClicked"
+      class="w-6/12 border-2 p-5 bg-gray-50 h-2/3 relative"
       >
+      
         <div class="field-wrapper">
           <label for="name">Site Name:</label>
           <input
@@ -102,22 +97,25 @@
         </div>
       </form>
     </div>
-  <settingsPanelVue :toolbar-hidden="false" 
-    class="h-full"
-    :class="sidePanelWidth"
-    @toggle-clicked="resizePanel()"
-  >
-    <TabstripContainer :labels="['Palette Editor', 'Material colours']">
-      <template v-slot:tab-0>
-        <ColourPalettes :sitePalette="getSitePalette()" 
-          @reset-clicked="resetColourSwatches"
-        /> 
-      </template>
-      <template v-slot:tab-1>
-        <MaterialColours :materialColours="getMaterialColours()" :siteSwatches="getSitePalette()" @save-clicked="saveMaterialColours($event)"/>
-      </template>
-    </TabstripContainer>
-  </settingsPanelVue>
+    <settingsPanelVue :toolbar-hidden="false" 
+      class="h-full"
+      :class="sidePanelWidth"
+      @toggle-clicked="resizePanel()"
+    >
+      <TabstripContainer :labels="['Palette Editor', 'Material colours', 'Typography']">
+        <template v-slot:tab-0>
+          <ColourPalettes :sitePalette="getSitePalette()" 
+            @reset-clicked="resetColourSwatches"
+          /> 
+        </template>
+        <template v-slot:tab-1>
+          <MaterialColours :materialColours="getMaterialColours()" :siteSwatches="getSitePalette()" @save-clicked="saveMaterialColours($event)"/>
+        </template>
+        <template v-slot:tab-2>
+          <Typography @saveClicked="saveSiteTypography($event)" :site-typography="getSiteTypography()"></Typography>
+        </template>
+      </TabstripContainer>
+    </settingsPanelVue>
 </div>
 </template>
 
@@ -137,23 +135,26 @@ import TabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStrip
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
+import typographyVue from '@/components/base/pickers/colour/sidePanel/typography/typography.vue';
+import type { SiteTypography } from '@/classes/sites/typography/model';
 
 export default defineComponent({
     name: 'SiteEditor',
 
     components: {
-      BaseButton: baseButtonVue,
-      UploadImage,
-      settingsPanelVue,
-      MaterialColours: SiteMaterialColour,
-      ColourPalettes,
-      TabstripContainer,
-    },
+    BaseButton: baseButtonVue,
+    UploadImage,
+    settingsPanelVue,
+    MaterialColours: SiteMaterialColour,
+    ColourPalettes,
+    TabstripContainer,
+    Typography: typographyVue,
+},
 
     data() {
       return {
           formErrors: [] as string[],
-          pageTitle: "",
+          pageTitle: "Site Editor",
           userId: useAuthStore().user.uid,
           store: useSiteStore(),
           siteService: siteService(),
@@ -173,8 +174,13 @@ export default defineComponent({
       getMaterialColours() {
         return this.store.getMaterialColours;
       },
+
       getSitePalette(): ColourSwatches {
         return this.store.getColourSwatches;
+      },
+
+      getSiteTypography(): SiteTypography {
+        return this.store.getTypography;
       },
 
       updateImageUrl(url: string): void {
@@ -207,6 +213,11 @@ export default defineComponent({
       async saveMaterialColours(materialColours: MaterialColours) {
         const siteAndUser = getSiteAndUser();
         await siteService().saveMaterialColours(siteAndUser, materialColours);
+      },
+
+      async saveSiteTypography(siteTypeography: SiteTypography): Promise<void> {
+        const siteAndUser = getSiteAndUser();
+        await siteService().saveTypography(siteAndUser, siteTypeography);
       },
 
       isFormCompletedCorrectly(errors: string[]): boolean {
