@@ -1,4 +1,4 @@
-import type { Site } from '@/classes/sites';
+import type { Site } from '@/classes/sites/site';
 import { useSitesStore } from '@/stores/sites.store';
 import { axiosClient } from '../httpService';
 

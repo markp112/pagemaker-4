@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-start w-64 border-2 shadow-lg bg-site-surface">
-    <img :src="site.image" alt="" class="w-full object-cover" />
+    <img :src="site.image" alt="" class="w-full object-cover h-40" />
     <div class="flex flex-row justify-between p-5">
       <p>{{ site.name }}</p>
       <img
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import type { Site } from '@/classes/sites';
+import type { Site } from '@/classes/sites/site';
 import { getImageUrl } from '@/common/getIcon';
 import { defineComponent, type PropType } from 'vue';
 

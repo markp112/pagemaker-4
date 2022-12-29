@@ -12,8 +12,7 @@
           >
           reset
         </BaseButton>
-        <SaveButton @onClick="savePaletteSelection()"/>
-
+        <SaveButton @onClick="savePaletteSelection()" :is-enabled="saveEnabled" />
       </div>
     </div>
     <div class="flex flex-row justify-start mb-4 w-full">
@@ -101,8 +100,6 @@ import ColourDropdown from '../../colourPicker/colourDropdown/colourDropDown.vue
 import saveButtonVue from '@/components/base/baseButton/saveButton/saveButton.vue';
 import BaseButton from '@/components/base/baseButton/baseButton.vue';
 import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
-import { siteService } from '@/services/site/site.service';
-import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import { useSnackbarStore } from '@/stores/snackbar.store';
 import type { SupportedColourModels } from '@/classes/colourPalette/colourModel';
 import { swatchesService } from '@/services/swatches/swatches.service';
@@ -110,7 +107,7 @@ import { swatchesService } from '@/services/swatches/swatches.service';
 export default defineComponent({
   name: 'colour-palettes',
   
-  emits: ['resetClicked'],
+  emits: ['resetClicked', 'saveClicked', 'onChange'],
 
   components: {
     ColourDropdown,
@@ -124,6 +121,7 @@ export default defineComponent({
       type: Object as PropType<ColourSwatches>,
       required: true,
     },
+    saveEnabled: Boolean,
   },
 
   data() {
@@ -137,6 +135,7 @@ export default defineComponent({
       snackbarStore: useSnackbarStore(),
       stripHeightAndWidth: { height: 'h-16', width: 'w-16' },
       selectedColour: '',
+      swatchesLocal: this.sitePalette,
     };
   },
 
@@ -147,7 +146,7 @@ export default defineComponent({
     },
 
     getColourSwatches(): ColourSwatch[] {
-      return this.$props.sitePalette.colourSwatches;
+      return this.swatchesLocal.colourSwatches;
     },
 
     paletteColourClicked(colour: string) {
@@ -157,13 +156,14 @@ export default defineComponent({
     async onColourChange(colour: string) {
       const swatches: ColourSwatches = {
         baseColourHex: colour,
-        colourScheme: this.$props.sitePalette.colourScheme,
-        colourSwatches: this.$props.sitePalette.colourSwatches,
+        colourScheme: this.swatchesLocal.colourScheme,
+        colourSwatches: this.swatchesLocal.colourSwatches,
       };
-      await swatchesService().getNewSwatchesFromColour(swatches);
+      this.swatchesLocal = await swatchesService().getNewSwatchesFromColour(swatches);
       this.saturationValue = 50;
       this.saturationPreviousValue = 50;
       this.selectedColour = colour;
+      this.$emit('onChange', this.swatchesLocal);
     },
     
     resetPalette() {
@@ -171,43 +171,27 @@ export default defineComponent({
     },
 
     async savePaletteSelection() {
-      try {
-        await siteService().saveSitePalette(getSiteAndUser());
-        this.displayMessage('Palette saved', 'success');
-      } 
-      catch (err) {
-        console.log(err);
-        this.displayMessage('Something went wrong when saving the colour palette, please retry', 'error');
-      }
+      this.$emit('saveClicked', this.swatchesLocal);
     },
 
-    displayMessage(msg: string, type: 'success' | 'error' ) {
-      this.snackbarStore.setSnackbarMessage(
-        { 
-          type: type,
-          payload: {
-            message: msg,
-            title: 'Site Record Saved' 
-          }
-        }); 
-    },
-    
     async onSaturationChange() {
       const value = this.saturationValue > this.saturationPreviousValue ? 1 : -1;
       this.saturationPreviousValue = this.saturationValue;
-      const swatches = this.$props.sitePalette.colourSwatches;
+      const swatches = this.swatchesLocal.colourSwatches;
       if(value > 0) {
-        await swatchesService().increaseSaturation(swatches);
+        this.swatchesLocal.colourSwatches = await swatchesService().increaseSaturation(swatches);
       } else {
-        await swatchesService().decreaseSaturation(swatches);
+        this.swatchesLocal.colourSwatches = await swatchesService().decreaseSaturation(swatches);
       }
+      this.$emit('onChange', this.swatchesLocal);
     },
     
     async changeScheme(scheme: SupportedColourModels) {
       this.scheme = scheme;
-      const swatches = this.$props.sitePalette;
+      const swatches = this.swatchesLocal;
       swatches.colourScheme = scheme;
-      await swatchesService().changeColourModel(swatches);
+      this.swatchesLocal = await swatchesService().changeColourModel(swatches);
+      this.$emit('onChange', this.swatchesLocal);
     },
 
   },

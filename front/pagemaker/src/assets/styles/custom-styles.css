@@ -7,7 +7,9 @@
   @apply font-bold;
   @apply text-on-surface;
   @apply text-left;
-  @apply ml-2;
+  @apply ml-4;
+  @apply text-site-primary-dark;
+  @apply text-3xl;
 }
 
 .form-page-wrapper {

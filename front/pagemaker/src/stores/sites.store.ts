@@ -1,4 +1,4 @@
-import type { Site } from '@/classes/sites';
+import type { Site } from '@/classes/sites/site';
 import { defineStore } from 'pinia';
 
 export const useSitesStore = defineStore({

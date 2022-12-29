@@ -31,7 +31,7 @@ export default defineComponent({
 
   props: {
     labels: {
-      type: [] as PropType<string[]>,
+      type: Array as PropType<string[]>,
       required: true,
 
     }

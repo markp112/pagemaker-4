@@ -28,5 +28,10 @@ type ColourSwatches = {
 };
 
 type ColourSwatchesFirebaseObject = { colourSwatches: string };
+type ColourSwatchesFirebase = {
+  baseColourHex: string;
+  colourSwatches: string;
+  colourScheme: SupportedColourModels;
+}
 
-export type { ColourPalette, ColourSwatches, ColourSwatch, ColourSwatchesFirebaseObject, Colours };
+export type { ColourPalette, ColourSwatches, ColourSwatch, ColourSwatchesFirebaseObject,ColourSwatchesFirebase, Colours };

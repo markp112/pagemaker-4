@@ -1,3 +1,4 @@
+import { HttpStatusCode } from 'axios';
 import { httpStatusCodes } from '../../api/httpStatusCodes/index';
 import type { Response } from '../../api/types';
 import { logger } from '../../logger';
@@ -26,6 +27,12 @@ class ResourceNotFoundError extends DomainError {
   constructor(resource: string) {
     super(`Resource ${resource} was not found`, httpStatusCodes.RESOURCE_NOT_FOUND);
   }
+};
+
+class InsufficientPermissions extends DomainError {
+  constructor() {
+    super(`Insufficent Permissions: there was an issue accessing the requested resource`, httpStatusCodes.FORBIDDEN)
+  }
 }
 
 class GenericError extends DomainError {
@@ -34,4 +41,4 @@ class GenericError extends DomainError {
   }
 };
 
-export {DomainError, ResourceNotFoundError, GenericError };
+export {DomainError, ResourceNotFoundError, InsufficientPermissions, GenericError };

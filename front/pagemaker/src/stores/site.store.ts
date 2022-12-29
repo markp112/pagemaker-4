@@ -1,13 +1,11 @@
-import type { Site } from '@/classes/sites'
+import { NEW_SITE, type Site } from '@/classes/sites/site'
 import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import type { SiteTypography } from '@/classes/sites/typography/model';
 import { defineStore } from 'pinia';
+import { useAuthStore } from './auth.store';
 
-const utility: ColourSwatch = {
-  swatch: ['#e6003c', '#ffffff', '#000000'],
-  swatchName: 'utility'
-};
+
 const useSiteStore = defineStore({
   id: 'siteStore',
 
@@ -39,6 +37,11 @@ const useSiteStore = defineStore({
   },
 
   actions: {
+
+    newSite() {
+      this._site = {...NEW_SITE};
+      this._site.userId = useAuthStore().user.uid;
+    },
 
     setSite(site: Site) {
       this._site = site;

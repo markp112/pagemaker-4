@@ -45,7 +45,6 @@ export const useAuthStore = defineStore({
 
   actions: {
     setUser(user: User) {
-      console.log('%c⧭', 'color: #aa00ff', user);
       this.$state._user = user;
     },
 

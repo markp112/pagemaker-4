@@ -1,5 +1,5 @@
 import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
-import type { Site } from '@/classes/sites';
+import type { Site } from '@/classes/sites/site';
 import { siteDefaultColours } from '@/classes/sites/siteColours/colour';
 import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
@@ -8,8 +8,7 @@ import type { SnackbarType } from '@/components/base/notifications/snackbar/mode
 import { useSiteStore } from '@/stores/site.store';
 import { useSnackbarStore } from '@/stores/snackbar.store';
 import { axiosClient, type ResponseError } from '../httpService';
-
-const SAVED_OK = 'Saved Ok';
+import { userService } from '../user/userService';
 
 function siteService() {
   const BASE_ROUTE = '/sites/';
@@ -41,10 +40,9 @@ function siteService() {
     }
   }
 
-  async function saveMaterialColours(siteAndUser: SiteAndUser, materialColours: MaterialColours) {
+  async function saveMaterialColours(siteAndUser: SiteAndUser, materialColours: MaterialColours):Promise<void> {
     try {
       await axiosClient().post<MaterialColours, MaterialColours>(`${getRoute(siteAndUser)}/materialColours`, materialColours);
-      displayMessage(SAVED_OK, 'success', 'Material Colours');
     } catch (error) {
       const err = error as ResponseError;
       displayMessage(err.msg, 'error', 'Material Colours');
@@ -66,7 +64,6 @@ function siteService() {
   async function saveTypography(siteAndUser: SiteAndUser, siteTypography: SiteTypography): Promise<void> {
     try {
       await axiosClient().post<SiteTypography, SiteTypography>(`${getRoute(siteAndUser)}/typography`, siteTypography);
-      displayMessage(SAVED_OK, 'success', 'Site Typography');
     } catch (error) {
       const err = error as ResponseError;
       displayMessage(err.msg, 'error', 'Site Typography');
@@ -75,18 +72,12 @@ function siteService() {
 
   async function fetchSiteColourPalette(siteAndUser: SiteAndUser): Promise<void> {
     try {
-      const siteColourPalette = await axiosClient().get<ColourSwatch[]>(`${getRoute(siteAndUser)}/colourpalette`);
+      const siteColourPalette = await axiosClient().get<ColourSwatches>(`${getRoute(siteAndUser)}/colourpalette`);
       if (siteColourPalette) {
-        const colourSwatches: ColourSwatches = {
-          colourScheme: 'complementary',
-          baseColourHex: '#2e237e',
-          colourSwatches: siteColourPalette, 
-        }
-        store.setColourPalette(colourSwatches);
+        store.setColourPalette(siteColourPalette);
       }
     } 
     catch (err) {
-      // store.initialisePalettes();
       console.log(err);
     }
   }
@@ -95,13 +86,11 @@ function siteService() {
     await fetchSiteColourPalette(siteAndUser);
   }
 
-  async function saveSitePalette(siteAndUser: SiteAndUser) {
+  async function saveSitePalette(siteAndUser: SiteAndUser, colourSwatches: ColourSwatches) {
     try {
-      const colourPalette: ColourSwatches = store.getColourSwatches;
-      const savedPalette = await axiosClient().post<ColourSwatches, ColourSwatches>(`${getRoute(siteAndUser)}/colourpalette`, colourPalette);
+      const savedPalette = await axiosClient().post<ColourSwatches, ColourSwatches>(`${getRoute(siteAndUser)}/colourpalette`, colourSwatches);
       if (savedPalette) {
         store.setColourPalette(savedPalette);
-        displayMessage(SAVED_OK, 'success', 'Colour Swatches');
       }
     } 
     catch (error) {
@@ -109,15 +98,37 @@ function siteService() {
       const err = error as ResponseError;
       displayMessage(err.msg, 'error', 'Material Colours');
     }
-
   }
 
   async function saveNewSite(site: Site): Promise<Site> {
-    return await axiosClient().post<Site, Site>(getRoute(site), site);
+    const siteAndUser: SiteAndUser = {
+      siteId: site.siteId,
+      userId: site.userId,
+    };
+    return await axiosClient().post<Site, Site>(getRoute(siteAndUser), site);
   }
 
-  async function saveExistingSite(site: Site): Promise<Site> {
-      return await axiosClient().put<Site, Site>(getRoute(site), site);
+  async function saveExistingSite(site: Site, siteAndUser: SiteAndUser): Promise<Site> {
+      return await axiosClient().put<Site, Site>(getRoute(siteAndUser), site);
+  }
+
+  async function getDefaultSwatches(): Promise<void> {
+    const defaultColourPalettes = await axiosClient().get<ColourSwatches>(`${BASE_ROUTE}defaults/default-palette`);
+      store.setColourPalette(defaultColourPalettes);
+  }
+
+  async function getDefaultMaterialColours(): Promise<void> {
+    const defaultMaterialColours = await axiosClient().get<MaterialColours>(`${BASE_ROUTE}defaults/material-colours`);
+    store.setMaterialColours(defaultMaterialColours);
+  }
+
+  async function getDefaultTypography(): Promise<void> {
+    const defaultTypography = await axiosClient().get<SiteTypography>(`${BASE_ROUTE}defaults/default-typography`);
+    store.setTypography(defaultTypography);
+  }
+
+  function isNewSite(): boolean {
+    return store.site.siteId === '-1';
   }
 
   return { getSiteMaterialColours,
@@ -128,6 +139,11 @@ function siteService() {
     saveMaterialColours,
     getSiteTypography,
     saveTypography,
+    getDefaultSwatches,
+    getDefaultMaterialColours,
+    getDefaultTypography,
+    isNewSite,
+    displayMessage,
   }
 }
 

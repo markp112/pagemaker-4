@@ -2,17 +2,20 @@ import express from 'express';
 import YAML from 'yamljs';
 import swaggerUI from 'swagger-ui-express';
 import bodyParser from 'body-parser';
+import multer from 'multer';
 import cors from 'cors';
 import { logger, morganMiddleware } from './logger';
 import { authMiddleware } from './middleware';
 import { router } from './api';
 
-const port = 3000;
+const PORT = 3000;
 const app = express();
+
 app.use(function(req, res, next) {
 	req.headers['if-none-match'] = 'no-match-for-this';
 	next();    
 });
+
 app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'POST, PUT, OPTIONS, DELETE, GET');
@@ -39,6 +42,6 @@ app.use((req, res, next) => {
 	});
 });
 
-app.listen(port, () => {
-	return console.log(`Express is listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+	return console.log(`Express is listening at http://localhost:${PORT}`);
 });

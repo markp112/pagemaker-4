@@ -2,7 +2,7 @@
   <div class="flex flex-col justify-start w-full">
     <div class="flex flex-row justify-between items-center mb-2">
       <h3 class="text-3xl ">Site Colours</h3>
-      <SaveButton class="ml-24" @onClick="saveMaterialColours"/>
+      <SaveButton class="ml-24" @onClick="saveMaterialColours" :is-enabled="saveEnabled"/>
     </div>
     <div class="w-full flex flex-auto">
       <div class="w-6/12">
@@ -48,7 +48,7 @@ import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
 
 export default defineComponent({
   name: 'siteMaterialColour',
-  emits: ['saveClicked'],
+  emits: ['saveClicked', 'onChange'],
 
   components: {
     MaterialElement,
@@ -66,6 +66,7 @@ export default defineComponent({
       type: Object as PropType<ColourSwatches>,
       required: true,
     },
+    saveEnabled: Boolean,
   },
 
   data() {
@@ -100,6 +101,7 @@ export default defineComponent({
           return paletteElement
         })
       this.materialColoursLocal = newColours;
+      this.$emit('onChange', this.materialColoursLocal);
     },
 
     updateColourElementForPalette(colour: string, paletteElement: MaterialColour): MaterialColour {
@@ -142,7 +144,7 @@ export default defineComponent({
 
     saveMaterialColours() {
       this.$emit('saveClicked', this.materialColoursLocal);
-    }
+    },
   }
 
 })
