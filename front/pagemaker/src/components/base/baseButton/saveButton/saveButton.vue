@@ -3,6 +3,7 @@
     size="medium"
     variant="solid"
     @onClick="saveClicked()"
+    :disabled="!isEnabled"
     >
     save
   </BaseButton>
@@ -19,6 +20,10 @@ export default defineComponent({
 
   components: {
     BaseButton,
+  },
+
+  props: {
+    isEnabled: Boolean,
   },
 
   methods: {

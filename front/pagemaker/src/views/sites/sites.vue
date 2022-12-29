@@ -1,7 +1,7 @@
 <template>
   <section>
-    <div class="flex flex-row justify-between text-accent1 mt-8 bg-site-background overflow-hidden">
-      <h2 class="page-heading ml-4 text-site-primary-dark">My Sites</h2>
+    <div class="flex flex-row justify-between text-accent1 mt-8 ml-8 bg-site-background overflow-hidden">
+      <h3 class="page-heading">My Sites</h3>
       <div class="w-32 h-4/6 mr-12">
         <base-button
           buttonType="primary"
@@ -13,21 +13,23 @@
         </base-button>
       </div>
     </div>
-    <ul class="flex flex-row justify-evenly w-full mt-20">
-      <li class="ml-3" v-for="site in sites" :key="site.siteId">
-        <SiteCard :site="site"
-          @site-clicked="siteClicked($event)"
-          @edit-clicked="siteEditClick($event)"
-        />
-      </li>
-    </ul>
+    <div class="flex flex-row justify-center w-full overflow-y-auto p-2">
+      <ul class="flex flex-row justify-around ml-8 w-8/12 mt-20 flex-wrap">
+        <li class="ml-3 mt-4" v-for="site in sites" :key="site.siteId">
+          <SiteCard :site="site"
+            @site-clicked="siteClicked($event)"
+            @edit-clicked="siteEditClick($event)"
+          />
+        </li>
+      </ul>
+    </div>
   </section>
 </template>
 
 <script lang="ts">
 
 import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
-import type { Site } from '@/classes/sites';
+import type { Site } from '@/classes/sites/site';
 import { siteService } from '@/services/site/site.service';
 import { sitesService } from '@/services/sites/sites.service';
 import { useAuthStore } from '@/stores/auth.store';
@@ -64,11 +66,14 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
       async createNewSite(): Promise<void> {
         await Promise.all([
           siteService().getDefaultSwatches(),
-        ])
+          siteService().getDefaultMaterialColours(),
+          siteService().getDefaultTypography(),
+        ]);
+        this.siteStore.newSite();
         this.$router.push({ name: 'site-editor', params: { title: 'New Site' } });
       },
 
-      async getSiteDefaults(siteId: string, route: string) {
+      async getSiteData(siteId: string, route: string) {
         this.store.setCurrentSite(siteId);
         this.siteStore.setSite(this.store.currentSite); 
         const siteAndUser: SiteAndUser = {
@@ -85,7 +90,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
       
       siteClicked(siteId: string) {
         try {
-          this.getSiteDefaults(siteId, `/pagelist` );
+          this.getSiteData(siteId, `/pagelist` );
         } catch (error) {
             console.log('%c⧭', 'color: #5200cc', error)
         }
@@ -93,7 +98,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
 
       async siteEditClick(siteId: string) {
         try {
-          await this.getSiteDefaults(siteId, `/site-editor`);
+          await this.getSiteData(siteId, `/site-editor`);
           this.$router.push({ name: 'site-editor', params: { title: 'edit site' }})
         } catch (error) {
             console.log('%c⧭', 'color: #5200cc', error)

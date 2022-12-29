@@ -4,6 +4,7 @@ const nonAuthRoutes = {
   '/api/v1.0/auth/login': true,
   '/api/v1.0/private/menus/navmenu/true': true,
   '/api/v1.0/private/fonts': true,
+  '/api/v1.0/sites/defaults/create': true,
 };
 
 const routeDoesNotRequireAuth = (requestedUrl: string): boolean => {

@@ -3,7 +3,7 @@
     <h3 class="text-3xl mb-8">
       Typography
     </h3>
-    <SaveButton @onClick="saveTypography()" />
+    <SaveButton @onClick="saveTypography()" :is-enabled="saveEnabled"/>
   </div>
   <p class="w-full flex flex-row justify-start place-items-center h-10 mb-4">
     <label for="fontPicker" class="w-auto pt-2">Site Font:</label>
@@ -51,12 +51,13 @@
       SaveButton,
     },
 
-    emits: ['saveClicked'],
+    emits: ['saveClicked', 'onChange'],
 
     props: {
       siteTypography: {
         type: Object as PropType<SiteTypography>
-      }
+      },
+      saveEnabled: Boolean,
     },
 
     data() {
@@ -80,14 +81,17 @@
 
       setSiteFont(fontname: string) {
         this.fontSettings.fontFamily = fontname;
+        this.$emit('onChange', this.fontSettings);
       },
 
       fontSizeChange(size: string) {
         this.fontSettings.size = size;
+        this.$emit('onChange', this.fontSettings);
       },
 
       fontUnitChange(unit: HtmlUnits) {
         this.fontSettings.unit = unit;
+        this.$emit('onChange', this.fontSettings);
       },
 
       getStyle() {

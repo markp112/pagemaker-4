@@ -14,10 +14,12 @@
   },
   "dependencies": {
     "@types/color": "^3.0.3",
+    "@types/uuid": "^9.0.0",
     "axios": "^0.27.2",
     "color": "^4.2.3",
     "dayjs": "^1.11.5",
     "pinia": "^2.0.17",
+    "uuid": "^9.0.0",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3"
   },

@@ -14,6 +14,14 @@ const backEndClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+const backEndClientMultiPart = axios.create({
+  baseURL: import.meta.env.BASE_URL,
+  timeout: 4000,
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'multipart/form-data',
+  },
+});
 
 type ResponseError =  {
   msg: string,
@@ -72,6 +80,29 @@ async function performPost<T, U>(path: string, payload: T, config: AxiosRequestC
     throw new Error(errMsg.err?.msg as string);
   }
 }
+async function performMultipartPost<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
+  const route = getRoute(path);
+  try {
+    const configOptions = config; 
+    configOptions.headers = {
+        'Authorization': `Bearer ${getToken()}`,
+    };
+    const response = await backEndClientMultiPart.post(route, payload, config);
+    return new Promise((resolve, reject) => {
+      if (response.status >= 400) {
+        reject(response.data.err);
+      } 
+      resolve(response.data.data);
+    })
+  } catch (error) {
+    const err = error as AxiosError;
+    const errContent = err.response?.data;
+    const errMsg = errContent as Response;
+    console.log('%c⧭', 'color: #997326', errMsg);
+    console.log('%c⧭', 'color: #731d6d', err.response?.data);
+    throw new Error(errMsg.err?.msg as string);
+  }
+}
 
 async function performPut<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
   const route = getRoute(path);
@@ -98,6 +129,10 @@ function  axiosClient() {
     return await performPost<T, U>(path, payload, config);
   }
 
+  async function postMultiPart<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
+    return await performMultipartPost<T, U>(path, payload, config);
+  }
+
   async function put<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
     return await performPut<T, U>(path, payload, config);
   }
@@ -106,7 +141,7 @@ function  axiosClient() {
   //   return await getBase64(path);
   // }
 
-  return { get, post, put, };
+  return { get, post, postMultiPart, put, };
 } 
 
 export type { ResponseError };

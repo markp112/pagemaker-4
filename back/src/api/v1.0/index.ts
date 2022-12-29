@@ -6,6 +6,7 @@ import { settingsRouter } from './settings';
 import { sitesRouter } from './sites';
 import { usersRouter } from './users';
 import { swatchesRouter } from './swatches';
+import { storageRouter } from './storage';
 
 const V1 = '/v1.0';
 const routerV1 = express.Router();
@@ -18,6 +19,7 @@ routerV1.use(V1, sitesRouter);
 routerV1.use(V1, pagesRouter);
 routerV1.use(V1, usersRouter);
 routerV1.use(V1, swatchesRouter);
+routerV1.use(V1, storageRouter);
 
 routerV1.get(V1, function(req, res, next) {
   res.send('V1 route is working');

@@ -3,7 +3,7 @@
     <input
       class="w-full app-input-field text-site-primary-dark mb-1"
       type="file"
-      @change="setImage($event.target)"
+      @change="uploadImage($event)"
       accept="image/png, image/jpeg"
     />
     <input
@@ -94,7 +94,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['imageChanged'],
+  emits: ['onChange'],
 
   components: {
     ImageGallery,
@@ -128,16 +128,6 @@ export default defineComponent({
 
   methods: {
 
-    updateImage() {
-      const img = this.$refs.imagePlaceholder as HTMLImageElement;
-      const image = new Image();
-      image.maintainRatio = this.maintainRatio;
-      image.content = this.url;
-      image.naturalSize.width.value = img.naturalWidth;
-      image.naturalSize.height.value = img.naturalHeight;
-      this.$emit('imageChanged', image);
-    },
-
     async showImageGallery() {
       await userService().retrieveImages(this.$props.userId);
       this.images = this.imageStore.imageDisplayList;
@@ -151,6 +141,17 @@ export default defineComponent({
     dragLeave() {
       this.isDragging = false;
     },
+
+    drop(e: DragEvent) {
+      if (e.dataTransfer !== null) {
+        const files = e.dataTransfer.files;
+        this.wrongFile = false;
+        if (files.length === 1) {
+          const file = files[0];
+          this.$emit('onChange', file);
+        }
+      }
+    },
     
     onImageLoad() {
       this.updateImage();
@@ -161,24 +162,13 @@ export default defineComponent({
       this.updateImage();
     },
     
-    drop(e: DragEvent) {
-      if (e.dataTransfer !== null) {
-        const files = e.dataTransfer.files;
-        this.wrongFile = false;
-        // allows only 1 file
-        if (files.length === 1) {
-          const file = files[0];
-          // return new Promise((resolve, reject) => {
-            
-          //   firestoreSaveFile(file, this.siteAndUser).then(result => {
-          //     this.hasFile = true;
-          //     this.url = result.message;
-          //     this.updateImage();
-          //     resolve('');
-          //   });
-          // });
-        }
-      }
+    updateImage() {
+      const img = this.$refs.imagePlaceholder as HTMLImageElement;
+      const image = new Image();
+      image.maintainRatio = this.maintainRatio;
+      image.content = this.url;
+      image.naturalSize.width.value = img.naturalWidth;
+      image.naturalSize.height.value = img.naturalHeight;
     },
     
     imageClicked(url: string) {
@@ -186,19 +176,14 @@ export default defineComponent({
       this.updateImage();
     },
     
-    setImage(target:Event['target']) {
+    uploadImage(event: Event) {
+      const target = event.target as HTMLInputElement;
+      const files = target.files;
+      if(files) {
+        const fileData = files[0];
+        this.$emit('onChange', fileData);
+      }
 
-
-    //   const url = file[0];
-    //   return new Promise((resolve, reject) => {
-    //     firestoreSaveFile(file[0], this.siteAndUser)
-    //     .then(result => {
-    //       this.url = result.message;
-    //       this.updateImage();
-    //       resolve('');
-    //     })
-    //     .catch(err => reject(err));
-    //   });
     },
     
     getImageFromUrl() {

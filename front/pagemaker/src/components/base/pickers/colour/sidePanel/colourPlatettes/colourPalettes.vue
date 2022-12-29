@@ -12,8 +12,7 @@
           >
           reset
         </BaseButton>
-        <SaveButton @onClick="savePaletteSelection()"/>
-
+        <SaveButton @onClick="savePaletteSelection()" :is-enabled="saveEnabled" />
       </div>
     </div>
     <div class="flex flex-row justify-start mb-4 w-full">
@@ -108,7 +107,7 @@ import { swatchesService } from '@/services/swatches/swatches.service';
 export default defineComponent({
   name: 'colour-palettes',
   
-  emits: ['resetClicked', 'saveClicked'],
+  emits: ['resetClicked', 'saveClicked', 'onChange'],
 
   components: {
     ColourDropdown,
@@ -122,6 +121,7 @@ export default defineComponent({
       type: Object as PropType<ColourSwatches>,
       required: true,
     },
+    saveEnabled: Boolean,
   },
 
   data() {
@@ -163,6 +163,7 @@ export default defineComponent({
       this.saturationValue = 50;
       this.saturationPreviousValue = 50;
       this.selectedColour = colour;
+      this.$emit('onChange', this.swatchesLocal);
     },
     
     resetPalette() {
@@ -173,17 +174,6 @@ export default defineComponent({
       this.$emit('saveClicked', this.swatchesLocal);
     },
 
-    displayMessage(msg: string, type: 'success' | 'error' ) {
-      this.snackbarStore.setSnackbarMessage(
-        { 
-          type: type,
-          payload: {
-            message: msg,
-            title: 'Site Record Saved' 
-          }
-        }); 
-    },
-    
     async onSaturationChange() {
       const value = this.saturationValue > this.saturationPreviousValue ? 1 : -1;
       this.saturationPreviousValue = this.saturationValue;
@@ -193,6 +183,7 @@ export default defineComponent({
       } else {
         this.swatchesLocal.colourSwatches = await swatchesService().decreaseSaturation(swatches);
       }
+      this.$emit('onChange', this.swatchesLocal);
     },
     
     async changeScheme(scheme: SupportedColourModels) {
@@ -200,6 +191,7 @@ export default defineComponent({
       const swatches = this.swatchesLocal;
       swatches.colourScheme = scheme;
       this.swatchesLocal = await swatchesService().changeColourModel(swatches);
+      this.$emit('onChange', this.swatchesLocal);
     },
 
   },

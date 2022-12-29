@@ -5,10 +5,12 @@ import { Response } from '../../../../api/types';
 import { Site } from '../model/site';
 import { GenericError } from '../../../../common/errors/';
 import { logger } from '../../../../logger';
-import {  ColourSwatch, ColourSwatches, ColourSwatchesFirebase, ColourSwatchesFirebaseObject } from '../model/colourPalette';
+import {  ColourSwatches, } from '../model/colourPalette';
 import { httpStatusCodes } from '../../../../api/httpStatusCodes';
 import { FirebaseMaterialColours, MaterialColours } from '../model/materialColours';
 import { SiteTypography } from '../model/typography';
+import { handleError } from '@errors/handleError';
+import { FirebaseError } from 'firebase-admin/lib/app/core';
 
 function sitesController() {
 
@@ -37,8 +39,8 @@ function sitesController() {
       const statusCode = isPost ? 201 : httpStatusCodes.OK
       return constructResponse<Site>(site, statusCode);
     }  catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      const errToThrow = handleError(err);
+      throw errToThrow;
     }
   }
 
@@ -70,7 +72,7 @@ function sitesController() {
       const colourSwatches = firebaseResponse.data() as unknown as ColourSwatches;
       return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK);
     }
-}
+  }
 
   async function saveColourPalette(userId: string, siteId: string, colourSwatches: ColourSwatches) {
     try {
@@ -80,7 +82,6 @@ function sitesController() {
       return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK)
     }
     catch (err) {
-      console.log('%c⧭', 'color: #006dcc', err);
       logger.error(err);
       throw new GenericError(err);
     }
