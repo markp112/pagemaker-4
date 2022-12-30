@@ -3,7 +3,7 @@
     <h3 class="text-3xl mb-8">
       Typography
     </h3>
-    <SaveButton @onClick="saveTypography()" :is-enabled="saveEnabled"/>
+    <SaveButton @onClick="saveTypography()" :is-enabled="saveEnabled.valueOf"/>
   </div>
   <p class="w-full flex flex-row justify-start place-items-center h-10 mb-4">
     <label for="fontPicker" class="w-auto pt-2">Site Font:</label>

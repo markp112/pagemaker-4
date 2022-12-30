@@ -2,7 +2,7 @@
   <div class="flex flex-col justify-start w-full">
     <div class="flex flex-row justify-between items-center mb-2">
       <h3 class="text-3xl ">Site Colours</h3>
-      <SaveButton class="ml-24" @onClick="saveMaterialColours" :is-enabled="saveEnabled"/>
+      <SaveButton class="ml-24" @onClick="saveMaterialColours" :is-enabled="saveEnabled.valueOf"/>
     </div>
     <div class="w-full flex flex-auto">
       <div class="w-6/12">

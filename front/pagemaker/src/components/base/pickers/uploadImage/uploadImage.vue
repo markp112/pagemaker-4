@@ -64,7 +64,7 @@
         :userId="userId"
         :image-details="images"
         @closeClicked="showImagePicker=false"
-        @imageClicked="imageClicked($event)"
+        @imageClicked="galleryImageSelected($event)"
       />
     </div>
   </div>
@@ -79,6 +79,7 @@ import { userService } from '@/services/user/userService';
 import { useImagesStore } from '@/stores/images.store';
 import type { ImageCardProps } from '../imageGallery/types';
 import { Image } from '@/classes/image/image';
+import type { UploadImage } from './model';
 
 export default defineComponent({
   name:'upload-image',
@@ -86,7 +87,7 @@ export default defineComponent({
   props: {
     urlEdited: {
       type: String,
-
+      default: ''
     },
     userId: {
       type: String,
@@ -117,7 +118,9 @@ export default defineComponent({
   },
 
   mounted() {
-    this.url = this.urlEditedLocal;
+    if(this.urlEdited) {
+      this.url = this.urlEdited;
+    }
   },
 
   computed: {
@@ -147,10 +150,17 @@ export default defineComponent({
         const files = e.dataTransfer.files;
         this.wrongFile = false;
         if (files.length === 1) {
-          const file = files[0];
-          this.$emit('onChange', file);
+          const uploadImage = this.getUploadImage(files[0], 'file');
+          this.$emit('onChange', uploadImage);
         }
       }
+    },
+
+    getUploadImage(image: File | string, type: 'file' | 'url'): UploadImage {
+      return {
+        image: image,
+        type: type,
+      };
     },
     
     onImageLoad() {
@@ -171,17 +181,19 @@ export default defineComponent({
       image.naturalSize.height.value = img.naturalHeight;
     },
     
-    imageClicked(url: string) {
+    galleryImageSelected(url: string) {
       this.url = url;
       this.updateImage();
+      const uploadImage = this.getUploadImage(url, 'url')
+      this.$emit('onChange', uploadImage);
     },
     
     uploadImage(event: Event) {
       const target = event.target as HTMLInputElement;
       const files = target.files;
       if(files) {
-        const fileData = files[0];
-        this.$emit('onChange', fileData);
+        const uploadImage = this.getUploadImage(files[0], 'file');
+          this.$emit('onChange', uploadImage);
       }
 
     },
@@ -204,7 +216,7 @@ export default defineComponent({
 })
 </script>
   
-<style lang="postcss">
+<style lang="css">
   .image-drop {
     width: 100%;
     @apply h-full;

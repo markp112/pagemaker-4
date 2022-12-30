@@ -29,7 +29,7 @@ sitesRouter
   })
 
   .get(sitePathBase(`materialcolours`), async (req, res) => {
-    logger.info('material colours called');
+    logger.info('GET: material colours called');
     const userId = req.params.userId;
     const siteId = req.params.siteId;
     try {
@@ -42,7 +42,7 @@ sitesRouter
   })
   
   .post(sitePathBase(`materialcolours`), async (req, res) => {
-    logger.info('post material colours called');
+    logger.info('POST: material colours called');
     try {
       const materialcolours = req.body as MaterialColours;
       const userId = req.params.userId;
