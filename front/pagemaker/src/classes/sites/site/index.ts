@@ -1,3 +1,7 @@
+import type { ColourSwatches } from '../siteColours/colour/colourPalette';
+import type { MaterialColours } from '../siteColours/models/colours.model';
+import type { SiteTypography } from '../typography/model';
+
 interface Site {
   siteId: string;
   userId: string;
@@ -22,5 +26,14 @@ const NEW_SITE: Site = {
   userId: '',
 };
 
-export type { Site };
+interface SiteData {
+  site: Site,
+  materialColours?: MaterialColours | undefined,
+  colourSwatches?: ColourSwatches | undefined,
+  typography?: SiteTypography | undefined,
+  imageFile?: File | undefined,
+  isSiteSaved: boolean,
+}
+
+export type { Site, SiteData };
 export { NEW_SITE };

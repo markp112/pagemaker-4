@@ -18,7 +18,7 @@ siteDefaultsRouter
   
   .get(getRoute('material-colours'), async(req, res) => {
     logger.info('sites/defaults/material colours called');
-    const response = await SiteDefaultsController().getDefaultPalette();
+    const response = await SiteDefaultsController().getDefaultMaterialColours();
     res.status(response.status).send(response);
   })
   

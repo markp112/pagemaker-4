@@ -12,7 +12,7 @@
           >
           reset
         </BaseButton>
-        <SaveButton @onClick="savePaletteSelection()" :is-enabled="saveEnabled" />
+        <SaveButton @onClick="savePaletteSelection()" :is-enabled="saveEnabled.valueOf" />
       </div>
     </div>
     <div class="flex flex-row justify-start mb-4 w-full">

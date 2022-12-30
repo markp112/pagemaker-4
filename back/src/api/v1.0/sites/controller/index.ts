@@ -10,7 +10,6 @@ import { httpStatusCodes } from '../../../../api/httpStatusCodes';
 import { FirebaseMaterialColours, MaterialColours } from '../model/materialColours';
 import { SiteTypography } from '../model/typography';
 import { handleError } from '@errors/handleError';
-import { FirebaseError } from 'firebase-admin/lib/app/core';
 
 function sitesController() {
 
@@ -47,8 +46,7 @@ function sitesController() {
   async function getSiteMaterialColours(userId: string, siteId: string) {
     const firebaseResponse = await firebaseGetCollection('materialcolours', userId, siteId);
     if (firebaseResponse.exists()) {
-      const returnedData = firebaseResponse.data() as unknown as FirebaseMaterialColours;
-      const materialColours = returnedData.materialColours; 
+      const materialColours = firebaseResponse.data().materialColours as unknown as MaterialColours;
       return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
     }
   }

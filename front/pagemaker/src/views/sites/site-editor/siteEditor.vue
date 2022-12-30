@@ -41,7 +41,7 @@
         </div>
         <div class="field-wrapper">
           <label for="created">Created:</label>
-          <input type="date" name="created" id="created" v-model="site.created" />
+          <input type="date" name="created" id="created" v-model="dateCreated" @change="site.created = new Date(dateCreated)" />
         </div>
         <div class="field-wrapper">
           <label for="Url">Url:</label>
@@ -59,8 +59,9 @@
             type="date"
             name="published"
             id="published"
-            v-model="site.published"
-            placeholder="url for website"
+            v-model="datePublished"
+            placeholder="date site was last published"
+            @change="site.published = new Date(datePublished)"
           />
         </div>
         <div class="field-wrapper">
@@ -125,34 +126,32 @@
 </template>
 
 <script lang="ts">
-import type { Site } from '@/classes/sites/site';
+import type { Site, SiteData } from '@/classes/sites/site';
 import { useSiteStore } from '@/stores/site.store';
 import { defineComponent } from 'vue';
 import baseButtonVue from '@/components/base/baseButton/baseButton.vue';
-import UploadImage from '@/components/base/pickers/uploadImage/uploadImage.vue';
+import ImagePicker from '@/components/base/pickers/uploadImage/uploadImage.vue';
 import { useAuthStore } from '@/stores/auth.store';
 import { siteService } from '@/services/site/site.service';
-import { useSnackbarStore } from '@/stores/snackbar.store';
-import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import SiteMaterialColour from '@/components/base/pickers/colour/sidePanel/materialColours/siteMaterialColour.vue';
 import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPlatettes/colourPalettes.vue';
 import TabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
-import { getSiteAndUser, type SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
+import { getSiteAndUser, } from '@/classes/siteAndUser/siteAndUser';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import typographyVue from '@/components/base/pickers/colour/sidePanel/typography/typography.vue';
 import type { SiteTypography } from '@/classes/sites/typography/model';
 import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
+import type { UploadImage } from '@/components/base/pickers/uploadImage/model';
 
-const SAVED_OK = 'Saved Ok';
 
 export default defineComponent({
   name: 'SiteEditor',
 
   components: {
     BaseButton: baseButtonVue,
-    UploadImage,
+    UploadImage: ImagePicker,
     settingsPanelVue,
     MaterialColours: SiteMaterialColour,
     ColourPalettes,
@@ -168,13 +167,14 @@ export default defineComponent({
       userId: useAuthStore().user.uid,
       store: useSiteStore(),
       siteService: siteService(),
-      snackbarStore: useSnackbarStore(),
       site: Object as unknown as Site,
       sidePanelWidth: 'w-3/12',
       colourSwatches: Object as unknown as ColourSwatches,
       typography: Object as unknown as SiteTypography,
       materialColours: Object as unknown as MaterialColours,
-      siteImage: Object as unknown as File,
+      fileImage: Object as unknown as File | undefined,
+      dateCreated: '',
+      datePublished: '',
     };
   },
 
@@ -182,6 +182,10 @@ export default defineComponent({
     this.formErrors = [];
     this.pageTitle = this.$route.params.title as string;
     this.site = this.store.site;
+    this.dateCreated = this.site.created.toString().split('T')[0];
+    if(this.site.published) {
+      this.datePublished = this.site.published?.toString().split('T')[0];
+    }
     this.colourSwatches = this.store.getColourSwatches;
     this.materialColours = this.store.getMaterialColours;
     this.typography = this.store.getTypography;
@@ -189,7 +193,7 @@ export default defineComponent({
 
   computed: {
     isNewSite(): boolean {
-      return this.siteService.isNewSite();
+      return this.site.siteId === '-1';
     },
   },
 
@@ -207,12 +211,18 @@ export default defineComponent({
       return this.store.getTypography;
     },
 
-    updateFileRef(file: File): void {
-        this.siteImage = file;
+    updateFileRef(uploadedImage: UploadImage): void {
+      if(uploadedImage.type === 'file') {
+        this.fileImage = uploadedImage.image as File;
+        this.site.image = '';
+      } else {
+        this.site.image = uploadedImage.image as string;
+        this.fileImage = undefined;
+      }
     },
 
     cancelClicked() {
-        this.$router.push("/sites");
+      this.$router.push("/sites");
     },
 
     async resetColourSwatches() {
@@ -224,49 +234,57 @@ export default defineComponent({
     },
     
     async saveClicked() {
-      const siteAndUser = getSiteAndUser();
       if (!this.isFormCompletedCorrectly(this.validateForm())) {
         return;
       }
       if (this.isNewSite) {
-        await this.saveNewSite()
+        await this.saveNewSite();
       } else {
-        await siteService().saveExistingSite(this.site, siteAndUser);
-        siteService().displayMessage('Site details updated', 'success', 'Updated');
+        const siteData: SiteData = {
+          site: this.site,
+          isSiteSaved: false,
+        }
+        await siteService().saveSite(siteData);
       }
     },
 
     async saveNewSite() {
-      if(this.siteImage.name !== '') {
-        const imageUrl = await FileUploadService().uploadFile(this.siteImage, this.userId);
-        this.site.image = imageUrl;
-      }
-      const site = await siteService().saveNewSite(this.site);
-      this.store.setSite(site);
-      const siteAndUser = getSiteAndUser();
-      await Promise.all([
-        siteService().saveSitePalette(siteAndUser, this.colourSwatches),
-        siteService().saveMaterialColours(siteAndUser, this.materialColours),
-        siteService().saveTypography(siteAndUser, this.typography)
-      ]);
-      siteService().displayMessage(SAVED_OK,'success', 'New site created');
+      const siteData: SiteData = {
+        site: this.site,
+        imageFile: this.fileImage,
+        materialColours: this.materialColours,
+        colourSwatches: this.colourSwatches,
+        typography: this.typography,
+        isSiteSaved: false,
+      };
+      await siteService().saveSite(siteData);
     },
 
     async saveColourSwatches(colourSwatches: ColourSwatches): Promise<void> {
-        await siteService().saveSitePalette(getSiteAndUser(), colourSwatches);
-        siteService().displayMessage(SAVED_OK, 'success', 'Colour Swatches');
+      const siteData: SiteData = {
+        site: this.site,
+        isSiteSaved: true,
+        colourSwatches: colourSwatches,
+      };
+      await siteService().saveSite(siteData);
     },
   
     async saveMaterialColours(materialColours: MaterialColours) {
-      const siteAndUser = getSiteAndUser();
-      await siteService().saveMaterialColours(siteAndUser, materialColours);
-      siteService().displayMessage(SAVED_OK, 'success', 'Material Colours');
+      const siteData: SiteData = {
+        site: this.site,
+        isSiteSaved: true,
+        materialColours: materialColours,
+      };
+      await siteService().saveSite(siteData);
     },
 
     async saveSiteTypography(siteTypeography: SiteTypography): Promise<void> {
-      const siteAndUser = getSiteAndUser();
-      await siteService().saveTypography(siteAndUser, siteTypeography);
-      siteService().displayMessage(SAVED_OK, 'success', 'Site Typography');
+      const siteData: SiteData = {
+        site: this.site,
+        isSiteSaved: true,
+        typography: siteTypeography,
+      };
+      await siteService().saveSite(siteData);
     },
 
     updateSwatches(colourSwatches: ColourSwatches) {
@@ -290,11 +308,11 @@ export default defineComponent({
     },
 
     validateForm(): string[] {
-        const errors: string[] = [];
-        if (this.site.name.length < 5) {
-            errors.push("Site name must be more than 5 characters");
-        }
-        return errors;
+      const errors: string[] = [];
+      if (this.site.name.length < 5) {
+          errors.push("Site name must be more than 5 characters");
+      }
+      return errors;
     },
   },
 })
