@@ -16,8 +16,9 @@ const sitePathBase = (collectionName: string) => `${ROUTE_PATH}/:userId/:siteId/
 sitesRouter.use(ROUTE_PATH, siteDefaultsRouter);
 
 sitesRouter
+  
   .get(`${ROUTE_PATH}/:userId`, async (req, res) => {
-    logger.info('sites.get called');
+    logger.info('GET: sites.get called');
     const userId = req.params.userId;
     try {
       const response = await sitesController().getSites(userId);
@@ -101,8 +102,8 @@ sitesRouter
       logger.info('POST: site typography called');
       const userId = req.params.userId;
       const siteId = req.params.siteId;
-      const typeography: SiteTypography = req.body;
-      const response = await sitesController().saveTypography(userId, siteId, typeography);
+      const typography: SiteTypography = req.body;
+      const response = await sitesController().saveTypography(userId, siteId, typography);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -114,7 +115,6 @@ sitesRouter
     logger.info(`${ROUTE_PATH}/:userId/:siteId`);
     const site: Site = req.body;
     site.siteId = Guid.newGuid();
-    console.log('%c⧭', 'color: #1d3f73', site);
     try {
       const response = await sitesController().saveSite(site, true);
       res.status(response.status).send(response);
@@ -134,6 +134,18 @@ sitesRouter
       const error = err as DomainError;
       const response = error.getResponse();
       res.status(error._status).send(response);
+    }
+  })
+
+  .delete(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
+    logger.info('DELETE: site called');
+    try {
+      const userId = req.params.userId;
+      const siteId = req.params.siteId;
+      const response = await sitesController().deleteSite(userId, siteId);
+      res.status(response.status).send();
+    } catch (error) {
+      
     }
   });
 

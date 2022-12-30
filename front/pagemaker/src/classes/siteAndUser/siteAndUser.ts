@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/stores/auth.store';
 import { useSiteStore } from '@/stores/site.store';
 
 type SiteAndUser = {
@@ -8,7 +9,7 @@ type SiteAndUser = {
 function getSiteAndUser(): SiteAndUser {
   return {
     siteId: useSiteStore().site.siteId,
-    userId: useSiteStore().site.userId,
+    userId: useAuthStore().userUid,
   }
 }
 export type { SiteAndUser };

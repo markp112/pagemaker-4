@@ -119,6 +119,20 @@ async function performPut<T, U>(path: string, payload: T, config: AxiosRequestCo
   })
 }
 
+async function performDelete(path: string, config: AxiosRequestConfig = {}): Promise<void> {
+  try {
+    const configOptions = config; 
+    configOptions.headers = {
+      'Authorization': `Bearer ${getToken()}`,
+  };
+    const route = getRoute(path);
+    await backEndClient.delete(route, config);
+  } catch (error) {
+    console.log('%c⧭', 'color: #86bf60', error);
+    
+  }
+}
+
 function  axiosClient() {
 
   async function get<T>(path: string): Promise<T> {
@@ -137,11 +151,11 @@ function  axiosClient() {
     return await performPut<T, U>(path, payload, config);
   }
 
-  // async function get64(path: string): Promise<string> {
-  //   return await getBase64(path);
-  // }
+  async function deleteResource(path: string): Promise<void> {
+    await performDelete(path);
+  }
 
-  return { get, post, postMultiPart, put, };
+  return { get, post, postMultiPart, put, deleteResource };
 } 
 
 export type { ResponseError };

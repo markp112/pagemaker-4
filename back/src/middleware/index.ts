@@ -4,7 +4,6 @@ const nonAuthRoutes = {
   '/api/v1.0/auth/login': true,
   '/api/v1.0/private/menus/navmenu/true': true,
   '/api/v1.0/private/fonts': true,
-  '/api/v1.0/sites/defaults/create': true,
 };
 
 const routeDoesNotRequireAuth = (requestedUrl: string): boolean => {
@@ -24,10 +23,10 @@ function authMiddleware(req, res, next) {
     }
     const token = headerToken.split(' ')[1];
     admin
-    .auth()
-    .verifyIdToken(token)
-    .then(() => next())
-    .catch(() => res.send({ message: 'Could not authorize' }).status(403));
+      .auth()
+      .verifyIdToken(token)
+      .then(() => next())
+      .catch(() => res.send({ message: 'Could not authorize' }).status(403));
   }
 }
 

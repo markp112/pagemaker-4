@@ -26,6 +26,7 @@ module.exports = {
         'site-surface': "#ffffff",
         'accent-1': "#D9C4B8",
         'accent-2': "#F2E3D5",
+        'site-warning': '#d71515',
       },
     },
     width: (theme) => ({
