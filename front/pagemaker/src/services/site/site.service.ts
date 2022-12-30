@@ -1,7 +1,7 @@
 import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { Site, SiteData } from '@/classes/sites/site';
 import { siteDefaultColours } from '@/classes/sites/siteColours/colour';
-import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
+import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import type { SiteTypography, } from '@/classes/sites/typography/model';
 import type { SnackbarType } from '@/components/base/notifications/snackbar/models';

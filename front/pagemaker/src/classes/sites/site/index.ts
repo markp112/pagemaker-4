@@ -28,10 +28,10 @@ const NEW_SITE: Site = {
 
 interface SiteData {
   site: Site,
-  materialColours?: MaterialColours | undefined,
-  colourSwatches?: ColourSwatches | undefined,
-  typography?: SiteTypography | undefined,
-  imageFile?: File | undefined,
+  materialColours?: MaterialColours,
+  colourSwatches?: ColourSwatches,
+  typography?: SiteTypography,
+  imageFile?: File,
   isSiteSaved: boolean,
 }
 

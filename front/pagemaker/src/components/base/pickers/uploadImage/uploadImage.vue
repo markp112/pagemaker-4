@@ -85,7 +85,10 @@ export default defineComponent({
   name:'upload-image',
   
   props: {
-    urlEdited: String,
+    urlEdited: {
+      type: String,
+      default: ''
+    },
     userId: {
       type: String,
       required: true,

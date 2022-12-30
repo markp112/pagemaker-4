@@ -3,8 +3,6 @@ import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/c
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import type { SiteTypography } from '@/classes/sites/typography/model';
 import { defineStore } from 'pinia';
-import { useAuthStore } from './auth.store';
-
 
 const useSiteStore = defineStore({
   id: 'siteStore',
