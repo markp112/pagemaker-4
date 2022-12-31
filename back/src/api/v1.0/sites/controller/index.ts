@@ -1,5 +1,5 @@
 import { constructResponse } from '@common/functions/constructResponse';
-import { collection, deleteDoc, doc, DocumentReference, getDoc, getDocs, setDoc } from '@firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '../../../../firebase/initFirebase';
 import { Response } from '../../../../api/types';
 import { Site } from '../model/site';
