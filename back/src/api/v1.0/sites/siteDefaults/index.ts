@@ -1,4 +1,3 @@
-import { async } from '@firebase/util';
 import express from 'express';
 import { logger } from '../../../../logger';
 import { SiteDefaultsController } from './controller';
