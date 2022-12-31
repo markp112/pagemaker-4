@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-container mt-3 bg-white max-h-screen shadow-lg shadow-gray-400 p-4 flex flex-col justify-start absolute top-0 right-2 border border-gray-400 rounded-md transition-all ease-in-out duration-1000 transform translate-x-0"
+  <div class="h-100 bg-white shadow-lg shadow-gray-400 p-4 flex flex-col justify-start absolute top-0 right-2 border border-gray-400 rounded-md transition-all ease-in-out duration-1000 transform translate-x-0"
     :class="getWidth()"
   >
     <div class="nav-content" v-if="width==='w-full'">
@@ -76,15 +76,15 @@ export default defineComponent({
 });
 </script>
 
-<style>
-
+<style lang="css">
 
 #nav-container {
   position: fixed;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   pointer-events: none;
 }
+
 #nav-container .bg {
   position: absolute;
   top: 70px;
@@ -121,14 +121,13 @@ export default defineComponent({
 }
 
 #nav-content {
-  margin-top: 70px;
   padding: 20px;
   width: 90%;
   max-width: 300px;
   position: absolute;
   top: 0;
   left: 0;
-  height: calc(100% - 70px);
+  height: 100%;
   background: #ececec;
   pointer-events: auto;
   -webkit-tap-highlight-color: rgba(0,0,0,0);

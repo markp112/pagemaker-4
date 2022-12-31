@@ -1,5 +1,5 @@
 <template>
-  <div class="py-2 bg-site-primary shadow-lg h-16 z-20 w-full pr-5">
+  <div class="bg-site-primary shadow-lg p-2 z-20 pr-5">
     <nav class="text-on-primary flex items-center justify-between">
       <div class="pr-10">
         <img
@@ -15,7 +15,7 @@
         />
 
         <div id="menu"
-          class="flex justify-end toggleable z-30 absolute top-12 right2 bg-white border-gray-100 border-2"
+          class="flex justify-end toggleable z-30 absolute top-12 right-1 bg-white border-gray-100 border-2"
           v-if="toggleMenu"
         >
           <ul

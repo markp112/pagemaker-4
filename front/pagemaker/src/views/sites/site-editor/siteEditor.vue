@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full relative w-full">
-    <p class="m-4 text-site-primary text-3xl w-full">Site Editor</p>
-    <div class="form-page-wrapper items-center w-full flex-wrap ml-48">
+  <div class="relative w-full h-86vh">
+    <p class="m-4 text-site-primary text-3xl">Site Editor</p>
+    <div class=" items-center w-11/12 flex-wrap ml-48">
       <form
       @submit.prevent="saveClicked"
       class="w-6/12 border-2 p-5 bg-gray-50 h-2/3 relative"

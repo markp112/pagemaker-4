@@ -48,7 +48,6 @@ function sitesController() {
   }
 
   async function deleteSite(userId: string, siteId: string): Promise<Response> {
-    console.log('%c⧭', 'color: #7f2200', 'deleteSite', userId, siteId);
     try {
       const docRef = doc(firebaseDb, sitesCollection(userId), siteId);
       await Promise.all([

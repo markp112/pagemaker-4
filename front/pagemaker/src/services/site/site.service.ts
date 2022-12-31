@@ -55,6 +55,7 @@ function siteService() {
   async function getSiteTypography(siteAndUser: SiteAndUser):Promise<void> {
     try {
       const typography = await axiosClient().get<SiteTypography>(`${getRoute(siteAndUser)}/typography`);
+      console.log('%c⧭', 'color: #00e600', typography);
       if (typography) {
         store.setTypography(typography)
       }
