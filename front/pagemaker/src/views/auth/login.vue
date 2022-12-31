@@ -6,7 +6,7 @@
           alt="picture of a bank vault"
           class="object-fit"
         />
-      <div class="border-2 rounded-md p-5 text-left w-2/6 h-100 flex flex-col justify-start">
+      <div class="border-2 rounded-md p-5 text-left w-2/6 h-98 flex flex-col justify-start">
         <Login-Form
           :form-errors="formErrors"
           @cancel-clicked="cancelClicked"

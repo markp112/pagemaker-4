@@ -1,15 +1,14 @@
 
 <template>
-  <main class="w-full flex flex-col drop-shadow-lg bg-site-background text-site-primary-dark">
+  <main class="w-screen flex flex-col bg-site-background text-site-primary-dark h-98">
     <Navbar :nav-menu-items="getMenuItems"
       @nav-menu-clicked="navMenuClicked"
     />
-    <div class="w-full">
+    <div class="w-98">
       <Breadcumb/>
     </div>
-    <div class="w-screen border-box font-body h-screen overflow-hidden">
+    <div class="w-full border-box font-body ">
       <RouterView>
-
       </RouterView>
     </div>
     <div class="w-80">

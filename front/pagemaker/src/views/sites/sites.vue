@@ -3,7 +3,7 @@
       <h3 class="page-heading w-full">My Sites</h3>
       <div v-if="hasSites">
         <div class="flex justify-end">
-          <base-button
+          <BaseButton
             buttonType="primary"
             size="medium"
             variant="solid"
@@ -11,18 +11,13 @@
             @onClick="createNewSite()"
           >
             Create New
-          </base-button>
+          </BaseButton>
         </div>
-        <div class="flex flex-row justify-center w-full overflow-y-auto p-2" >
-        <ul class="flex flex-row justify-around ml-8 w-8/12 mt-20 flex-wrap">
-          <li class="ml-3 mt-4" v-for="site in sites" :key="site.siteId">
-            <SiteCard :site="site"
-              @site-clicked="siteClicked($event)"
-              @edit-clicked="siteEditClick($event)"
-            />
-          </li>
-        </ul>
-        </div>
+        <SiteCardContainer :sites="sites"
+          @site-clicked="siteClicked($event)"
+          @site-edit-clicked="siteEditClick($event)"
+          @site-delete-clicked="siteDeleteClicked($event)"
+        />
       </div>
       <div v-else>
         <FirstSite @create-new="createNewSite()"/>
@@ -40,7 +35,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useSiteStore } from '@/stores/site.store';
 import { useSitesStore } from '@/stores/sites.store';
 import { defineComponent } from 'vue';
-import SiteCard from './components/siteCard/siteCard.vue';
+import siteCardContainerVue from './components/sideCardContainer/siteCard.container.vue';
 import FirstSite from './components/firstSite/firstSite.vue';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
 
@@ -48,9 +43,9 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
     name: 'sites',
 
     components: {
-      SiteCard: SiteCard,
       FirstSite,
-      'base-button': baseButton,
+      SiteCardContainer: siteCardContainerVue,
+      'BaseButton': baseButton,
     },
 
     data() {
@@ -59,16 +54,16 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         siteStore: useSiteStore(),
         userStore: useAuthStore(),
         userId: '',
-        hasSites: false,
+        hasSites: true,
       }
     },
 
-    async mounted() {
+    async created() {
       this.userId = this.userStore.userUid;
       await sitesService().getSites(this.userId);
       this.hasSites = this.store.sites.length > 0;
     },
-
+    
     methods: {
       async createNewSite(): Promise<void> {
         await sitesService().createNewSite();
@@ -96,6 +91,10 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         } catch (error) {
             console.log('%c⧭', 'color: #5200cc', error)
         }
+      },
+
+      async siteDeleteClicked(siteId: string) {
+        await siteService().deleteSite(siteId);
       },
 
       async siteEditClick(siteId: string) {

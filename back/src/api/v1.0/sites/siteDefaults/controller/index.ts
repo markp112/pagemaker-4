@@ -32,9 +32,9 @@ function SiteDefaultsController() {
     }
 
     async function getDefaultTypography(): Promise<Response> {
-      const firebaseResponse = await firebaseGetCollection('typography');
-      const SiteTypography = firebaseResponse.data() as unknown as SiteTypography;
-      return constructResponse(SiteTypography, httpStatusCodes.OK);
+      const firebaseResponse = await firebaseGetCollection('default-typography');
+      const siteTypography = firebaseResponse.data() as unknown as SiteTypography;
+      return constructResponse(siteTypography, httpStatusCodes.OK);
     }
 
     async function createMaterialColours(): Promise<Response> {

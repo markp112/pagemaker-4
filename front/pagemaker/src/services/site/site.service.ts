@@ -1,4 +1,4 @@
-import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
+import { getSiteAndUser, type SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { Site, SiteData } from '@/classes/sites/site';
 import { siteDefaultColours } from '@/classes/sites/siteColours/colour';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
@@ -55,6 +55,7 @@ function siteService() {
   async function getSiteTypography(siteAndUser: SiteAndUser):Promise<void> {
     try {
       const typography = await axiosClient().get<SiteTypography>(`${getRoute(siteAndUser)}/typography`);
+      console.log('%c⧭', 'color: #00e600', typography);
       if (typography) {
         store.setTypography(typography)
       }
@@ -118,6 +119,12 @@ function siteService() {
       await saveExistingSite(siteData);
     }
     
+  }
+
+  async function deleteSite(siteId: string) {
+    const siteAndUser = getSiteAndUser();
+    siteAndUser.siteId = siteId;
+    await axiosClient().deleteResource(getRoute(siteAndUser));
   }
 
   async function uploadImageToStorage(imageFile: File, userId: string): Promise<string> {
@@ -186,6 +193,7 @@ function siteService() {
 
   return { getSiteMaterialColours,
     saveSite,
+    deleteSite,
     getSiteColourPalette,
     getSiteTypography,
     getDefaultSwatches,
