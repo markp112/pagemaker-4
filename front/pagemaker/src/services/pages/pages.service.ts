@@ -1,4 +1,4 @@
-import type { Page } from '@/components/page/model/model';
+import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
 import { usePagesStore } from '@/stores/pages.store';
 import { axiosClient } from '../httpService';
 
@@ -9,8 +9,7 @@ function pagesService() {
 
   async function getPageList(userId: string , siteId: string): Promise<void> {
     try {
-      const pages = await axiosClient().get<Page[]>(`${BASE_ROUTE}/${userId}/${siteId}`);
-      console.log('%c⧭', 'color: #40fff2', pages);
+      const pages = await axiosClient().get<PageMetaData[]>(`${BASE_ROUTE}/${userId}/${siteId}`);
       if (pages.length > 0) {
         store.clear();
         store.setPages(pages);

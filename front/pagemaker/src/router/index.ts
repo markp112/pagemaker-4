@@ -2,8 +2,9 @@ import loginVue from '@/views/auth/login.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import sitesVue from '@/views/sites/sites.vue';
-import pageListVue from '@/views/pageList/pageList.vue';
 import SiteEditor from '@/views/sites/site-editor/siteEditor.vue';
+import pageListVue from '@/views/pageList/pageList.vue';
+import pageEditor from '@/views/pageList/page-editor/page-editor.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,8 +42,18 @@ const router = createRouter({
       meta: {
         breadcrumb: [{ name: 'sites', link: 'sites' }]
       }
-
     },
+    {
+      path: '/page-editor',
+      name: 'page-editor',
+      component: pageEditor,
+      meta: {
+        breadcrumb:  [{ name: 'sites', link: 'sites' }, 
+          {name: 'pages', link: '/pagelist'},
+          {name: 'page-editor'}
+        ]
+      }
+    }
   ],
 });
 

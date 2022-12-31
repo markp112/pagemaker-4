@@ -1,4 +1,4 @@
-import type { Page } from '@/components/page/model/model';
+import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
 import { defineStore } from 'pinia'
 
 const usePagesStore = defineStore({
@@ -6,7 +6,7 @@ const usePagesStore = defineStore({
 
   state: () => {
     return {
-      _pages: {} as Page[],
+      _pages: {} as PageMetaData[],
     }
   },
 
@@ -21,7 +21,7 @@ const usePagesStore = defineStore({
   },
 
   actions: {
-    setPages(pages: Page[]) {
+    setPages(pages: PageMetaData[]) {
       this._pages = pages;
     },
 
@@ -33,7 +33,7 @@ const usePagesStore = defineStore({
       return this._pages.filter(page => page.pageId === pageId).length > 0;
     },
 
-    add(page: Page) {
+    add(page: PageMetaData) {
       if (!this.pageExists(page.pageId)) {
         this._pages.push(page);
       }

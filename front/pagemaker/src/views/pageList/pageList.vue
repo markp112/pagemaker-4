@@ -62,7 +62,7 @@
 import { defineComponent } from 'vue';
 import BaseButton from '@/components/base/baseButton/baseButton.vue';
 import { getImageUrl } from '@/common/getIcon';
-import { formatDate, formatTimeStampAsDate, type TimeStamp } from '@/common/dateFunctions';
+import { formatDate, } from '@/common/dateFunctions';
 import { pagesService } from '@/services/pages/pages.service';
 import { usePagesStore } from '@/stores/pages.store';
 import { useSiteStore } from '@/stores/site.store';
@@ -83,7 +83,6 @@ export default defineComponent({
   },
 
   mounted(): void {
-    
     const siteId = this.siteStore.site.siteId;
     const userId = this.siteStore.site.userId;
     this.pagesService.getPageList(userId, siteId);
