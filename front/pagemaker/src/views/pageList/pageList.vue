@@ -66,6 +66,8 @@ import { formatDate, } from '@/common/dateFunctions';
 import { pagesService } from '@/services/pages/pages.service';
 import { usePagesStore } from '@/stores/pages.store';
 import { useSiteStore } from '@/stores/site.store';
+import { PageService } from '@/services/page/page.service';
+import { stringifyQuery } from 'vue-router';
 
 export default defineComponent({
   name: 'PageList',
@@ -77,15 +79,18 @@ export default defineComponent({
   data() {
     return {
       pagesService: pagesService(),
+      pageService: PageService(),
       store: usePagesStore(),
       siteStore: useSiteStore(),
+      siteId: '',
+      userId: '',
     }
   },
 
   mounted(): void {
-    const siteId = this.siteStore.site.siteId;
-    const userId = this.siteStore.site.userId;
-    this.pagesService.getPageList(userId, siteId);
+    this.siteId = this.siteStore.site.siteId;
+    this.userId = this.siteStore.site.userId;
+    this.pagesService.getPageList(this.userId, this.siteId);
   },
 
   computed: {
@@ -109,6 +114,7 @@ export default defineComponent({
     },
     
     createNewPage() {
+      this.pageService.createNewPage(this.siteId);
       this.$router.push({
         name: 'page-editor',
         params: {

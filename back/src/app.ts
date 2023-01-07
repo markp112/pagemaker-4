@@ -6,6 +6,7 @@ import cors from 'cors';
 import { logger, morganMiddleware } from './logger';
 import { authMiddleware } from './middleware';
 import { router } from './api';
+import swaggerJSDoc from 'swagger-jsdoc';
 
 const PORT = 3000;
 const app = express();
@@ -23,7 +24,18 @@ app.use((req, res, next) => {
 	next();
 });
 
-const swaggerDoc = YAML.load('./src/api/swagger/swagger.yaml');
+const swaggerDoc = YAML.load('./src/api/swagger/_build/swagger.yaml');
+const swaggerDefinition = {
+  info: {
+    title: 'REST API for PageMaker',
+    version: '1.0.0', 
+    description: 'This is the REST API for my product', // short description of the app
+  },
+  host: 'localhost:3000', // the host or url of the app
+  basePath: '/src/api', // the basepath of your endpoint
+}
+const options = { swaggerDefinition: swaggerDefinition, apis: ['./swagger/**/*.yaml']};
+const swagDoc = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(morganMiddleware);
 app.use(authMiddleware);
