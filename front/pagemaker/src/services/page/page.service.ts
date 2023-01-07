@@ -1,5 +1,4 @@
 import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
-import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import { displayMessage } from '@/common/displayMessage';
 import type { ValidField } from '@/components/base/formFields/inputText/model';
 import { pagesService } from '@/services/pages/pages.service';

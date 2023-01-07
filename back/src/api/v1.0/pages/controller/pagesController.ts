@@ -1,5 +1,4 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
-import { getUserAndSiteId } from '../../../../common/functions/userAndSiteId';
 import { collection, getDocs } from '@firebase/firestore';
 import { logger } from '../../../../logger';
 import { firebaseDb } from '../../../../firebase/initFirebase';

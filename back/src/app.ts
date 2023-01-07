@@ -34,8 +34,6 @@ const swaggerDefinition = {
   host: 'localhost:3000', // the host or url of the app
   basePath: '/src/api', // the basepath of your endpoint
 }
-const options = { swaggerDefinition: swaggerDefinition, apis: ['./swagger/**/*.yaml']};
-const swagDoc = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(morganMiddleware);
 app.use(authMiddleware);
