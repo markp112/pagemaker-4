@@ -52,7 +52,6 @@ function userImages() {
     const path = getStorageRef(userId, bucket);
     try {
       const url = await getDownloadURL(storageRef(storage, `${path}/${fileName}`));
-      console.log('%c⧭', 'color: #408059', url, 'url');
       return url;
     } catch (err) {
       logger.error(err);
@@ -77,7 +76,7 @@ function userImages() {
       const url = await getImageUrl(userId, bucket, file);
       const imageFile: MetaData = {
         name: metaData.name,
-        url: await getImageUrl(userId, bucket, file),
+        url: url,
         tags: metaData.customMetadata?.tags.split(',')
       };
       return imageFile;

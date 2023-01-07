@@ -13,6 +13,16 @@ function PageService() {
   const store = usePageStore();
   const siteStore = useSiteStore();
   const getRoute = (siteId: string, pageId: string) => `${BASE_ROUTE}${siteId}/${pageId}`;
+  
+  const isUniquePageName = (pageName: string): ValidField => {
+    const pageNameIsValid = { isValid: true, message: '' };
+    const isValid = pagesService().isUniquePageName(pageName);
+    if(!isValid) {
+      pageNameIsValid.isValid = isValid;
+      pageNameIsValid.message = "Page name must be unique, a page already exists with this name";
+    }
+    return pageNameIsValid;
+  }
 
   function createNewPage(siteId: string) {
     const page: PageMetaData = {
@@ -58,15 +68,7 @@ function PageService() {
     return isUniquePageName(name);
   }
 
-  const isUniquePageName = (pageName: string): ValidField => {
-    const pageNameIsValid = { isValid: true, message: '' };
-    const isValid = pagesService().isUniquePageName(pageName);
-    if(!isValid) {
-      pageNameIsValid.isValid = isValid;
-      pageNameIsValid.message = "Page name must be unique, a page already exists with this name";
-    }
-    return pageNameIsValid;
-  }
+
 
   return { createNewPage, savePage, validatePageName };
 }
