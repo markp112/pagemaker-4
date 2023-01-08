@@ -1,0 +1,39 @@
+
+#   /pages/{userId}/{pageId}/metadata:
+  get:
+    tags: 
+      - page
+    summary: Get a page 
+    parameters:
+      $ref: './userAndPage.yaml'
+    responses:
+      '200':
+        description: returns the requested page
+        content:
+          application/json:
+            schema:
+              $ref: './page.yaml'
+      '404': 
+        description: not found
+#   /pages/{userId}/{pageId}/metadata:
+  post:
+    tags:
+      - page
+    summary: create a new page
+    description: expects the pageid to be -1
+    parameters:
+      $ref: './userAndPage.yaml'
+    requestBody:
+      description: details of the page meta data to be created
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './page.yaml'
+    responses:
+      '201': 
+        description: site created, returns back the new site with the updated id
+        content:
+          application/json:
+            schema:
+              $ref: './page.yaml'

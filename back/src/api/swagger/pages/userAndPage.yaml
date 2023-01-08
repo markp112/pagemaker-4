@@ -1,0 +1,12 @@
+  - name: userId
+    in: path
+    required: true
+    description: id of the current user
+    schema:
+      type: string
+  - name: pageId
+    in: path
+    required: true
+    description: id of the requested page
+    schema:
+      type: string

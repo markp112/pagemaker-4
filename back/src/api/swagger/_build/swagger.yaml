@@ -3,7 +3,7 @@ info:
   title: Pagemaker API.
   version: 0.1.0
 servers:
-  - url: http://localhost:4200/api/v1.0
+  - url: 'http://localhost:4200/api/v1.0'
     description: Pagemaker API V1.0
 paths:
   /auth/login:
@@ -21,9 +21,8 @@ paths:
             schema:
               $ref: '#components/schemas/login'
       responses:
-        '200': 
+        '200':
           description: user has successfully logged in
-
   /sites:
     get:
       tags:
@@ -42,15 +41,14 @@ paths:
       responses:
         '200':
           description: array containing the list of sites or empty array if none have been created
-          content: 
+          content:
             application/json:
               schema:
                 type: array
                 items:
                   type: object
                   $ref: '#/components/schemas/site'
-                  
-  /sites/{userId}/{siteId}/materialcolours:
+  '/sites/{userId}/{siteId}/materialcolours':
     get:
       tags:
         - public
@@ -72,7 +70,7 @@ paths:
             type: string
       responses:
         '200':
-          description: 'An object containing colours assigned according to the Material colour convention'
+          description: An object containing colours assigned according to the Material colour convention
           content:
             application/json:
               schema:
@@ -80,9 +78,8 @@ paths:
                 items:
                   type: object
                   $ref: '#/components/schemas/colour'
-
-  /sites/{userId}/{siteId}/colourpalette:
-    get: 
+  '/sites/{userId}/{siteId}/colourpalette':
+    get:
       tags:
         - sites
         - site
@@ -109,13 +106,11 @@ paths:
                 type: array
                 items:
                   type: string
-  
     post:
       tags:
-        - sites
-          - site
+        - sites - site
       summary: stores the selected material colours for the site
-      description: Based on the material framework this saves the colours chosen by the user for things like the primary colour, surface text etc
+      description: 'Based on the material framework this saves the colours chosen by the user for things like the primary colour, surface text etc'
       requestBody:
         required: true
         content:
@@ -124,13 +119,12 @@ paths:
               $ref: '#/components/schemas/material-colours'
       responses:
         '201':
-          description: 'Material colours were saved'
+          description: Material colours were saved
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/material-colours'
-
-  /sites/{userId}/{siteId}:
+  '/sites/{userId}/{siteId}':
     post:
       tags:
         - site
@@ -167,16 +161,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/site'
-
-  /pages/{userId}/{siteId}:
+  '/pages/{userId}/{siteId}':
     get:
       tags:
         - public
         - pages
       summary: returns an array of pages for the given user and site
       parameters:
-        - $ref: "#/components/parameters/userId"
-        - $ref: "#/components/parameters/siteId"
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/siteId'
       responses:
         '200':
           description: returns an array of the pages
@@ -186,12 +179,94 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref: "#/components/schemas/pages"
-
-  /pages/{userId}/{pageId}/metadata:
-    $ref: './pages/routes.yaml'
-
-  /users/{userId}/images/url/${userBucket}:
+                  $ref: '#/components/schemas/pages'
+  '/pages/{userId}/{pageId}/metadata':
+    get:
+      tags:
+        - page
+      summary: Get a page
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: id of the current user
+          schema:
+            type: string
+        - name: pageId
+          in: path
+          required: true
+          description: id of the requested page
+          schema:
+            type: string
+      responses:
+        '200':
+          description: returns the requested page
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1pages~1%7BuserId%7D~1%7BpageId%7D~1metadata/post/requestBody/content/application~1json/schema'
+        '404':
+          description: not found
+    post:
+      tags:
+        - page
+      summary: create a new page
+      description: expects the pageid to be -1
+      parameters:
+        $ref: '#/paths/~1pages~1%7BuserId%7D~1%7BpageId%7D~1metadata/get/parameters'
+      requestBody:
+        description: details of the page meta data to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: A page
+              properties:
+                pageId:
+                  title: pageId
+                  description: unique id of this page
+                  type: string
+                name:
+                  title: Page name
+                  description: the page name e.g. home page
+                  type: string
+                width:
+                  title: pqge width
+                  description: css class defining the page width
+                  type: string
+                height:
+                  title: Page height
+                  description: css class defining page height
+                  type: string
+                backgroundColour:
+                  title: Background Colour
+                  description: Background Colour for the page
+                  type: string
+                colour:
+                  title: text colour
+                  description: text colour for the page
+                  type: string
+                icon:
+                  title: icon
+                  description: Icon for the page
+                  type: string
+                created:
+                  title: Date created
+                  description: date the page was created
+                  type: string
+                edited:
+                  title: Date edited
+                  description: date the page was kast edited
+                  type: string
+      responses:
+        '201':
+          description: 'site created, returns back the new site with the updated id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1pages~1%7BuserId%7D~1%7BpageId%7D~1metadata/post/requestBody/content/application~1json/schema'
+  '/users/{userId}/images/url/${userBucket}':
     get:
       tags:
         - public
@@ -199,12 +274,12 @@ paths:
       summary: returns the download url for an image
       description: returns the download url for an image
       parameters:
-        - $ref: "#/components/parameters/userId"
+        - $ref: '#/components/parameters/userId'
         - name: userBucket
           in: path
           required: true
           schema:
-            $ref: "#/components/schemas/user-bucket"
+            $ref: '#/components/schemas/user-bucket'
       responses:
         '200':
           description: string url for the file long lived
@@ -212,8 +287,7 @@ paths:
             application/json:
               schema:
                 type: string
-
-  /users/{userId}/images/list/${userBucket}:
+  '/users/{userId}/images/list/${userBucket}':
     get:
       tags:
         - public
@@ -221,12 +295,12 @@ paths:
         - images
       summary: return a list of images for a given bucket
       parameters:
-        - $ref: "#/components/parameters/userId"
+        - $ref: '#/components/parameters/userId'
         - name: userBucket
           in: path
           required: true
           schema:
-            $ref: "#/components/schemas/user-bucket"
+            $ref: '#/components/schemas/user-bucket'
       responses:
         '200':
           description: Returns a list of images in the bucket
@@ -236,8 +310,7 @@ paths:
                 type: array
                 items:
                   type: object
-                  $ref:  "#/components/schemas/bucket-image"
-
+                  $ref: '#/components/schemas/bucket-image'
   /settings/colours:
     get:
       tags:
@@ -247,21 +320,18 @@ paths:
       summary: get the default colour palette for a site
       description: returns the default colour palette for a given site
       parameters:
-        - $ref: "#/components/parameters/siteId"
+        - $ref: '#/components/parameters/siteId'
       responses:
         '200':
           description: array containing a list of the colours for the palette
-          content: 
+          content:
             application/json:
               schema:
                 type: array
                 items:
                   type: object
                   $ref: '#/components/schemas/colour'
-
-
-
-  /private/menus/navmenu/{isLoggedIn}:
+  '/private/menus/navmenu/{isLoggedIn}':
     get:
       tags:
         - navmenu
@@ -277,15 +347,14 @@ paths:
             type: boolean
       responses:
         '200':
-          description: 'JSON array of menu items'
+          description: JSON array of menu items
           content:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   type: object
                   $ref: '#/components/schemas/NavMenuItem'
-
   /private/toolbar/toolbar-items/elements:
     get:
       tags:
@@ -303,9 +372,7 @@ paths:
                 items:
                   type: object
                   $ref: '#components/schemas/toolbar-elements'
-
 components:
-
   parameters:
     userId:
       name: userId
@@ -314,7 +381,6 @@ components:
       description: logged in user id
       schema:
         type: string
-    
     siteId:
       name: siteId
       in: path
@@ -322,7 +388,6 @@ components:
       description: The current site user is working on
       schema:
         type: string
-
   schemas:
     NavMenuItem:
       type: object
@@ -333,7 +398,7 @@ components:
           title: unique identifier for this menu item
         navText:
           type: string
-          description:  text to appear in the menu
+          description: text to appear in the menu
         navLink:
           type: string
           description: page url to link to
@@ -342,8 +407,7 @@ components:
           description: Toggle to show hide the menu item
         isLoggedIn:
           type: boolean
-          description: Chooses if the menu option is available according to whether the user is logged in or not, set to false to show on the logged out menu, to true to show when user is logged in
-        
+          description: 'Chooses if the menu option is available according to whether the user is logged in or not, set to false to show on the logged out menu, to true to show when user is logged in'
     login:
       type: object
       title: Login credentials
@@ -354,7 +418,6 @@ components:
         password:
           title: password for user
           type: string
-
     site:
       type: object
       title: A site
@@ -368,13 +431,12 @@ components:
         description:
           title: description of the site
           type: string
-        image: 
+        image:
           title: url pointing to an image linked to the site
           type: string
-        name: 
+        name:
           title: The name of the site
           type: string
-
     toolbar-elements:
       type: object
       title: a toolbar element
@@ -382,7 +444,7 @@ components:
         classes:
           title: list of tailwind classes that format this item on the screen
           type: string
-          example: 'bg-gray-200 flex flex-row flex-wrap'
+          example: bg-gray-200 flex flex-row flex-wrap
         componentName:
           title: unique name for this component
           type: string
@@ -414,7 +476,7 @@ components:
               type: object
               $ref: '#components/schemas/unit-and-value'
         toolbarIcon:
-          title: icon shown in the toolbar, name of an image to display
+          title: 'icon shown in the toolbar, name of an image to display'
           type: string
         tooltip:
           title: tooltip to display
@@ -422,7 +484,6 @@ components:
         type:
           title: type of element
           type: string
-
     unit-and-value:
       type: object
       title: CSS unit with value and type
@@ -430,11 +491,10 @@ components:
         unit:
           title: unit to be used
           type: string
-          example: 'px % em rem'
+          example: px % em rem
         value:
           title: numeric value assigned to the unit
           type: number
-
     colour:
       type: object
       title: colours
@@ -447,7 +507,6 @@ components:
           title: value
           description: hex value assigned to the colour
           type: string
-
     pages:
       type: object
       title: A page
@@ -479,7 +538,7 @@ components:
         icon:
           title: icon
           description: Icon for the page
-          type: string  
+          type: string
         created:
           title: Date created
           description: date the page was created
@@ -488,7 +547,6 @@ components:
           title: Date edited
           description: date the page was kast edited
           type: string
-
     user-bucket:
       type: object
       title: userBucket
@@ -500,7 +558,6 @@ components:
         userId:
           title: filename
           type: string
-    
     bucket-image:
       type: object
       title: Bucket Image
@@ -509,33 +566,30 @@ components:
         bucket:
           title: bucket name
           type: string
-        fullpath: 
+        fullpath:
           title: full path to the image
           type: string
         name:
           title: filename of the image
           type: string
-    
     material-colours:
       type: object
       title: Material colours
       description: contains the material colour settings for a users site
       properties:
         paletteName:
-          title: Palette Name - can be one of Primary, secondary, accent, error, surface
+          title: 'Palette Name - can be one of Primary, secondary, accent, error, surface'
           type: string
         colours:
           title: array of colour values
           type: object
           properties:
-            name: 
-              title: name of the colour values can be neutral, light or dark
+            name:
+              title: 'name of the colour values can be neutral, light or dark'
               type: string
             hexColourText:
               title: the hex colour value for text linked to this item
               type: string
             hexColourBackground:
               title: the colour to be applied to the background of the element
-              type:  string
-
-  
+              type: string

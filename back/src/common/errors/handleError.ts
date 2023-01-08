@@ -1,4 +1,3 @@
-import { isType } from '@babel/types';
 import { FirebaseError } from '@firebase/util';
 import { logger } from '@logger/index';
 import { DomainError, GenericError, InsufficientPermissions } from '.';

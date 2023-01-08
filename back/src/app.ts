@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-const swaggerDoc = YAML.load('./src/api/swagger/swagger.yaml');
+const swaggerDoc = YAML.load('./src/api/swagger/_build/swagger.yaml');
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(morganMiddleware);
 app.use(authMiddleware);

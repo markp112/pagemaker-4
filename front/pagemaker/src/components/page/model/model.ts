@@ -12,21 +12,9 @@ type Dimension = {
   left: Unit,
 };
 
-type Page = {
-  pageId: string,
-  name: string,
-  width: string,
-  height: string,
-  backgroundColour: string,
-  colour: string,
-  created: Date,
-  edited: Date,
-  icon: string,
-};
 
 export type {
   Units,
   Unit,
   Dimension,
-  Page
 }

@@ -12,7 +12,8 @@ type Dimension = {
   left: Unit,
 };
 
-type Page = {
+type PageMetaData = {
+  siteId: string,
   pageId: string,
   name: string,
   width: string,
@@ -25,4 +26,4 @@ type Page = {
 };
 
 
-export { Units, Unit, Dimension, Page };
+export { Units, Unit, Dimension, PageMetaData };

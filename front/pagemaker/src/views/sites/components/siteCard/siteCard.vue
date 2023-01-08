@@ -6,7 +6,7 @@
     </div>
     <div class="grid grid-cols-3 grid-rows-2 gap-2 place-items-center h-32 mt-4" v-if="!showDeleteWarning">
 
-      <span class="row-start-2 col-start-1">
+      <span class="row-start-2 col-start-1 relative">
         <img :src="getIcon('trash_can_32.png')"
           class="icon"
           @click="showDeleteWarning=!showDeleteWarning"
@@ -20,7 +20,7 @@
         class="cursor-pointer w-32 h-auto row-start-1 col-start-1 col-span-3"
         @click="goClick()"
         />
-      <span class="row-start-2 col-start-3">
+      <span class="row-start-2 col-start-3 relative">
         <img :src="getIcon('pencil-32.png')"
           alt="edit"
           class="icon"

@@ -1,4 +1,3 @@
-import { HttpStatusCode } from 'axios';
 import { httpStatusCodes } from '../../api/httpStatusCodes/index';
 import type { Response } from '../../api/types';
 import { logger } from '../../logger';

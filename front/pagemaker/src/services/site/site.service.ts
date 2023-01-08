@@ -4,9 +4,8 @@ import { siteDefaultColours } from '@/classes/sites/siteColours/colour';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import type { SiteTypography, } from '@/classes/sites/typography/model';
-import type { SnackbarType } from '@/components/base/notifications/snackbar/models';
+import { displayMessage } from '@/common/displayMessage';
 import { useSiteStore } from '@/stores/site.store';
-import { useSnackbarStore } from '@/stores/snackbar.store';
 import { FileUploadService } from '../fileUpload/fileUpload.service';
 import { axiosClient, type ResponseError } from '../httpService';
 
@@ -16,16 +15,6 @@ function siteService() {
   const store = useSiteStore();
   const getRoute = (siteAndUser: SiteAndUser) => `${BASE_ROUTE}${siteAndUser.userId}/${siteAndUser.siteId}`;
 
-  function displayMessage(msg: string, type: SnackbarType, title: string) {
-    useSnackbarStore().setSnackbarMessage(
-      { 
-        type: type,
-        payload: {
-          message: msg,
-          title: title 
-        }
-      });
-  }
 
   async function getSiteMaterialColours(siteAndUser: SiteAndUser):Promise<void> {
     try {

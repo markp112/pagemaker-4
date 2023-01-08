@@ -1,0 +1,39 @@
+  type: object
+  title: A page
+  properties:
+    pageId:
+      title: pageId
+      description: unique id of this page
+      type: string
+    name:
+      title: Page name
+      description: the page name e.g. home page
+      type: string
+    width:
+      title: pqge width
+      description: css class defining the page width
+      type: string
+    height:
+      title: Page height
+      description: css class defining page height
+      type: string
+    backgroundColour:
+      title: Background Colour
+      description: Background Colour for the page
+      type: string
+    colour:
+      title: text colour
+      description: text colour for the page
+      type: string
+    icon:
+      title: icon
+      description: Icon for the page
+      type: string  
+    created:
+      title: Date created
+      description: date the page was created
+      type: string
+    edited:
+      title: Date edited
+      description: date the page was kast edited
+      type: string

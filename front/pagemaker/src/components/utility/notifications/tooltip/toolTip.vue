@@ -25,7 +25,7 @@ export default defineComponent({
 
   computed: {
     show(): boolean {
-      return this.$props.showToolTip;
+      return this.$props.showToolTip && this.tooltip !=='';
     },
 
   }
