@@ -179,36 +179,9 @@ export default defineComponent ({
     },
     
     async saveClick() {
-      console.log('%c⧭', 'color: #917399', 'saveClick')
-      console.log('%c⧭', 'color: #d90000', this.page)
       await this.pageService.savePage(this.page); 
       
     },
-    
-    // savePage(): void {
-    //   this.store.dispatch(AllActionTypes.ADD_A_NEW_PAGE,
-    //   {
-    //     page: this.page,
-    //     siteAndUser: this.siteAndUser,
-    //   }
-    //   )
-    //   .then(result => {
-    //     const notification = result;
-    //     if (notification.status === "ok") {
-    //       const message = `The ${this.page.name} page has been created`;
-    //       console.log('%c⧭', 'color: #007300', message)
-    //       showTheSnackbar('Page saved', message, 'success')
-    //     } else {
-    //       const message = notification.message;
-    //       console.log('%c⧭', 'color: #006dcc', message)
-    //       showTheSnackbar('Error', message, 'error');
-    //     }
-    //   })
-    //   .catch(err => {
-    //     const errMsg = err as Notification;
-    //     showTheSnackbar( "Error", errMsg.message, 'error');
-    //   });
-    // },
 },
   
 })

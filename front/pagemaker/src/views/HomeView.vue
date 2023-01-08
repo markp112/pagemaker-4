@@ -7,7 +7,7 @@
   </div>
   <div class="flex flex-row justify-center w-100 relative">
     <div class="mt-8 w-full">
-      <div class="h-full absolute left-0 top-4 border-r border-gray-400 mr-2 z-50" :class="getToolbarClasses" >
+      <div class="h-full absolute left-0 top-4 border-r border-gray-400 mr-2 z-50 shadow-lg" :class="getToolbarClasses" >
         <Toolbar @toggle-clicked="toolbarToggleClicked"
           :toolbarHidden="toolbarHidden"
         /> 

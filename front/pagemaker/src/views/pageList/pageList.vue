@@ -1,10 +1,10 @@
 <template>
-  <section>
+  <section class="container w-full">
     <div class="flex flex-row justify-between mt-8">
       <h2 class="page-heading ml-4">My Pages</h2>
-      <div class="w-32">
+      <div class="w-auto">
         <base-button
-          class="mr-4 w-32"
+          class="mr-4"
           buttonType="primary"
           variant="solid"
           @onClick="createNewPage()"
@@ -13,48 +13,43 @@
         </base-button>
       </div>
     </div>
-    <div class="flex flex-row justify-evenly font-bold ml-4 mt-10">
-      <span class="w-1/12"></span>
-      <span class="w-2/12">Page Name</span>
-      <span class="w-2/12">Date Created</span>
-      <span class="w-2/12">Last Edited</span>
-      <span class="w-2/12">Active</span>
-      <span class="w-1/12"></span>
-    </div>
-    <ul class="flex flex-col justify-start ml-4">
-      <li v-for="page in pageList" :key="page.name" class="">
-        <div class="flex flex-row justify-start">
-          <span
-            class="hover:bg-site-secondary-light hover:text-accent-1 w-11/12 p-1 mt-1 flex flex-row justify-evenly items-center cursor-pointer rounded-md"
-            @click="pageRowClick(page.name)"
-          >
-            <span class="w-1/12">
-              <span class="w-8 shadow-md">
-                <img :src="getIcon(page.icon)" alt=""/>
+    <div class="flex flex-row justify-center font-bold mt-10 text-lg">
+        <div class="basis-2/12"></div>
+        <div class="basis-2/12">Page Name</div>
+        <div class="basis-2/12">Date Created</div>
+        <div class="basis-2/12">Last Edited</div>
+        <div class="basis-2/12">Active</div>
+        <div class="basis-2/12"></div>
+    </div>  
+    
+      <ul class="flex flex-row justify-center font-semibold text-lg w-full">
+        <li v-for="page in pageList" 
+          :key="page.name"
+          class="hover:bg-site-secondary-light hover:text-accent-1 p-1 mt-1 cursor-pointer rounded-md flex flex-row justify-start w-full ml-2"
+          @click="pageRowClick(page.name)"
+        >
+              <span class="basis-2/12 self-end"></span>
+              <span class="basis-2/12">
+                <img :src="getIcon(page.icon)" alt="" class="w-8 h-8 inline-block mr-2 -ml-8"/>
+                {{ page.name }}
               </span>
-            </span>
-            <span class="w-2/12 text-left">
-              {{ page.name }}
-            </span>
-            <span class="w-2/12">
-              {{ formatDate(page.created) }}
-            </span>
-            <span class="w-2/12">
-              {{ formatDate(page.edited) }}
-            </span>
-            <span class="w-2/12 self-start">
-              <input type="checkbox" value="page.active" readonly />
-            </span>
-          </span>
-          <img
-            src="@/assets/icons/pencil-24.png"
-            alt="Edit pencil"
-            @click="editPageClick(page.name)"
-            class="w-8 h-8 hover:shadow-xl cursor-pointer"
-          />
-        </div>
-      </li>
-    </ul>
+              <span class="basis-2/12">
+                {{ formatDate(page.created) }}
+              </span>
+              <span class="basis-2/12">
+                {{ formatDate(page.edited) }}
+              </span>
+              <span class="basis-2/12 -ml-16">
+                <input type="checkbox" value="page.active" readonly />
+              </span>
+              <img
+              src="@/assets/icons/pencil-24.png"
+              alt="Edit pencil"
+              @click="editPageClick(page.name)"
+              class="w-8 h-8 hover:shadow-xl cursor-pointer"
+              />
+        </li>
+      </ul>
   </section>
 </template>
 
@@ -67,7 +62,6 @@ import { pagesService } from '@/services/pages/pages.service';
 import { usePagesStore } from '@/stores/pages.store';
 import { useSiteStore } from '@/stores/site.store';
 import { PageService } from '@/services/page/page.service';
-import { stringifyQuery } from 'vue-router';
 
 export default defineComponent({
   name: 'PageList',
@@ -125,7 +119,7 @@ export default defineComponent({
     
     pageRowClick(pageName: string) {
       this.$router.push({
-        name: 'page-builder',
+        name: 'home',
         params: {
           title: pageName,
         },
