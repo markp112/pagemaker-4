@@ -23,16 +23,24 @@ function PageService() {
     return pageNameIsValid;
   }
 
-  function createNewPage(siteId: string) {
+  function createNewPage(newSiteId: string) {
+    const created = new Date(); 
+    const edited = new Date();
+    const icon = '';
+    const pageId = NEW_PAGE;
+    const siteId = newSiteId;
+    const name = '';
+    const backgroundColour = getSiteBackgroundColour();
+    const colour = getSiteTextColour();
     const page: PageMetaData = {
-      created: new Date(),
-      edited: new Date(),
-      icon: '',
-      pageId: NEW_PAGE,
-      siteId:siteId,
-      name: '',
-      backgroundColour: getSiteBackgroundColour(),
-      colour: getSiteTextColour(),
+      created,
+      edited,
+      icon,
+      pageId,
+      siteId,
+      name,
+      backgroundColour,
+      colour,
       height: { value: 1024, unit: 'px' },
       width: { value: 1280, unit: 'px' },
     };

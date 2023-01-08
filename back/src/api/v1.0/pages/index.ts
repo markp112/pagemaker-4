@@ -39,7 +39,6 @@ pagesRouter
     try {
       const page: PageMetaData = req.body;
       page.pageId = Guid.newGuid();
-      console.log('%c⧭', 'color: #33cc99', page);
       const response = await pageController().savePageMetaData(page, true);
       res.status(response.status).send(response);
     }catch (error) {
