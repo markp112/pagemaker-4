@@ -1,17 +1,17 @@
 import type { Style } from '../model/pageElement/pageElement';
 
-function stylesToString(styles: Style[]): string {
-  let style = "";
-  if (styles.length > 0) {
-    styles.forEach(element => {
-      style += `${element.style}:${element.value};`;
-    });
+function stylesToString(styleCollection: Style[]): string {
+  let styles = '';
+  if (styleCollection.length > 0) {
+    for(const style of styleCollection) {
+      styles+= `${style.style}:${style.value}`;
+      if(style.unit) {
+        styles += `${style.unit}`;
+      }
+      styles += `;`;
+    }
   }
-  // style += `${this._dimension.toStyle()};`;
-  // if (this.isAbsolute) {
-  //   style += `${this._location.toStyle()};`;
-  // }
-  return style;
+  return styles;
 }
 
 export { stylesToString };

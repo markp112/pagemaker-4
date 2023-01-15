@@ -10,6 +10,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { stylesToString } from '../functions/stylesToString';
 import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';
 
 
@@ -39,13 +40,7 @@ import type { PageElement, PropsDefinition } from '../model/pageElement/pageElem
       getStyles(): string {
         let styles = '';
         if(this.thisComponent.styles) {
-          for(const style of this.thisComponent.styles) {
-            styles += `${style.style}:${style.value}`;
-            if(style.unit) {
-              styles += `${style.unit}`;
-            }
-            styles += `;`;
-          }
+          styles =stylesToString(this.thisComponent.styles)
         }
         styles += this.getDimensions();
         return styles;
