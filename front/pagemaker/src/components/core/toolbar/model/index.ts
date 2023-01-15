@@ -1,18 +1,8 @@
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
+import type { ComponentTypesString } from '@/components/page/model/pageElement/pageElement';
 
-export type ComponentTypesString =
-| undefined
-| 'container'
-| 'jumbo'
-| 'button'
-| 'navBar'
-| 'pageTemplate'
-| 'text'
-| 'image'
-| 'rootContainer';
-
-export interface Toolbar {
+export interface ToolbarComponentItem {
   componentName: string;
   dimension: Dimension;
   location: Location;

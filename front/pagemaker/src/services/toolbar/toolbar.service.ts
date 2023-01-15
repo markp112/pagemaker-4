@@ -1,4 +1,4 @@
-import type { Toolbar } from '@/components/core/toolbar/model';
+import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
 import { useToolbarStore } from '@/stores/toolbars.store';
 import { axiosClient } from '../httpService';
 
@@ -8,10 +8,11 @@ function toolbarService() {
 
   async function getToolBarItems() {
     try {
-      const toolbar = await axiosClient().get<Toolbar[]>(`${baseRoute}`);
-      if (toolbar.length > 0) {
+      const toolbarItems = await axiosClient().get<ToolbarComponentItem[]>(`${baseRoute}`);
+      console.log('%c⧭', 'color: #735656', toolbarItems);
+      if (toolbarItems.length > 0) {
         store.clear();
-        store.setItems(toolbar);
+        store.setItems(toolbarItems);
       }
     } catch (error) {
       console.log('%c⧭', 'color: #1d3f73', error);

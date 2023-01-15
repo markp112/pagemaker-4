@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
-import type { Toolbar } from './model';
+import type { ToolbarComponentItem } from './model';
 import toolTipVue from '@/components/utility/notifications/tooltip/toolTip.vue';
 import { getImageUrl } from '@/common/getIcon';
 import { drag } from '@/components/utility/composables/draggable/draggable';
@@ -32,7 +32,7 @@ import { drag } from '@/components/utility/composables/draggable/draggable';
 
     props: {
       toolbarItem: {
-        type: Object as PropType<Toolbar>,
+        type: Object as PropType<ToolbarComponentItem>,
         required: true
       }
     },

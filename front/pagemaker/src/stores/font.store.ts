@@ -41,8 +41,8 @@ const useFontStore = defineStore({
       return this._fontItems.filter(font => font.fontType === fontType)
     },
 
-    initWebFonts() {
-      WebFont.load({
+    async initWebFonts() {
+      await WebFont.load({
         google: {
           families: this.fontNameList.slice(0, 1100),
         },

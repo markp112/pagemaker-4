@@ -1,39 +1,55 @@
 <template>
-  <div class="border border-gray-800 page-shadow" 
+  <div class="border border-gray-800 page-shadow flex flex-col justify-start" 
     :style="getScaledPageSize"
     @dragover.prevent
     @drop.prevent="onDrop($event)"
   >
-heloe
+
+    <component v-for="(component, index) in pageElements"
+      :is="component.componentHTMLTag"
+      :key="index"
+      :index="index"
+      v-bind="getProps(component)"
+      @dragover.prevent
+      @drop.prevent="onDrop($event)"
+    >{{ component }}</component>
   </div>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent, } from 'vue';
-import type { Page } from './model/model';
-import { useToolbarStore } from '@/stores/toolbars.store';
-import { ComponentCounter } from '@/classes/componentCounter/componentCounter';
+import { defineComponent, type PropType, } from 'vue';
+import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
+import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
+import type { PageElement } from './model/pageElement/pageElement';
+import ContainerVue from './container/container.vue';
+import Container from './container/container.vue';
 
   export default defineComponent({
     name: 'page',
 
-    
     props: {
       page: {
-        type: Object as PropType<Page>
-        },
-        scale: Number
+        type: Object as PropType<PageMetaData>
       },
-      
+      scale: Number,
+      pageElements: {
+        type: Array as PropType<PageElement[]>,
+        required: true,
+      }
+    },
+    components: {
+      container: Container,
+    },
+
       data() {
         return {
-        store: useToolbarStore(),
-        componentCounter: ComponentCounter.getInstance(),
+        pageBuilderService: PageBuilderService(),
+        container:  defineComponent(() => import('./container/container.vue')),
       }
     },
 
     computed: {
+  
 
       getScaledPageSize(): string {
         let pageSize = '';
@@ -48,21 +64,19 @@ import { ComponentCounter } from '@/classes/componentCounter/componentCounter';
     },
 
     methods: {
+      getProps(component: PageElement) {
+        return {component: ContainerVue, props: {thisComponent: component}};
+      },
+    
+
       onDrop(event: DragEvent): void {
         console.log('dropped')
         const componentName = this.getComponentName(event);
-        const component = this.store.toolbarItems.filter(toolbarItem => toolbarItem.componentName === componentName)[0];
-        const id = this.componentCounter.getNextCounter();
-        const ref = `${componentName}::${id}`;
-        if (component) {
-          console.log(ref);
-        }
-        console.log('%c⧭', 'color: #eeff00', componentName);
+        this.pageBuilderService.createNewComponent(componentName);
       },
       
       getComponentName(event: DragEvent): string {
         const dataTransfer = event.dataTransfer;
-        console.log('%c⧭', 'color: #73998c', dataTransfer?.getData('text'))
         return dataTransfer ? dataTransfer.getData('text') : '';
       }
     },

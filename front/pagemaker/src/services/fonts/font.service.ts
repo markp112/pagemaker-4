@@ -7,7 +7,7 @@ export function FontService() {
 
   async function getFontsFromGoogle() {
     const fontData = await axiosClient().get<GoogleFontItemInterface[]>(BASE_ROUTE);
-    storeFonts(fontData);
+    await storeFonts(fontData);
   }
 
   async function storeFonts(fontData: GoogleFontItemInterface[]) {

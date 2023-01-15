@@ -13,7 +13,7 @@
         /> 
       </div>
       <div class="mt-4 bg-white w-full z-0" >
-        <Canvas :zoom-page="zoomPage"/>
+        <PageCanvas :zoom-page="zoomPage" :page-elements="getPageElements()"/>
       </div>
     </div>
   </div>
@@ -23,12 +23,12 @@
 import type { NavMenuItem } from '@/components/core/navbar/navbar';
 import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
 import { defineComponent } from 'vue';
-import Canvas from '@/components/canvas/canvas.vue';
 import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
 import type { SliderPosition, SliderSettings } from '@/components/canvas/scaler/model';
 import Scaler from '@/components/canvas/scaler/scaler.vue';
-import { auth } from '@/services/auth';
-
+import { usePageStore } from '@/stores/page.store';
+import type { PageElement } from '@/components/page/model/pageElement/pageElement';
+import PageCanvas from '@/components/canvas/pageCanvas.vue';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -47,7 +47,7 @@ const sliderPosition: SliderPosition = {
     name: 'main',
     
     components: {
-      Canvas,
+      PageCanvas,
       Toolbar: toolbarPanelVue,
       Scaler,
     },
@@ -55,6 +55,7 @@ const sliderPosition: SliderPosition = {
     data() {
       return {
         store: useNavMenuItemStore(),
+        pageStore: usePageStore(),
         menuItems: [] as NavMenuItem[],
         toolbarWidth: 'w-64',
         toolbarHidden: false,
@@ -88,6 +89,10 @@ const sliderPosition: SliderPosition = {
 
       sliderChange(newValue: number) {
         this.zoomPage = newValue / 100;;
+      },
+
+      getPageElements(): PageElement[] {
+        return this.pageStore.pageElements as PageElement[];
       },
     },
 
