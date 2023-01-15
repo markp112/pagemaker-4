@@ -9,7 +9,6 @@ function toolbarService() {
   async function getToolBarItems() {
     try {
       const toolbarItems = await axiosClient().get<ToolbarComponentItem[]>(`${baseRoute}`);
-      console.log('%c⧭', 'color: #735656', toolbarItems);
       if (toolbarItems.length > 0) {
         store.clear();
         store.setItems(toolbarItems);

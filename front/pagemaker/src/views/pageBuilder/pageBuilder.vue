@@ -44,7 +44,7 @@ const sliderPosition: SliderPosition = {
 };
 
   export default defineComponent({
-    name: 'main',
+    name: 'pageBuilder',
     
     components: {
       PageCanvas,

@@ -19,7 +19,6 @@ function siteService() {
   async function getSiteMaterialColours(siteAndUser: SiteAndUser):Promise<void> {
     try {
       const materialColours = await axiosClient().get<MaterialColours>(`${getRoute(siteAndUser)}/materialcolours`);
-      console.log('%c⧭', 'color: #006dcc', materialColours);
       if (materialColours) {
         store.setMaterialColours(materialColours);
       } else {

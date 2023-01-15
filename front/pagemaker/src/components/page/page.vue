@@ -35,6 +35,7 @@ import Container from './container/container.vue';
       pageElements: {
         type: Array as PropType<PageElement[]>,
         required: true,
+        default: 100,
       }
     },
     components: {
@@ -49,7 +50,6 @@ import Container from './container/container.vue';
     },
 
     computed: {
-  
 
       getScaledPageSize(): string {
         let pageSize = '';

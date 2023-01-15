@@ -1,4 +1,4 @@
-import { AnActionEvent } from '@/classes/actionEvent';[]
+import { AnActionEvent } from '@/classes/actionEvent';
 import { ADimension } from '@/classes/dimension';
 import { ALocation } from '@/classes/location';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
@@ -7,7 +7,7 @@ import type { ComponentTypesString, PageElement, Style, StyleTags } from '@/comp
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
 
 
-type Component = { [key in ComponentTypesString]: any };
+type Component = { [key in ComponentTypesString]: (component: ToolbarComponentItem) => PageElement | PageContainerInterface };
 
 function ComponentFactory() {
 
@@ -15,13 +15,13 @@ function ComponentFactory() {
 
   const ComponentMap: Component  = {
     'jumbo': (component: ToolbarComponentItem) => createContainer(component),
-    'container' : () => {},
-    'button' : () => {},
-    'navBar' : () => {},
-    'pageTemplate' : () => {},
-    'text' : () => {},
-    'image' : () => {},
-    'rootContainer': () => {},
+    'container': (component: ToolbarComponentItem) => createContainer(component),
+    'button':(component: ToolbarComponentItem) => createContainer(component),
+    'navBar':(component: ToolbarComponentItem) => createContainer(component),
+    'pageTemplate':(component: ToolbarComponentItem) => createContainer(component),
+    'text':(component: ToolbarComponentItem) => createContainer(component),
+    'image':(component: ToolbarComponentItem) => createContainer(component),
+    'rootContainer': (component: ToolbarComponentItem) => createContainer(component),
   };
 
   function createComponent(component: ToolbarComponentItem): PageElement | PageContainerInterface {
@@ -81,8 +81,8 @@ function ComponentFactory() {
     ]
   }
 
-  function constructStyle(styleItem: StyleTags, value: string): Style {
-    return { style: styleItem, value: value}
+  function constructStyle(style: StyleTags, value: string): Style {
+    return { style, value };
   }
 
   return { createComponent };
