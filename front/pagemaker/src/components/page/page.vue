@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-gray-800 page-shadow flex flex-col justify-start" 
+  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5" 
     :style="getScaledPageSize"
     @dragover.prevent
     @drop.prevent="onDrop($event)"
