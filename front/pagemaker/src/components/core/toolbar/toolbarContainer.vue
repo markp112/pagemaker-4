@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
-import type { Toolbar } from './model';
+import type { ToolbarComponentItem } from './model';
 import ToolbarItem from './toolbarItem.vue';
 
   export default defineComponent({
@@ -19,7 +19,7 @@ import ToolbarItem from './toolbarItem.vue';
 
     props: {
         toolbarItems: {
-            type: Array as PropType<Toolbar[]>,
+            type: Array as PropType<ToolbarComponentItem[]>,
             required: true,
         },
         title: {

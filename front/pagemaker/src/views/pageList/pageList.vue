@@ -119,10 +119,7 @@ export default defineComponent({
     
     pageRowClick(pageName: string) {
       this.$router.push({
-        name: 'home',
-        params: {
-          title: pageName,
-        },
+        name: 'pagebuilder',
       });
     }
     },

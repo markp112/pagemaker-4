@@ -1,5 +1,5 @@
 
-type ActionEventTypes = "Navigation";
+type ActionEventTypes = 'Navigation' | 'none';
 
 interface ActionEvent {
   actionType: ActionEventTypes;

@@ -29,7 +29,7 @@ import { useToolbarStore } from '@/stores/toolbars.store';
 import { defineComponent } from 'vue';
 import ToolbarItem from './toolbarItem.vue';
 import ToolbarContainer from './toolbarContainer.vue';
-import type { Toolbar } from './model';
+import type { ToolbarComponentItem } from './model';
 import { LEFT_ARROW, RIGHT_ARROW } from '../common/models/showHideIcons';
 
 export default defineComponent({
@@ -63,11 +63,11 @@ export default defineComponent({
   },
 
   computed: {
-    containerItems(): Toolbar[] {
+    containerItems(): ToolbarComponentItem[] {
       return this.containerElements(true);
     },
 
-    elementItems(): Toolbar[] {
+    elementItems(): ToolbarComponentItem[] {
       return this.containerElements(false);
     },
     
@@ -79,7 +79,7 @@ export default defineComponent({
       this.$emit('toggle-clicked')
     },
 
-    containerElements(isContainer: boolean): Toolbar[] {
+    containerElements(isContainer: boolean): ToolbarComponentItem[] {
       return this.store.toolbarItems.filter(toolbarItem => toolbarItem.isContainer === isContainer);
     }
 

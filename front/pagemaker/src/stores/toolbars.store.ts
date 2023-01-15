@@ -1,10 +1,10 @@
-import type { Toolbar } from '@/components/core/toolbar/model';
+import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
 import { defineStore } from 'pinia';
 
 export const useToolbarStore = defineStore({
   id: 'toolbarStore',
   state: () => ({
-    _toolbarItems: [] as Toolbar[],
+    _toolbarItems: [] as ToolbarComponentItem[],
     _isDragging: false,
 
   }),
@@ -16,11 +16,11 @@ export const useToolbarStore = defineStore({
   },
 
   actions: {
-    add(toolbarItem: Toolbar) {
+    add(toolbarItem: ToolbarComponentItem) {
       this._toolbarItems.push(toolbarItem);
     },
 
-    setItems(toolbarItems: Toolbar[]) {
+    setItems(toolbarItems: ToolbarComponentItem[]) {
       this._toolbarItems = toolbarItems;
     },
 

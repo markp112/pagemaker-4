@@ -89,14 +89,13 @@ type StyleTags =
 
 
 
-export type Style =  {
+type Style =  {
   style: StyleTags | CssStyleTypes;
   value: string;
   unit?: Units;
 };
 
-export type ComponentTypesString =
-  | undefined
+type ComponentTypesString =
   | 'container'
   | 'jumbo'
   | 'button'
@@ -123,4 +122,7 @@ interface PageElement {
   isAbsolute: boolean;
 };
 
-export type { PageElement, StyleTags };
+type PropsDefinition = { thisComponent: PageElement };
+
+
+export type { PageElement, StyleTags, ComponentTypesString, Style, CssStyleTypes, PropsDefinition  };

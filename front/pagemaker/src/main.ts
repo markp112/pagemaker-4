@@ -9,7 +9,7 @@ import { FontService } from './services/fonts/font.service';
 const app = createApp(App);
 const pinia = createPinia();
 setActivePinia(pinia);
-FontService().getFontsFromGoogle();
+await FontService().getFontsFromGoogle();
 app.use(pinia);
 app.use(router);
 app.mount("#app");

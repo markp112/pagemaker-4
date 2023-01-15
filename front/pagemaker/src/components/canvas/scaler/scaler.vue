@@ -55,7 +55,6 @@ export default defineComponent({
     methods: {
 
       rangeSlide(value: string) {
-        console.log('%c⧭', 'color: #33cc99', value)
         this.sliderValue = parseInt(value);
         this.$emit('sliderChange', this.sliderValue)
       },

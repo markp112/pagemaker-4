@@ -1,6 +1,5 @@
 import loginVue from '@/views/auth/login.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
 import sitesVue from '@/views/sites/sites.vue';
 import SiteEditor from '@/views/sites/site-editor/siteEditor.vue';
 import pageListVue from '@/views/pageList/pageList.vue';
@@ -10,9 +9,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView,
+      path: '/pagebuilder',
+      name: 'pagebuilder',
+      component:() => import('../views/pageBuilder/pageBuilder.vue'),
+      meta: {
+        breadcrumb: [{ name: 'sites', link: 'sites' }, 
+        {name: 'pages', link: '/pagelist'},
+        {name: 'page-builder'}]
+      }
     },
     {
       path: '/login',

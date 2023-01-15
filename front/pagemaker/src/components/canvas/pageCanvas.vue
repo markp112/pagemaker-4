@@ -1,17 +1,21 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="bg-gray-100 w-full h-screen flex flex-row justify-center mt-4 overflow-auto relative">
-    <Page :page="page" :scale="zoomPage" v-if="zoomPage !== 0" />
+    <Page :page="page" 
+      :page-elements="pageElements"
+      :scale="zoomPage"
+      v-if="zoomPage !== 0" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, } from 'vue';
-import type { Page } from '../page/model/model';
+import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
+import { defineComponent, type PropType, } from 'vue';
+import type { PageElement } from '../page/model/pageElement/pageElement';
 import pageVue from "../page/page.vue";
 
   export default defineComponent({
-    name: 'page',
+    name: 'page-canvas',
     
     components: {
       Page: pageVue,
@@ -21,7 +25,11 @@ import pageVue from "../page/page.vue";
       zoomPage: {
         type: Number,
         required: true,
-      }
+      },
+      pageElements: {
+        type: Array as PropType<PageElement[]>,
+        required: true,
+      },
     },
     
     data() {
@@ -36,13 +44,11 @@ import pageVue from "../page/page.vue";
           edited: undefined,
           icon: '',
           pageId: '',
-        } as unknown as Page,
+        } as unknown as PageMetaData,
       }
     },
 
     methods: {
-
-     
     }
 
   });
