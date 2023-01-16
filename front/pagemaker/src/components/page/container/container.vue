@@ -5,6 +5,7 @@
     :class="getClasses()"
     :style="getStyles()"
     @click.prevent="onClick()"
+    @mouseleave="isActive=false"
   >
     hello world {{ getClasses() }}{{ getStyles() }}
     <Resize :is-active="isActive" 
@@ -18,9 +19,10 @@ import { defineComponent } from 'vue';
 import { stylesToString } from '../functions/stylesToString';
 import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';
 import resize from '@/components/base/resize/resize.vue';
-import { useMouse } from '../functions/mouse';
+import { useMouse } from '../classes/mouse/mouse';
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import { ADimension, type Dimension } from '@/classes/dimension';
+import { Resize } from '../functions/onResize';
 
   export default defineComponent({
     name: 'component-container',
@@ -32,7 +34,7 @@ import { ADimension, type Dimension } from '@/classes/dimension';
     data() {
       return {
         thisComponent: {} as PageElement,
-        isActive: true,
+        isActive: false,
         mouse: new useMouse(),
       }
     },
@@ -71,75 +73,18 @@ import { ADimension, type Dimension } from '@/classes/dimension';
       resizeStarted(event: MouseEvent ) {
         this.mouse.updatePositionEvent(event)
       },
-
-      
-    onResize(ADimension: ClientCoordinates) {
-      console.log('%c⧭', 'color: #f279ca', ADimension)
-      // if (this.isDragging) return;
-      const thisComponent = this.thisComponent;
-      const boundingRect: ADimension | null = this.getElementDimension(
-        thisComponent.ref
-        );
-        console.log('%c⧭', 'color: #7f7700', boundingRect)
-      if (boundingRect) {
-        this.mouse.updatePositionCoordinates({x: ADimension.clientX, y: ADimension.clientY });
-        const boxDimensions: Dimension = this.calculateNewDimensions(
-          boundingRect,
-          this.mouse.deltaY,
-          this.mouse.deltaX,
-          );
-        // if (thisComponent.isContainer) {
-        //   const parentContainer = thisComponent.parent;
-        //   const parentDimensions = parentContainer.dimension;
-        //   const offSetWidth = ADimension.offsetWidth;
-        //   if (
-        //     boxDimensions.width.value + (offSetWidth * 2) >
-        //       parentDimensions.width.value
-        //   ) {
-        //     boxDimensions.width.value =
-        //       parentDimensions.width.value - ((offSetWidth * 2) + offSetWidth);
-        //   }
-        // }
-        this.resizeComponent(boxDimensions);
-      }
-
-    },
-    resizeComponent(boxDimensions: Dimension){
-      this.thisComponent.dimension.height = boxDimensions.height;
-      this.thisComponent.dimension.width = boxDimensions.width;
-    },
-
-  
-  calculateNewDimensions(
-    boundingRect: ADimension,
-    changeY: number,
-    changeX: number
-    ): Dimension {
-    return {
-      height: { value: boundingRect.height.value + changeY, unit: 'px' },
-      width: { value: boundingRect.width.value + changeX, unit: 'px' },
-    };
-  },
-
-  getElementDimension(htmlElement: string): ADimension {
-    let element = this.$refs[htmlElement] as HTMLDivElement;
-    if (!element) {
-      element = document.getElementById(htmlElement) as HTMLDivElement;
-    }
-    const boundingRect = new ADimension();
-    boundingRect.width.value = element.getBoundingClientRect().width;
-    boundingRect.height.value = element.getBoundingClientRect().height;
-    return boundingRect;
-  },
-
-      
+        
+      onResize(aDimension: ClientCoordinates) {
+        let element = this.$refs[this.thisComponent.ref] as HTMLDivElement;
+        Resize(this.thisComponent as PageElement, this.mouse as useMouse, element).onResize(aDimension);
+      },
 
       onClick() {
         this.isActive = true;
-      }
-    }
+      },
+  }
 
-  })
+})
 </script>
 <style lang="css" scoped>
 .border-outline {
