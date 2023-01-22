@@ -8,13 +8,13 @@ const BOTH_SIDES = 2;
 
 function Resize(thisComponent: PageElement, mouse: useMouse) {
   
-  function onResize(ADimension: ClientCoordinates) {
+  function onResize(elementDimensions: ClientCoordinates) {
     // if (this.isDragging) return;
     const boundingRect = getElementDimension(
       thisComponent.ref
     );
     if (boundingRect) {
-      mouse.updatePositionCoordinates({x: ADimension.clientX, y: ADimension.clientY });
+      mouse.updatePositionCoordinates({x: elementDimensions.clientX, y: elementDimensions.clientY });
       const boxDimensions: Dimension = {
         height: calculateChangeInDimension(boundingRect.height, mouse.deltaY),
         width: calculateChangeInDimension(boundingRect.width, mouse.deltaX),
