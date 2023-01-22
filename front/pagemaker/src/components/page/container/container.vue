@@ -74,8 +74,7 @@ import { Resize } from '../../base/resize/onResize';
       },
         
       onResize(aDimension: ClientCoordinates) {
-        let element = this.$refs[this.thisComponent.ref] as HTMLDivElement;
-        Resize(this.thisComponent as PageElement, this.mouse as useMouse, element).onResize(aDimension);
+        Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
       },
 
       onClick() {

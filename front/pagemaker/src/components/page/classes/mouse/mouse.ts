@@ -1,5 +1,3 @@
-import { ref, onMounted, onUnmounted } from 'vue';
-
 type MousePosition = { x: number, y: number };
 
 class useMouse {

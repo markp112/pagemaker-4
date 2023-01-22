@@ -1,14 +1,12 @@
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import { ADimension, type Dimension } from '@/classes/dimension';
 import type { ValueAndUnit } from '@/classes/units';
-import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-import { usePageStore } from '@/stores/page.store';
 import type { useMouse } from '../../page/classes/mouse/mouse';
 import type { PageElement } from '../../page/model/pageElement/pageElement';
 
 const BOTH_SIDES = 2;
 
-function Resize(thisComponent: PageElement, mouse: useMouse, element: HTMLElement) {
+function Resize(thisComponent: PageElement, mouse: useMouse) {
   
   function onResize(ADimension: ClientCoordinates) {
     // if (this.isDragging) return;
@@ -34,7 +32,7 @@ function Resize(thisComponent: PageElement, mouse: useMouse, element: HTMLElemen
     const parentDimension = getElementDimension(parentRef);
     const padding = window.getComputedStyle(document.getElementById(parentRef) as HTMLDivElement).paddingLeft;
     const paddingValue = parseInt(padding.slice(0, padding.indexOf('p')));
-    parentDimension.width.value = parentDimension.width.value - (paddingValue * 2);
+    parentDimension.width.value = parentDimension.width.value - (paddingValue * BOTH_SIDES);
     return parentDimension;
   }
 
