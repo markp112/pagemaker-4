@@ -1,6 +1,6 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="bg-gray-100 w-full h-screen flex flex-row justify-center mt-4 overflow-auto relative">
+  <div class="bg-gray-100 w-full h-screen flex flex-row justify-center mt-4 pt-5 overflow-auto relative">
     <Page :page="page" 
       :page-elements="pageElements"
       :scale="zoomPage"

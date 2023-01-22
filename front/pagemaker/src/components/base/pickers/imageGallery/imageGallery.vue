@@ -87,13 +87,11 @@ export default defineComponent({
     
     leftArrowClick() {
       this.imagePointer--;
-      console.log('%c⧭', 'color: #00bf00', this.imagePointer)
       if (this.imagePointer < 0) this.imagePointer = this.imageDetails.length - this.maxImages;
     },
     
     rightArrowClick() {
       this.imagePointer++;
-      console.log('%c⧭', 'color: #00bf00', this.imagePointer)
       if (this.imagePointer + this.maxImages > this.imageDetails.length) this.imagePointer = 0;
     },
   }

@@ -7,42 +7,43 @@ import type { ComponentTypesString, PageElement, Style, StyleTags } from '@/comp
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
 
 
-type Component = { [key in ComponentTypesString]: (component: ToolbarComponentItem) => PageElement | PageContainerInterface };
+type Component = { [key in ComponentTypesString]: (component: ToolbarComponentItem, parentReference: ComponentTypesString) => PageElement | PageContainerInterface };
 
 function ComponentFactory() {
 
   const siteDefaultProperties = new SiteDefaultProperties();
 
   const ComponentMap: Component  = {
-    'jumbo': (component: ToolbarComponentItem) => createContainer(component),
-    'container': (component: ToolbarComponentItem) => createContainer(component),
-    'button':(component: ToolbarComponentItem) => createContainer(component),
-    'navBar':(component: ToolbarComponentItem) => createContainer(component),
-    'pageTemplate':(component: ToolbarComponentItem) => createContainer(component),
-    'text':(component: ToolbarComponentItem) => createContainer(component),
-    'image':(component: ToolbarComponentItem) => createContainer(component),
-    'rootContainer': (component: ToolbarComponentItem) => createContainer(component),
+    'jumbo': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+    'container': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+    'button':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+    'navBar':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+    'pageTemplate':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+    'text':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+    'image':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+    'rootContainer': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+    'page': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
   };
 
-  function createComponent(component: ToolbarComponentItem): PageElement | PageContainerInterface {
-    const pageElement = ComponentMap[component.type](component);
+  function createComponent(component: ToolbarComponentItem, parentRefernce: ComponentTypesString): PageElement | PageContainerInterface {
+    const pageElement = ComponentMap[component.type](component, parentRefernce);
     return pageElement;
   }
 
-  function createContainer(component: ToolbarComponentItem): PageContainerInterface {
-    const container = createBaseElement(component) as PageContainerInterface;
+  function createContainer(component: ToolbarComponentItem, parentReference: ComponentTypesString): PageContainerInterface {
+    const container = createBaseElement(component, parentReference) as PageContainerInterface;
     container.isContainer = true;
     container.componentHTMLTag = 'container';
     container.elements = [];
     return container;
   }
 
-  function createBaseElement(component: ToolbarComponentItem): PageElement {
+  function createBaseElement(component: ToolbarComponentItem, parentReference: ComponentTypesString): PageElement {
     const ref = component.componentRef;
     const name = component.componentName;
     const type = component.type;
     const styles: Style[] = createBaseStyles();
-    const parentRef = '';
+    const parentRef = parentReference;
     const classDefinition = component.classes;
     const location = new ALocation(component.location.left, component.location.top);
     const dimension = new ADimension(component.dimension.height, component.dimension.width);
@@ -87,7 +88,5 @@ function ComponentFactory() {
 
   return { createComponent };
 }
-
-
 
 export { ComponentFactory };

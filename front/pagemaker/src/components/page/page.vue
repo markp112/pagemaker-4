@@ -1,6 +1,8 @@
 <template>
-  <div class="border border-gray-800 page-shadow flex flex-col justify-start" 
+  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5" 
     :style="getScaledPageSize"
+    ref="page"
+    id="page"
     @dragover.prevent
     @drop.prevent="onDrop($event)"
   >
@@ -23,62 +25,74 @@ import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import type { PageElement } from './model/pageElement/pageElement';
 import ContainerVue from './container/container.vue';
 import Container from './container/container.vue';
+import type { Dimension } from '@/classes/dimension';
+import type { ValueAndUnit } from '@/classes/units';
 
-  export default defineComponent({
-    name: 'page',
+const PAGE_REF = 'page';
 
-    props: {
-      page: {
-        type: Object as PropType<PageMetaData>
-      },
-      scale: Number,
-      pageElements: {
-        type: Array as PropType<PageElement[]>,
-        required: true,
-        default: 100,
-      }
+export default defineComponent({
+  name: PAGE_REF,
+
+  props: {
+    page: {
+      type: Object as PropType<PageMetaData>
     },
-    components: {
-      container: Container,
-    },
+    scale: Number,
+    pageElements: {
+      type: Array as PropType<PageElement[]>,
+      required: true,
+      default: 100,
+    }
+  },
+  components: {
+    container: Container,
+  },
 
-      data() {
-        return {
-        pageBuilderService: PageBuilderService(),
-        container:  defineComponent(() => import('./container/container.vue')),
-      }
-    },
+  data() {
+    return {
+      pageBuilderService: PageBuilderService(),
+      container:  defineComponent(() => import('./container/container.vue')),
+    }
+  },
 
-    computed: {
+  computed: {
 
-      getScaledPageSize(): string {
-        let pageSize = '';
-        const scale = this.$props.scale;
-        if (this.$props.page && scale) {
-          const width = `${this.$props.page.width.value * scale}${this.$props.page.width.unit}`;
-          const height = `${this.$props.page.height.value * scale}${this.$props.page.height.unit}`;
-          pageSize = `width:${width}; height:${height};`;
+    getScaledPageSize(): string {
+      let pageSize = '';
+      const scale = this.$props.scale;
+      if (this.$props.page && scale) {
+        const dimensions: Dimension = {
+          width: this.$props.page.width,
+          height: this.$props.page.height,
         }
-        return pageSize;
-      },
-    },
+        const scaledDimension = this.pageBuilderService.calcPageSize(scale, dimensions);
+        this.pageBuilderService.setScaledDimension(scaledDimension);
+        pageSize = `width:${this.getDimension(scaledDimension.width)}; height:${this.getDimension(scaledDimension.height)};`;
 
-    methods: {
-      getProps(component: PageElement) {
-        return {component: ContainerVue, props: {thisComponent: component}};
-      },
-    
-
-      onDrop(event: DragEvent): void {
-        console.log('dropped')
-        const componentName = this.getComponentName(event);
-        this.pageBuilderService.createNewComponent(componentName);
-      },
-      
-      getComponentName(event: DragEvent): string {
-        const dataTransfer = event.dataTransfer;
-        return dataTransfer ? dataTransfer.getData('text') : '';
       }
+      return pageSize;
     },
-  })
+
+  },
+    
+  methods: {
+    getProps(component: PageElement) {
+      return {component: ContainerVue, props: {thisComponent: component}};
+    },
+
+    getDimension(dimension: ValueAndUnit): string {
+      return `${dimension.value}${dimension.unit}`;
+    },
+
+    onDrop(event: DragEvent): void {
+      const componentName = this.getComponentName(event);
+      this.pageBuilderService.createNewComponent(componentName, 'page');
+    },
+    
+    getComponentName(event: DragEvent): string {
+      const dataTransfer = event.dataTransfer;
+      return dataTransfer ? dataTransfer.getData('text') : '';
+    }
+  },
+})
 </script>
