@@ -103,7 +103,8 @@ type ComponentTypesString =
   | 'pageTemplate'
   | 'text'
   | 'image'
-  | 'rootContainer';
+  | 'rootContainer'
+  | 'page';
 
 
 interface PageElement {

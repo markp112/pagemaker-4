@@ -21,8 +21,7 @@ import type { PageElement, PropsDefinition } from '../model/pageElement/pageElem
 import resize from '@/components/base/resize/resize.vue';
 import { useMouse } from '../classes/mouse/mouse';
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
-import { ADimension, type Dimension } from '@/classes/dimension';
-import { Resize } from '../functions/onResize';
+import { Resize } from '../../base/resize/onResize';
 
   export default defineComponent({
     name: 'component-container',

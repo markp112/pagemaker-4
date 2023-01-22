@@ -44,7 +44,6 @@ function PageService() {
       height: { value: 1024, unit: 'px' },
       width: { value: 1280, unit: 'px' },
     };
-
     store.setPage(page);
   }
 
