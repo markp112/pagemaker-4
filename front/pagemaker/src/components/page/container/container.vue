@@ -22,17 +22,21 @@ import resize from '@/components/base/resize/resize.vue';
 import { useMouse } from '../classes/mouse/mouse';
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import { Resize } from '../../base/resize/onResize';
+import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
+import imageElement from '../image/imageElement.vue';
 
   export default defineComponent({
     name: 'component-container',
 
     components: {
       Resize: resize,
+      ImageElement: imageElement,
     },
 
     data() {
       return {
         thisComponent: {} as PageElement,
+        pageBuilderService: PageBuilderService(),
         isActive: false,
         mouse: new useMouse(),
       }
@@ -80,6 +84,16 @@ import { Resize } from '../../base/resize/onResize';
       onClick() {
         this.isActive = true;
       },
+
+      onDrop(event: DragEvent): void {
+        const componentName = this.getComponentName(event);
+        this.pageBuilderService.createNewComponent(componentName, this.thisComponent.type);
+      },   
+      
+    getComponentName(event: DragEvent): string {
+      const dataTransfer = event.dataTransfer;
+      return dataTransfer ? dataTransfer.getData('text') : '';
+    }
   }
 
 })
