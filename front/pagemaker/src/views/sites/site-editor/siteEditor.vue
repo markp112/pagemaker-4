@@ -6,7 +6,6 @@
       @submit.prevent="saveClicked"
       class="w-6/12 border-2 p-5 bg-gray-50 h-2/3 relative"
       >
-      
         <div class="field-wrapper">
           <label for="name">Site Name:</label>
           <input

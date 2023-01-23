@@ -8,7 +8,7 @@
       :toolbar-items="elementItems"
       title="Elements"
     />
-    <span class="absolute -right-10 w-10 p-1 bottom-40 border border-gray-400 rounded-r-full z-10 bg-white">
+    <span class="absolute -right-10 w-10 p-1 bottom-44 border border-gray-400 rounded-r-full z-10 bg-white">
       <Icon-Image :icon-image="activeIcon" 
         @icon-click="toggleToolbar($event as string)" 
       />

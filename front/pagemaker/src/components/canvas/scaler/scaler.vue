@@ -2,14 +2,13 @@
   <div :style="{'width': slider.width + 'px' }" :class="getPosition" class="z-50">
     <label for="" class="block">{{ slider.label }}</label>
     <span class="rangeValue">{{ slider.min }}</span>
-    <Input class="range" 
-      type="range" 
+    <input class="range" 
+      type="range"
       name="Zoom" 
       v-model="sliderValue"
       :min="slider.min"
       :max="slider.max" 
-      @change="rangeSlide($event.target.value)" 
-      @mousemove="rangeSlide($event.target.value)"></Input>
+      @mousemove="rangeSlide()"/>
     <span class="rangeValue">{{ slider.max }}</span>
   </div>
 </template>
@@ -54,8 +53,7 @@ export default defineComponent({
 
     methods: {
 
-      rangeSlide(value: string) {
-        this.sliderValue = parseInt(value);
+      rangeSlide() {
         this.$emit('sliderChange', this.sliderValue)
       },
     },
