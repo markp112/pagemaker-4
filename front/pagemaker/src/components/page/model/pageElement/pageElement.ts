@@ -102,7 +102,7 @@ type ComponentTypesString =
   | 'navBar'
   | 'pageTemplate'
   | 'text'
-  | 'image'
+  | 'imageElement'
   | 'rootContainer'
   | 'page';
 

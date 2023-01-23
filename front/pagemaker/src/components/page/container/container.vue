@@ -40,7 +40,7 @@ import type { PageContainerInterface } from '../model/pageContainer/container';
 
     components: {
       Resize: resize,
-      image: imageElement,
+      imageElement: imageElement,
     },
 
     data() {

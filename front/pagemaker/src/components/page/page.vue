@@ -47,7 +47,7 @@ export default defineComponent({
   },
   components: {
     container: Container,
-    Image: imageElement,
+    imageElement: imageElement,
   },
 
   data() {

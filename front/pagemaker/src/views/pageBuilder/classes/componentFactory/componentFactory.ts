@@ -7,8 +7,6 @@ import type { PageContainerInterface } from '@/components/page/model/pageContain
 import type { ComponentTypesString, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
 
-type Component = { [key in ComponentTypesString]: (component: ToolbarComponentItem, parentReference: ComponentTypesString) => PageElement | PageContainerInterface };
-
 function ComponentFactory() {
 
   const siteDefaultProperties = new SiteDefaultProperties();
@@ -20,7 +18,7 @@ function ComponentFactory() {
     'navBar':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'pageTemplate':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'text':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
-    'image':(component: ToolbarComponentItem, parentReference: string) => createImage(component, parentReference),
+    'imageElement':(component: ToolbarComponentItem, parentReference: string) => createImage(component, parentReference),
     'rootContainer': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'page': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
   };
