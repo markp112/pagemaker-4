@@ -27,6 +27,7 @@ import ContainerVue from './container/container.vue';
 import Container from './container/container.vue';
 import type { Dimension } from '@/classes/dimension';
 import type { ValueAndUnit } from '@/classes/units';
+import imageElement from './image/imageElement.vue';
 
 const PAGE_REF = 'page';
 
@@ -46,6 +47,7 @@ export default defineComponent({
   },
   components: {
     container: Container,
+    imageElement: imageElement,
   },
 
   data() {

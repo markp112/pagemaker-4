@@ -2,35 +2,33 @@ import { AnActionEvent } from '@/classes/actionEvent';
 import { ADimension } from '@/classes/dimension';
 import { ALocation } from '@/classes/location';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
+import type { ImageElement } from '@/components/page/model/imageElement/imageElement';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-import type { ComponentTypesString, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
-
-
-type Component = { [key in ComponentTypesString]: (component: ToolbarComponentItem, parentReference: ComponentTypesString) => PageElement | PageContainerInterface };
 
 function ComponentFactory() {
 
   const siteDefaultProperties = new SiteDefaultProperties();
 
-  const ComponentMap: Component  = {
-    'jumbo': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'container': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'button':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'navBar':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'pageTemplate':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'text':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'image':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'rootContainer': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'page': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+  const ComponentMap = {
+    'jumbo': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'container': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'button':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'navBar':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'pageTemplate':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'text':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'imageElement':(component: ToolbarComponentItem, parentReference: string) => createImage(component, parentReference),
+    'rootContainer': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'page': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
   };
 
-  function createComponent(component: ToolbarComponentItem, parentRefernce: ComponentTypesString): PageElement | PageContainerInterface {
+  function createComponent(component: ToolbarComponentItem, parentRefernce: string): PageElement | PageContainerInterface {
     const pageElement = ComponentMap[component.type](component, parentRefernce);
     return pageElement;
   }
 
-  function createContainer(component: ToolbarComponentItem, parentReference: ComponentTypesString): PageContainerInterface {
+  function createContainer(component: ToolbarComponentItem, parentReference: string): PageContainerInterface {
     const container = createBaseElement(component, parentReference) as PageContainerInterface;
     container.isContainer = true;
     container.componentHTMLTag = 'container';
@@ -38,7 +36,20 @@ function ComponentFactory() {
     return container;
   }
 
-  function createBaseElement(component: ToolbarComponentItem, parentReference: ComponentTypesString): PageElement {
+  function createImage(component: ToolbarComponentItem, parentReference: string): ImageElement {
+    const imageElement = createBaseElement(component, parentReference) as ImageElement;
+    imageElement.componentHTMLTag = component.type;
+    imageElement.content ='imageplaceholder-100x83.png';
+    imageElement.container = {
+      naturalSize: new ADimension (),
+      location: new ALocation(),
+    }
+    imageElement.container.naturalSize.height = { value: 200, unit: 'px' };
+    imageElement.container.naturalSize.width = { value: 100, unit: 'px' };
+    return imageElement;
+  }
+
+  function createBaseElement(component: ToolbarComponentItem, parentReference: string): PageElement {
     const ref = component.componentRef;
     const name = component.componentName;
     const type = component.type;

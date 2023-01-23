@@ -4,10 +4,19 @@
     :ref="getId()"
     :class="getClasses()"
     :style="getStyles()"
-    @click.prevent="onClick()"
+    @click.stop.prevent="onClick()"
+    @drop.prevent="onDrop($event)"
     @mouseleave="isActive=false"
   >
-    hello world {{ getClasses() }}{{ getStyles() }}
+  <component
+      v-for="(pageElement, index) in getPageElements()"
+      :is="pageElement.componentHTMLTag"
+      :key="index"
+      :index="index"
+      v-bind="getProps(pageElement)"
+      @dragover.prevent
+      @drop.stop.prevent="onDrop"
+    >{{pageElement}}</component>
     <Resize :is-active="isActive" 
       @resize-started="resizeStarted($event)"
       @on-resize="onResize($event)"
@@ -22,24 +31,29 @@ import resize from '@/components/base/resize/resize.vue';
 import { useMouse } from '../classes/mouse/mouse';
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import { Resize } from '../../base/resize/onResize';
+import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
+import imageElement from '../image/imageElement.vue';
+import type { PageContainerInterface } from '../model/pageContainer/container';
 
   export default defineComponent({
     name: 'component-container',
 
     components: {
       Resize: resize,
+      imageElement: imageElement,
     },
 
     data() {
       return {
-        thisComponent: {} as PageElement,
+        thisComponent: {} as PageContainerInterface,
+        pageBuilderService: PageBuilderService(),
         isActive: false,
         mouse: new useMouse(),
       }
     },
 
     mounted() {
-      this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
+      this.thisComponent = ((this.$attrs.props as unknown as PropsDefinition).thisComponent) as PageContainerInterface;
     },
 
     methods: {
@@ -69,17 +83,37 @@ import { Resize } from '../../base/resize/onResize';
         return dimension;
       },
 
+      getPageElements(): PageElement[] {
+        return (this.thisComponent as PageContainerInterface).elements;
+      },
+
+      getProps(component: PageElement) {
+        return {props: {thisComponent: component}};
+      },
+
       resizeStarted(event: MouseEvent ) {
         this.mouse.updatePositionEvent(event)
       },
         
       onResize(aDimension: ClientCoordinates) {
-        Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
+        Resize(this.thisComponent as PageContainerInterface, this.mouse as useMouse).onResize(aDimension);
       },
 
       onClick() {
         this.isActive = true;
       },
+
+      onDrop(event: DragEvent): void {
+        event.stopImmediatePropagation();
+        const componentName = this.getComponentName(event);
+        console.log('%c⧭', 'color: #ffa640', componentName)
+        this.pageBuilderService.createNewComponent(componentName, this.thisComponent.ref);
+      },   
+      
+    getComponentName(event: DragEvent): string {
+      const dataTransfer = event.dataTransfer;
+      return dataTransfer ? dataTransfer.getData('text') : '';
+    }
   }
 
 })
