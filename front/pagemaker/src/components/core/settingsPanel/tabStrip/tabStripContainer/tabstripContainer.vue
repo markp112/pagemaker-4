@@ -59,7 +59,7 @@ export default defineComponent({
 </script>
 
 
-<style  lang="postcss" scoped>
+<style  lang="css" scoped>
 
 .tab-wrapper {
   @apply w-full;
@@ -93,10 +93,12 @@ export default defineComponent({
   @apply leading-10;
   @apply w-auto h-12 p-1;  
   @apply border-r-2 border-r-site-primary-dark;
-  @apply bg-site-primary-light;
+  @apply bg-gray-400;
   @apply cursor-pointer;
   @apply top-0;
   @apply text-on-surface;
+  @apply text-center;
+  @apply overflow-hidden;
   transition: all 0.25s;
 }
 .tab-label:hover {

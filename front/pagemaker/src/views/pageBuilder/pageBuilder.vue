@@ -16,6 +16,14 @@
         <PageCanvas :zoom-page="zoomPage" :page-elements="getPageElements()"/>
       </div>
     </div>
+    <SettingsPanelVue :toolbar-hidden="false" 
+      class="h-full"
+      :class="sidePanelWidth"
+      @toggle-clicked="resizePanel()"
+    >
+      <TabstripContainer :labels="['Palette Editor', 'Material colours', 'Typography']">
+      </TabstripContainer>
+    </SettingsPanelVue>
   </div>
 </template>
 
@@ -29,6 +37,8 @@ import Scaler from '@/components/canvas/scaler/scaler.vue';
 import { usePageStore } from '@/stores/page.store';
 import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import PageCanvas from '@/components/canvas/pageCanvas.vue';
+import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
+import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -50,6 +60,9 @@ const sliderPosition: SliderPosition = {
       PageCanvas,
       Toolbar: toolbarPanelVue,
       Scaler,
+      SettingsPanelVue: settingsPanelVue,
+      TabstripContainer: tabstripContainer, 
+
     },
     
     data() {
@@ -62,6 +75,7 @@ const sliderPosition: SliderPosition = {
         sliderSettings: scalerSettings,
         sliderPosition: sliderPosition,
         zoomPage: 1,
+        sidePanelWidth: 'w-3/12',
       }
     },
 
@@ -93,6 +107,10 @@ const sliderPosition: SliderPosition = {
 
       getPageElements(): PageElement[] {
         return this.pageStore.pageElements as PageElement[];
+      },
+
+      resizePanel() {
+        this.sidePanelWidth=this.sidePanelWidth === 'w-1' ? 'w-2/12' : 'w-1';
       },
     },
 

@@ -6,7 +6,6 @@
     @dragover.prevent
     @drop.prevent="onDrop($event)"
   >
-
     <component v-for="(component, index) in pageElements"
       :is="component.componentHTMLTag"
       :key="index"
@@ -48,6 +47,7 @@ export default defineComponent({
   components: {
     container: Container,
     imageElement: imageElement,
+
   },
 
   data() {

@@ -106,7 +106,6 @@ import type { PageContainerInterface } from '../model/pageContainer/container';
       onDrop(event: DragEvent): void {
         event.stopImmediatePropagation();
         const componentName = this.getComponentName(event);
-        console.log('%c⧭', 'color: #ffa640', componentName)
         this.pageBuilderService.createNewComponent(componentName, this.thisComponent.ref);
       },   
       
