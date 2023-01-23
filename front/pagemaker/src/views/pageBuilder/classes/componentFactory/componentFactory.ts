@@ -4,7 +4,7 @@ import { ALocation } from '@/classes/location';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
 import type { ImageElement } from '@/components/page/model/imageElement/imageElement';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-import type { ComponentTypesString, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
 
 function ComponentFactory() {
