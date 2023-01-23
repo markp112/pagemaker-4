@@ -1,6 +1,6 @@
 import { ComponentCounter } from '@/classes/componentCounter/componentCounter';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
-import type { ComponentTypesString, PageElement } from '@/components/page/model/pageElement/pageElement';
+import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import { useToolbarStore } from '@/stores/toolbars.store';
 import { usePageStore } from '@/stores/page.store';
 import { ComponentFactory } from '@/views/pageBuilder/classes/componentFactory/componentFactory';
@@ -10,7 +10,7 @@ function PageBuilderService() {
   const toolbarStore = useToolbarStore();
   const pageStore = usePageStore();
 
-  function createNewComponent(componentName: string, parentRef: ComponentTypesString) {
+  function createNewComponent(componentName: string, parentRef: string) {
     const component = getToolbarComponent(componentName);
     if (component) {
       const pageElement = getNewComponent(component, parentRef);
@@ -22,7 +22,7 @@ function PageBuilderService() {
     return toolbarStore.toolbarItems.filter(toolbarItem => toolbarItem.componentName === componentName)[0];
   }
 
-  function getNewComponent(component: ToolbarComponentItem, parentRef: ComponentTypesString): PageElement {
+  function getNewComponent(component: ToolbarComponentItem, parentRef: string): PageElement {
     const componentCounter: ComponentCounter = ComponentCounter.getInstance();
     const id = componentCounter.getNextCounter();
     component.componentRef = `${component.componentName}::${id}`;
@@ -33,8 +33,6 @@ function PageBuilderService() {
     return {
       width: { value: dimension.width.value * scale, unit: dimension.width.unit },
       height: { value: dimension.height.value * scale, unit: dimension.height.unit },
-      offSetHeight: dimension.offSetHeight,
-      offSetWidth: dimension.offSetWidth,
     };
   }
 

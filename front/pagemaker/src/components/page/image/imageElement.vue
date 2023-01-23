@@ -3,7 +3,7 @@
     :ref="getId()"
     :id="getId()"
     class="relative select-none overflow-hidden"
-    @click.prevent="onImageClick($event)"
+    @click.stop.prevent="onImageClick($event)"
     :style="getContainerStyles()"
   >
     <img
@@ -73,7 +73,6 @@ methods: {
 
   getImage(): string {
     const path =  getImageUrl((this.thisComponent as ImageElement).content);
-    console.log('%c⧭', 'color: #733d00', path)
     return path;
   },
 

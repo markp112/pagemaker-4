@@ -13,24 +13,24 @@ function ComponentFactory() {
 
   const siteDefaultProperties = new SiteDefaultProperties();
 
-  const ComponentMap: Component  = {
-    'jumbo': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'container': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'button':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'navBar':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'pageTemplate':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'text':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'image':(component: ToolbarComponentItem, parentReference: ComponentTypesString) => createImage(component, parentReference),
-    'rootContainer': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
-    'page': (component: ToolbarComponentItem, parentReference: ComponentTypesString) => createContainer(component, parentReference),
+  const ComponentMap = {
+    'jumbo': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'container': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'button':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'navBar':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'pageTemplate':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'text':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'image':(component: ToolbarComponentItem, parentReference: string) => createImage(component, parentReference),
+    'rootContainer': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'page': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
   };
 
-  function createComponent(component: ToolbarComponentItem, parentRefernce: ComponentTypesString): PageElement | PageContainerInterface {
+  function createComponent(component: ToolbarComponentItem, parentRefernce: string): PageElement | PageContainerInterface {
     const pageElement = ComponentMap[component.type](component, parentRefernce);
     return pageElement;
   }
 
-  function createContainer(component: ToolbarComponentItem, parentReference: ComponentTypesString): PageContainerInterface {
+  function createContainer(component: ToolbarComponentItem, parentReference: string): PageContainerInterface {
     const container = createBaseElement(component, parentReference) as PageContainerInterface;
     container.isContainer = true;
     container.componentHTMLTag = 'container';
@@ -38,7 +38,7 @@ function ComponentFactory() {
     return container;
   }
 
-  function createImage(component: ToolbarComponentItem, parentReference: ComponentTypesString): ImageElement {
+  function createImage(component: ToolbarComponentItem, parentReference: string): ImageElement {
     const imageElement = createBaseElement(component, parentReference) as ImageElement;
     imageElement.componentHTMLTag = component.type;
     imageElement.content ='imageplaceholder-100x83.png';
@@ -49,10 +49,9 @@ function ComponentFactory() {
     imageElement.container.naturalSize.height = { value: 200, unit: 'px' };
     imageElement.container.naturalSize.width = { value: 100, unit: 'px' };
     return imageElement;
-
   }
 
-  function createBaseElement(component: ToolbarComponentItem, parentReference: ComponentTypesString): PageElement {
+  function createBaseElement(component: ToolbarComponentItem, parentReference: string): PageElement {
     const ref = component.componentRef;
     const name = component.componentName;
     const type = component.type;

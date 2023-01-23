@@ -1,6 +1,7 @@
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import { ADimension, type Dimension } from '@/classes/dimension';
 import type { ValueAndUnit } from '@/classes/units';
+import type { ImageElement } from '@/components/page/model/imageElement/imageElement';
 import type { useMouse } from '../../page/classes/mouse/mouse';
 import type { PageElement } from '../../page/model/pageElement/pageElement';
 
@@ -47,6 +48,10 @@ function Resize(thisComponent: PageElement, mouse: useMouse) {
   function resizeComponent(boxDimensions: Dimension){
     thisComponent.dimension.height = boxDimensions.height;
     thisComponent.dimension.width = boxDimensions.width;
+    if(thisComponent.type === 'image') {
+      (thisComponent as ImageElement).container.naturalSize.height = boxDimensions.height;
+      (thisComponent as ImageElement).container.naturalSize.width = boxDimensions.width
+    }
   }
 
   function getElementDimension(htmlElement: string): ADimension {
