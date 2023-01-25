@@ -1,3 +1,5 @@
+import type { CssStyleNames } from '@/classes/cssStyles';
+
 type EditorButtonTypes = 'list' | 'iconList' | 'plusMinus' | 'basic';
 
 interface EditorButtonBase {
@@ -5,6 +7,7 @@ interface EditorButtonBase {
   tooltip: string;
   displayIcon: string;
   buttonType: EditorButtonTypes;
+  cssStyleName: CssStyleNames
 };
 
 interface SelectListIcon {

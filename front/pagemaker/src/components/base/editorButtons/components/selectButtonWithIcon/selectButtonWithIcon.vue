@@ -51,14 +51,14 @@ import toolTip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import type { Style } from '@/components/page/model/pageElement/pageElement';
 import type { EditorButtonSelectList, SelectListIcon } from '../../model';
 import { getImageUrl } from '@/common/getIcon';
- 
+
 export default defineComponent({
   name:'Select-Button',
   emits: ['selectChange'],
 
   props: {
     buttonData: {
-      type: {} as PropType<EditorButtonSelectList>,
+      type: Object as PropType<EditorButtonSelectList>,
       required: true,
     }
   },
@@ -105,5 +105,5 @@ export default defineComponent({
       return this.showTooltip === classDef;
     },
   }
-}
+})
 </script>
