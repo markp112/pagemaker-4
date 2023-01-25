@@ -21,7 +21,10 @@
       :class="sidePanelWidth"
       @toggle-clicked="resizePanel()"
     >
-      <TabstripContainer :labels="['Palette Editor', 'Material colours', 'Typography']">
+      <TabstripContainer :labels="['Palette Editor']">
+        <template v-slot:tab-0>
+          <SelectButtonWithIcon :button-data="getButtonData()"></SelectButtonWithIcon>
+        </template>
       </TabstripContainer>
     </SettingsPanelVue>
   </div>
@@ -39,6 +42,9 @@ import type { PageElement } from '@/components/page/model/pageElement/pageElemen
 import PageCanvas from '@/components/canvas/pageCanvas.vue';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
+import selectButtonWithIcon from '@/components/base/editorButtons/components/selectButtonWithIcon/selectButtonWithIcon.vue';
+import type { SelectListIcon } from '@/components/base/editorButtons/model';
+import { buttonDataMock } from '@/components/base/editorButtons/components/selectButtonWithIcon/mockData';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -61,8 +67,8 @@ const sliderPosition: SliderPosition = {
       Toolbar: toolbarPanelVue,
       Scaler,
       SettingsPanelVue: settingsPanelVue,
-      TabstripContainer: tabstripContainer, 
-
+      TabstripContainer: tabstripContainer,
+      SelectButtonWithIcon: selectButtonWithIcon,
     },
     
     data() {
@@ -76,6 +82,8 @@ const sliderPosition: SliderPosition = {
         sliderPosition: sliderPosition,
         zoomPage: 1,
         sidePanelWidth: 'w-3/12',
+        buttonData: buttonDataMock,
+        buttonDataMock,
       }
     },
 
@@ -112,6 +120,10 @@ const sliderPosition: SliderPosition = {
       resizePanel() {
         this.sidePanelWidth=this.sidePanelWidth === 'w-1' ? 'w-2/12' : 'w-1';
       },
+
+      getButtonData() {
+        return buttonDataMock;
+      }
     },
 
   })
