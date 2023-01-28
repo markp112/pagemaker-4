@@ -8,6 +8,10 @@ class EditorSettingsService {
     return this.store.borderLineStyle; 
   }
 
+  setLineStyle(lineStyle: LineStyle) {
+    this.store.setBorderLineStyle(lineStyle);
+  }
+
 }
 
 export  { EditorSettingsService };

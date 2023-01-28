@@ -1,3 +1,4 @@
+import type { CommandName } from '@/classes/command/model/command';
 import type { CssStyleNames } from '@/classes/cssStyles';
 import type { StyleTags } from '@/components/page/model/pageElement/pageElement';
 
@@ -8,12 +9,12 @@ interface EditorButtonBase {
   tooltip: string;
   displayIcon: string;
   buttonType: EditorButtonTypes;
-  cssStyleName: CssStyleNames
+  commandName: CommandName;
 };
 
 interface SelectListIcon {
   icon: string;
-  classToApply: StyleTags;
+  classToApply: StyleTags | CssStyleNames;
   tooltip: string;
 }
 

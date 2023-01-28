@@ -48,7 +48,6 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
 import toolTip from '@/components/utility/notifications/tooltip/toolTip.vue';
-import type { Style } from '@/components/page/model/pageElement/pageElement';
 import type { EditorButtonSelectList, SelectListIcon } from '../../model';
 import { getImageUrl } from '@/common/getIcon';
 import type { CommandProperties } from '@/classes/command/model/command';
@@ -81,7 +80,7 @@ export default defineComponent({
     iconClicked(iconElement: SelectListIcon) {
       this.selectedItem = iconElement.classToApply;
       const payload: CommandProperties = {
-        commandName: 'border',
+        commandName: this.buttonData.commandName,
         payload: iconElement.classToApply,
       };
       this.show();
