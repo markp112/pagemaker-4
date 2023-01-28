@@ -11,7 +11,8 @@ const usePageStore = defineStore({
     return {
       _page: {} as PageMetaData,
       _pageElements: [] as PageElement[],
-      _scaledDimension: {} as Dimension, 
+      _scaledDimension: {} as Dimension,
+      _activeElement: {} as PageElement,
     }
   },
 
@@ -26,14 +27,22 @@ const usePageStore = defineStore({
 
     scaledDimension: (state) => {
       return state._scaledDimension;
+    },
+
+    activeElement: (state) => {
+      return state._activeElement as PageElement;
     }
 
   },
 
   actions: {
-    setPage(page: PageMetaData) {
+    setPage(page: PageMetaData): void {
       this._page = page;
     },
+
+    setActiveElement(pageElement: PageElement): void {
+      this._activeElement = pageElement;
+    }, 
 
     addNewElement(pageElement: PageElement) {
       const parentElement = this.findParentElement(pageElement.parentRef);

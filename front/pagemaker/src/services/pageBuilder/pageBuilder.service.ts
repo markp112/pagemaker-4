@@ -5,6 +5,8 @@ import { useToolbarStore } from '@/stores/toolbars.store';
 import { usePageStore } from '@/stores/page.store';
 import { ComponentFactory } from '@/views/pageBuilder/classes/componentFactory/componentFactory';
 import type { Dimension } from '@/classes/dimension';
+import type { CommandProperties } from '@/classes/command/model/command';
+import { CommandProcessor } from '@/classes/command/commandProcessor';
 
 function PageBuilderService() {
   const toolbarStore = useToolbarStore();
@@ -40,9 +42,23 @@ function PageBuilderService() {
     pageStore.setScaledDimension(dimension);
   }
 
+  function setActiveElement(pageElement: PageElement): void {
+    pageStore.setActiveElement(pageElement);
+  }
+
+  function processButtonCommand(payload: CommandProperties): void {
+    const pageElement = pageStore.activeElement;
+    if(pageElement) {
+      const commandProcessor = new CommandProcessor(pageElement);
+      commandProcessor.processCommand(payload);
+    }
+  }
+
   return { createNewComponent, 
       calcPageSize,
       setScaledDimension,
+      processButtonCommand,
+      setActiveElement
     };
 }
 

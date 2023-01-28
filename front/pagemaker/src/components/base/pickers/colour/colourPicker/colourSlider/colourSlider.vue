@@ -4,9 +4,9 @@
     width="40"
     height="250"
     class="z-50"
-    @mousedown="onMouseDown"
-    @mousemove="onMouseMove"
-    @mouseup="onMouseUp"
+    @mousedown.stop="onMouseDown"
+    @mousemove.stop="onMouseMove"
+    @mouseup.stop="onMouseUp"
   >
   </canvas>
 </template>
@@ -73,7 +73,6 @@ export default defineComponent({
   },
   
   onMouseDown(evt: MouseEvent) {
-    evt.stopPropagation();
     this.mouseDown = true;
     this.selectedHeight = evt.offsetY;
     this.draw();

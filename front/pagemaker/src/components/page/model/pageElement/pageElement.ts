@@ -71,6 +71,8 @@ type StyleTags =
   | 'border-right'
   | 'border-top'
   | 'border-bottom'
+  | 'border-none'
+  | 'border'
   | 'height'
   | 'width'
   | 'margin-left'
@@ -94,6 +96,21 @@ type Style =  {
   value: string;
   unit?: Units;
 };
+
+type LineStyle = 'solid'
+  | 'dashed'
+  | 'dotted'
+  | 'none'
+  | 'double'
+  | 'groove'
+  | 'ridge'
+  | 'inset'
+  | 'outset'
+
+type BorderStyle = Style & {
+  lineStyle: LineStyle;
+  colour?: string;
+}
 
 type ComponentTypesString =
   | 'container'
@@ -126,4 +143,12 @@ interface PageElement {
 type PropsDefinition = { thisComponent: PageElement };
 
 
-export type { PageElement, StyleTags, ComponentTypesString, Style, CssStyleTypes, PropsDefinition  };
+export type { PageElement, 
+  StyleTags, 
+  ComponentTypesString, 
+  Style,
+  BorderStyle, 
+  CssStyleTypes,
+  LineStyle,
+  PropsDefinition
+};

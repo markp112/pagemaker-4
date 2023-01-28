@@ -14,6 +14,7 @@
       :key="index"
       :index="index"
       v-bind="getProps(pageElement)"
+      @onClick.stop="containedElementClick($event)"
       @dragover.prevent
       @drop.stop.prevent="onDrop"
     >{{pageElement}}</component>
@@ -43,6 +44,8 @@ import type { PageContainerInterface } from '../model/pageContainer/container';
       imageElement: imageElement,
     },
 
+    emits:['onClick'],
+
     data() {
       return {
         thisComponent: {} as PageContainerInterface,
@@ -69,8 +72,8 @@ import type { PageContainerInterface } from '../model/pageContainer/container';
       getStyles(): string {
         let styles = '';
         if(this.thisComponent.styles) {
-          styles =stylesToString(this.thisComponent.styles)
-        }
+          styles = stylesToString(this.thisComponent.styles)
+        } 
         styles += this.getDimensions();
         return styles;
       },
@@ -101,6 +104,11 @@ import type { PageContainerInterface } from '../model/pageContainer/container';
 
       onClick() {
         this.isActive = true;
+        this.$emit('onClick', this.thisComponent);
+      },
+
+      containedElementClick(pageElement: PageElement): void {
+        this.$emit('onClick', pageElement);
       },
 
       onDrop(event: DragEvent): void {

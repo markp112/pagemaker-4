@@ -13,6 +13,7 @@
       v-bind="getProps(component)"
       @dragover.prevent
       @drop.prevent="onDrop($event)"
+      @OnClick="containedElementClick($event)"
     >{{ component }}</component>
   </div>
 </template>
@@ -94,7 +95,11 @@ export default defineComponent({
     getComponentName(event: DragEvent): string {
       const dataTransfer = event.dataTransfer;
       return dataTransfer ? dataTransfer.getData('text') : '';
-    }
+    },
+
+    containedElementClick(pageElement: PageElement): void {
+      this.pageBuilderService.setActiveElement(pageElement);
+    },
   },
 })
 </script>

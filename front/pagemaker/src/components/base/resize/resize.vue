@@ -23,8 +23,8 @@
       class="triangle top-left"
       :class="getClass()"
       @mousedown.stop.prevent="handleDown($event)"
-      @mouseup="handleMouseUp($event)"
-      @mousemove="handleMouseMove($event)"
+      @mouseup.stop="handleMouseUp($event)"
+      @mousemove.stop="handleMouseMove($event)"
     >
     </span>
     <span
@@ -32,8 +32,8 @@
       class="triangle bottom-left"
       :class="getClass()"
       @mousedown.stop.prevent="handleDown($event)"
-      @mouseup="handleMouseUp($event)"
-      @mousemove="handleMouseMove($event)"
+      @mouseup.stop="handleMouseUp($event)"
+      @mousemove.stop="handleMouseMove($event)"
     >
     </span>
   </section>
@@ -70,7 +70,6 @@ export default defineComponent({
     },
     
     handleMouseUp(event: MouseEvent) {
-      event.stopPropagation;
       this.isSizing = false;
       window.removeEventListener('mouseup', this.handleMouseUp);
       this.$emit('resizeStopped');

@@ -3,7 +3,7 @@
     :ref="getId()"
     :id="getId()"
     class="relative select-none overflow-hidden"
-    @click.stop.prevent="onImageClick($event)"
+    @click.stop.prevent="onImageClick()"
     :style="getContainerStyles()"
   >
     <img
@@ -32,76 +32,78 @@ import { getImageUrl } from '@/common/getIcon';
 export default  defineComponent({
   name: 'imageComponent',
 
+  emits: ['onClick'],
+
   components: {
-      Resize: resize,
+    Resize: resize,
+  },
+
+  data() {
+    return {
+      thisComponent: {} as PageElement,
+      isActive: false,
+      mouse: new useMouse(),
+      isSizing: false,
+    }
+  },
+
+  mounted() {
+    this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
+  },
+
+  methods: {
+
+    resizeStarted(event: MouseEvent ) {
+      this.mouse.updatePositionEvent(event)
+    },
+      
+    onResize(aDimension: ClientCoordinates) {
+      Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
     },
 
-    data() {
-      return {
-        thisComponent: {} as PageElement,
-        isActive: false,
-        mouse: new useMouse(),
-        isSizing: false,
+    onImageClick() {
+      this.isActive = true;
+      this.$emit('onClick', this.thisComponent);
+    },
+
+    getDimensions(): string {
+      let dimension = '' 
+      if(this.thisComponent.dimension) {
+        dimension = this.thisComponent.dimension.toStyle();
       }
+      return dimension;
     },
 
-    mounted() {
-      this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
+    getImage(): string {
+      const path =  getImageUrl((this.thisComponent as ImageElement).content);
+      return path;
     },
 
-methods: {
+    getId() {
+      return this.thisComponent.ref;
+    },
 
-  resizeStarted(event: MouseEvent ) {
-    this.mouse.updatePositionEvent(event)
-  },
+    getClasses(): string {
+      return this.thisComponent.classDefinition;
+    },
+
+    getStyles(): string {
+      let styles = '';
+      if(this.thisComponent.styles) {
+        styles = stylesToString(this.thisComponent.styles)
+      }
+      styles += this.getDimensions();
+      return styles;
+    },
     
-  onResize(aDimension: ClientCoordinates) {
-    Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
-  },
-
-  onImageClick(event: MouseEvent) {
-    this.isActive = true;
-  },
-
-  getDimensions(): string {
-    let dimension = '' 
-    if(this.thisComponent.dimension) {
-      dimension = this.thisComponent.dimension.toStyle();
+    getContainerStyles(): string {
+      if((this.thisComponent as ImageElement).container) {
+        return (this.thisComponent as ImageElement).container.naturalSize.toStyle();
+      }
+      return '';
     }
-    return dimension;
+
   },
-
-  getImage(): string {
-    const path =  getImageUrl((this.thisComponent as ImageElement).content);
-    return path;
-  },
-
-  getId() {
-    return this.thisComponent.ref;
-  },
-
-  getClasses(): string {
-    return this.thisComponent.classDefinition;
-  },
-
-  getStyles(): string {
-    let styles = '';
-    if(this.thisComponent.styles) {
-      styles = stylesToString(this.thisComponent.styles)
-    }
-    styles += this.getDimensions();
-    return styles;
-  },
-  
-  getContainerStyles(): string {
-    if((this.thisComponent as ImageElement).container) {
-      return (this.thisComponent as ImageElement).container.naturalSize.toStyle();
-    }
-    return '';
-  }
-
-
-},
 
 })
 </script>

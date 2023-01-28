@@ -1,4 +1,5 @@
 import type { CssStyleNames } from '@/classes/cssStyles';
+import type { StyleTags } from '@/components/page/model/pageElement/pageElement';
 
 type EditorButtonTypes = 'list' | 'iconList' | 'plusMinus' | 'basic';
 
@@ -12,7 +13,7 @@ interface EditorButtonBase {
 
 interface SelectListIcon {
   icon: string;
-  classToApply: string;
+  classToApply: StyleTags;
   tooltip: string;
 }
 
