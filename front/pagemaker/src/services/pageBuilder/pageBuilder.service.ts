@@ -5,7 +5,7 @@ import { useToolbarStore } from '@/stores/toolbars.store';
 import { usePageStore } from '@/stores/page.store';
 import { ComponentFactory } from '@/views/pageBuilder/classes/componentFactory/componentFactory';
 import type { Dimension } from '@/classes/dimension';
-import type { CommandProperties } from '@/classes/command/command';
+import type { CommandProperties } from '@/classes/command/model/command';
 import { CommandProcessor } from '@/classes/command/commandProcessor';
 
 function PageBuilderService() {

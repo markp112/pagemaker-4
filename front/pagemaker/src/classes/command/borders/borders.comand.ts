@@ -1,13 +1,10 @@
-import type { BorderStyle, LineStyle, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { BorderStyle, LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import { EditorSettingsService } from '@/services/editor.settings.service';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
-import type { Command } from '../command';
-
-const STRING_SEPARATOR = ' ';
-
-const storeRef = useEditorSettingsStore();
+import type { Command } from '../model/command';
 
 class BordersCommand implements Command{
-  constructor(private pageElement: PageElement) {};
+  constructor(private pageElement: PageElement, private service:EditorSettingsService = new EditorSettingsService()) {};
 
   execute(styleRequested: StyleTags): PageElement {
     if(styleRequested === 'border-none') {
@@ -41,16 +38,14 @@ class BordersCommand implements Command{
   }
 
   private getLineStyle(): LineStyle {
-    return storeRef.borderLineStyle;
+    return this.service.getLineStyle();
   }
 
   private removeBorders(): PageElement {
-    console.log('%c⧭', 'color: #e57373', 'removeBorders');
     const styles = this.pageElement.styles.filter(style => !style.style.includes('border'));
     this.pageElement.styles = styles;
     return this.pageElement;
   }
 }
-
 
 export { BordersCommand };

@@ -46,7 +46,7 @@ import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue'
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 import selectButtonWithIcon from '@/components/base/editorButtons/components/selectButtonWithIcon/selectButtonWithIcon.vue';
 import { buttonDataMock } from '@/components/base/editorButtons/components/selectButtonWithIcon/mockData';
-import type { CommandProperties } from '@/classes/command/command';
+import type { CommandProperties } from '@/classes/command/model/command';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 
 const scalerSettings: SliderSettings = {

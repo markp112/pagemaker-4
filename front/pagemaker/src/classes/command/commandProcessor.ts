@@ -1,6 +1,6 @@
 import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import { BordersCommand } from './borders/borders.comand';
-import type { Command, CommandName, CommandProperties } from './command';
+import type { Command, CommandName, CommandProperties } from './model/command';
 
 type CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any}
 
@@ -11,11 +11,9 @@ class CommandProcessor {
   };
 
   processCommand(commandProperties: CommandProperties) {
-    console.log('%c⧭', 'color: #006dcc', commandProperties);
-    const command = (this.commandMap[commandProperties.commandName]);
-    console.log('%c⧭', 'color: #807160', command);
-    const x = command(this.pageElement);
-    this.pageElement = x.execute(commandProperties.payload);
+    const getCommand = (this.commandMap[commandProperties.commandName]);
+    const comamnd = getCommand(this.pageElement);
+    this.pageElement = comamnd.execute(commandProperties.payload);
   };
 
   undoCommand(commandProperties: CommandProperties) {
