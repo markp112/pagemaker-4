@@ -48,7 +48,7 @@ function Resize(thisComponent: PageElement, mouse: useMouse) {
   function resizeComponent(boxDimensions: Dimension){
     thisComponent.dimension.height = boxDimensions.height;
     thisComponent.dimension.width = boxDimensions.width;
-    if(thisComponent.type === 'image') {
+    if(thisComponent.type === 'imageElement') {
       (thisComponent as ImageElement).container.naturalSize.height = boxDimensions.height;
       (thisComponent as ImageElement).container.naturalSize.width = boxDimensions.width
     }

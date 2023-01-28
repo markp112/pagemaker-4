@@ -80,12 +80,12 @@ const lineStyleButtonMock: EditorButtonSelectList = {
     {
       classToApply: 'ridge',
       icon: 'ridge-32.png',
-      tooltip: 'Inset line',
+      tooltip: 'Ridge',
     },
     {
       classToApply: 'groove',
       icon: 'groove-32.png',
-      tooltip: 'Groove line',
+      tooltip: 'Groove',
     },
   ]
 }
