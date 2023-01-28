@@ -1,6 +1,5 @@
 import type { BorderStyle, LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { EditorSettingsService } from '@/services/editor.settings.service';
-import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 import type { Command } from '../model/command';
 
 class BordersCommand implements Command{
