@@ -94,7 +94,6 @@ export default defineComponent({
     },
     
     handleMouseMove(ev: MouseEvent) {
-      ev.stopPropagation;
       if (this.isSizing) {
         const clientCoordinates: ClientCoordinates = {
           clientX: ev.pageX,

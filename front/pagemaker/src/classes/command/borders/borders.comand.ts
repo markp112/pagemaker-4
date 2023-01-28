@@ -2,8 +2,8 @@ import type { BorderStyle, LineStyle, PageElement, StyleTags } from '@/component
 import { EditorSettingsService } from '@/services/editor.settings.service';
 import type { Command } from '../model/command';
 
-class BordersCommand implements Command{
-  constructor(private pageElement: PageElement, private service:EditorSettingsService = new EditorSettingsService()) {};
+class BordersCommand implements Command {
+  constructor(private pageElement: PageElement, private service: EditorSettingsService = new EditorSettingsService()) {};
 
   execute(styleRequested: StyleTags): PageElement {
     if(styleRequested === 'border-none') {
