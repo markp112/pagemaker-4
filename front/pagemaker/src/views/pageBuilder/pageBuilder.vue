@@ -23,10 +23,7 @@
     >
       <TabstripContainer :labels="['Borders']">
         <template v-slot:tab-0>
-          <SelectButtonWithIcon v-for="button in buttonData"
-            :button-data="button" 
-            @on-click="handleButtonClick($event)"
-          />
+          <BordersContainer @on-button-click="handleButtonClick($event)" />
         </template>
       </TabstripContainer>
     </SettingsPanelVue>
@@ -45,10 +42,9 @@ import type { PageElement } from '@/components/page/model/pageElement/pageElemen
 import PageCanvas from '@/components/canvas/pageCanvas.vue';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
-import selectButtonWithIcon from '@/components/base/editorButtons/components/selectButtonWithIcon/selectButtonWithIcon.vue';
-import { borderButtonDataMock, lineStyleButtonMock } from '@/components/base/editorButtons/components/selectButtonWithIcon/borderButtonData';
 import type { CommandProperties } from '@/classes/command/model/command';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
+import bordersContainer from '@/components/base/editorButtons/editorContainers/borders/bordersContainer.vue'
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -72,7 +68,7 @@ const sliderPosition: SliderPosition = {
       Scaler,
       SettingsPanelVue: settingsPanelVue,
       TabstripContainer: tabstripContainer,
-      SelectButtonWithIcon: selectButtonWithIcon,
+      BordersContainer: bordersContainer,
     },
     
     data() {
@@ -87,7 +83,7 @@ const sliderPosition: SliderPosition = {
         sliderPosition: sliderPosition,
         zoomPage: 1,
         sidePanelWidth: 'w-2/12',
-        buttonData: [borderButtonDataMock, lineStyleButtonMock]
+        
       }
     },
 
