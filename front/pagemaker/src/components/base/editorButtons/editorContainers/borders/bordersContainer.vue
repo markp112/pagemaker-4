@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-row justify-start">
-    <SelectButtonWithIcon v-for="button in buttonsData"
+    <SelectButtonWithIcon v-for="(button, index) in buttonsData"
+        :key="index"
         :button-data="button" 
         @on-click="handleButtonClick($event)"
       />

@@ -3,7 +3,7 @@
     :ref="getId()"
     :id="getId()"
     class="relative select-none overflow-hidden"
-    @click.stop.prevent="onImageClick()"
+    @click.stop="onImageClick()"
     :style="getContainerStyles()"
   >
     <img
