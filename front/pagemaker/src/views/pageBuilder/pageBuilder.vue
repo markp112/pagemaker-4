@@ -21,9 +21,11 @@
       :class="sidePanelWidth"
       @toggle-clicked="resizePanel()"
     >
-      <TabstripContainer :labels="['Palette Editor']">
+      <TabstripContainer :labels="['Borders']">
         <template v-slot:tab-0>
-          <SelectButtonWithIcon :button-data="getButtonData()"></SelectButtonWithIcon>
+          <SelectButtonWithIcon :button-data="getButtonData()" 
+            @on-click="handleButtonClick($event)"
+          />
         </template>
       </TabstripContainer>
     </SettingsPanelVue>
@@ -43,8 +45,9 @@ import PageCanvas from '@/components/canvas/pageCanvas.vue';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 import selectButtonWithIcon from '@/components/base/editorButtons/components/selectButtonWithIcon/selectButtonWithIcon.vue';
-import type { SelectListIcon } from '@/components/base/editorButtons/model';
 import { buttonDataMock } from '@/components/base/editorButtons/components/selectButtonWithIcon/mockData';
+import type { CommandProperties } from '@/classes/command/command';
+import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -75,13 +78,14 @@ const sliderPosition: SliderPosition = {
       return {
         store: useNavMenuItemStore(),
         pageStore: usePageStore(),
+        pageBuilderService: PageBuilderService(),
         menuItems: [] as NavMenuItem[],
         toolbarWidth: 'w-64',
         toolbarHidden: false,
         sliderSettings: scalerSettings,
         sliderPosition: sliderPosition,
         zoomPage: 1,
-        sidePanelWidth: 'w-3/12',
+        sidePanelWidth: 'w-2/12',
         buttonData: buttonDataMock,
         buttonDataMock,
       }
@@ -123,6 +127,10 @@ const sliderPosition: SliderPosition = {
 
       getButtonData() {
         return buttonDataMock;
+      },
+
+      handleButtonClick(payload: CommandProperties): void {
+        this.pageBuilderService.processButtonCommand(payload);
       }
     },
 

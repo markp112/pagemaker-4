@@ -1,5 +1,5 @@
 <template>
-  <span :class="getClasses" @click="buttonClick($event)" class="bg-site ">
+  <span :class="getClasses" @click.stop="buttonClick($event)" class="bg-site ">
     <slot />
   </span>
 </template>
@@ -106,7 +106,6 @@ export default defineComponent({
 
   methods: {
     buttonClick(event: MouseEvent): void {
-      event.stopPropagation();
       this.$emit('onClick');
     },
     

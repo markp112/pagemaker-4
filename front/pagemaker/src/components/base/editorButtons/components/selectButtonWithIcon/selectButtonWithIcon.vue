@@ -26,17 +26,17 @@
           @click="iconClicked(iconElement)"
           class="dropdown-menu-item mb-2 relative "
           :class="{
-            'bg-secondary-100': iconElement.classToApply === selectedItem
+            'border border-site-primary': iconElement.classToApply === selectedItem
           }"
         >
           <img :src="getPath(iconElement.icon)"
             class="w-8 h-8"
             :class="getClass(iconElement.classToApply)"
-            @mouseover.stop="showTooltip = iconElement.classToApply"
+            @mouseover.stop="showTooltip = iconElement.icon"
             @mouseleave.stop="showTooltip = ''"
           />
           <Tooltip
-            :showToolTip="getShowToolTip(iconElement.classToApply)"
+            :showToolTip="getShowToolTip(iconElement.icon)"
             :tooltip="iconElement.tooltip"
           />
         </li>
@@ -51,10 +51,11 @@ import toolTip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import type { Style } from '@/components/page/model/pageElement/pageElement';
 import type { EditorButtonSelectList, SelectListIcon } from '../../model';
 import { getImageUrl } from '@/common/getIcon';
+import type { CommandProperties } from '@/classes/command/command';
 
 export default defineComponent({
   name:'Select-Button',
-  emits: ['selectChange'],
+  emits: ['onClick'],
 
   props: {
     buttonData: {
@@ -77,16 +78,14 @@ export default defineComponent({
 
   methods: {
 
-    iconClicked(iconElement: SelectListIcon): Style {
+    iconClicked(iconElement: SelectListIcon) {
       this.selectedItem = iconElement.classToApply;
-      const style: Style = {
-        style: this.buttonData.cssStyleName,
-        value: iconElement.classToApply,
-        unit: 'px',
+      const payload: CommandProperties = {
+        commandName: 'border',
+        payload: iconElement.classToApply,
       };
       this.show();
-      this.$emit('selectChange', style)
-      return style;
+      this.$emit('onClick', payload)
     },
 
     show() {

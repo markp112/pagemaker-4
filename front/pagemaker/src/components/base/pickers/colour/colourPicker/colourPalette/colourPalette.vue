@@ -4,9 +4,9 @@
     class="color-palette z-50"
     width="200"
     height="200"
-    @mousedown="onMouseDown($event)"
-    @mousemove="onMouseMove($event)"
-    @mouseup="onMouseUp()"
+    @mousedown.stop="onMouseDown($event)"
+    @mousemove.stop="onMouseMove($event)"
+    @mouseup.stop="onMouseUp()"
   >
   </canvas>
 </template>
@@ -102,7 +102,6 @@ export default defineComponent({
       },
       
       onMouseMove(evt: MouseEvent) {
-        evt.stopPropagation();
         if (this.mousedown) {
           this.selectedPosition = { x: evt.offsetX, y: evt.offsetY };
           this.draw();
