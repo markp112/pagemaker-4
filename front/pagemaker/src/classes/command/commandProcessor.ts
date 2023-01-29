@@ -16,12 +16,13 @@ class CommandProcessor {
 
   processCommand(commandProperties: CommandProperties) {
     const getCommand = (this.commandMap[commandProperties.commandName]);
-    const comamnd = getCommand(this.pageElement);
-    this.pageElement = comamnd.execute(commandProperties.payload);
+    const command = getCommand(this.pageElement);
+    this.pageElement = command.execute(commandProperties.payload);
   };
 
   undoCommand(commandProperties: CommandProperties) {
-    const command = (this.commandMap[commandProperties.commandName]) as unknown as Command;
+    const getCommand = (this.commandMap[commandProperties.commandName]);
+    const command = getCommand(this.pageElement);
     command.undo(commandProperties.payload);
   }
 }

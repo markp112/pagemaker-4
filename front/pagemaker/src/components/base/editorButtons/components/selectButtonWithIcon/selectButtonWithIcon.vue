@@ -3,7 +3,7 @@
     <div class="sidebar-button-container relative">
       <div class="flex flex-row justify-start ">
         <img
-          :src="getPath(buttonData.displayIcon)"
+          :src="getPath(selectedIcon)"
           alt=""
           class="cursor-pointer hover:bg-gray-600"
           @click="show()"
@@ -54,7 +54,7 @@ import type { CommandProperties } from '@/classes/command/model/command';
 
 export default defineComponent({
   name:'Select-Button',
-  emits: ['onClick'],
+  emits: ['onClick', 'onClear'],
 
   props: {
     buttonData: {
@@ -71,7 +71,8 @@ export default defineComponent({
     return {
       toggleSelectOptions: false,
       selectedItem: '',
-      showTooltip: ''
+      showTooltip: '',
+      selectedIcon: this.buttonData.displayIcon,
     }
   },
 
@@ -84,7 +85,16 @@ export default defineComponent({
         payload: iconElement.classToApply,
       };
       this.show();
-      this.$emit('onClick', payload)
+      if(iconElement.icon === this.selectedIcon) {
+        this.$emit('onClear', payload);
+      } else {
+        this.$emit('onClick', payload);
+      }
+      this.setIcon(iconElement.icon);
+    },
+
+    setIcon(icon: string) {
+      this.selectedIcon = this.selectedIcon === icon ? this.buttonData.displayIcon : icon; 
     },
 
     show() {

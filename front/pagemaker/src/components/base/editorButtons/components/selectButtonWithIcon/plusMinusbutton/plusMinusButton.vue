@@ -6,15 +6,15 @@
       :src="getPath(buttonData.displayIcon)"
       @mouseover="showToolTip=!showToolTip"
       @mouseleave="showToolTip=!showToolTip"
-      class="text-accent-600 cursor-pointer hover:bg-gray-600"
+      class="text-accent-600"
     />
     <div class="flex flex-col items-center">
       <span
-      class="icon-img plus h-4 inline-block w-4"
+      class="icon-img plus h-4 w-4 inline-block active:rounded-full"
       @click="lineThicknessChange(1)"
       ></span>
       <span
-        class="icon-img minus h-4 inline-block w-4"
+        class="icon-img minus h-4 inline-block w-4 active:rounded-full"
         @click="lineThicknessChange(-1)"
       ></span>
     </div>
@@ -79,6 +79,7 @@ export default  defineComponent ({
 
 .plus {
   background-image: url("../../../../../../assets/icons/plus-24.png");
+  @apply cursor-pointer;
 }
 
 .plus:hover {
@@ -86,6 +87,7 @@ export default  defineComponent ({
 }
 .minus {
   background-image: url("../../../../../../assets/icons/minus-24.png");
+  @apply cursor-pointer;
 }
 
 .minus:hover {

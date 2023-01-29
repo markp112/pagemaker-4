@@ -4,6 +4,7 @@
         :key="index"
         :button-data="button" 
         @on-click="handleButtonClick($event)"
+        @on-clear="handleClear($event)"
       />
       <PlusMinusButton :button-data="lineThicknessButton" @on-click="handleButtonClick($event)"/>
   </div>
@@ -19,7 +20,7 @@ import plusMinusButton from '../../components/selectButtonWithIcon/plusMinusbutt
 export default defineComponent({
     name: 'bordersContainer',
 
-    emits: ['onButtonClick'],
+    emits: ['onButtonClick', 'onClearCommand'],
 
     data() {
       return {
@@ -36,7 +37,12 @@ export default defineComponent({
     methods: {
       handleButtonClick(payload: CommandProperties) {
         this.$emit('onButtonClick', payload);
+      },
+
+      handleClear(payload: CommandProperties) {
+        this.$emit('onClearCommand', payload);
       }
+
     }
   })
 

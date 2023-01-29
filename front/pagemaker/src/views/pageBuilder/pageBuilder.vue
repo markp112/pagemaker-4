@@ -23,7 +23,7 @@
     >
       <TabstripContainer :labels="['Borders']">
         <template v-slot:tab-0>
-          <!-- <BordersContainer @on-button-click="handleButtonClick($event)" /> -->
+          <BordersContainer @on-button-click="handleButtonClick($event)" @on-clear-command="handleClearCommand($event)" />
         </template>
       </TabstripContainer>
     </SettingsPanelVue>
@@ -123,6 +123,10 @@ const sliderPosition: SliderPosition = {
 
       handleButtonClick(payload: CommandProperties): void {
         this.pageBuilderService.processButtonCommand(payload);
+      },
+
+      handleClearCommand(payload: CommandProperties): void {
+        this.pageBuilderService.clearButtonCommand(payload);
       }
     },
 

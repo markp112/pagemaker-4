@@ -54,10 +54,19 @@ function PageBuilderService() {
     }
   }
 
+  function clearButtonCommand(payload: CommandProperties) {
+    const pageElement = pageStore.activeElement;
+    if(pageElement) {
+      const commandProcessor = new CommandProcessor(pageElement);
+      commandProcessor.undoCommand(payload);
+    }
+  }
+
   return { createNewComponent, 
       calcPageSize,
       setScaledDimension,
       processButtonCommand,
+      clearButtonCommand,
       setActiveElement
     };
 }

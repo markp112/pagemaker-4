@@ -15,11 +15,9 @@ class LineThicknessCommand implements Command {
       lineThickness = lineThickness < 0 ? 0 : lineThickness;
     }
     this.service.setLineThickness(lineThickness);
-    const bordersCommand = new BordersCommand(this.pageElement);
     const selectedBorder = this.service.getBorderElement();
-    console.log('%c⧭', 'color: #1d3f73', selectedBorder);
+    const bordersCommand = new BordersCommand(this.pageElement);
     bordersCommand.execute(selectedBorder);
-    
     return this.pageElement;
   }
 
