@@ -13,6 +13,7 @@ class BordersCommand implements Command {
       this.undo(styleRequested);
     }
     this.pageElement.styles.push(this.getBorderStyle(styleRequested));
+    // this.service.setBorderElement(styleRequested);
     return this.pageElement;
   }
 
@@ -28,10 +29,11 @@ class BordersCommand implements Command {
 
   private getBorderStyle(styleRequested: StyleTags): BorderStyle {
     const lineStyle: LineStyle = this.getLineStyle();
+    const thickness: number = this.service.lineThickness();
     return {
       style: styleRequested,
       lineStyle,
-      value: '1',
+      value: `${thickness}`,
       unit: 'px',
     };
   }

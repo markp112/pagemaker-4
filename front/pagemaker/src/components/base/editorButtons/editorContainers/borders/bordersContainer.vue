@@ -5,14 +5,16 @@
         :button-data="button" 
         @on-click="handleButtonClick($event)"
       />
+      <PlusMinusButton :button-data="lineThicknessButton" @on-click="handleButtonClick($event)"/>
   </div>
 </template>
 
 <script lang="ts">
 import type { CommandProperties } from '@/classes/command/model/command';
 import { defineComponent } from 'vue';
-import { borderButtonDataMock, lineStyleButtonMock } from '../../components/selectButtonWithIcon/borderButtonData';
+import { borderButtonDataMock, lineStyleButtonMock, lineThicknessButton } from '../../components/selectButtonWithIcon/borderButtonData';
 import selectButtonWithIcon from '../../components/selectButtonWithIcon/selectButtonWithIcon.vue';
+import plusMinusButton from '../../components/selectButtonWithIcon/plusMinusbutton/plusMinusButton.vue';
   
 export default defineComponent({
     name: 'bordersContainer',
@@ -21,12 +23,14 @@ export default defineComponent({
 
     data() {
       return {
-        buttonsData: [borderButtonDataMock, lineStyleButtonMock]
+        buttonsData: [borderButtonDataMock, lineStyleButtonMock],
+        lineThicknessButton: lineThicknessButton,
       }
     },
 
     components: {
       SelectButtonWithIcon: selectButtonWithIcon,
+      PlusMinusButton: plusMinusButton, 
     },
 
     methods: {

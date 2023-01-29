@@ -23,7 +23,7 @@
     >
       <TabstripContainer :labels="['Borders']">
         <template v-slot:tab-0>
-          <BordersContainer @on-button-click="handleButtonClick($event)" />
+          <!-- <BordersContainer @on-button-click="handleButtonClick($event)" /> -->
         </template>
       </TabstripContainer>
     </SettingsPanelVue>

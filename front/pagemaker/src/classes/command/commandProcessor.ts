@@ -1,6 +1,7 @@
 import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import { BordersCommand } from './borders/borders.comand';
 import { LineStyleCommand } from './lineStyle/lineStyle.command';
+import { LineThicknessCommand } from './lineThickness/lineThickness.command';
 import type { Command, CommandName, CommandProperties } from './model/command';
 
 type CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any}
@@ -10,6 +11,7 @@ class CommandProcessor {
   private commandMap: CommandKey = {
     'border': (pageElement: PageElement) => new BordersCommand(pageElement),
     'line-style': (pageElement: PageElement) => new LineStyleCommand(pageElement),
+    'line-thickness': (pageElement: PageElement) => new LineThicknessCommand(pageElement),
   };
 
   processCommand(commandProperties: CommandProperties) {
