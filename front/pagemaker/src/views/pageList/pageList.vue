@@ -13,22 +13,23 @@
         </base-button>
       </div>
     </div>
-    <div class="flex flex-row justify-center font-bold mt-10 text-lg">
-        <div class="basis-2/12"></div>
-        <div class="basis-2/12">Page Name</div>
-        <div class="basis-2/12">Date Created</div>
-        <div class="basis-2/12">Last Edited</div>
-        <div class="basis-2/12">Active</div>
-        <div class="basis-2/12"></div>
+    <div class="ml-64 w-full">
+    <div class="flex flex-row justify-center font-bold mt-10 text-lg w-8/12">
+        <span class="w-1/12"></span>
+        <span class="w-2/12">Page Name</span>
+        <span class="w-2/12">Date Created</span>
+        <span class="w-2/12">Last Edited</span>
+        <span class="w-2/12">Active</span>
+        <span class="w-2/12"></span>
     </div>  
     
-      <ul class="flex flex-row justify-center font-semibold text-lg w-full">
+      <ul class="flex flex-row justify-center font-semibold text-lg w-8/12">
         <li v-for="page in pageList" 
           :key="page.name"
           class="hover:bg-site-secondary-light hover:text-accent-1 p-1 mt-1 cursor-pointer rounded-md flex flex-row justify-start w-full ml-2"
           @click="pageRowClick(page.name)"
         >
-              <span class="basis-2/12 self-end"></span>
+              <span class="basis-1/12 self-end"></span>
               <span class="basis-2/12">
                 <img :src="getIcon(page.icon)" alt="" class="w-8 h-8 inline-block mr-2 -ml-8"/>
                 {{ page.name }}
@@ -50,6 +51,7 @@
               />
         </li>
       </ul>
+    </div>
   </section>
 </template>
 
