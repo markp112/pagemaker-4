@@ -1,4 +1,4 @@
-import type { LineStyle } from '@/components/page/model/pageElement/pageElement';
+import type { LineStyle, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia';
 
 const useEditorSettingsStore = defineStore('editorStore',{
@@ -7,6 +7,8 @@ const useEditorSettingsStore = defineStore('editorStore',{
     return {
       _borderLineStyle: 'solid' as LineStyle,
       _currentColor: '#000000' as string,
+      _lineThickness: 1,
+      _borderElement: '' as StyleTags,
     }
   },
 
@@ -17,6 +19,14 @@ const useEditorSettingsStore = defineStore('editorStore',{
 
     borderLineStyle: (state) => {
       return state._borderLineStyle;
+    },
+
+    getLineThickness: (state) => {
+      return state._lineThickness;
+    },
+
+    borderElement: (state) => {
+      return state._borderElement;
     }
   },
 
@@ -28,6 +38,14 @@ const useEditorSettingsStore = defineStore('editorStore',{
     setBorderLineStyle(lineStyle: LineStyle): void {
       this._borderLineStyle = lineStyle;
     },
+
+    setLineThickness(byAmount: number): void {
+      this._lineThickness = byAmount;
+    },
+
+    setBorderElement(borderElement: StyleTags):void {
+      this._borderElement = borderElement;
+    }
 
   }
 });

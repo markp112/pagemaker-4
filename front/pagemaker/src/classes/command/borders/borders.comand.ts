@@ -13,12 +13,12 @@ class BordersCommand implements Command {
       this.undo(styleRequested);
     }
     this.pageElement.styles.push(this.getBorderStyle(styleRequested));
+    this.setOrClearBorderElement(styleRequested);
     return this.pageElement;
   }
 
   undo(styleRequested: StyleTags): PageElement {
-    const styles = this.pageElement.styles.filter(style => style.style !== styleRequested);
-    this.pageElement.styles = styles;
+    this.service.setBorderElement('');
     return this.pageElement
   }
 
@@ -28,10 +28,11 @@ class BordersCommand implements Command {
 
   private getBorderStyle(styleRequested: StyleTags): BorderStyle {
     const lineStyle: LineStyle = this.getLineStyle();
+    const thickness: number = this.service.lineThickness();
     return {
       style: styleRequested,
       lineStyle,
-      value: '1',
+      value: `${thickness}`,
       unit: 'px',
     };
   }
@@ -44,6 +45,10 @@ class BordersCommand implements Command {
     const styles = this.pageElement.styles.filter(style => !style.style.includes('border'));
     this.pageElement.styles = styles;
     return this.pageElement;
+  }
+
+  private setOrClearBorderElement(borderElement: StyleTags): void {
+    this.service.setBorderElement(borderElement);
   }
 }
 

@@ -1,4 +1,4 @@
-import type { EditorButtonSelectList } from '../../model';
+import type { EditorButtonBase, EditorButtonSelectList } from '../../model';
 
 const borderButtonDataMock: EditorButtonSelectList = {
   buttonType: 'iconList',
@@ -88,6 +88,14 @@ const lineStyleButtonMock: EditorButtonSelectList = {
       tooltip: 'Groove',
     },
   ]
+};
+
+const lineThicknessButton: EditorButtonBase = {
+  buttonType: 'plusMinus',
+  commandName: 'line-thickness',
+  displayIcon: 'thickness-32.png',
+  name: 'LineThickness',
+  tooltip: 'Line thickness'
 }
 
-export { borderButtonDataMock, lineStyleButtonMock };
+export { borderButtonDataMock, lineStyleButtonMock, lineThicknessButton };

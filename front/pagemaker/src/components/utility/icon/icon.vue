@@ -56,8 +56,6 @@ export default defineComponent ({
             : this.getImageUrl(`emoji_waiting-32.png`);
         return icon;
       } catch (error) {
-        console.log('%c⧭', 'color: #0088cc', error)
-        console.log(`${errorMessages.files.icons.missingIcon}${this.$props.iconImage.icon}`);
         throw new Error(`${errorMessages.files.icons.missingIcon}${this.$props.iconImage.icon}`);
       }
     }
