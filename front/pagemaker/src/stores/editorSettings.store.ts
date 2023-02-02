@@ -1,3 +1,4 @@
+import type { Units } from '@/components/page/model/model';
 import type { LineStyle, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia';
 
@@ -9,6 +10,7 @@ const useEditorSettingsStore = defineStore('editorStore',{
       _currentColor: '#000000' as string,
       _lineThickness: 1,
       _borderElement: '' as StyleTags,
+      _units: 'px' as Units,
     }
   },
 
@@ -27,7 +29,12 @@ const useEditorSettingsStore = defineStore('editorStore',{
 
     borderElement: (state) => {
       return state._borderElement;
-    }
+    },
+
+    units: (state) => {
+      return state._units;
+    },
+
   },
 
   actions: {
@@ -45,6 +52,10 @@ const useEditorSettingsStore = defineStore('editorStore',{
 
     setBorderElement(borderElement: StyleTags):void {
       this._borderElement = borderElement;
+    },
+
+    setUnits(units: Units): void {
+      this._units = units;
     }
 
   }

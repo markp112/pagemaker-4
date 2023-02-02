@@ -1,4 +1,4 @@
-import type { EditorButtonBase, EditorButtonSelectList } from '../../model';
+import type { EditorButtonBase, EditorButtonNumericSelectList, EditorButtonSelectList } from '.';
 
 const borderButtonDataMock: EditorButtonSelectList = {
   buttonType: 'iconList',
@@ -98,4 +98,13 @@ const lineThicknessButton: EditorButtonBase = {
   tooltip: 'Line thickness'
 }
 
-export { borderButtonDataMock, lineStyleButtonMock, lineThicknessButton };
+const borderRadius: EditorButtonNumericSelectList = {
+  displayIcon: 'bezier-32.png',
+  buttonType: 'numericWithSelect',
+  commandName: 'border-radius',
+  listValues: ['px', 'em', '%'],
+  name: 'BorderRadius',
+  tooltip: 'Border radius',
+}
+
+export { borderButtonDataMock, lineStyleButtonMock, lineThicknessButton, borderRadius };

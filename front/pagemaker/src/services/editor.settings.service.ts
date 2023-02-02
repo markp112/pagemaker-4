@@ -1,3 +1,4 @@
+import type { Units } from '@/components/page/model/model';
 import type { LineStyle, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 
@@ -26,6 +27,14 @@ class EditorSettingsService {
 
   getBorderElement(): StyleTags {
     return this.store.borderElement;
+  }
+
+  getUnits(): Units {
+    return this.store.units;
+  }
+
+  setUnits(units: Units) {
+    this.store.setUnits(units);
   }
 }
 

@@ -1,9 +1,9 @@
 <template>
   <div class="text-site-primary w-full">
-    <label for="drop-down" v-if="label" class="w-full block mb-1"> {{ label }}</label>
     <div class="flex flex-row justify-between text-sm relative">
+      <label for="drop-down" v-if="label" class="w-full block mb-1 font-semibold"> {{ label }}</label>
       <input
-        v-model="currentValue"
+        v-model="selectedItem"
         id="drop-down"
         name="drop-down"
         class="p-2 relative bg-site-surface text-on-surface h-6 border border-gray-400 "
@@ -53,7 +53,7 @@ export default defineComponent({
   data() {
     return {
       toggleSelectOptions: false,
-      currentValue: this.$props.selectedItem,
+      currentValue: this.selectedItem,
     }
   },
 

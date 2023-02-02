@@ -7,12 +7,15 @@
           alt=""
           class="cursor-pointer hover:bg-gray-600"
           @click="show()"
+          @mouseover="showMainTooltip=!showMainTooltip"
+          @mouseout="showMainTooltip=!showMainTooltip"
         />
         <img
           :src="getPath('down-24.png')"
           class="w-4 h-4 cursor-pointer hover:bg-gray-800"
           @click="show()"
         />
+        <Tooltip :tooltip="buttonData.tooltip" :showToolTip="showMainTooltip" class="left-10"/>
       </div>
     </div>
     <div>
@@ -71,6 +74,7 @@ export default defineComponent({
     return {
       toggleSelectOptions: false,
       selectedItem: '',
+      showMainTooltip: false,
       showTooltip: '',
       selectedIcon: this.buttonData.displayIcon,
     }
