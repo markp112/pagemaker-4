@@ -1,5 +1,5 @@
 import type { CssStyleNames } from '@/classes/cssStyles';
-import type { Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { StyleTags } from '@/components/page/model/pageElement/pageElement';
 
 type CommandName = | 'border'
   | 'line-style'

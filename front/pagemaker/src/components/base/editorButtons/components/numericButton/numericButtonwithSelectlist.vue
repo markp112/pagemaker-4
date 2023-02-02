@@ -22,7 +22,6 @@ import type { CommandProperties } from '@/classes/command/model/command';
 import { getImageUrl } from '@/common/getIcon';
 import { defineComponent, type PropType } from 'vue';
 import type { EditorButtonNumericSelectList } from '../../model';
-import dropDown from '@/components/base/pickers/dropDown/dropDown.vue';
 import toolTip from '@/components/utility/notifications/tooltip/toolTip.vue';
 
 export default defineComponent({
@@ -38,7 +37,6 @@ export default defineComponent({
   },
 
   components: {
-    DropDown: dropDown,
     Tooltip: toolTip,
   },
 

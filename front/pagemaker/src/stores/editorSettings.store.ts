@@ -1,4 +1,4 @@
-import type { Unit, Units } from '@/components/page/model/model';
+import type { Units } from '@/components/page/model/model';
 import type { LineStyle, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia';
 
