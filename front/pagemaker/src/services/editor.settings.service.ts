@@ -1,5 +1,5 @@
 import type { Units } from '@/components/page/model/model';
-import type { LineStyle, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 
 class EditorSettingsService {
@@ -35,6 +35,31 @@ class EditorSettingsService {
 
   setUnits(units: Units) {
     this.store.setUnits(units);
+  }
+
+  setColour(colour: string) {
+    this.store.setCurrentColour(colour);
+  }
+
+  getColour(): string {
+    return this.store.currentColour;
+  }
+
+  setActiveElement(element: PageElement) {
+    console.log('%c⧭', 'color: #733d00', element);
+    if(this.store.activeElement === undefined) {
+      this.store.setActiveElement(element);
+      return;
+    } 
+    if(this.store.activeElement.ref === element.ref) {
+      this.store.setActiveElement(undefined);
+      return;
+    } 
+    this.store.setActiveElement(element);
+  }
+
+  getActiveElement() {
+    return this.store.activeElement;
   }
 }
 

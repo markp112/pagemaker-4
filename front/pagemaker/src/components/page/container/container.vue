@@ -4,9 +4,8 @@
     :ref="getId()"
     :class="getClasses()"
     :style="getStyles()"
-    @click.stop.prevent="onClick()"
+    @click.stop="onClick()"
     @drop.prevent="onDrop($event)"
-    @mouseleave="isActive=false"
   >
   <component
       v-for="(pageElement, index) in getPageElements()"
@@ -14,9 +13,9 @@
       :key="index"
       :index="index"
       v-bind="getProps(pageElement)"
-      @onClick.stop="containedElementClick($event)"
+      @onClick="containedElementClick($event)"
       @dragover.prevent
-      @drop.stop.prevent="onDrop"
+      @drop.stop="onDrop"
     >{{pageElement}}</component>
     <Resize :is-active="isActive" 
       @resize-started="resizeStarted($event)"
@@ -35,6 +34,7 @@ import { Resize } from '../../base/resize/onResize';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import imageElement from '../image/imageElement.vue';
 import type { PageContainerInterface } from '../model/pageContainer/container';
+import { EditorSettingsService } from '@/services/editor.settings.service';
 
   export default defineComponent({
     name: 'component-container',
@@ -50,8 +50,8 @@ import type { PageContainerInterface } from '../model/pageContainer/container';
       return {
         thisComponent: {} as PageContainerInterface,
         pageBuilderService: PageBuilderService(),
-        isActive: false,
         mouse: new useMouse(),
+        editorSettings: new EditorSettingsService(),
       }
     },
 
@@ -59,7 +59,15 @@ import type { PageContainerInterface } from '../model/pageContainer/container';
       this.thisComponent = ((this.$attrs.props as unknown as PropsDefinition).thisComponent) as PageContainerInterface;
     },
 
+    computed: {
+
+      isActive() {
+        return this.editorSettings.getActiveElement()?.ref === this.thisComponent.ref;
+      },
+    },
+
     methods: {
+
 
       getId() {
         return this.thisComponent.ref;
@@ -103,7 +111,6 @@ import type { PageContainerInterface } from '../model/pageContainer/container';
       },
 
       onClick() {
-        this.isActive = true;
         this.$emit('onClick', this.thisComponent);
       },
 

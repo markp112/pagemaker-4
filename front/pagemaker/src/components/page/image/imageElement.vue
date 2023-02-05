@@ -29,6 +29,7 @@ import resize from '@/components/base/resize/resize.vue';
 import { stylesToString } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
+import { EditorSettingsService } from '@/services/editor.settings.service';
 export default  defineComponent({
   name: 'imageComponent',
 
@@ -41,16 +42,24 @@ export default  defineComponent({
   data() {
     return {
       thisComponent: {} as PageElement,
-      isActive: false,
       mouse: new useMouse(),
       isSizing: false,
+      editorSettings: new EditorSettingsService(),
     }
   },
 
+  
+  
   mounted() {
     this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
   },
+  
+  computed: {
 
+    isActive() {
+      return this.editorSettings.getActiveElement()?.ref === this.thisComponent.ref;
+  },
+  },
   methods: {
 
     resizeStarted(event: MouseEvent ) {
@@ -62,7 +71,6 @@ export default  defineComponent({
     },
 
     onImageClick() {
-      this.isActive = true;
       this.$emit('onClick', this.thisComponent);
     },
 

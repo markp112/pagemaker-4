@@ -2,7 +2,8 @@ import type { EditorButtonBase, EditorButtonNumericSelectList, EditorButtonSelec
 
 const borderButtonDataMock: EditorButtonSelectList = {
   buttonType: 'iconList',
-  commandName:'border',
+  commandName: 'border',
+  commandType: 'direct',
   displayIcon: 'border_all-32.png',
   name: 'Borders',
   tooltip: 'Borders',
@@ -44,6 +45,7 @@ const lineStyleButtonMock: EditorButtonSelectList = {
   buttonType: 'iconList',
   commandName:'line-style',
   displayIcon: 'sketch-32.png',
+  commandType: 'indirect',
   name: 'line styles',
   tooltip: 'Line Style',
   listValues: [
@@ -93,6 +95,7 @@ const lineStyleButtonMock: EditorButtonSelectList = {
 const lineThicknessButton: EditorButtonBase = {
   buttonType: 'plusMinus',
   commandName: 'line-thickness',
+  commandType: 'indirect',
   displayIcon: 'thickness-32.png',
   name: 'LineThickness',
   tooltip: 'Line thickness'
@@ -102,6 +105,7 @@ const borderRadius: EditorButtonNumericSelectList = {
   displayIcon: 'bezier-32.png',
   buttonType: 'numericWithSelect',
   commandName: 'border-radius',
+  commandType: 'indirect',
   listValues: ['px', 'em', '%'],
   name: 'BorderRadius',
   tooltip: 'Border radius',

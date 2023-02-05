@@ -7,10 +7,13 @@ import { ComponentFactory } from '@/views/pageBuilder/classes/componentFactory/c
 import type { Dimension } from '@/classes/dimension';
 import type { CommandProperties } from '@/classes/command/model/command';
 import { CommandProcessor } from '@/classes/command/commandProcessor';
+import type { CommandHistory } from '@/classes/history/history';
+import { EditorSettingsService } from '../editor.settings.service';
 
 function PageBuilderService() {
   const toolbarStore = useToolbarStore();
   const pageStore = usePageStore();
+  const editorSettingsService = new EditorSettingsService();
 
   function createNewComponent(componentName: string, parentRef: string) {
     const component = getToolbarComponent(componentName);
@@ -43,22 +46,22 @@ function PageBuilderService() {
   }
 
   function setActiveElement(pageElement: PageElement): void {
-    pageStore.setActiveElement(pageElement);
+    editorSettingsService.setActiveElement(pageElement);
   }
 
-  function processButtonCommand(payload: CommandProperties): void {
-    const pageElement = pageStore.activeElement;
+  function processButtonCommand(payload: CommandProperties, commandHistory: CommandHistory<CommandProperties>): void {
+    const pageElement = editorSettingsService.getActiveElement() as PageElement;
     if(pageElement) {
-      const commandProcessor = new CommandProcessor(pageElement);
+      const commandProcessor = new CommandProcessor(pageElement, commandHistory);
       commandProcessor.processCommand(payload);
     }
   }
 
-  function clearButtonCommand(payload: CommandProperties) {
-    const pageElement = pageStore.activeElement;
+  function clearButtonCommand(payload: CommandProperties, commandHistory: CommandHistory<CommandProperties>) {
+    const pageElement = editorSettingsService.getActiveElement() as PageElement;
     if(pageElement) {
-      const commandProcessor = new CommandProcessor(pageElement);
-      commandProcessor.undoCommand(payload);
+      const commandProcessor = new CommandProcessor(pageElement, commandHistory);
+      commandProcessor.processCommand(payload);
     }
   }
 
@@ -66,8 +69,8 @@ function PageBuilderService() {
       calcPageSize,
       setScaledDimension,
       processButtonCommand,
-      clearButtonCommand,
-      setActiveElement
+      setActiveElement,
+      clearButtonCommand
     };
 }
 

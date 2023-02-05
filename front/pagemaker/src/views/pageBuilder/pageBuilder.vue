@@ -21,9 +21,12 @@
       :class="sidePanelWidth"
       @toggle-clicked="resizePanel()"
     >
-      <TabstripContainer :labels="['Borders']">
+      <TabstripContainer :labels="['Borders', 'Colours']">
         <template v-slot:tab-0>
           <BordersContainer @on-button-click="handleButtonClick($event)" @on-clear-command="handleClearCommand($event)" />
+        </template>
+        <template v-slot:tab-1>
+          <ColoursContainer @on-change="handleButtonClick($event)"></ColoursContainer>
         </template>
       </TabstripContainer>
     </SettingsPanelVue>
@@ -45,6 +48,8 @@ import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStrip
 import type { CommandProperties } from '@/classes/command/model/command';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import bordersContainer from '@/components/base/editorButtons/editorContainers/borders/bordersContainer.vue'
+import ColoursContainer from '@/components/base/editorButtons/editorContainers/colours/coloursContainer.vue';
+import { CommandHistory } from '@/classes/history/history';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -63,13 +68,14 @@ const sliderPosition: SliderPosition = {
     name: 'pageBuilder',
     
     components: {
-      PageCanvas,
-      Toolbar: toolbarPanelVue,
-      Scaler,
-      SettingsPanelVue: settingsPanelVue,
-      TabstripContainer: tabstripContainer,
-      BordersContainer: bordersContainer,
-    },
+    PageCanvas,
+    Toolbar: toolbarPanelVue,
+    Scaler,
+    SettingsPanelVue: settingsPanelVue,
+    TabstripContainer: tabstripContainer,
+    BordersContainer: bordersContainer,
+    ColoursContainer
+},
     
     data() {
       return {
@@ -83,8 +89,13 @@ const sliderPosition: SliderPosition = {
         sliderPosition: sliderPosition,
         zoomPage: 1,
         sidePanelWidth: 'w-2/12',
+        commandHistory: Object as unknown as  CommandHistory<CommandProperties>,
         
       }
+    },
+    
+    mounted() {
+      this.commandHistory = new CommandHistory<CommandProperties>();
     },
 
     computed: {
@@ -122,12 +133,12 @@ const sliderPosition: SliderPosition = {
       },
 
       handleButtonClick(payload: CommandProperties): void {
-        this.pageBuilderService.processButtonCommand(payload);
+        this.pageBuilderService.processButtonCommand(payload, this.commandHistory as CommandHistory<CommandProperties>);
       },
 
       handleClearCommand(payload: CommandProperties): void {
-        this.pageBuilderService.clearButtonCommand(payload);
-      }
+        this.pageBuilderService.clearButtonCommand(payload, this.commandHistory as CommandHistory<CommandProperties>);
+      },
     },
 
   })

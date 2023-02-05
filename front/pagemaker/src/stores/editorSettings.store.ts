@@ -1,5 +1,5 @@
 import type { Units } from '@/components/page/model/model';
-import type { LineStyle, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia';
 
 const useEditorSettingsStore = defineStore('editorStore',{
@@ -11,6 +11,7 @@ const useEditorSettingsStore = defineStore('editorStore',{
       _lineThickness: 1,
       _borderElement: '' as StyleTags,
       _units: 'px' as Units,
+      _activeElement: Object as unknown as PageElement | undefined,
     }
   },
 
@@ -35,6 +36,9 @@ const useEditorSettingsStore = defineStore('editorStore',{
       return state._units;
     },
 
+    activeElement: (state) => {
+      return state._activeElement;
+    }
   },
 
   actions: {
@@ -50,13 +54,19 @@ const useEditorSettingsStore = defineStore('editorStore',{
       this._lineThickness = byAmount;
     },
 
-    setBorderElement(borderElement: StyleTags):void {
+    setBorderElement(borderElement: StyleTags): void {
       this._borderElement = borderElement;
     },
 
     setUnits(units: Units): void {
       this._units = units;
-    }
+    },
+
+    setActiveElement(pageElement: PageElement | undefined) {
+      console.log('%c⧭', 'color: #e50000', 'setActiveElement');
+      console.log('%c⧭', 'color: #ff0000', pageElement, '--store in');
+      this._activeElement = pageElement
+    },
 
   }
 });

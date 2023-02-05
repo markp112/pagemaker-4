@@ -1,4 +1,4 @@
-import type { CommandName } from '@/classes/command/model/command';
+import type { CommandName, CommandTypes } from '@/classes/command/model/command';
 import type { CssStyleNames } from '@/classes/cssStyles';
 import type { StyleTags } from '@/components/page/model/pageElement/pageElement';
 
@@ -10,6 +10,7 @@ interface EditorButtonBase {
   displayIcon: string;
   buttonType: EditorButtonTypes;
   commandName: CommandName;
+  commandType: CommandTypes;
 };
 
 interface SelectListIcon {
