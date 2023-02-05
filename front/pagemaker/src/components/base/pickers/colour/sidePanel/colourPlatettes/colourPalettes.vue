@@ -1,7 +1,7 @@
 <template> 
   <section>
     <div class="text-primary-800 mb-8">
-      <div class="flex flex-row justify-between">
+      <div class="flex flex-row justify-between" v-if="!simple">
         <h3 class="text-3xl ">
           Colour Palette
         </h3>
@@ -16,13 +16,13 @@
       </div>
     </div>
     <div class="flex flex-row justify-start mb-4 w-full">
-      <span class="px-2">Select base colour</span>
+      <span class="px-2 w-1/4 text-center">Base colour</span>
       <ColourDropdown 
         @onColourClick="onColourChange($event)"
         :inputColour="$props.sitePalette.baseColourHex"
       >
       </ColourDropdown>
-      <div class="ml-12 flex flex-col justify-start">
+      <div class="ml-12 flex flex-col justify-start" v-if="!simple">
         <label for="saturation">saturation</label>
         <input
           type="range"
@@ -35,8 +35,8 @@
         >
       </div>
     </div>
-    <p class="ml-1">scheme</p>
-    <div class="flex flex-row flex-wrap justify-start w-full ml-4 mb-6 mt-0">
+    <div class="flex flex-row flex-wrap justify-start w-full ml-4 mb-6 mt-0" v-if="!simple">
+      <p class="w-full font-semibold">scheme</p>
       <span class="w-6/12">
       <label for="complementary">complementary</label>
       <input 
@@ -79,7 +79,7 @@
       </span>
     </div>
     <div class="flex flex-col justify-start ml-8">
-      <PaletteStrip v-for="swatch in getColourSwatches()" 
+      <PaletteStrip v-for="swatch in sitePalette.colourSwatches" 
         :palette="swatch.swatch"
         :label="swatch.swatchName"
         @colourClicked="paletteColourClicked($event)"
@@ -107,7 +107,7 @@ import { swatchesService } from '@/services/swatches/swatches.service';
 export default defineComponent({
   name: 'colour-palettes',
   
-  emits: ['resetClicked', 'saveClicked', 'onChange'],
+  emits: ['resetClicked', 'saveClicked', 'onChange', 'onSaturationChange'],
 
   components: {
     ColourDropdown,
@@ -120,6 +120,10 @@ export default defineComponent({
     sitePalette: {
       type: Object as PropType<ColourSwatches>,
       required: true,
+    },
+    simple: {
+      type: Boolean,
+      default: false
     },
     saveEnabled: Boolean,
   },
@@ -159,11 +163,10 @@ export default defineComponent({
         colourScheme: this.swatchesLocal.colourScheme,
         colourSwatches: this.swatchesLocal.colourSwatches,
       };
-      this.swatchesLocal = await swatchesService().getNewSwatchesFromColour(swatches);
       this.saturationValue = 50;
       this.saturationPreviousValue = 50;
       this.selectedColour = colour;
-      this.$emit('onChange', this.swatchesLocal);
+      this.$emit('onChange', swatches);
     },
     
     resetPalette() {
@@ -183,7 +186,7 @@ export default defineComponent({
       } else {
         this.swatchesLocal.colourSwatches = await swatchesService().decreaseSaturation(swatches);
       }
-      this.$emit('onChange', this.swatchesLocal);
+      this.$emit('onSaturationChange', this.swatchesLocal);
     },
     
     async changeScheme(scheme: SupportedColourModels) {

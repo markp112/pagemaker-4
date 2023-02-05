@@ -34,10 +34,6 @@ export default defineComponent({
       store: useSnackbarStore(),
     }
   },
-  
-  mounted() {
-  
-  },
 
   computed: {
     snackbarContent(): SnackbarTypes {

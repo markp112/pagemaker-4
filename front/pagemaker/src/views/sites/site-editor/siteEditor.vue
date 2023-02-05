@@ -97,16 +97,17 @@
     >
       <TabstripContainer :labels="['Palette Editor', 'Material colours', 'Typography']">
         <template v-slot:tab-0>
-          <ColourPalettes :sitePalette="getSitePalette()"
+          <ColourPalettes :sitePalette="colourSwatches"
             :save-enabled="isNewSite"
             @reset-clicked="resetColourSwatches"
             @save-clicked="saveColourSwatches($event)"
             @on-change="updateSwatches($event)"
+            @on-saturation-change="updateSaturation($event)"
           /> 
         </template>
         <template v-slot:tab-1>
           <MaterialColours :materialColours="getMaterialColours()" 
-            :siteSwatches="getSitePalette()" 
+            :siteSwatches="getSitePalette" 
             :save-enabled="isNewSite"
             @save-clicked="saveMaterialColours($event)"
             @on-change="updateMaterialColours($event)"
@@ -143,6 +144,7 @@ import typographyVue from '@/components/base/pickers/colour/sidePanel/typography
 import type { SiteTypography } from '@/classes/sites/typography/model';
 import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
 import type { UploadImage } from '@/components/base/pickers/uploadImage/model';
+import { swatchesService } from '@/services/swatches/swatches.service';
 
 
 export default defineComponent({
@@ -194,7 +196,12 @@ export default defineComponent({
     isNewSite(): boolean {
       return this.site.siteId === '-1';
     },
+
+    getSitePalette(): ColourSwatches {
+      return this.store.getColourSwatches;
+    },
   },
+
 
   methods: {
 
@@ -202,9 +209,6 @@ export default defineComponent({
       return this.store.getMaterialColours;
     },
 
-    getSitePalette(): ColourSwatches {
-      return this.store.getColourSwatches;
-    },
 
     getSiteTypography(): SiteTypography {
       return this.store.getTypography;
@@ -286,7 +290,14 @@ export default defineComponent({
       await siteService().saveSite(siteData);
     },
 
-    updateSwatches(colourSwatches: ColourSwatches) {
+    async updateSwatches(colourSwatches: ColourSwatches) {
+      const newSwatches = await swatchesService().getNewSwatchesFromColour(colourSwatches);
+      this.store.setColourPalette(newSwatches);
+      this.colourSwatches = newSwatches;
+    },
+
+    updateSaturation(colourSwatches: ColourSwatches) {
+      this.store.setColourPalette(colourSwatches);
       this.colourSwatches = colourSwatches;
     },
 

@@ -4,7 +4,7 @@ import type { Command } from '../model/command';
 
 class BordersCommand implements Command {
   constructor(private pageElement: PageElement, private service: EditorSettingsService = new EditorSettingsService()) {};
-
+  
   execute(styleRequested: StyleTags): PageElement {
     if(styleRequested === 'border-none') {
       return this.removeBorders();
@@ -19,6 +19,8 @@ class BordersCommand implements Command {
 
   undo(styleRequested: StyleTags): PageElement {
     this.service.setBorderElement('');
+    const styles = this.pageElement.styles.filter(style => style.style !== styleRequested);
+    this.pageElement.styles = styles; 
     return this.pageElement
   }
 
@@ -29,8 +31,10 @@ class BordersCommand implements Command {
   private getBorderStyle(styleRequested: StyleTags): BorderStyle {
     const lineStyle: LineStyle = this.getLineStyle();
     const thickness: number = this.service.lineThickness();
+    const colour: string = this.service.getColour();
     return {
       style: styleRequested,
+      colour,
       lineStyle,
       value: `${thickness}`,
       unit: 'px',

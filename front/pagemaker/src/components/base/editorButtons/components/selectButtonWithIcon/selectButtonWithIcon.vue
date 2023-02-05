@@ -85,6 +85,7 @@ export default defineComponent({
     iconClicked(iconElement: SelectListIcon) {
       this.selectedItem = iconElement.classToApply;
       const payload: CommandProperties = {
+        commandType: this.buttonData.commandType,
         commandName: this.buttonData.commandName,
         payload: iconElement.classToApply,
       };

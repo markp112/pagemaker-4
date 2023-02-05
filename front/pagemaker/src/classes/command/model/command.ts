@@ -5,16 +5,22 @@ type CommandName = | 'border'
   | 'line-style'
   | 'line-thickness'
   | 'border-radius'
-  | 'set-units';
+  | 'set-units'
+  | 'set-colour';
+
+type CommandParameter = StyleTags | CssStyleNames | number | string;
 
 interface Command {
-  execute(styleToApply: StyleTags | CssStyleNames | number): void;
-  undo(styleToRemove: StyleTags | CssStyleNames | number): void;
+  execute(styleToApply: CommandParameter ): void;
+  undo(styleToRemove: CommandParameter): void;
 };
+
+type CommandTypes = 'direct' | 'indirect';
 
 interface CommandProperties {
+  commandType: CommandTypes; 
   commandName: CommandName;
-  payload: StyleTags | CssStyleNames | number | string;
+  payload: CommandParameter;
 };
 
-export type { Command, CommandProperties, CommandName };
+export type { Command, CommandProperties, CommandName, CommandTypes };

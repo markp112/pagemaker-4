@@ -51,6 +51,7 @@ export default defineComponent({
 
     onChange() {
       const commandProperties: CommandProperties = {
+        commandType: this.buttonData.commandType,
         commandName: this.buttonData.commandName,
         payload:  this.inputValue,
       };

@@ -6,7 +6,7 @@ function stylesToString(styleCollection: Style[]): string {
     for(const style of styleCollection) {
       if(isBorderStyle(style.style)) {
         const borderStyle = style as BorderStyle;
-        styles += `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.value}${borderStyle.unit}`;
+        styles += `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.colour} ${borderStyle.value}${borderStyle.unit}`;
       }else {
 
         styles += `${style.style}:${style.value}`;

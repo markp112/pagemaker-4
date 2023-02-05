@@ -50,7 +50,8 @@ export default  defineComponent ({
 
     lineThicknessChange(value: number) {
       const commandProperties: CommandProperties = {
-        commandName: 'line-thickness',
+        commandType: this.buttonData.commandType,        
+        commandName: this.buttonData.commandName,
         payload: value
       };
       this.$emit('onClick', commandProperties);
