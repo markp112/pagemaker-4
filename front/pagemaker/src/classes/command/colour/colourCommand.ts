@@ -1,4 +1,3 @@
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import { EditorSettingsService } from '@/services/editor.settings.service';
 import type { Command } from '../model/command';
 

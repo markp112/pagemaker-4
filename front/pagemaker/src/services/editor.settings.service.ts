@@ -46,7 +46,6 @@ class EditorSettingsService {
   }
 
   setActiveElement(element: PageElement) {
-    console.log('%c⧭', 'color: #733d00', element);
     if(this.store.activeElement === undefined) {
       this.store.setActiveElement(element);
       return;

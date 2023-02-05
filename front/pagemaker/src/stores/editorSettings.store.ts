@@ -63,8 +63,6 @@ const useEditorSettingsStore = defineStore('editorStore',{
     },
 
     setActiveElement(pageElement: PageElement | undefined) {
-      console.log('%c⧭', 'color: #e50000', 'setActiveElement');
-      console.log('%c⧭', 'color: #ff0000', pageElement, '--store in');
       this._activeElement = pageElement
     },
 

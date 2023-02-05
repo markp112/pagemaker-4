@@ -9,8 +9,6 @@
 import type { CommandProperties } from '@/classes/command/model/command';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import { rgbToHex } from '@/common/rgbToHex';
-import ColourDropDown from '@/components/base/pickers/colour/colourPicker/colourDropdown/colourDropDown.vue';
-import ColourPicker from '@/components/base/pickers/colour/colourPicker/colourPicker.vue';
 import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPlatettes/colourPalettes.vue';
 import { useSiteStore } from '@/stores/site.store';
 import { defineComponent, type PropType } from 'vue';
@@ -19,8 +17,6 @@ export default defineComponent({
   name: 'coloursContainer',
 
   components: {
-    ColourPicker,
-    ColourDropDown,
     ColourPalettes
   },
 
