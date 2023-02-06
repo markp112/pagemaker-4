@@ -25,15 +25,12 @@
         <template v-slot:[getTab(index)] v-for="(buttonContainer, index) in getEditorCommandButtons().tabElements" >
           <component 
             :is="buttonContainer"
-            
+            :key="index"
+            @on-button-click="handleButtonClick($event)"
+            @on-clear-command="handleClearCommand($event)"
           >
-            <!-- <BordersContainer @on-button-click="handleButtonClick($event)" @on-clear-command="handleClearCommand($event)" /> -->
           </component>
-          </template>
-
-        <!-- <template v-slot:tab-1>
-          <ColoursContainer @on-change="handleButtonClick($event)"></ColoursContainer>
-        </template> -->
+        </template>
       </TabstripContainer>
     </SettingsPanelVue>
   </div>
@@ -56,8 +53,9 @@ import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import bordersContainer from '@/components/base/editorButtons/editorContainers/borders/bordersContainer.vue'
 import ColoursContainer from '@/components/base/editorButtons/editorContainers/colours/coloursContainer.vue';
 import { CommandHistory } from '@/classes/history/history';
-import { containerButtons, imageButtons } from '@/components/base/editorButtons/model/borderButtonData';
+import { containerButtons } from '@/components/base/editorButtons/model/borderButtonData';
 import { EditorSettingsService } from '@/services/editor.settings.service';
+import type { EditorComponentButtons } from '@/components/base/editorButtons/model';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -125,7 +123,7 @@ const sliderPosition: SliderPosition = {
         return `tab-${index}`;
       },
 
-      getEditorCommandButtons() {
+      getEditorCommandButtons(): EditorComponentButtons {
         const editorButtons = this.editorSettingsService.getContainerCommands();
         return editorButtons ? editorButtons : containerButtons;
       },
