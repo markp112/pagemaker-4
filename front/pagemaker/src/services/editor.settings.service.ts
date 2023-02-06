@@ -1,5 +1,6 @@
+import { editorComponentButtons } from '@/components/base/editorButtons/model/borderButtonData';
 import type { Units } from '@/components/page/model/model';
-import type { LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { ComponentTypesString, LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 
 class EditorSettingsService {
@@ -59,6 +60,14 @@ class EditorSettingsService {
 
   getActiveElement() {
     return this.store.activeElement;
+  }
+
+  getContainerCommands() {
+    const elementName = this.store.activeElement?.name as ComponentTypesString;
+    if(elementName) {
+      return editorComponentButtons[elementName];
+    }
+    return;
   }
 }
 

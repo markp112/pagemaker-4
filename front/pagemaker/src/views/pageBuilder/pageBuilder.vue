@@ -21,12 +21,15 @@
       :class="sidePanelWidth"
       @toggle-clicked="resizePanel()"
     >
-      <TabstripContainer :labels="['Borders', 'Colours']">
-        <template v-slot:tab-0>
-          <BordersContainer @on-button-click="handleButtonClick($event)" @on-clear-command="handleClearCommand($event)" />
-        </template>
-        <template v-slot:tab-1>
-          <ColoursContainer @on-change="handleButtonClick($event)"></ColoursContainer>
+      <TabstripContainer :labels="getEditorCommandButtons().tabNames">
+        <template v-slot:[getTab(index)] v-for="(buttonContainer, index) in getEditorCommandButtons().tabElements" >
+          <component 
+            :is="buttonContainer"
+            :key="index"
+            @on-button-click="handleButtonClick($event)"
+            @on-clear-command="handleClearCommand($event)"
+          >
+          </component>
         </template>
       </TabstripContainer>
     </SettingsPanelVue>
@@ -50,6 +53,9 @@ import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import bordersContainer from '@/components/base/editorButtons/editorContainers/borders/bordersContainer.vue'
 import ColoursContainer from '@/components/base/editorButtons/editorContainers/colours/coloursContainer.vue';
 import { CommandHistory } from '@/classes/history/history';
+import { containerButtons } from '@/components/base/editorButtons/model/borderButtonData';
+import { EditorSettingsService } from '@/services/editor.settings.service';
+import type { EditorComponentButtons } from '@/components/base/editorButtons/model';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -68,14 +74,14 @@ const sliderPosition: SliderPosition = {
     name: 'pageBuilder',
     
     components: {
-    PageCanvas,
-    Toolbar: toolbarPanelVue,
-    Scaler,
-    SettingsPanelVue: settingsPanelVue,
-    TabstripContainer: tabstripContainer,
-    BordersContainer: bordersContainer,
-    ColoursContainer
-},
+      PageCanvas,
+      Toolbar: toolbarPanelVue,
+      Scaler,
+      SettingsPanelVue: settingsPanelVue,
+      TabstripContainer: tabstripContainer,
+      BordersContainer: bordersContainer,
+      ColoursContainer
+    },
     
     data() {
       return {
@@ -90,6 +96,7 @@ const sliderPosition: SliderPosition = {
         zoomPage: 1,
         sidePanelWidth: 'w-2/12',
         commandHistory: Object as unknown as  CommandHistory<CommandProperties>,
+        editorSettingsService: new EditorSettingsService(),
         
       }
     },
@@ -111,6 +118,16 @@ const sliderPosition: SliderPosition = {
     },
 
     methods: {
+
+      getTab(index: number | string) {
+        return `tab-${index}`;
+      },
+
+      getEditorCommandButtons(): EditorComponentButtons {
+        const editorButtons = this.editorSettingsService.getContainerCommands();
+        return editorButtons ? editorButtons : containerButtons;
+      },
+
       toolbarToggleClicked() {
         if (this.toolbarHidden) {
           this.toolbarWidth = 'w-64';

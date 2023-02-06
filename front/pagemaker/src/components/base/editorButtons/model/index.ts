@@ -27,6 +27,17 @@ interface EditorButtonNumericSelectList extends EditorButtonBase {
   listValues: string[];
 }
 
-export type { EditorButtonBase, EditorButtonSelectList, SelectListIcon, EditorButtonNumericSelectList };
+type ButtonContainerName = string;
 
+interface EditorComponentButtons {
+  id: string,
+  tabNames: string[],
+  tabElements: ButtonContainerName[],
+};
 
+export type { EditorButtonBase,
+  EditorButtonSelectList,
+  SelectListIcon,
+  EditorButtonNumericSelectList,
+  EditorComponentButtons
+};

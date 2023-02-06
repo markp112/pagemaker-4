@@ -9,6 +9,8 @@ import type { CommandProperties } from '@/classes/command/model/command';
 import { CommandProcessor } from '@/classes/command/commandProcessor';
 import type { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '../editor.settings.service';
+import { storeToRefs } from 'pinia';
+
 
 function PageBuilderService() {
   const toolbarStore = useToolbarStore();

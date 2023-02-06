@@ -1,4 +1,5 @@
-import type { EditorButtonBase, EditorButtonNumericSelectList, EditorButtonSelectList } from '.';
+import type { ComponentTypesString } from '@/components/page/model/pageElement/pageElement';
+import type { EditorButtonBase, EditorButtonNumericSelectList, EditorButtonSelectList, EditorComponentButtons } from '.';
 
 const borderButtonDataMock: EditorButtonSelectList = {
   buttonType: 'iconList',
@@ -99,7 +100,7 @@ const lineThicknessButton: EditorButtonBase = {
   displayIcon: 'thickness-32.png',
   name: 'LineThickness',
   tooltip: 'Line thickness'
-}
+};
 
 const borderRadius: EditorButtonNumericSelectList = {
   displayIcon: 'bezier-32.png',
@@ -109,6 +110,39 @@ const borderRadius: EditorButtonNumericSelectList = {
   listValues: ['px', 'em', '%'],
   name: 'BorderRadius',
   tooltip: 'Border radius',
+};
+
+const imageButtons: EditorComponentButtons = {
+  id: 'ImageEditorButtons',
+  tabNames: ['Borders', 'Colours'],
+  tabElements: ['BordersContainer', 'ColoursContainer']
+};
+const containerButtons: EditorComponentButtons = {
+  id: 'ContainerEditorButtons',
+  tabNames: ['Borders', 'Colours'],
+  tabElements: ['BordersContainer', 'ColoursContainer']
+};
+
+type EditorKey = {[key in ComponentTypesString]: EditorComponentButtons }
+
+const editorComponentButtons: EditorKey = {
+  'imageElement': imageButtons,
+  'jumbo': containerButtons,
+  'button': imageButtons,
+  'container': containerButtons,
+  'navBar': containerButtons,
+  'page': containerButtons,
+  'pageTemplate': containerButtons,
+  'rootContainer': containerButtons,
+  'text': imageButtons,
 }
 
-export { borderButtonDataMock, lineStyleButtonMock, lineThicknessButton, borderRadius };
+export { 
+  borderButtonDataMock,
+  lineStyleButtonMock,
+  lineThicknessButton,
+  borderRadius,
+  imageButtons,
+  containerButtons,
+  editorComponentButtons,
+};
