@@ -14,15 +14,10 @@ export class ImageCommand implements Command {
       const imgWidth = img.width;
       const imgHeight = img.height;
       const ratio =  Math.min(imgWidth / imgHeight, imgHeight / imgWidth);
-      console.log('%c⧭', 'color: #731d1d', ratio);
       const imageElement = this.pageElement as ImageElement;
-      console.log('%c⧭', 'color: #807160', imageElement);
       imageElement.image.naturalSize.width.value = img.naturalWidth;
       imageElement.image.naturalSize.height.value = img.naturalHeight;
       imageElement.container.naturalSize.height.value = imageElement.image.scaledSize.width.value * ratio;
-      console.log('%c⧭', 'color: #731d6d', imageElement.image.scaledSize.width.value);
-      
-
     }
     return this.pageElement;  
   }
