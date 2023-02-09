@@ -20,7 +20,7 @@ export default defineComponent({
     ColourPalettes
   },
 
-  emits:['onChange'],
+  emits:['onButtonClick'],
 
   props: {
     selectedColour: {
@@ -48,7 +48,7 @@ export default defineComponent({
         commandName: 'set-colour',
         payload: colour,
       };
-      this.$emit('onChange', commandProperties);
+      this.$emit('onButtonClick', commandProperties);
     }
   }
 

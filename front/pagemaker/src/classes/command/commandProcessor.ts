@@ -3,6 +3,7 @@ import type { CommandHistory } from '../history/history';
 import { BorderRadiusCommand } from './borderRadius/borderRadius.command';
 import { BordersCommand } from './borders/borders.comand';
 import { ColourCommand } from './colour/colourCommand';
+import { ImageCommand } from './image/image.command';
 import { LineStyleCommand } from './lineStyle/lineStyle.command';
 import { LineThicknessCommand } from './lineThickness/lineThickness.command';
 import type { CommandName, CommandProperties } from './model/command';
@@ -21,6 +22,7 @@ class CommandProcessor {
     'border-radius': (pageElement: PageElement) => new BorderRadiusCommand(pageElement),
     'set-units': () => new UnitsCommand(),
     'set-colour': () => new ColourCommand(),
+    'set-image': (pageElement: PageElement) => new ImageCommand(pageElement)
   };
 
   processCommand(commandProperties: CommandProperties) {

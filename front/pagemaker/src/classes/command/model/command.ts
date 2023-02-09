@@ -6,7 +6,8 @@ type CommandName = | 'border'
   | 'line-thickness'
   | 'border-radius'
   | 'set-units'
-  | 'set-colour';
+  | 'set-colour'
+  | 'set-image';
 
 type CommandParameter = StyleTags | CssStyleNames | number | string;
 

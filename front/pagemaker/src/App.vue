@@ -4,7 +4,7 @@
     <Navbar :nav-menu-items="getMenuItems"
       @nav-menu-clicked="navMenuClicked"
     />
-    <div class="w-98">
+    <div class="w-98 ml-4">
       <Breadcumb/>
     </div>
     <div class="w-full border-box font-body ">

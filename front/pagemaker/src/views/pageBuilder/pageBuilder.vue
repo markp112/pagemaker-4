@@ -21,12 +21,13 @@
       :class="sidePanelWidth"
       @toggle-clicked="resizePanel()"
     >
-      <TabstripContainer :labels="getEditorCommandButtons().tabNames">
-        <template v-slot:[getTab(index)] v-for="(buttonContainer, index) in getEditorCommandButtons().tabElements" >
+      <TabstripContainer :labels="getEditorCommandButtons.tabNames">
+        <template v-slot:[getTab(index)] v-for="(buttonContainer, index) in getEditorCommandButtons.tabElements" >
           <component 
             :is="buttonContainer"
             :key="index"
             @on-button-click="handleButtonClick($event)"
+            @on-change="handleButtonClick($event)"
             @on-clear-command="handleClearCommand($event)"
           >
           </component>
@@ -56,6 +57,7 @@ import { CommandHistory } from '@/classes/history/history';
 import { containerButtons } from '@/components/base/editorButtons/model/borderButtonData';
 import { EditorSettingsService } from '@/services/editor.settings.service';
 import type { EditorComponentButtons } from '@/components/base/editorButtons/model';
+import ImagesContainer from '@/components/base/editorButtons/editorContainers/images/imagesContainer.vue';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -80,7 +82,8 @@ const sliderPosition: SliderPosition = {
       SettingsPanelVue: settingsPanelVue,
       TabstripContainer: tabstripContainer,
       BordersContainer: bordersContainer,
-      ColoursContainer
+      ColoursContainer,
+      ImagesContainer,
     },
     
     data() {
@@ -97,7 +100,6 @@ const sliderPosition: SliderPosition = {
         sidePanelWidth: 'w-2/12',
         commandHistory: Object as unknown as  CommandHistory<CommandProperties>,
         editorSettingsService: new EditorSettingsService(),
-        
       }
     },
     
@@ -114,7 +116,12 @@ const sliderPosition: SliderPosition = {
           classDef = `${this.toolbarWidth}`
         }
         return classDef 
-      }
+      },
+
+      getEditorCommandButtons(): EditorComponentButtons {
+        const editorButtons = this.editorSettingsService.getContainerCommands();
+        return editorButtons ? editorButtons : containerButtons;
+      },
     },
 
     methods: {
@@ -123,10 +130,6 @@ const sliderPosition: SliderPosition = {
         return `tab-${index}`;
       },
 
-      getEditorCommandButtons(): EditorComponentButtons {
-        const editorButtons = this.editorSettingsService.getContainerCommands();
-        return editorButtons ? editorButtons : containerButtons;
-      },
 
       toolbarToggleClicked() {
         if (this.toolbarHidden) {

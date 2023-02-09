@@ -64,6 +64,7 @@ class EditorSettingsService {
 
   getContainerCommands() {
     const elementName = this.store.activeElement?.name as ComponentTypesString;
+    console.log('%c⧭', 'color: #00bf00', elementName);
     if(elementName) {
       return editorComponentButtons[elementName];
     }

@@ -114,8 +114,8 @@ const borderRadius: EditorButtonNumericSelectList = {
 
 const imageButtons: EditorComponentButtons = {
   id: 'ImageEditorButtons',
-  tabNames: ['Borders', 'Colours'],
-  tabElements: ['BordersContainer', 'ColoursContainer']
+  tabNames: ['Borders', 'Colours', 'Image'],
+  tabElements: ['BordersContainer', 'ColoursContainer', 'ImagesContainer']
 };
 const containerButtons: EditorComponentButtons = {
   id: 'ContainerEditorButtons',

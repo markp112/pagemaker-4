@@ -1,6 +1,7 @@
 import { AnActionEvent } from '@/classes/actionEvent';
 import { ADimension } from '@/classes/dimension';
 import { ALocation } from '@/classes/location';
+import type { ValueAndUnit } from '@/classes/units';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
 import type { ImageElement } from '@/components/page/model/imageElement/imageElement';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
@@ -43,9 +44,20 @@ function ComponentFactory() {
     imageElement.container = {
       naturalSize: new ADimension (),
       location: new ALocation(),
-    }
-    imageElement.container.naturalSize.height = { value: 200, unit: 'px' };
-    imageElement.container.naturalSize.width = { value: 100, unit: 'px' };
+    };
+    imageElement.image = {
+      naturalSize: new ADimension (),
+      location: new ALocation(),
+      scaledSize: new ADimension(),
+    };
+    const defaultHeight: ValueAndUnit = { value: 200, unit: 'px' };
+    const defaulWidth: ValueAndUnit = { value: 100, unit: 'px' };
+    imageElement.image.scaledSize.height = {...defaultHeight};
+    imageElement.image.scaledSize.width = {...defaulWidth};
+    imageElement.image.naturalSize.height = {...defaultHeight};
+    imageElement.image.naturalSize.width = {...defaulWidth};
+    imageElement.container.naturalSize.height = {...defaultHeight};
+    imageElement.container.naturalSize.width = {...defaulWidth};
     return imageElement;
   }
 

@@ -104,7 +104,6 @@ export default defineComponent({
         this.emitResize(clientCoordinates);
       }
     },
-
     
   },
 })
