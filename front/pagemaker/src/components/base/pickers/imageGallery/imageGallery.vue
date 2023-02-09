@@ -3,7 +3,7 @@
     <p class="flex justify-end flex-row w-full">
       <CloseButton @onClick="closeClicked()"/>
     </p>
-    <div class="flex flex-row flex-nowrap w-full justify-between items-center h-72">
+    <div class="flex flex-row w-100 h-72 justify-between min-w-fit">
       <img
         src="@/assets/icons/left-grey-32.png"
         alt=""
@@ -13,9 +13,12 @@
       <span
         v-for="image in getImages"
         :key="image.url"
-        class="w-44 h-auto border border-gray-200 inline-block ml-1 mr-1"
+        class="w-44 inline-block ml-1 mr-1"
       >
-        <img :src="image.url" alt="" @click="imageClicked(image.url)" class="cursor-pointer max-h-48 w-full">
+        <span class="inline-block h-auto border border-gray-200">
+          <img :src="image.url" alt="" @click="imageClicked(image.url)" class="cursor-pointer w-full">
+
+        </span>
       </span>
       <img
         src="@/assets/icons/right-grey-32.png"
@@ -104,6 +107,7 @@ export default defineComponent({
   .nav-arrow {
     @apply cursor-pointer;
     @apply rounded-full;
+    @apply h-8;
   }
 
   .nav-arrow:hover {

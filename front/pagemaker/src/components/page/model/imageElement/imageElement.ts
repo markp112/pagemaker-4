@@ -2,12 +2,12 @@ import type { ADimension } from '@/classes/dimension';
 import type { ALocation } from '@/classes/location';
 import type { PageElement } from '../pageElement/pageElement';
 
-type ContainerProps = {
+interface ContainerProps  {
   location: ALocation;
   naturalSize: ADimension;
 };
 
-type ImageProps = ContainerProps & {
+interface ImageProps extends ContainerProps {
   scaledSize: ADimension;
 };
 

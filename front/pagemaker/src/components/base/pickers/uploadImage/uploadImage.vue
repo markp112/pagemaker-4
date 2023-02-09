@@ -56,11 +56,11 @@
         Library
       </BaseButton>
     </div>
-    <div
-      class="image-picker w-full relative"
+    <div class="image-picker w-full relative"
       v-if="showImagePicker"
-      >
+    >
       <ImageGallery
+        :class="getGalleryPosition"
         :userId="userId"
         :image-details="images"
         @closeClicked="showImagePicker=false"
@@ -93,6 +93,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    galleryLocation: {
+      type: String,
+      required: true,
+    }
   },
 
   emits: ['onChange'],
@@ -126,6 +130,10 @@ export default defineComponent({
   computed: {
     getImages() {
       return this.images;
+    },
+
+    getGalleryPosition() {
+      return `${this.$props.galleryLocation}-0`;
     },
   },
 
@@ -162,7 +170,7 @@ export default defineComponent({
         type: type,
       };
     },
-    
+
     onImageLoad() {
       this.updateImage();
     },
@@ -184,7 +192,7 @@ export default defineComponent({
     galleryImageSelected(url: string) {
       this.url = url;
       this.updateImage();
-      const uploadImage = this.getUploadImage(url, 'url')
+      const uploadImage = this.getUploadImage(url, 'url');
       this.$emit('onChange', uploadImage);
     },
     
@@ -192,14 +200,14 @@ export default defineComponent({
       const target = event.target as HTMLInputElement;
       const files = target.files;
       if(files) {
-        const uploadImage = this.getUploadImage(files[0], 'file');
-          this.$emit('onChange', uploadImage);
+          this.$emit('onChange', this.getUploadImage(files[0], 'file'));
       }
 
     },
     
     getImageFromUrl() {
       this.hasFile = this.url !== '';
+      this.$emit('onChange', this.getUploadImage(this.url, 'url'));
     },
     
     getImage() {
@@ -232,8 +240,7 @@ export default defineComponent({
 
   .image-picker {
     width: 100%;
-    height: 240px;
+    height: 72em;
     top: -0px;
-    left: 0px;
   }
 </style>

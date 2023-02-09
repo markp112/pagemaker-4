@@ -15,6 +15,8 @@
     <Resize :is-active="isActive" 
       @resize-started="resizeStarted($event)"
       @on-resize="onResize($event)"
+      @resize-stopped="isSizing=!isSizing"
+      onclick.stop=""
     />
   </div>
 </template>
@@ -58,12 +60,14 @@ export default  defineComponent({
 
     isActive() {
       return this.editorSettings.getActiveElement()?.ref === this.thisComponent.ref;
+    },
   },
-  },
+
   methods: {
 
     resizeStarted(event: MouseEvent ) {
-      this.mouse.updatePositionEvent(event)
+      this.mouse.updatePositionEvent(event);
+      this.isSizing = true;
     },
       
     onResize(aDimension: ClientCoordinates) {
@@ -71,6 +75,9 @@ export default  defineComponent({
     },
 
     onImageClick() {
+      if(this.isSizing) {
+        return;
+      }
       this.$emit('onClick', this.thisComponent);
     },
 
@@ -83,8 +90,11 @@ export default  defineComponent({
     },
 
     getImage(): string {
-      const path =  getImageUrl((this.thisComponent as ImageElement).content);
-      return path;
+      const DEFAULT_IMAGE = 'imageplaceholder-100x83.png';
+      if((this.thisComponent as ImageElement).content === DEFAULT_IMAGE) {
+        return getImageUrl((this.thisComponent as ImageElement).content);
+      }
+      return (this.thisComponent as ImageElement).content;
     },
 
     getId() {
