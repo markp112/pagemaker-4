@@ -7,13 +7,14 @@ type CommandName = | 'border'
   | 'border-radius'
   | 'set-units'
   | 'set-colour'
-  | 'set-image';
+  | 'set-image'
+  | 'set-colour-applies-to';
 
 type CommandParameter = StyleTags | CssStyleNames | number | string;
 
 interface Command {
   execute(styleToApply: CommandParameter ): void;
-  undo(styleToRemove: CommandParameter): void;
+  undo(styleToRemove?: CommandParameter): void;
 };
 
 type CommandTypes = 'direct' | 'indirect';

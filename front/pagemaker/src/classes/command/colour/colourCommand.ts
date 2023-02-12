@@ -8,7 +8,7 @@ class ColourCommand implements Command {
     this.service.setColour(colour);
   }
 
-  undo(colour: string) {
+  undo() {
     throw new Error('not implemented')
   }
 }

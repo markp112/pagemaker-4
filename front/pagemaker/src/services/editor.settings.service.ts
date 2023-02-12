@@ -46,6 +46,11 @@ class EditorSettingsService {
     return this.store.currentColour;
   }
 
+  setColourAppliesTo(appliesTo: string) {
+    this.store.setColourAppliesTo(appliesTo)
+
+  } 
+
   setActiveElement(element: PageElement) {
     if(this.store.activeElement === undefined) {
       this.store.setActiveElement(element);

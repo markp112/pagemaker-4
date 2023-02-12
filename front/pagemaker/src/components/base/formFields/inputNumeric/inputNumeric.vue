@@ -35,21 +35,22 @@
       default: undefined,
     }
   },
+
   components: {
     InputBase: inputBaseVue,
   },
 
   emits: ['onFieldChange', 'validateField'],
   
-  methods: {
-    onFieldChange(value: number) {
-      this.$emit('onFieldChange', value);
-    },
+    methods: {
+      onFieldChange(value: number) {
+        this.$emit('onFieldChange', value);
+      },
 
-    validateField(value: number) {
-      this.$emit('validateField', value)
+      validateField(value: number) {
+        this.$emit('validateField', value)
+      }
     }
-  }
   });
 
 

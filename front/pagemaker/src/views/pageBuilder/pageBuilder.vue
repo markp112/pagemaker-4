@@ -130,7 +130,6 @@ const sliderPosition: SliderPosition = {
         return `tab-${index}`;
       },
 
-
       toolbarToggleClicked() {
         if (this.toolbarHidden) {
           this.toolbarWidth = 'w-64';
