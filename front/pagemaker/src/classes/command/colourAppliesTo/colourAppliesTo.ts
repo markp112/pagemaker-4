@@ -8,7 +8,6 @@ class ApplyColourTo implements Command {
   constructor(private pageElement: PageElement, private service: EditorSettingsService = new EditorSettingsService()) {};
 
   execute(applyTo: Applies): void {
-    console.log('%c⧭', 'color: #ace2e6', applyTo);
     this.service.setColourAppliesTo(applyTo);
     this.pageElement.styles = this.removeExistingStyle(applyTo);
     this.pageElement.styles.push(this.addColourStyle(applyTo));
