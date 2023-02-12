@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5" 
+  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5 overflow-hidden" 
     :style="getScaledPageSize"
     ref="page"
     id="page"
@@ -7,6 +7,7 @@
     @drop.prevent="onDrop($event)"
   >
     <component v-for="(component, index) in pageElements"
+      track-by="$index"
       :is="component.componentHTMLTag"
       :key="index"
       :index="index"
@@ -100,6 +101,7 @@ export default defineComponent({
     containedElementClick(pageElement: PageElement): void {
       this.pageBuilderService.setActiveElement(pageElement);
     },
+
   },
 })
 </script>

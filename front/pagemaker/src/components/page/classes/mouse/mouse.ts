@@ -1,4 +1,4 @@
-type MousePosition = { x: number, y: number };
+interface MousePosition { x: number, y: number };
 
 class useMouse {
 
@@ -20,6 +20,11 @@ class useMouse {
   updatePositionCoordinates(newPosition: MousePosition) {
     this.updateValues(newPosition);
   }
+  
+  setCurrentPosition(newPosition: MousePosition) {
+    this.mousePosition.x = newPosition.x;
+    this.mousePosition.y = newPosition.y;
+  }
 
   private updateValues(newPosition: MousePosition) {
     this.setLastPosition();
@@ -27,10 +32,6 @@ class useMouse {
     this.calcDelta();
   }
 
-  private setCurrentPosition(newPosition: MousePosition) {
-    this.mousePosition.x = newPosition.x;
-    this.mousePosition.y = newPosition.y;
-  }
 
   private calcDelta() {
     this.deltaX = this.mousePosition.x - this.lastPosition.x;
@@ -45,3 +46,5 @@ class useMouse {
 }
 
 export { useMouse };
+
+export type { MousePosition };

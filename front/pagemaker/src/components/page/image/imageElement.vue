@@ -1,16 +1,21 @@
 <template>
   <div
+    :track-by="getId()"
     :ref="getId()"
     :id="getId()"
     class="relative select-none overflow-hidden"
+    :class="thisComponent.classDefinition"
     @click.stop="onImageClick()"
     :style="getContainerStyles()"
   >
     <img
       ref="image-element"
-      class="absolute"
+      class="absolute w-100"
       :src="getImage()"
       :style="getStyles()"
+      @dragstart="onDragStart($event)"
+      @drag="onDrag($event)"
+      @dragend="onDragEnd()"
     />
     <Resize :is-active="isActive" 
       @resize-started="resizeStarted($event)"
@@ -32,6 +37,8 @@ import { stylesToString } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editor.settings.service';
+import { dragElement } from '@/common/dragElement/dragElement';
+
 export default  defineComponent({
   name: 'imageComponent',
 
@@ -46,11 +53,10 @@ export default  defineComponent({
       thisComponent: {} as PageElement,
       mouse: new useMouse(),
       isSizing: false,
+      isDragging: false,
       editorSettings: new EditorSettingsService(),
     }
   },
-
-  
   
   mounted() {
     this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
@@ -68,6 +74,7 @@ export default  defineComponent({
     resizeStarted(event: MouseEvent ) {
       this.mouse.updatePositionEvent(event);
       this.isSizing = true;
+      this.isDragging = false;
     },
       
     onResize(aDimension: ClientCoordinates) {
@@ -79,6 +86,24 @@ export default  defineComponent({
         return;
       }
       this.$emit('onClick', this.thisComponent);
+    },
+
+    onDragStart(event: MouseEvent) {
+      this.isDragging = true;
+      this.mouse.setCurrentPosition({ x: event.pageX, y: event.pageY });
+      dragElement(this.thisComponent as PageElement, this.mouse as useMouse).onDragStart();
+    },
+    
+    onDrag(event: MouseEvent) {
+      if(!this.isDragging) {
+        return
+      }
+      dragElement(this.thisComponent as PageElement, this.mouse as useMouse).onDrag({x: event.pageX, y: event.pageY});
+    },
+
+    onDragEnd() {
+      this.isDragging = false;
+      this.thisComponent.classDefinition = dragElement(this.thisComponent as PageElement, this.mouse as useMouse).onDragEnd()
     },
 
     getDimensions(): string {
@@ -107,18 +132,20 @@ export default  defineComponent({
 
     getStyles(): string {
       let styles = '';
-      if(this.thisComponent.styles) {
-        styles = stylesToString(this.thisComponent.styles)
-      }
+      styles = stylesToString(this.thisComponent.styles)
       styles += this.getDimensions();
       return styles;
     },
     
     getContainerStyles(): string {
-      if((this.thisComponent as ImageElement).container) {
-        return (this.thisComponent as ImageElement).container.naturalSize.toStyle();
+      let styles = '';
+      if(this.thisComponent.isAbsolute) {
+        styles = this.thisComponent.location.toStyle();
       }
-      return '';
+      if((this.thisComponent as ImageElement).container) {
+        styles += (this.thisComponent as ImageElement).container.naturalSize.toStyle();
+      }
+      return styles;
     }
 
   },

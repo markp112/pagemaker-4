@@ -10,14 +10,14 @@ export class ImageCommand implements Command {
     if(this.pageElement.type === 'imageElement') {
       this.pageElement.content = imageUrl;
       const img = new Image();
+      const imageElement = this.pageElement as ImageElement;
       img.src = imageUrl;
       const imgWidth = img.width;
       const imgHeight = img.height;
       const ratio =  Math.min(imgWidth / imgHeight, imgHeight / imgWidth);
-      const imageElement = this.pageElement as ImageElement;
       imageElement.image.naturalSize.width.value = img.naturalWidth;
       imageElement.image.naturalSize.height.value = img.naturalHeight;
-      imageElement.container.naturalSize.height.value = imageElement.image.scaledSize.width.value * ratio;
+      imageElement.ratio = ratio;
     }
     return this.pageElement;  
   }

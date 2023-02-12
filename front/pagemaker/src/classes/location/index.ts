@@ -12,8 +12,8 @@ class ALocation implements Location {
   constructor();
   constructor(top: ValueAndUnit, left: ValueAndUnit);
   constructor(top?: ValueAndUnit, left?: ValueAndUnit,) {
-    this._top = top ? {value: top.value, unit: top.unit } : { value: 0, unit: 'px' };
-    this._left = left? {value: left.value, unit: left.unit } : { value: 0, unit: 'px' };
+    this._top = top ? { value: top.value, unit: top.unit } : { value: 0, unit: 'px' };
+    this._left = left? { value: left.value, unit: left.unit } : { value: 0, unit: 'px' };
   }
 
   get top(): ValueAndUnit {
