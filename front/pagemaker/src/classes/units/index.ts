@@ -4,7 +4,7 @@ export type Units =
   | 'em'
   | '%';
 
-export type ValueAndUnit = {
-  value: number,
-  unit: Units,
+export interface ValueAndUnit {
+  value: number;
+  unit: Units;
 };

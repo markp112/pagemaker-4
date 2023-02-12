@@ -8,7 +8,7 @@
       v-model="sliderValue"
       :min="slider.min"
       :max="slider.max" 
-      @mousemove="rangeSlide()"/>
+      @mousemove.self="rangeSlide()"/>
     <span class="rangeValue">{{ slider.max }}</span>
   </div>
 </template>

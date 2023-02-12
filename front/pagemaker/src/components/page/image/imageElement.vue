@@ -1,14 +1,18 @@
 <template>
-  <div
+  <div class="relative select-none overflow-hidden"
     :ref="getId()"
     :id="getId()"
-    class="relative select-none overflow-hidden"
+    :class="thisComponent.classDefinition"
+    :style="getContainerStyles()" 
     @click.stop="onImageClick()"
-    :style="getContainerStyles()"
+    @dragstart="onDragStart($event)"
+    @drag="onDrag($event)"
+    @dragend="onDragEnd()"
+
   >
     <img
       ref="image-element"
-      class="absolute"
+      class="absolute w-100"
       :src="getImage()"
       :style="getStyles()"
     />
@@ -32,6 +36,9 @@ import { stylesToString } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editor.settings.service';
+import { useDrag } from '@/composables/drag/drag';
+
+
 export default  defineComponent({
   name: 'imageComponent',
 
@@ -47,10 +54,9 @@ export default  defineComponent({
       mouse: new useMouse(),
       isSizing: false,
       editorSettings: new EditorSettingsService(),
+      elementDrag: useDrag,
     }
   },
-
-  
   
   mounted() {
     this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
@@ -81,6 +87,18 @@ export default  defineComponent({
       this.$emit('onClick', this.thisComponent);
     },
 
+    onDragStart(event: MouseEvent) {
+      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragStart(event)
+    },
+    
+    onDrag(event: MouseEvent) {
+      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDrag(event);
+    },
+
+    onDragEnd() {
+      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragEnd();
+    },
+
     getDimensions(): string {
       let dimension = '' 
       if(this.thisComponent.dimension) {
@@ -107,18 +125,20 @@ export default  defineComponent({
 
     getStyles(): string {
       let styles = '';
-      if(this.thisComponent.styles) {
-        styles = stylesToString(this.thisComponent.styles)
-      }
+      styles = stylesToString(this.thisComponent.styles)
       styles += this.getDimensions();
       return styles;
     },
     
     getContainerStyles(): string {
-      if((this.thisComponent as ImageElement).container) {
-        return (this.thisComponent as ImageElement).container.naturalSize.toStyle();
+      let styles = '';
+      if(this.thisComponent.isAbsolute) {
+        styles = this.thisComponent.location.toStyle();
       }
-      return '';
+      if((this.thisComponent as ImageElement).container) {
+        styles += (this.thisComponent as ImageElement).container.naturalSize.toStyle();
+      }
+      return styles;
     }
 
   },

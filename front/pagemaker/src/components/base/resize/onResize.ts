@@ -10,7 +10,6 @@ const BOTH_SIDES = 2;
 function Resize(thisComponent: PageElement, mouse: useMouse) {
   
   function onResize(elementDimensions: ClientCoordinates) {
-    // if (this.isDragging) return;
     const boundingRect = getElementDimension(
       thisComponent.ref
     );
