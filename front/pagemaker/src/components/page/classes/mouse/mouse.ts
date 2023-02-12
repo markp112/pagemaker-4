@@ -1,6 +1,6 @@
 interface MousePosition { x: number, y: number };
 
-class useMouse {
+class UseMouse {
 
   private mousePosition: MousePosition = {
     x: 0,
@@ -45,6 +45,6 @@ class useMouse {
   
 }
 
-export { useMouse };
+export { UseMouse as useMouse };
 
 export type { MousePosition };

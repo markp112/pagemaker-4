@@ -1,4 +1,3 @@
-import type { Location } from '@/classes/location';
 import type { BorderStyle, Style, } from '../model/pageElement/pageElement';
 
 function stylesToString(styleCollection: Style[]): string {
@@ -32,7 +31,7 @@ function isBorderStyle(styleName: string): boolean {
 }
 
 function getBorderStyle(borderStyle: BorderStyle) {
-  `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.colour} ${borderStyle.value}${borderStyle.unit}`;
+  return `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.colour} ${borderStyle.value}${borderStyle.unit}`;
 }
 
 export { stylesToString };

@@ -1,21 +1,20 @@
 <template>
-  <div
-    :track-by="getId()"
+  <div class="relative select-none overflow-hidden"
     :ref="getId()"
     :id="getId()"
-    class="relative select-none overflow-hidden"
     :class="thisComponent.classDefinition"
+    :style="getContainerStyles()" 
     @click.stop="onImageClick()"
-    :style="getContainerStyles()"
+    @dragstart="onDragStart($event)"
+    @drag="onDrag($event)"
+    @dragend="onDragEnd()"
+
   >
     <img
       ref="image-element"
       class="absolute w-100"
       :src="getImage()"
       :style="getStyles()"
-      @dragstart="onDragStart($event)"
-      @drag="onDrag($event)"
-      @dragend="onDragEnd()"
     />
     <Resize :is-active="isActive" 
       @resize-started="resizeStarted($event)"
@@ -37,7 +36,8 @@ import { stylesToString } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editor.settings.service';
-import { dragElement } from '@/common/dragElement/dragElement';
+import { useDrag } from '@/composables/drag/drag';
+
 
 export default  defineComponent({
   name: 'imageComponent',
@@ -53,8 +53,8 @@ export default  defineComponent({
       thisComponent: {} as PageElement,
       mouse: new useMouse(),
       isSizing: false,
-      isDragging: false,
       editorSettings: new EditorSettingsService(),
+      elementDrag: useDrag,
     }
   },
   
@@ -74,7 +74,6 @@ export default  defineComponent({
     resizeStarted(event: MouseEvent ) {
       this.mouse.updatePositionEvent(event);
       this.isSizing = true;
-      this.isDragging = false;
     },
       
     onResize(aDimension: ClientCoordinates) {
@@ -89,21 +88,15 @@ export default  defineComponent({
     },
 
     onDragStart(event: MouseEvent) {
-      this.isDragging = true;
-      this.mouse.setCurrentPosition({ x: event.pageX, y: event.pageY });
-      dragElement(this.thisComponent as PageElement, this.mouse as useMouse).onDragStart();
+      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragStart(event)
     },
     
     onDrag(event: MouseEvent) {
-      if(!this.isDragging) {
-        return
-      }
-      dragElement(this.thisComponent as PageElement, this.mouse as useMouse).onDrag({x: event.pageX, y: event.pageY});
+      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDrag(event);
     },
 
     onDragEnd() {
-      this.isDragging = false;
-      this.thisComponent.classDefinition = dragElement(this.thisComponent as PageElement, this.mouse as useMouse).onDragEnd()
+      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragEnd();
     },
 
     getDimensions(): string {

@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5 overflow-hidden" 
+  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5 overflow-hidden relative" 
     :style="getScaledPageSize"
     ref="page"
     id="page"

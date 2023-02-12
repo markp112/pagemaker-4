@@ -1,9 +1,15 @@
 <template>
-  <div class="overflow-hidden flex-nowrap relative" 
+  <div class="overflow-hidden relative select-none" 
     :id="getId()"
     :ref="getId()"
     :class="getClasses()"
     :style="getStyles()"
+    @dragstart.self="onDragStart($event)"
+    @mousedown="onDragStart($event)"
+    @mouseup="onDragEnd()"
+    @mousemove="onDrag($event)"
+    @drag.self="onDrag($event)"
+    @dragend="onDragEnd"
     @click.stop="onClick()"
     @drop.prevent="onDrop($event)"
   >
@@ -16,7 +22,7 @@
       @onClick="containedElementClick($event)"
       @dragover.prevent
       @drop.stop="onDrop"
-    >{{pageElement}}</component>
+    />
     <Resize :is-active="isActive" 
       @resize-started="resizeStarted($event)"
       @on-resize="onResize($event)"
@@ -35,94 +41,117 @@ import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import imageElement from '../image/imageElement.vue';
 import type { PageContainerInterface } from '../model/pageContainer/container';
 import { EditorSettingsService } from '@/services/editor.settings.service';
+import { useDrag } from '@/composables/drag/drag';
+import { containerButtons } from '@/components/base/editorButtons/model/borderButtonData';
 
-  export default defineComponent({
-    name: 'component-container',
+export default defineComponent({
+  name: 'component-container',
 
-    components: {
-      Resize: resize,
-      imageElement: imageElement,
+  components: {
+    Resize: resize,
+    imageElement: imageElement,
+    container: containerButtons,
+  },
+
+  emits:['onClick'],
+
+  data() {
+    return {
+      thisComponent: {} as PageContainerInterface,
+      pageBuilderService: PageBuilderService(),
+      mouse: new useMouse(),
+      editorSettings: new EditorSettingsService(),
+      isDragging: false,
+      elementDrag: useDrag,
+    }
+  },
+
+  mounted() {
+    this.thisComponent = ((this.$attrs.props as unknown as PropsDefinition).thisComponent) as PageContainerInterface;
+  },
+
+  computed: {
+
+    isActive() {
+      return this.editorSettings.getActiveElement()?.ref === this.thisComponent.ref;
+    },
+  },
+
+  methods: {
+
+    getId() {
+      return this.thisComponent.ref;
     },
 
-    emits:['onClick'],
+    getClasses(): string {
+      return this.thisComponent.classDefinition;
+    },
 
-    data() {
-      return {
-        thisComponent: {} as PageContainerInterface,
-        pageBuilderService: PageBuilderService(),
-        mouse: new useMouse(),
-        editorSettings: new EditorSettingsService(),
+    getStyles(): string {
+      let styles = '';
+      if(this.thisComponent.isAbsolute) {
+        styles = this.thisComponent.location.toStyle();
+      }
+      if(this.thisComponent.styles) {
+        styles += stylesToString(this.thisComponent.styles)
+      } 
+      styles += this.getDimensions();
+      return styles;
+    },
+
+    getDimensions(): string {
+      let dimension = '' 
+      if(this.thisComponent.dimension) {
+        dimension = this.thisComponent.dimension.toStyle();
+      }
+      return dimension;
+    },
+
+    getPageElements(): PageElement[] {
+      return (this.thisComponent as PageContainerInterface).elements;
+    },
+
+    getProps(component: PageElement) {
+      return {props: {thisComponent: component}};
+    },
+
+    resizeStarted(event: MouseEvent ) {
+      this.mouse.updatePositionEvent(event)
+    },
+      
+    onResize(aDimension: ClientCoordinates) {
+      Resize(this.thisComponent as PageContainerInterface, this.mouse as useMouse).onResize(aDimension);
+    },
+
+    onClick() {
+      this.$emit('onClick', this.thisComponent);
+    },
+
+    containedElementClick(pageElement: PageElement): void {
+      this.$emit('onClick', pageElement);
+    },
+
+    onDrop(event: DragEvent): void {
+      event.stopImmediatePropagation();
+      const componentName = this.getComponentName(event);
+      this.pageBuilderService.createNewComponent(componentName, this.thisComponent.ref);
+    },
+
+    onDragStart(event: MouseEvent) {
+      this.isDragging = true;
+      this.elementDrag(this.thisComponent as PageContainerInterface, this.mouse as useMouse).onDragStart(event)
+    },
+      
+    onDrag(event: MouseEvent) {
+      if(this.isDragging) {
+        this.elementDrag(this.thisComponent as PageContainerInterface as PageElement, this.mouse as useMouse).onDrag(event);
       }
     },
 
-    mounted() {
-      this.thisComponent = ((this.$attrs.props as unknown as PropsDefinition).thisComponent) as PageContainerInterface;
+    onDragEnd() {
+      this.isDragging = false;
+      this.elementDrag(this.thisComponent as PageContainerInterface as PageElement, this.mouse as useMouse).onDragEnd();
     },
-
-    computed: {
-
-      isActive() {
-        return this.editorSettings.getActiveElement()?.ref === this.thisComponent.ref;
-      },
-    },
-
-    methods: {
-
-
-      getId() {
-        return this.thisComponent.ref;
-      },
-
-      getClasses(): string {
-        return this.thisComponent.classDefinition;
-      },
-
-      getStyles(): string {
-        let styles = '';
-        if(this.thisComponent.styles) {
-          styles = stylesToString(this.thisComponent.styles)
-        } 
-        styles += this.getDimensions();
-        return styles;
-      },
-
-      getDimensions(): string {
-        let dimension = '' 
-        if(this.thisComponent.dimension) {
-          dimension = this.thisComponent.dimension.toStyle();
-        }
-        return dimension;
-      },
-
-      getPageElements(): PageElement[] {
-        return (this.thisComponent as PageContainerInterface).elements;
-      },
-
-      getProps(component: PageElement) {
-        return {props: {thisComponent: component}};
-      },
-
-      resizeStarted(event: MouseEvent ) {
-        this.mouse.updatePositionEvent(event)
-      },
-        
-      onResize(aDimension: ClientCoordinates) {
-        Resize(this.thisComponent as PageContainerInterface, this.mouse as useMouse).onResize(aDimension);
-      },
-
-      onClick() {
-        this.$emit('onClick', this.thisComponent);
-      },
-
-      containedElementClick(pageElement: PageElement): void {
-        this.$emit('onClick', pageElement);
-      },
-
-      onDrop(event: DragEvent): void {
-        event.stopImmediatePropagation();
-        const componentName = this.getComponentName(event);
-        this.pageBuilderService.createNewComponent(componentName, this.thisComponent.ref);
-      },   
       
     getComponentName(event: DragEvent): string {
       const dataTransfer = event.dataTransfer;
@@ -132,40 +161,3 @@ import { EditorSettingsService } from '@/services/editor.settings.service';
 
 })
 </script>
-<style lang="css" scoped>
-.border-outline {
-  @apply border-red-600 border-8 border-dashed;
-}
-
-.handle {
-  position: relative;
-  box-sizing: border-box;
-}
-.border1 {
-  @apply border-indigo-800 border border-dashed;
-}
-
-.triangle {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  right: -1px;
-  box-sizing: border-box;
-  cursor: nwse-resize;
-  width: 0;
-  height: 0;
-  text-indent: -9999px;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 10px solid rgb(56, 55, 56);
-  transform: rotate(45deg);
-}
-
-.active {
-  visibility: visible;
-}
-
-.in-active {
-  visibility: hidden;
-}
-</style>
