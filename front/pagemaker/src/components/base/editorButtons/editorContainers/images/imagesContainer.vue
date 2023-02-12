@@ -38,7 +38,6 @@ export default defineComponent({
 
   methods: {
     async onChange(image: UploadImage) {
-      console.log('%c⧭', 'color: #d90000', image)
       if(image.type === 'file') {
         const url = await this.fileUploadService.uploadFile(image.image as File, this.userId);
         image.type = 'file';

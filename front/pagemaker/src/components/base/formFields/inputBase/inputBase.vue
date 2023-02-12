@@ -1,12 +1,13 @@
 <template>
-  <div class="field-wrapper">
-    <label for="input-field">{{ label }}</label>
+  <div class="flex flex-row justify-evenly">
+    <label for="input-field" class="ml-2 mr-1 w-auto">{{ label }}</label>
     <input
       :type="inputType"
       id="input-field"
       v-model="inputValue"
       :placeholder="placeHolder"
-      class="inputField"
+      class="p-2 leading-4 border ml-2"
+      :name="name"
       :class="getClasses"
       @change="onFieldChange()"
       @blur="checkIsValid()"
@@ -52,6 +53,10 @@ export default defineComponent({
     isValidated: {
       type:  Object as PropType<ValidField>,
       default: undefined,
+    },
+    name: {
+      type: String,
+      default: '',
     }
   },
 
@@ -64,7 +69,8 @@ export default defineComponent({
       failedValidationMessage: '',
       fieldWidthMap: {
         'text': 'w-9/12',
-        'number': 'w-2/12'
+        'number': 'w-2/12',
+        'radio': 'w-8/12'
       } as Record<string, string>,
     }
   },
@@ -99,14 +105,14 @@ export default defineComponent({
 </script>
 
 <style lang="css">
-  .inputField {
-    @apply bg-site-surface p-2 leading-4 border;
+  .input-field {
+    @apply bg-site-surface;
     @apply text-site-primary-dark;
   }
-
+/* 
   .field-wrapper {
     @apply flex flex-row justify-start mb-2 ml-1;
-  }
+  } */
 
   .invalid {
     @apply border-site-warning border-dashed;

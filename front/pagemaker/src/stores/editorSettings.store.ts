@@ -8,6 +8,7 @@ const useEditorSettingsStore = defineStore('editorStore',{
     return {
       _borderLineStyle: 'solid' as LineStyle,
       _currentColor: '#000000' as string,
+      _colourAppliesTo: 'fore' as string,
       _lineThickness: 1,
       _borderElement: '' as StyleTags,
       _units: 'px' as Units,
@@ -18,6 +19,10 @@ const useEditorSettingsStore = defineStore('editorStore',{
   getters: {
     currentColour: (state) => {
       return state._currentColor;
+    },
+
+    colourAppliesTo: (state) => {
+      return state._colourAppliesTo;
     },
 
     borderLineStyle: (state) => {
@@ -44,6 +49,10 @@ const useEditorSettingsStore = defineStore('editorStore',{
   actions: {
     setCurrentColour(colour: string): void {
       this._currentColor = colour;
+    },
+
+    setColourAppliesTo(appliesTo: string) {
+      this._colourAppliesTo = appliesTo;
     },
 
     setBorderLineStyle(lineStyle: LineStyle): void {

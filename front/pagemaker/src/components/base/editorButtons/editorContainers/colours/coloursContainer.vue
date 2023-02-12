@@ -1,4 +1,5 @@
 <template>
+  <BackForeBorderSelector @on-change="onAppliesToChange($event)"/>
   <ColourPalettes :site-palette="store.getColourSwatches"
     :simple="true"
     @on-change="onColourChange($event)"
@@ -10,6 +11,7 @@ import type { CommandProperties } from '@/classes/command/model/command';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import { rgbToHex } from '@/common/rgbToHex';
 import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPlatettes/colourPalettes.vue';
+import ColourBackForeBorder from '@/components/colourBackForeBorder/colourBackForeBorder.vue';
 import { useSiteStore } from '@/stores/site.store';
 import { defineComponent, type PropType } from 'vue';
 
@@ -17,7 +19,8 @@ export default defineComponent({
   name: 'coloursContainer',
 
   components: {
-    ColourPalettes
+    ColourPalettes,
+    BackForeBorderSelector: ColourBackForeBorder,
   },
 
   emits:['onButtonClick'],
@@ -49,6 +52,10 @@ export default defineComponent({
         payload: colour,
       };
       this.$emit('onButtonClick', commandProperties);
+    },
+
+    onAppliesToChange(payload: CommandProperties) {
+      this.$emit('onButtonClick', payload);
     }
   }
 
