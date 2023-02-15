@@ -89,8 +89,6 @@ type StyleTags =
   | 'transparency'
   | '';
 
-
-
 type Style =  {
   style: StyleTags | CssStyleTypes;
   value: string;
@@ -115,7 +113,7 @@ type BorderStyle = Style & {
 type ComponentTypesString =
   | 'container'
   | 'jumbo'
-  | 'button'
+  | 'buttonElement'
   | 'navBar'
   | 'pageTemplate'
   | 'text'

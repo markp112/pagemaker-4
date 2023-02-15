@@ -128,7 +128,7 @@ type EditorKey = {[key in ComponentTypesString]: EditorComponentButtons }
 const editorComponentButtons: EditorKey = {
   'imageElement': imageButtons,
   'jumbo': containerButtons,
-  'button': imageButtons,
+  'button': containerButtons,
   'container': containerButtons,
   'navBar': containerButtons,
   'page': containerButtons,

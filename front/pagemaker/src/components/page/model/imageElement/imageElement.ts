@@ -17,6 +17,8 @@ interface ImageElement extends PageElement {
   container: ContainerProps;
   image: ImageProps;
   toString(): string
-}
+};
 
-export type {ContainerProps, ImageProps, ImageElement };
+interface ButtonElement extends PageElement {};
+
+export type {ContainerProps, ImageProps, ImageElement, ButtonElement };
