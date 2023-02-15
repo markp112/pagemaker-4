@@ -49,7 +49,7 @@ export default defineComponent({
   components: {
     Resize: resize,
     imageElement: imageElement,
-    button: buttonElement,
+    buttonElement: buttonElement,
   },
 
   emits:['onClick'],
