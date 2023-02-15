@@ -113,7 +113,7 @@ type BorderStyle = Style & {
 type ComponentTypesString =
   | 'container'
   | 'jumbo'
-  | 'button'
+  | 'buttonElement'
   | 'navBar'
   | 'pageTemplate'
   | 'text'

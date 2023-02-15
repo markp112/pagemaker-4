@@ -15,7 +15,7 @@ function ComponentFactory() {
   const ComponentMap = {
     'jumbo': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'container': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
-    'button':(component: ToolbarComponentItem, parentReference: string) => createButton(component, parentReference),
+    'buttonElement':(component: ToolbarComponentItem, parentReference: string) => createButton(component, parentReference),
     'navBar':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'pageTemplate':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'text':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),

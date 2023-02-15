@@ -50,7 +50,7 @@ export default defineComponent({
   components: {
     container: Container,
     imageElement: imageElement,
-    button: buttonElement,
+    buttonElement: buttonElement,
 
   },
 
