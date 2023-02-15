@@ -89,8 +89,6 @@ type StyleTags =
   | 'transparency'
   | '';
 
-
-
 type Style =  {
   style: StyleTags | CssStyleTypes;
   value: string;

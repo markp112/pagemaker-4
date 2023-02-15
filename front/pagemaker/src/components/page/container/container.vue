@@ -5,16 +5,15 @@
     :class="getClasses()"
     :style="getStyles()"
     @dragstart.self="onDragStart($event)"
-    @mousedown="onDragStart($event)"
-    @mouseup="onDragEnd()"
-    @mousemove="onDrag($event)"
+    @mousedown.stop.prevent="onDragStart($event)"
+    @mouseup.stop.prevent="onDragEnd()"
+    @mousemove.stop.prevent="onDrag($event)"
     @drag.self="onDrag($event)"
     @dragend="onDragEnd"
     @click.stop="onClick()"
     @drop.prevent="onDrop($event)"
   >
-  <component
-      v-for="(pageElement, index) in getPageElements()"
+    <component v-for="(pageElement, index) in getPageElements()"
       :is="pageElement.componentHTMLTag"
       :key="index"
       :index="index"
@@ -39,10 +38,10 @@ import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordi
 import { Resize } from '../../base/resize/onResize';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import imageElement from '../image/imageElement.vue';
+import buttonElement from '../button/button-element.vue';
 import type { PageContainerInterface } from '../model/pageContainer/container';
 import { EditorSettingsService } from '@/services/editor.settings.service';
 import { useDrag } from '@/composables/drag/drag';
-import { containerButtons } from '@/components/base/editorButtons/model/borderButtonData';
 
 export default defineComponent({
   name: 'component-container',
@@ -50,7 +49,7 @@ export default defineComponent({
   components: {
     Resize: resize,
     imageElement: imageElement,
-    container: containerButtons,
+    button: buttonElement,
   },
 
   emits:['onClick'],

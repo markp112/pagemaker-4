@@ -3,7 +3,7 @@ import { ADimension } from '@/classes/dimension';
 import { ALocation } from '@/classes/location';
 import type { ValueAndUnit } from '@/classes/units';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
-import type { ImageElement } from '@/components/page/model/imageElement/imageElement';
+import type { ButtonElement, ImageElement } from '@/components/page/model/imageElement/imageElement';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
 import type { PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
@@ -15,7 +15,7 @@ function ComponentFactory() {
   const ComponentMap = {
     'jumbo': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'container': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
-    'button':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'button':(component: ToolbarComponentItem, parentReference: string) => createButton(component, parentReference),
     'navBar':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'pageTemplate':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'text':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
@@ -39,7 +39,6 @@ function ComponentFactory() {
 
   function createImage(component: ToolbarComponentItem, parentReference: string): ImageElement {
     const imageElement = createBaseElement(component, parentReference) as ImageElement;
-    imageElement.componentHTMLTag = component.type;
     imageElement.content ='imageplaceholder-100x83.png';
     imageElement.container = {
       naturalSize: new ADimension (),
@@ -61,6 +60,12 @@ function ComponentFactory() {
     return imageElement;
   }
 
+  function createButton(component: ToolbarComponentItem, parentReference: string): ButtonElement {
+    const buttonElement = createBaseElement(component, parentReference);
+    buttonElement.content = 'Click me';
+    return buttonElement;
+  }
+
   function createBaseElement(component: ToolbarComponentItem, parentReference: string): PageElement {
     const ref = component.componentRef;
     const name = component.componentName;
@@ -74,7 +79,7 @@ function ComponentFactory() {
     const content = '';
     const isContainer = false;
     const isAbsolute = false;
-    const componentHTMLTag = '';
+    const componentHTMLTag = component.type;
     return {
       ref,
       name,
