@@ -8,7 +8,18 @@ type CommandName = | 'border'
   | 'set-units'
   | 'set-colour'
   | 'set-image'
-  | 'set-colour-applies-to';
+  | 'set-colour-applies-to'
+  | 'flex-row'
+  | 'flex-col'
+  | 'justify-start'
+  | 'justify-center'
+  | 'justify-end'
+  | 'justify-between'
+  | 'justify-evenly'
+  | 'justify-around'
+  | 'items-start'
+  | 'items-center'
+  | 'items-end';
 
 type CommandParameter = StyleTags | CssStyleNames | number | string;
 

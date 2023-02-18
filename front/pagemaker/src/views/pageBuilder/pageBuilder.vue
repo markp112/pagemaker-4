@@ -58,6 +58,7 @@ import { containerButtons } from '@/components/base/editorButtons/model/borderBu
 import { EditorSettingsService } from '@/services/editor.settings.service';
 import type { EditorComponentButtons } from '@/components/base/editorButtons/model';
 import ImagesContainer from '@/components/base/editorButtons/editorContainers/images/imagesContainer.vue';
+import layoutContainer from '@/components/base/editorButtons/editorContainers/layout/layoutContainer.vue';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -84,6 +85,7 @@ const sliderPosition: SliderPosition = {
       BordersContainer: bordersContainer,
       ColoursContainer,
       ImagesContainer,
+      LayoutContainer: layoutContainer,
     },
     
     data() {
