@@ -10,8 +10,9 @@ import { ItemsAlignmentCommand } from './itemsAlignment/itemsAlignment';
 import { justifyCommand } from './jusftify/justifyCommand';
 import { LineStyleCommand } from './lineStyle/lineStyle.command';
 import { LineThicknessCommand } from './lineThickness/lineThickness.command';
-import type { Command, CommandName, CommandProperties } from './model/command';
+import type { CommandName, CommandProperties } from './model/command';
 import { UnitsCommand } from './units/units.command';
+import { ZindexCommand } from './zIndex/zindexCommand';
 
 type CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any }
 
@@ -38,7 +39,10 @@ class CommandProcessor {
     'flex-row': (pageElement: PageElement) => new AlignmentCommand(pageElement),
     'items-start': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
     'items-center': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
-    'items-end': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
+    'items-end': (pageElement: PageElement) => new ZindexCommand(pageElement),
+    'send-to-back': (pageElement: PageElement) => new ZindexCommand(pageElement),
+    'bring-to-front': (pageElement: PageElement) => new ZindexCommand(pageElement),
+    
   };
 
   processCommand(commandProperties: CommandProperties) {

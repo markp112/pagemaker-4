@@ -19,7 +19,9 @@ type CommandName = | 'border'
   | 'justify-around'
   | 'items-start'
   | 'items-center'
-  | 'items-end';
+  | 'items-end'
+  | 'bring-to-front'
+  | 'send-to-back';
 
 type CommandParameter = StyleTags | CssStyleNames | number | string;
 

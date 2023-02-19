@@ -192,7 +192,6 @@ const itemsStart: EditorButtonBase = {
   name: 'alignTop',
   tooltip: 'align items to start'
 };
-
 const itemsCenter: EditorButtonBase = {
   buttonType: 'basic',
   commandName: 'items-center',
@@ -201,7 +200,6 @@ const itemsCenter: EditorButtonBase = {
   name: 'alignTop',
   tooltip: 'align items to center'
 };
-
 const itemsEnd: EditorButtonBase = {
   buttonType: 'basic',
   commandName: 'items-end',
@@ -209,6 +207,22 @@ const itemsEnd: EditorButtonBase = {
   displayIcon: 'align_vertical_bottom-32.png',
   name: 'alignTop',
   tooltip: 'align items to end'
+};
+const bringToFront: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'bring-to-front',
+  commandType: 'direct',
+  displayIcon: 'bring_to_front-32.png',
+  name: 'bringToFront',
+  tooltip: 'bring to front'
+};
+const sendToBack: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'send-to-back',
+  commandType: 'direct',
+  displayIcon: 'send_to_back-32.png',
+  name: 'sendToBack',
+  tooltip: 'send to back'
 };
 
 const imageButtons: EditorComponentButtons = {
@@ -254,4 +268,6 @@ export {
   itemsStart,
   itemsCenter,
   itemsEnd,
+  bringToFront,
+  sendToBack,
 };
