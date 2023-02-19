@@ -112,6 +112,119 @@ const borderRadius: EditorButtonNumericSelectList = {
   tooltip: 'Border radius',
 };
 
+const flexRow: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'flex-row',
+  commandType: 'direct',
+  displayIcon: 'row-32.png',
+  name: 'flexRow',
+  tooltip: 'align items on horizontal axis'
+};
+
+const flexColumn: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'flex-col',
+  commandType: 'direct',
+  displayIcon: 'column-32.png',
+  name: 'flexColumn',
+  tooltip: 'align items on vertical axis'
+};
+
+const justifyStart: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'justify-start',
+  commandType: 'direct',
+  displayIcon: 'align_horizontal_left-32.png',
+  name: 'justifyStart',
+  tooltip: 'Align content to the start'
+};
+
+const justifyCenter: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'justify-center',
+  commandType: 'direct',
+  displayIcon: 'align_horizontal_center-32.png',
+  name: 'justifyStart',
+  tooltip: 'Align content to the Center'
+};
+
+const justifyEnd: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'justify-end',
+  commandType: 'direct',
+  displayIcon: 'align_horizontal_right-32.png',
+  name: 'justifyEnd',
+  tooltip: 'Align content to the end'
+};
+
+const justifyBetween: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'justify-between',
+  commandType: 'direct',
+  displayIcon: 'space_between_horizontal-32.png',
+  name: 'justifyBetween',
+  tooltip: 'space between'
+};
+
+const justifyEvenly: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'justify-evenly',
+  commandType: 'direct',
+  displayIcon: 'space_evenly_horizontal-32.png',
+  name: 'justifyEvenly',
+  tooltip: 'space evenly'
+};
+
+const justifyAround: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'justify-around',
+  commandType: 'direct',
+  displayIcon: 'space_around_horizontal-32.png',
+  name: 'justifyAround',
+  tooltip: 'space around'
+};
+
+const itemsStart: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'items-start',
+  commandType: 'direct',
+  displayIcon: 'align_vertical_top-32.png',
+  name: 'alignTop',
+  tooltip: 'align items to start'
+};
+const itemsCenter: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'items-center',
+  commandType: 'direct',
+  displayIcon: 'align_vertical_center-32.png',
+  name: 'alignTop',
+  tooltip: 'align items to center'
+};
+const itemsEnd: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'items-end',
+  commandType: 'direct',
+  displayIcon: 'align_vertical_bottom-32.png',
+  name: 'alignTop',
+  tooltip: 'align items to end'
+};
+const bringToFront: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'bring-to-front',
+  commandType: 'direct',
+  displayIcon: 'bring_to_front-32.png',
+  name: 'bringToFront',
+  tooltip: 'bring to front'
+};
+const sendToBack: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'send-to-back',
+  commandType: 'direct',
+  displayIcon: 'send_to_back-32.png',
+  name: 'sendToBack',
+  tooltip: 'send to back'
+};
+
 const imageButtons: EditorComponentButtons = {
   id: 'ImageEditorButtons',
   tabNames: ['Borders', 'Colours', 'Image'],
@@ -119,23 +232,22 @@ const imageButtons: EditorComponentButtons = {
 };
 const containerButtons: EditorComponentButtons = {
   id: 'ContainerEditorButtons',
-  tabNames: ['Borders', 'Colours'],
-  tabElements: ['BordersContainer', 'ColoursContainer']
+  tabNames: ['Borders', 'Colours', 'Layout'],
+  tabElements: ['BordersContainer', 'ColoursContainer', 'LayoutContainer']
 };
-
 type EditorKey = {[key in ComponentTypesString]: EditorComponentButtons }
 
 const editorComponentButtons: EditorKey = {
   'imageElement': imageButtons,
   'jumbo': containerButtons,
-  'button': containerButtons,
+  'buttonElement': containerButtons,
   'container': containerButtons,
   'navBar': containerButtons,
   'page': containerButtons,
   'pageTemplate': containerButtons,
   'rootContainer': containerButtons,
   'text': imageButtons,
-}
+};
 
 export { 
   borderButtonDataMock,
@@ -145,4 +257,17 @@ export {
   imageButtons,
   containerButtons,
   editorComponentButtons,
+  justifyStart,
+  justifyEnd,
+  justifyCenter,
+  justifyBetween,
+  justifyEvenly,
+  justifyAround,
+  flexColumn,
+  flexRow,
+  itemsStart,
+  itemsCenter,
+  itemsEnd,
+  bringToFront,
+  sendToBack,
 };

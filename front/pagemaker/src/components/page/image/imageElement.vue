@@ -5,9 +5,9 @@
     :class="thisComponent.classDefinition"
     :style="getContainerStyles()" 
     @click.stop="onImageClick()"
-    @dragstart="onDragStart($event)"
-    @drag="onDrag($event)"
-    @dragend="onDragEnd()"
+    @dragstart.stop="onDragStart($event)"
+    @drag.stop="onDrag($event)"
+    @dragend.stop="onDragEnd()"
 
   >
     <img
