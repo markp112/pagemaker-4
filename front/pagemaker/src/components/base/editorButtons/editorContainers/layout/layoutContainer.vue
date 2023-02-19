@@ -8,9 +8,8 @@
 <script lang="ts">
 import type { CommandProperties } from '@/classes/command/model/command';
 import  { defineComponent } from 'vue';
-import iconImageButton from '../../components/iconImageButton/iconImageButton.vue';
 import type { EditorButtonBase } from '../../model';
-import { justifyCenter, justifyEnd, justifyStart,justifyBetween, justifyEvenly, justifyAround, flexColumn, flexRow, itemsStart, itemsCenter, itemsEnd, bringToFront, sendToBack } from '../../model/borderButtonData';
+import { justifyCenter, justifyEnd, justifyStart, justifyBetween, justifyEvenly, justifyAround, flexColumn, flexRow, itemsStart, itemsCenter, itemsEnd, bringToFront, sendToBack } from '../../model/borderButtonData';
 import buttonPanel from '../buttonPanel/buttonPanel.vue';
 
 export default defineComponent({
@@ -19,7 +18,6 @@ export default defineComponent({
   emits: ['onButtonClick'],
 
   components: {
-    IconImageButton: iconImageButton,
     ButtonPanel: buttonPanel,
   },
 
