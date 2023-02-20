@@ -33,6 +33,7 @@
             <UploadImage
               :url-edited="site.image"
               :user-id="userId"
+              gallery-location="left"
               class="mt-4 mb-2"
               @on-change="updateFileRef($event)"
             />

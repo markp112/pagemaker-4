@@ -33,7 +33,6 @@ export default defineComponent({
   },
 
   emits: ['onClick'],
-
   
   data() {
     return {

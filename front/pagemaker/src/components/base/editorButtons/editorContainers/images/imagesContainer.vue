@@ -14,7 +14,6 @@ import type { UploadImage } from '@/components/base/pickers/uploadImage/model';
 import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
 import type { CommandProperties } from '@/classes/command/model/command';
 
-
 export default defineComponent({
   name: 'imagesContainer',
 
