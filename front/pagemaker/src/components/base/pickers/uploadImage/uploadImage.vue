@@ -164,13 +164,6 @@ export default defineComponent({
       }
     },
 
-    getUploadImage(image: File | string, type: 'file' | 'url'): UploadImage {
-      return {
-        image: image,
-        type: type,
-      };
-    },
-
     onImageLoad() {
       this.updateImage();
     },
@@ -208,6 +201,13 @@ export default defineComponent({
     getImageFromUrl() {
       this.hasFile = this.url !== '';
       this.$emit('onChange', this.getUploadImage(this.url, 'url'));
+    },
+
+    getUploadImage(image: File | string, type: 'file' | 'url'): UploadImage {
+      return {
+        image: image,
+        type: type,
+      };
     },
     
     getImage() {

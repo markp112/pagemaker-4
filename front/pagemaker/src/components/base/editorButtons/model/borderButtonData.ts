@@ -224,7 +224,22 @@ const sendToBack: EditorButtonBase = {
   name: 'sendToBack',
   tooltip: 'send to back'
 };
-
+const uploadImage: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'border-radius',
+  commandType: 'direct',
+  displayIcon: 'folder_images-32.png',
+  name: 'uploadImage',
+  tooltip: 'upload image',
+};
+const pasteImageUrl: EditorButtonBase = {
+  buttonType: 'basic',
+  commandName: 'border-radius',
+  commandType: 'direct',
+  displayIcon: 'paste-32.png',
+  name: 'pasteImageUrl',
+  tooltip: 'paste image url',
+};
 const imageButtons: EditorComponentButtons = {
   id: 'ImageEditorButtons',
   tabNames: ['Borders', 'Colours', 'Image'],
@@ -270,4 +285,6 @@ export {
   itemsEnd,
   bringToFront,
   sendToBack,
+  uploadImage,
+  pasteImageUrl
 };
