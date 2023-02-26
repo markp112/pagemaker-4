@@ -1,10 +1,18 @@
 <template>
-  <ButtonPanel :button-data="alignmentDirection" @on-button-click="handleButtonClick($event)"></ButtonPanel>
-  <ButtonPanel :button-data="horizontalAlignment" @on-button-click="handleButtonClick($event)"></ButtonPanel>
-  <ButtonPanel :button-data="verticalAlignment" @on-button-click="handleButtonClick($event)"></ButtonPanel>
-  <ButtonPanel :button-data="zindex" @on-button-click="handleButtonClick($event)"></ButtonPanel>
+  <ButtonPanel :button-data="alignmentDirection"
+    @on-button-click="handleButtonClick($event)"
+  />
+  <ButtonPanel :button-data="horizontalAlignment"
+    @on-button-click="handleButtonClick($event)"
+  />
+  <ButtonPanel :button-data="verticalAlignment"
+    @on-button-click="handleButtonClick($event)"
+  />
+  <ButtonPanel :button-data="zindex"
+    @on-button-click="handleButtonClick($event)"
+  />
   <UploadButton :button-data="uploadImage" active-command-name="me"/>
-  <TextInputButton :button-data="pasteImageUrl" active-command-name="test" ></TextInputButton>
+  <TextInputButton :button-data="pasteImageUrl" active-command-name="test" placeholder="paste url"></TextInputButton>
 </template>
 
 <script lang="ts">
@@ -25,17 +33,14 @@ export default defineComponent({
     ButtonPanel: buttonPanel,
     UploadButton: uploadButton,
     TextInputButton,
-},
+  },
 
   data() {
     return {
-      alignmentDirection: [flexRow, flexColumn],
-      horizontalAlignment: [justifyStart, justifyCenter, justifyEnd, justifyBetween, justifyEvenly, justifyAround],
-      verticalAlignment: [itemsStart, itemsCenter, itemsEnd],
-      zindex:[bringToFront, sendToBack],
-      activeDirectionButton: '',
-      activeJustifyButton: '',
-      activeItemsAlignmentButton: '',
+      alignmentDirection: [flexRow, flexColumn] as EditorButtonBase[],
+      horizontalAlignment: [justifyStart, justifyCenter, justifyEnd, justifyBetween, justifyEvenly, justifyAround] as EditorButtonBase[],
+      verticalAlignment: [itemsStart, itemsCenter, itemsEnd] as EditorButtonBase[],
+      zindex:[bringToFront, sendToBack] as EditorButtonBase[],
       uploadImage,
       pasteImageUrl,
     }
@@ -50,7 +55,6 @@ export default defineComponent({
       };
       this.$emit('onButtonClick', payload);
     },
-
   }
 })
 </script>

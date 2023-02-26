@@ -39,7 +39,7 @@ class CommandProcessor {
     'flex-row': (pageElement: PageElement) => new AlignmentCommand(pageElement),
     'items-start': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
     'items-center': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
-    'items-end': (pageElement: PageElement) => new ZindexCommand(pageElement),
+    'items-end': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
     'send-to-back': (pageElement: PageElement) => new ZindexCommand(pageElement),
     'bring-to-front': (pageElement: PageElement) => new ZindexCommand(pageElement),
     

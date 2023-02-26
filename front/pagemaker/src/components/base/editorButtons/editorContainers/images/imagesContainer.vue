@@ -1,4 +1,8 @@
 <template>
+  <ButtonPanel :button-data="uploadButtons" @on-button-click="onChange($event)"/>
+  <TextInputButton :button-data="uploadImagebutton" placeholder="upload file" active-command-name="this"/>
+  <TextInputButton :button-data="pasteImageUrl" placeholder="paste url" active-command-name="this"/>
+  
   <UploadImage url-edited="" 
     :user-id="userId" 
     galleryLocation="right"
@@ -13,12 +17,17 @@ import { useAuthStore } from '@/stores/auth.store';
 import type { UploadImage } from '@/components/base/pickers/uploadImage/model';
 import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
 import type { CommandProperties } from '@/classes/command/model/command';
+import buttonPanel from '../buttonPanel/buttonPanel.vue';
+import { pasteImageUrl, uploadImage as uploadImagebutton, imageLibrary } from '../../model/borderButtonData';
+import textInput from '../../components/textInputButton/textInput.vue';
 
 export default defineComponent({
   name: 'imagesContainer',
 
   components: {
     UploadImage: uploadImage,
+    ButtonPanel: buttonPanel,
+    TextInputButton: textInput,
   },
 
   emits: ['onChange'],
@@ -27,7 +36,10 @@ export default defineComponent({
     return {
       userId: '',
       userStore: useAuthStore(),
-      fileUploadService: FileUploadService(), 
+      fileUploadService: FileUploadService(),
+      uploadButtons: [imageLibrary],
+      uploadImagebutton,
+      pasteImageUrl
     }
   },
 

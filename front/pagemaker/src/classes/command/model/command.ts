@@ -21,7 +21,8 @@ type CommandName = | 'border'
   | 'items-center'
   | 'items-end'
   | 'bring-to-front'
-  | 'send-to-back';
+  | 'send-to-back'
+  | 'image-library';
 
 type CommandParameter = StyleTags | CssStyleNames | number | string;
 

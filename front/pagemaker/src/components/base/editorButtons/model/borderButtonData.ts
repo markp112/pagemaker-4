@@ -113,7 +113,7 @@ const borderRadius: EditorButtonNumericSelectList = {
 };
 
 const flexRow: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'flex-row',
   commandType: 'direct',
   displayIcon: 'row-32.png',
@@ -122,7 +122,7 @@ const flexRow: EditorButtonBase = {
 };
 
 const flexColumn: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'flex-col',
   commandType: 'direct',
   displayIcon: 'column-32.png',
@@ -131,7 +131,7 @@ const flexColumn: EditorButtonBase = {
 };
 
 const justifyStart: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-start',
   commandType: 'direct',
   displayIcon: 'align_horizontal_left-32.png',
@@ -140,7 +140,7 @@ const justifyStart: EditorButtonBase = {
 };
 
 const justifyCenter: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-center',
   commandType: 'direct',
   displayIcon: 'align_horizontal_center-32.png',
@@ -149,7 +149,7 @@ const justifyCenter: EditorButtonBase = {
 };
 
 const justifyEnd: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-end',
   commandType: 'direct',
   displayIcon: 'align_horizontal_right-32.png',
@@ -158,7 +158,7 @@ const justifyEnd: EditorButtonBase = {
 };
 
 const justifyBetween: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-between',
   commandType: 'direct',
   displayIcon: 'space_between_horizontal-32.png',
@@ -167,7 +167,7 @@ const justifyBetween: EditorButtonBase = {
 };
 
 const justifyEvenly: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-evenly',
   commandType: 'direct',
   displayIcon: 'space_evenly_horizontal-32.png',
@@ -176,7 +176,7 @@ const justifyEvenly: EditorButtonBase = {
 };
 
 const justifyAround: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-around',
   commandType: 'direct',
   displayIcon: 'space_around_horizontal-32.png',
@@ -185,7 +185,7 @@ const justifyAround: EditorButtonBase = {
 };
 
 const itemsStart: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'items-start',
   commandType: 'direct',
   displayIcon: 'align_vertical_top-32.png',
@@ -193,23 +193,23 @@ const itemsStart: EditorButtonBase = {
   tooltip: 'align items to start'
 };
 const itemsCenter: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'items-center',
   commandType: 'direct',
   displayIcon: 'align_vertical_center-32.png',
-  name: 'alignTop',
+  name: 'alignCenter',
   tooltip: 'align items to center'
 };
 const itemsEnd: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'items-end',
   commandType: 'direct',
   displayIcon: 'align_vertical_bottom-32.png',
-  name: 'alignTop',
+  name: 'alignBottom',
   tooltip: 'align items to end'
 };
 const bringToFront: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'bring-to-front',
   commandType: 'direct',
   displayIcon: 'bring_to_front-32.png',
@@ -217,7 +217,7 @@ const bringToFront: EditorButtonBase = {
   tooltip: 'bring to front'
 };
 const sendToBack: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'send-to-back',
   commandType: 'direct',
   displayIcon: 'send_to_back-32.png',
@@ -225,7 +225,7 @@ const sendToBack: EditorButtonBase = {
   tooltip: 'send to back'
 };
 const uploadImage: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'uploadButton',
   commandName: 'border-radius',
   commandType: 'direct',
   displayIcon: 'folder_images-32.png',
@@ -233,12 +233,20 @@ const uploadImage: EditorButtonBase = {
   tooltip: 'upload image',
 };
 const pasteImageUrl: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'textInputButton',
   commandName: 'border-radius',
   commandType: 'direct',
   displayIcon: 'paste-32.png',
   name: 'pasteImageUrl',
   tooltip: 'paste image url',
+};
+const imageLibrary: EditorButtonBase = {
+  buttonType: 'iconImageButton',
+  commandName: 'border-radius',
+  commandType: 'direct',
+  displayIcon: 'library-32.png',
+  name: 'imageLibrary',
+  tooltip: 'select from library',
 };
 const imageButtons: EditorComponentButtons = {
   id: 'ImageEditorButtons',
@@ -286,5 +294,6 @@ export {
   bringToFront,
   sendToBack,
   uploadImage,
-  pasteImageUrl
+  pasteImageUrl,
+  imageLibrary,
 };
