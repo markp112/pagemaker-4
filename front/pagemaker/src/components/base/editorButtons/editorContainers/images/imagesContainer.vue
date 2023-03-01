@@ -1,13 +1,8 @@
 <template>
-  <ButtonPanel :button-data="uploadButtons" @on-button-click="onChange($event)"/>
+  <ImageGallery :user-id="getSiteAndUser().userId" :image-details="images" @image-clicked="onClick($event)"></ImageGallery>
   <TextInputButton :button-data="uploadImagebutton" placeholder="upload file" active-command-name="this"/>
   <TextInputButton :button-data="pasteImageUrl" placeholder="paste url" active-command-name="this"/>
-  
-  <UploadImage url-edited="" 
-    :user-id="userId" 
-    galleryLocation="right"
-    @on-change="onChange($event)" 
-  />
+  <UploadButton :button-data="uploadImagebutton" @on-button-click="onImageUpload($event)"></UploadButton>
 </template>
 
 <script lang="ts">
@@ -20,6 +15,13 @@ import type { CommandProperties } from '@/classes/command/model/command';
 import buttonPanel from '../buttonPanel/buttonPanel.vue';
 import { pasteImageUrl, uploadImage as uploadImagebutton, imageLibrary } from '../../model/borderButtonData';
 import textInput from '../../components/textInputButton/textInput.vue';
+import imageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
+import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
+import { userService } from '@/services/user/userService';
+import type { ImageCardProps } from '@/components/base/pickers/imageGallery/types';
+import { useImagesStore } from '@/stores/images.store';
+import uploadButton from '../../components/uploadButton/uploadButton.vue';
+import type { EditorButtonContent } from '../../model';
 
 export default defineComponent({
   name: 'imagesContainer',
@@ -28,6 +30,8 @@ export default defineComponent({
     UploadImage: uploadImage,
     ButtonPanel: buttonPanel,
     TextInputButton: textInput,
+    ImageGallery: imageGallery,
+    UploadButton: uploadButton,
   },
 
   emits: ['onChange'],
@@ -39,29 +43,39 @@ export default defineComponent({
       fileUploadService: FileUploadService(),
       uploadButtons: [imageLibrary],
       uploadImagebutton,
-      pasteImageUrl
+      pasteImageUrl,
+      getSiteAndUser,
+      images: [] as ImageCardProps[],
+      imageStore: useImagesStore(),
     }
   },
 
-  mounted() {
+  async mounted() {
     this.userId = this.userStore.user.uid;
+    await userService().retrieveImages(this.userId);
+    this.images = this.imageStore.imageDisplayList;
   },
 
   methods: {
-    async onChange(image: UploadImage) {
-      if(image.type === 'file') {
-        const url = await this.fileUploadService.uploadFile(image.image as File, this.userId);
-        image.type = 'file';
-        image.image = url;
-      }
+    async onImageUpload(image: EditorButtonContent) {
+        const url = await this.fileUploadService.uploadFile(image.content as File, this.userId);
+        this.emitCommand(url);
+    },
+
+    emitCommand(imageUrl: string) {
       const command: CommandProperties = {
         commandType: 'direct',
         commandName: 'set-image',
-        payload: image.image as string,
+        payload: imageUrl,
       };
       this.$emit('onChange', command);
-    }
+    },
+
+    onClick(imageUrl: string) {
+      this.emitCommand(imageUrl);
+    },
   },
+
 
 })
 

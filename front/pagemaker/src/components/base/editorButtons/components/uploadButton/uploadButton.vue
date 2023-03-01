@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { EditorButtonBase } from '../../model';
+import type { EditorButtonBase, EditorButtonContent } from '../../model';
 import { getImageUrl } from '@/common/getIcon';
 import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
 
@@ -28,11 +28,10 @@ const emit = defineEmits(['onButtonClick']);
 
 const props = defineProps<{
   buttonData: EditorButtonBase,
-  activeCommandName: string,
+  activeCommandName?: string,
 }>();
 
 let showToolTip = ref(false);
-let inputValue = ref('');
 
 const getIsActive = () => {
   return props.buttonData.commandName === props.activeCommandName ? 'border border-solid border-white' : '';
@@ -42,7 +41,8 @@ const handleClick = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const files = target.files;
   if(files) {
-    emit('onButtonClick', props.buttonData, files[0]);
+    const commandButton: EditorButtonContent = {...props.buttonData, content: files[0] }
+    emit('onButtonClick', commandButton);
   }
 };
 

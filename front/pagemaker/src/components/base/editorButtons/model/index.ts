@@ -8,7 +8,9 @@ type EditorButtonTypes = 'list'
   | 'iconImageButton'
   | 'numericWithSelect'
   | 'textInputButton'
-  | 'uploadButton';
+  | 'uploadButton'
+  | 'imageLibrary'
+  ;
 
 interface EditorButtonBase {
   name: string;
