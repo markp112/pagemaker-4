@@ -19,11 +19,12 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { EditorButtonBase } from '../../model';
+import type { EditorButtonBase, EditorButtonContent } from '../../model';
 import { getImageUrl } from '@/common/getIcon';
 import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
+import type { CommandProperties } from '@/classes/command/model/command';
 
-  const emit = defineEmits(['onButtonClick']);
+  const emit = defineEmits(['onClick']);
 
   const props = defineProps<{
     buttonData: EditorButtonBase,
@@ -39,7 +40,14 @@ import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
   };
 
   const handleClick = () => {
-    emit('onButtonClick', props.buttonData, inputValue);
+    if (inputValue.value !== '') {
+      const commandProperties: CommandProperties = {
+        commandName: props.buttonData.commandName,
+        commandType: props.buttonData.commandType,
+        payload: inputValue.value,
+      };
+      emit('onClick', commandProperties);
+    }
   };
 
   const getPath = (url: string) => {

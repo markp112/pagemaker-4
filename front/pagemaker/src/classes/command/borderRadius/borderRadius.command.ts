@@ -1,6 +1,6 @@
 import type { Units } from '@/components/page/model/model';
 import type { PageElement, Style } from '@/components/page/model/pageElement/pageElement';
-import { EditorSettingsService } from '@/services/editor.settings.service';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import type { Command } from '../model/command';
 
 class BorderRadiusCommand implements Command {

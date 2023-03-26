@@ -1,0 +1,42 @@
+type: object
+title: Command Button
+properties:
+  name:
+    title: command name
+    description: human friendky name for the command
+    type: string
+  tooltip: 
+    title: tooltip
+    description: tooltip to display for the command
+    type: string
+  displayIcon: 
+    title: icon to display
+    description: name of the icon to display - .png or .jpg file
+    type: string
+  buttonType: 
+    title: Editor Button
+    description: | 
+      Defines the type of button used to support the command, supported commands include
+        * iconList - displays a drop down list with icons to support commands like border styles
+        * plusMinus - simple increment control to add / decrease by 1
+        * iconImageButton - regular button with an icon for executing a single command
+        * numericWithSelect - numeric input with a drop down list of numeric values
+        * textInput - a button that allows the input of text
+        * uploadButton - used for uploading files (images)
+        * imageLibrary - triggers the display of the gallery component
+    type: string
+  commandName:
+    title: Command Name
+    description: The name of the command to execute maps interpreted by the front end to process the command
+    type: string
+  commandType: 
+    title: Command type
+    description: | 
+      direct or indirect - direct commands act directly on the element - indirect have no immediate bearing on 
+      the element but instead are applied to the last previous command e.g. when setting a border styles
+    type: string
+  content:
+    title: Content
+    description: optional field used for when the command needs additional data e.g. an image url
+    type: string
+    

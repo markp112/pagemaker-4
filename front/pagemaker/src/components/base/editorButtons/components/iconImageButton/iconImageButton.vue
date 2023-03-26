@@ -17,7 +17,7 @@ import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import { getImageUrl } from '@/common/getIcon';
 import type { EditorButtonBase } from '../../model';
 import { ref } from '@vue/reactivity';
-
+import type { CommandProperties } from '@/classes/command/model/command';
 
   const props = defineProps<{
     buttonData: EditorButtonBase,
@@ -37,7 +37,12 @@ import { ref } from '@vue/reactivity';
     };
 
     const handleClick = () => {
-      emits('onClick', props.buttonData);
+      const commandProperties: CommandProperties = {
+        commandName: props.buttonData.commandName,
+        commandType: props.buttonData.commandType,
+        payload: props.buttonData.commandName,
+      }
+      emits('onClick', commandProperties);
     };
 
 

@@ -5,9 +5,11 @@
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "./dist",
     "resolveJsonModule": true,
+    "noFallthroughCasesInSwitch": true,
     "baseUrl": "src",
+    "rootDir": "src",
     "paths": {
       "@api/*": ["api/*"],
       "@database/*": ["database/*"],
@@ -17,6 +19,6 @@
       "@firebase/*": ["firebase/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "lib": ["es2015"]
 }

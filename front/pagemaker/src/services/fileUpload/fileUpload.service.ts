@@ -6,6 +6,7 @@ const getRoute = (userId: string) => `${BASE_ROUTE}/${userId}`;
 function FileUploadService() {
 
   async function uploadFile(file: File, userId: string): Promise<string> {
+    console.log('%c⧭', 'color: #00bf00', file);
     try {
       const formData = new FormData();
       formData.append('uploadFile', file, file.name);

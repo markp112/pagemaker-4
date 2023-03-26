@@ -39,6 +39,7 @@ import siteCardContainerVue from './components/sideCardContainer/siteCard.contai
 import FirstSite from './components/firstSite/firstSite.vue';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
 
+
   export default defineComponent({
     name: 'sites',
 
@@ -53,6 +54,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         store: useSitesStore(),
         siteStore: useSiteStore(),
         userStore: useAuthStore(),
+
         userId: '',
         hasSites: true,
       }

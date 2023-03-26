@@ -1,0 +1,14 @@
+type: object
+title: Command Group
+properties:
+  containerName:
+    title: Container name
+    description: The name of the container object which will hold these commands
+    type: string
+  commandButtons: 
+    title: Command Buttons
+    description: An array containing the command buttons
+    type: array
+    items:
+      schema:
+        ref: './commandButton.yaml'

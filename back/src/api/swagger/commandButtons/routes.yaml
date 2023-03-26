@@ -1,0 +1,13 @@
+# /private/editor/command-buttons
+get:
+  tags:
+    - command buttons
+  summary: get the list of all commands
+  parameters:
+  responses:
+    '200':
+      description: returns a list of commandGroups which contain the relevant comamnds for a given component being edited
+      content:
+        application/json:
+          schema:
+            $ref: './commandGroup.yaml'

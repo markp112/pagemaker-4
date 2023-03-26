@@ -1,10 +1,20 @@
-import { editorComponentButtons } from '@/components/base/editorButtons/model/borderButtonData';
 import type { Units } from '@/components/page/model/model';
-import type { ComponentTypesString, LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
+import { useImagesStore } from '@/stores/images.store';
+import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
+import { userService } from '@/services/user/userService';
+import { useAuthStore } from '@/stores/auth.store';
+import { useCommandButtonStore } from '@/stores/commandButton.store';
 
 class EditorSettingsService {
-  store = useEditorSettingsStore();
+
+  constructor(private store = useEditorSettingsStore(), 
+    private imagesStore = useImagesStore(),
+    private fileUploadService = FileUploadService(),
+    private authStore = useAuthStore(),
+    private useUserService = userService()
+  ) {}
 
   getLineStyle(): LineStyle {
     return this.store.borderLineStyle; 
@@ -48,7 +58,6 @@ class EditorSettingsService {
 
   setColourAppliesTo(appliesTo: string) {
     this.store.setColourAppliesTo(appliesTo)
-
   } 
 
   setActiveElement(element: PageElement) {
@@ -67,13 +76,21 @@ class EditorSettingsService {
     return this.store.activeElement;
   }
 
-  getContainerCommands() {
-    const elementName = this.store.activeElement?.name as ComponentTypesString;
-    if(elementName) {
-      return editorComponentButtons[elementName];
+  async showImageLibrary(show: boolean) {
+    if(this.imagesStore.imageDisplayList.length === 0) {
+      await this.useUserService.retrieveImages();
     }
-    return;
+    this.imagesStore.setShowGallery(show);
   }
+
+  getImagesForGallery() {
+    return this.imagesStore.imageDisplayList;
+  }
+
+  async uploadImageFile(file: File) {
+    return await this.fileUploadService.uploadFile(file, this.authStore.userUid);
+  }
+
 }
 
 export  { EditorSettingsService };

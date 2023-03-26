@@ -1,5 +1,5 @@
 import type { Units } from '@/components/page/model/model';
-import { EditorSettingsService } from '@/services/editor.settings.service';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 
 export class UnitsCommand {
   constructor(private service: EditorSettingsService = new EditorSettingsService()) {}

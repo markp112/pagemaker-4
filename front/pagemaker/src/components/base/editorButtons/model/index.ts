@@ -9,17 +9,20 @@ type EditorButtonTypes = 'list'
   | 'numericWithSelect'
   | 'textInputButton'
   | 'uploadButton'
-  | 'imageLibrary'
-  ;
+  | 'imageLibrary';
 
 interface EditorButtonBase {
   name: string;
   tooltip: string;
   displayIcon: string;
   buttonType: EditorButtonTypes;
-  commandName: CommandName;
+  commandName: CommandName | StyleTags | CssStyleNames;
   commandType: CommandTypes;
 };
+
+interface EditorButtonContent extends EditorButtonBase {
+  content: string | File;
+}
 
 interface SelectListIcon {
   icon: string;
@@ -33,20 +36,13 @@ interface EditorButtonSelectList extends EditorButtonBase {
 
 interface EditorButtonNumericSelectList extends EditorButtonBase {
   listValues: string[];
-}
-
-type ButtonContainerName = string;
-
-interface EditorComponentButtons {
-  id: string,
-  tabNames: string[],
-  tabElements: ButtonContainerName[],
 };
 
+
 export type { EditorButtonBase,
+  EditorButtonContent,
   EditorButtonTypes,
   EditorButtonSelectList,
   SelectListIcon,
   EditorButtonNumericSelectList,
-  EditorComponentButtons
 };

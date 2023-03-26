@@ -1,4 +1,4 @@
-import { EditorSettingsService } from '@/services/editor.settings.service';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import type { Command } from '../model/command';
 
 class ColourCommand implements Command {

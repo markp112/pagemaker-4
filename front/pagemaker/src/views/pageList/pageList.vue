@@ -64,6 +64,8 @@ import { pagesService } from '@/services/pages/pages.service';
 import { usePagesStore } from '@/stores/pages.store';
 import { useSiteStore } from '@/stores/site.store';
 import { PageService } from '@/services/page/page.service';
+import { CommandsService } from '@/services/commandButtons/commandButtons.service';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 
 export default defineComponent({
   name: 'PageList',
@@ -76,6 +78,7 @@ export default defineComponent({
     return {
       pagesService: pagesService(),
       pageService: PageService(),
+      editorSettingsService: new EditorSettingsService(),
       store: usePagesStore(),
       siteStore: useSiteStore(),
       siteId: '',
@@ -119,7 +122,8 @@ export default defineComponent({
       });
     },
     
-    pageRowClick(pageName: string) {
+    async pageRowClick(pageName: string) {
+      await CommandsService().fetchCommandHierarchy(),
       this.$router.push({
         name: 'pagebuilder',
       });

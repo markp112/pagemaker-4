@@ -1,0 +1,621 @@
+openapi: 3.0.0
+info:
+  title: Pagemaker API.
+  version: 0.1.0
+servers:
+  - url: 'http://localhost:4200/api/v1.0'
+    description: Pagemaker API V1.0
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+        - login
+      summary: log the user in
+      description: Post the login credentials to the auth service to log the user in
+      requestBody:
+        description: user name and password
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/login'
+      responses:
+        '200':
+          description: user has successfully logged in
+  /sites:
+    get:
+      tags:
+        - public
+        - user
+        - sites
+      summary: get list of the users sites
+      description: returns a list of the sites for a given user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: logged in user id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: array containing the list of sites or empty array if none have been created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/site'
+  '/sites/{userId}/{siteId}/materialcolours':
+    get:
+      tags:
+        - public
+        - site
+      summary: get the current material colour assignments for this site
+      description: returns the default colour palette defined for the site
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: the user the site is owned by
+          schema:
+            type: string
+        - name: siteId
+          in: path
+          required: true
+          description: Id of the site to retrieve the colours for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An object containing colours assigned according to the Material colour convention
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/colour'
+  '/sites/{userId}/{siteId}/colourpalette':
+    get:
+      tags:
+        - sites
+        - site
+        - colours
+      summary: return the site's defined colour palette
+      description: return the site's defined colour palette
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: siteId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: returns a json array of string hex codes representing the different colours that make up the palette
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    post:
+      tags:
+        - sites - site
+      summary: stores the selected material colours for the site
+      description: 'Based on the material framework this saves the colours chosen by the user for things like the primary colour, surface text etc'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/material-colours'
+      responses:
+        '201':
+          description: Material colours were saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/material-colours'
+  '/sites/{userId}/{siteId}':
+    post:
+      tags:
+        - site
+      summary: Save details of a new site
+      requestBody:
+        description: details of the site
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+      responses:
+        '201':
+          description: Site was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+    put:
+      tags:
+        - sites
+      summary: Save details of a new site
+      requestBody:
+        description: details of the site
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site'
+      responses:
+        '201':
+          description: Site was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site'
+  '/pages/{userId}/{siteId}':
+    get:
+      tags:
+        - public
+        - pages
+      summary: returns an array of pages for the given user and site
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/siteId'
+      responses:
+        '200':
+          description: returns an array of the pages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/pages'
+  '/pages/{userId}/{pageId}/metadata':
+    get:
+      tags:
+        - page
+      summary: Get a page
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: id of the current user
+          schema:
+            type: string
+        - name: pageId
+          in: path
+          required: true
+          description: id of the requested page
+          schema:
+            type: string
+      responses:
+        '200':
+          description: returns the requested page
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1pages~1%7BuserId%7D~1%7BpageId%7D~1metadata/post/requestBody/content/application~1json/schema'
+        '404':
+          description: not found
+    post:
+      tags:
+        - page
+      summary: create a new page
+      description: expects the pageid to be -1
+      parameters:
+        $ref: '#/paths/~1pages~1%7BuserId%7D~1%7BpageId%7D~1metadata/get/parameters'
+      requestBody:
+        description: details of the page meta data to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: A page
+              properties:
+                pageId:
+                  title: pageId
+                  description: unique id of this page
+                  type: string
+                name:
+                  title: Page name
+                  description: the page name e.g. home page
+                  type: string
+                width:
+                  title: pqge width
+                  description: css class defining the page width
+                  type: string
+                height:
+                  title: Page height
+                  description: css class defining page height
+                  type: string
+                backgroundColour:
+                  title: Background Colour
+                  description: Background Colour for the page
+                  type: string
+                colour:
+                  title: text colour
+                  description: text colour for the page
+                  type: string
+                icon:
+                  title: icon
+                  description: Icon for the page
+                  type: string
+                created:
+                  title: Date created
+                  description: date the page was created
+                  type: string
+                edited:
+                  title: Date edited
+                  description: date the page was kast edited
+                  type: string
+      responses:
+        '201':
+          description: 'site created, returns back the new site with the updated id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1pages~1%7BuserId%7D~1%7BpageId%7D~1metadata/post/requestBody/content/application~1json/schema'
+  '/users/{userId}/images/url/${userBucket}':
+    get:
+      tags:
+        - public
+        - images
+      summary: returns the download url for an image
+      description: returns the download url for an image
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - name: userBucket
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/user-bucket'
+      responses:
+        '200':
+          description: string url for the file long lived
+          content:
+            application/json:
+              schema:
+                type: string
+  '/users/{userId}/images/list/${userBucket}':
+    get:
+      tags:
+        - public
+        - users
+        - images
+      summary: return a list of images for a given bucket
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - name: userBucket
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/user-bucket'
+      responses:
+        '200':
+          description: Returns a list of images in the bucket
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/bucket-image'
+  /settings/colours:
+    get:
+      tags:
+        - public
+        - settings
+        - site
+      summary: get the default colour palette for a site
+      description: returns the default colour palette for a given site
+      parameters:
+        - $ref: '#/components/parameters/siteId'
+      responses:
+        '200':
+          description: array containing a list of the colours for the palette
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/colour'
+  '/private/menus/navmenu/{isLoggedIn}':
+    get:
+      tags:
+        - navmenu
+        - private
+      summary: returns list of navmenu items
+      description: if the user is logged in then full list of options are returned otherwise options to register and login are returned
+      parameters:
+        - name: isLoggedIn
+          in: path
+          required: true
+          description: status of logged in user
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: JSON array of menu items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/NavMenuItem'
+  /private/toolbar/toolbar-items/elements:
+    get:
+      tags:
+        - toolbar-elements
+        - private
+      summary: returns a list of elements for use in the right hand toolbar
+      description: returns a list of elements for use in the right hand toolbar
+      responses:
+        '200':
+          description: JSON array of toolbar-elements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#components/schemas/toolbar-elements'
+  /private/editor/command-buttons:
+    get:
+      tags:
+        - command buttons
+      summary: get the list of all commands
+      parameters: null
+      responses:
+        '200':
+          description: returns a list of commandGroups which contain the relevant comamnds for a given component being edited
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Command Group
+                properties:
+                  containerName:
+                    title: Container name
+                    description: The name of the container object which will hold these commands
+                    type: string
+                  commandButtons:
+                    title: Command Buttons
+                    description: An array containing the command buttons
+                    type: array
+                    items:
+                      schema:
+                        ref: ./commandButton.yaml
+components:
+  parameters:
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: logged in user id
+      schema:
+        type: string
+    siteId:
+      name: siteId
+      in: path
+      required: true
+      description: The current site user is working on
+      schema:
+        type: string
+  schemas:
+    NavMenuItem:
+      type: object
+      title: Nav Menu Item
+      properties:
+        id:
+          type: string
+          title: unique identifier for this menu item
+        navText:
+          type: string
+          description: text to appear in the menu
+        navLink:
+          type: string
+          description: page url to link to
+        isVisible:
+          type: boolean
+          description: Toggle to show hide the menu item
+        isLoggedIn:
+          type: boolean
+          description: 'Chooses if the menu option is available according to whether the user is logged in or not, set to false to show on the logged out menu, to true to show when user is logged in'
+    login:
+      type: object
+      title: Login credentials
+      properties:
+        email:
+          title: email of user
+          type: string
+        password:
+          title: password for user
+          type: string
+    site:
+      type: object
+      title: A site
+      properties:
+        siteId:
+          title: unique id for the site
+          type: string
+        userId:
+          title: id of the user
+          type: string
+        description:
+          title: description of the site
+          type: string
+        image:
+          title: url pointing to an image linked to the site
+          type: string
+        name:
+          title: The name of the site
+          type: string
+    toolbar-elements:
+      type: object
+      title: a toolbar element
+      properties:
+        classes:
+          title: list of tailwind classes that format this item on the screen
+          type: string
+          example: bg-gray-200 flex flex-row flex-wrap
+        componentName:
+          title: unique name for this component
+          type: string
+        dimension:
+          title: initial dimensions of this object on the screen when dropped on a page
+          type: object
+          properties:
+            height:
+              title: height of item
+              type: object
+              $ref: '#components/schemas/unit-and-value'
+            width:
+              title: initial width
+              type: object
+              $ref: '#components/schemas/unit-and-value'
+        isContainer:
+          title: Can this element contain other elements
+          type: boolean
+        location:
+          title: Initial location of this item on the page
+          type: object
+          properties:
+            left:
+              title: left position of element
+              type: object
+              $ref: '#components/schemas/unit-and-value'
+            top:
+              title: top position of element
+              type: object
+              $ref: '#components/schemas/unit-and-value'
+        toolbarIcon:
+          title: 'icon shown in the toolbar, name of an image to display'
+          type: string
+        tooltip:
+          title: tooltip to display
+          type: string
+        type:
+          title: type of element
+          type: string
+    unit-and-value:
+      type: object
+      title: CSS unit with value and type
+      properties:
+        unit:
+          title: unit to be used
+          type: string
+          example: px % em rem
+        value:
+          title: numeric value assigned to the unit
+          type: number
+    colour:
+      type: object
+      title: colours
+      properties:
+        colourName:
+          title: colour name
+          description: material design colour name
+          type: string
+        value:
+          title: value
+          description: hex value assigned to the colour
+          type: string
+    pages:
+      type: object
+      title: A page
+      properties:
+        pageId:
+          title: pageId
+          description: unique id of this page
+          type: string
+        name:
+          title: Page name
+          description: the page name e.g. home page
+          type: string
+        width:
+          title: pqge width
+          description: css class defining the page width
+          type: string
+        height:
+          title: Page height
+          description: css class defining page height
+          type: string
+        backgroundColour:
+          title: Background Colour
+          description: Background Colour for the page
+          type: string
+        colour:
+          title: text colour
+          description: text colour for the page
+          type: string
+        icon:
+          title: icon
+          description: Icon for the page
+          type: string
+        created:
+          title: Date created
+          description: date the page was created
+          type: string
+        edited:
+          title: Date edited
+          description: date the page was kast edited
+          type: string
+    user-bucket:
+      type: object
+      title: userBucket
+      description: information about a users storage bucket for images and the name of the file required
+      properties:
+        bucket:
+          title: Bucket name
+          type: string
+        userId:
+          title: filename
+          type: string
+    bucket-image:
+      type: object
+      title: Bucket Image
+      description: Details of a single image
+      properties:
+        bucket:
+          title: bucket name
+          type: string
+        fullpath:
+          title: full path to the image
+          type: string
+        name:
+          title: filename of the image
+          type: string
+    material-colours:
+      type: object
+      title: Material colours
+      description: contains the material colour settings for a users site
+      properties:
+        paletteName:
+          title: 'Palette Name - can be one of Primary, secondary, accent, error, surface'
+          type: string
+        colours:
+          title: array of colour values
+          type: object
+          properties:
+            name:
+              title: 'name of the colour values can be neutral, light or dark'
+              type: string
+            hexColourText:
+              title: the hex colour value for text linked to this item
+              type: string
+            hexColourBackground:
+              title: the colour to be applied to the background of the element
+              type: string

@@ -6,15 +6,18 @@ import { BordersCommand } from './borders/borders.comand';
 import { ColourCommand } from './colour/colourCommand';
 import { ApplyColourTo } from './colourAppliesTo/colourAppliesTo';
 import { ImageCommand } from './image/image.command';
+import { ImageLibraryCommand } from './imageLibrary/imageLibrary.command';
 import { ItemsAlignmentCommand } from './itemsAlignment/itemsAlignment';
 import { justifyCommand } from './jusftify/justifyCommand';
 import { LineStyleCommand } from './lineStyle/lineStyle.command';
 import { LineThicknessCommand } from './lineThickness/lineThickness.command';
 import type { CommandName, CommandProperties } from './model/command';
 import { UnitsCommand } from './units/units.command';
+import { UploadImageCommand } from './uploadImageFile/uploadImageFile.command';
 import { ZindexCommand } from './zIndex/zindexCommand';
 
-type CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any }
+// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+type  CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any }
 
 class CommandProcessor {
   
@@ -42,11 +45,13 @@ class CommandProcessor {
     'items-end': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
     'send-to-back': (pageElement: PageElement) => new ZindexCommand(pageElement),
     'bring-to-front': (pageElement: PageElement) => new ZindexCommand(pageElement),
-    
+    'show-gallery': () => new ImageLibraryCommand(),
+    'upload-image-file': (pageElement: PageElement) => new UploadImageCommand(pageElement),
   };
 
   processCommand(commandProperties: CommandProperties) {
     const getCommand = (this.commandMap[commandProperties.commandName]);
+    console.log('%c⧭', 'color: #917399', getCommand);
     const command = getCommand(this.pageElement);
     if (commandProperties.commandType === 'direct') {
       this.pageElement = command.execute(commandProperties.payload);

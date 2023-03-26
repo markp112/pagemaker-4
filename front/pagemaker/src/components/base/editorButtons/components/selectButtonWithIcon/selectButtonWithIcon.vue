@@ -90,11 +90,7 @@ export default defineComponent({
         payload: iconElement.classToApply,
       };
       this.show();
-      if(iconElement.icon === this.selectedIcon) {
-        this.$emit('onClear', payload);
-      } else {
-        this.$emit('onClick', payload);
-      }
+      this.$emit('onClick', payload);
       this.setIcon(iconElement.icon);
     },
 

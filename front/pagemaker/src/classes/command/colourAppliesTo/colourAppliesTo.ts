@@ -1,5 +1,5 @@
 import type { PageElement, Style } from '@/components/page/model/pageElement/pageElement';
-import { EditorSettingsService } from '@/services/editor.settings.service';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import type { Command } from '../model/command';
 export type Applies = 'color' | 'background-color' | 'border'; 
 
