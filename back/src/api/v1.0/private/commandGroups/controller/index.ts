@@ -19,7 +19,6 @@ function commandGroups() {
       return constructResponse<CommandElement>(commandElements, httpStatusCodes.OK);
     }
     catch (err) {
-      console.log('%c⧭', 'color: #735656', err);
       logger.error(err);
       throw new GenericError(err);
     }
