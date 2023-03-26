@@ -5,7 +5,6 @@ import { useImagesStore } from '@/stores/images.store';
 import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
 import { userService } from '@/services/user/userService';
 import { useAuthStore } from '@/stores/auth.store';
-import { useCommandButtonStore } from '@/stores/commandButton.store';
 
 class EditorSettingsService {
 
@@ -80,7 +79,7 @@ class EditorSettingsService {
     if(this.imagesStore.imageDisplayList.length === 0) {
       await this.useUserService.retrieveImages();
     }
-    this.imagesStore.setShowGallery(show);
+    this.imagesStore.setShowGallery();
   }
 
   getImagesForGallery() {

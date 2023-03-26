@@ -1,5 +1,3 @@
-import type { TabStrip } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
-import type { ComponentTypesString } from '@/components/page/model/pageElement/pageElement';
 import type {  EditorButtonBase, EditorButtonNumericSelectList, EditorButtonSelectList, } from '.';
 
 // const borderButtonDataMock: EditorButtonSelectList = {

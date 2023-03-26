@@ -1,6 +1,5 @@
 import type { Units } from '@/components/page/model/model';
 import type { LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
-import { isObject } from '@vue/shared';
 import { defineStore } from 'pinia';
 
 const useEditorSettingsStore = defineStore('editorStore',{

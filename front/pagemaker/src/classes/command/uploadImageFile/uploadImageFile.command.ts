@@ -8,9 +8,7 @@ class UploadImageCommand implements Command {
     private service: EditorSettingsService = new EditorSettingsService()) {}
 
   async execute(imageFile: File): Promise<void> {
-    console.log('%c⧭', 'color: #99adcc', imageFile);
     const url = await this.service.uploadImageFile(imageFile);
-    console.log('%c⧭', 'color: #0088cc', url);
     const imageCommand = new ImageCommand(this.pageElement);
     imageCommand.execute(url);
 

@@ -44,7 +44,7 @@ const useImagesStore = defineStore({
       this._imageDisplayList = [];
     },
 
-    setShowGallery(show: boolean) {
+    setShowGallery() {
       this._showGallery = !this._showGallery;
     }
 
