@@ -1,6 +1,6 @@
 <template>
   <BaseButton
-    buttonShape="circle"
+    buttonShape="rectangular"
     variant="outline"
     size="small"
     @onClick="closeClicked()"

@@ -304,6 +304,9 @@ paths:
                   type: object
                   $ref: '#components/schemas/toolbar-elements'
 
+  /private/editor/command-buttons:
+    $ref: './commandButtons/routes.yaml'
+
 components:
 
   parameters:

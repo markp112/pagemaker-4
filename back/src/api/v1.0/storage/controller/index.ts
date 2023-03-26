@@ -14,9 +14,7 @@ function StorageController() {
       await uploadBytes(bucketRef, file.buffer);
       const downloadURL = await getDownloadURL(bucketRef);
       return constructResponse(downloadURL, httpStatusCodes.OK);
-      
     } catch (error) {
-      console.log('%c⧭', 'color: #99adcc', error);
       throw new GenericError(error.message);
     }
   }

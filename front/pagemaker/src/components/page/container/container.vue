@@ -40,7 +40,7 @@ import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import imageElement from '../image/imageElement.vue';
 import buttonElement from '../button/button-element.vue';
 import type { PageContainerInterface } from '../model/pageContainer/container';
-import { EditorSettingsService } from '@/services/editor.settings.service';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { useDrag } from '@/composables/drag/drag';
 
 export default defineComponent({

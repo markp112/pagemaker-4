@@ -33,6 +33,7 @@ export default defineComponent({
     onChange(unit: string) {
       const command: CommandProperties = {
         commandName: 'set-units',
+        commandType: 'indirect',
         payload: unit
       };
       this.$emit('onChange', command);

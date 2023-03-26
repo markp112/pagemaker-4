@@ -6,8 +6,9 @@ const useImagesStore = defineStore({
 
   state: () => {
     return {
-      _imageListRaw:[] as  BucketImage[],
+      _imageListRaw: [] as BucketImage[],
       _imageDisplayList: [] as ImageCardProps[],
+      _showGallery: false,
     }
   },
 
@@ -17,7 +18,11 @@ const useImagesStore = defineStore({
     },
 
     imageDisplayList: (state) => {
-      return state._imageDisplayList
+      return state._imageDisplayList;
+    },
+
+    showGallery: (state) => {
+      return state._showGallery;
     }
 
   },
@@ -39,6 +44,9 @@ const useImagesStore = defineStore({
       this._imageDisplayList = [];
     },
 
+    setShowGallery() {
+      this._showGallery = !this._showGallery;
+    }
 
   },
 });

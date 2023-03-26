@@ -29,7 +29,7 @@ import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordi
 import resize from '@/components/base/resize/resize.vue';
 import { Resize } from '../../base/resize/onResize';
 import { useDrag } from '@/composables/drag/drag';
-import { EditorSettingsService } from '@/services/editor.settings.service';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { defineComponent } from 'vue';
 import { useMouse } from '../classes/mouse/mouse';
 import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';

@@ -1,40 +1,58 @@
 <template>
-  <div class="flex flex-row justify-center flex-wrap gap-2 bg-gray-300 p-2 shadow-md mb-2">
-    <IconImageButton v-for="(commandButton, index) in buttonData"
+  <div class="flex flex-row justify-start flex-wrap gap-2 bg-gray-300 p-2 shadow-md mb-2">
+    <component v-for="(commandButton, index) in buttonData" 
+      track-by="$index"
+      :is="commandButtons[commandButton.buttonType]"
       :key="index"
-      :buttonData="commandButton "
-      class="mr-2"
-      @on-click="handleButtonClick($event)"
-      :activeCommandName="activeCommandButton"
+      :index="index"
+      :button-data = "commandButton"
+      :active-command-name="activeCommandButton"
+      @onClick="handleButtonClick($event)"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { CommandProperties } from '@/classes/command/model/command';
-import { ref } from 'vue';
-import type { EditorButtonBase } from '../../model';
-import IconImageButton  from '../../components/iconImageButton/iconImageButton.vue';
+import { ref, type Component } from 'vue';
+import type { EditorButtonBase, EditorButtonContent, EditorButtonNumericSelectList } from '../../model';
+import TextInputButton from '../../components/textInputButton/textInput.vue';
+import IconImageButton from '../../components/iconImageButton/iconImageButton.vue';
+import plusMinusButton from '../../components/plusMinusbutton/plusMinusButton.vue';
+import numericButtonwithSelectlist from '../../components/numericButton/numericButtonwithSelectlist.vue';
+import selectButtonWithIcon from '../../components/selectButtonWithIcon/selectButtonWithIcon.vue';
+import UploadButton from '../../components/uploadButton/uploadButton.vue';
+import type { EditorButtonTypes } from '../../model';
+import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
 
-defineProps<{
-  buttonData: EditorButtonBase[],
-}>();
+type ComponentKey = { [buttonType in EditorButtonTypes]: Component }
 
-const emit = defineEmits(['onButtonClick']);
+const commandButtons: ComponentKey = {
+  'textInputButton': TextInputButton,
+  'iconImageButton': IconImageButton,
+  'iconList': selectButtonWithIcon,
+  'uploadButton': UploadButton,
+  'list': () => IconImageButton,
+  'numericWithSelect': numericButtonwithSelectlist,
+  'plusMinus': plusMinusButton,
+  'imageLibrary': () => ImageGallery,
+};
 
-let activeCommandButton = ref('');
+  defineProps<{
+    buttonData: EditorButtonBase[] | EditorButtonNumericSelectList[],
+  }>();
+  
+  const emit = defineEmits(['onButtonClick']);
 
-const handleButtonClick = (buttonData: EditorButtonBase) => {
-  const payload: CommandProperties =  {
-    commandName: buttonData.commandName,
-    commandType: buttonData.commandType,
-    payload: buttonData.commandName,
+  let activeCommandButton = ref('');
+  
+  const handleButtonClick = (payload: CommandProperties) => {
+    setActiveButton(payload.commandName);
+    emit('onButtonClick', payload);
   };
-  setActiveButton(buttonData.commandName);
-  emit('onButtonClick', payload);
-};
 
-const setActiveButton = (buttonName: string) => {
-  activeCommandButton.value = buttonName;
-};
+  const setActiveButton = (buttonName: string) => {
+    activeCommandButton.value = buttonName;
+  };
+
 </script>

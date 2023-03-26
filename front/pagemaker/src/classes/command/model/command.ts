@@ -5,6 +5,7 @@ type CommandName = | 'border'
   | 'line-style'
   | 'line-thickness'
   | 'border-radius'
+  | 'border-top'
   | 'set-units'
   | 'set-colour'
   | 'set-image'
@@ -21,9 +22,11 @@ type CommandName = | 'border'
   | 'items-center'
   | 'items-end'
   | 'bring-to-front'
-  | 'send-to-back';
+  | 'send-to-back'
+  | 'show-gallery'
+  | 'upload-image-file';
 
-type CommandParameter = StyleTags | CssStyleNames | number | string;
+type CommandParameter = StyleTags | CssStyleNames | number | string | boolean | File;
 
 interface Command {
   execute(styleToApply: CommandParameter ): void;
@@ -34,7 +37,7 @@ type CommandTypes = 'direct' | 'indirect';
 
 interface CommandProperties {
   commandType: CommandTypes; 
-  commandName: CommandName;
+  commandName: CommandName | StyleTags |CssStyleNames;
   payload: CommandParameter;
 };
 

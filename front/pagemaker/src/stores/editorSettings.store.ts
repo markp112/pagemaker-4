@@ -12,7 +12,7 @@ const useEditorSettingsStore = defineStore('editorStore',{
       _lineThickness: 1,
       _borderElement: '' as StyleTags,
       _units: 'px' as Units,
-      _activeElement: Object as unknown as PageElement | undefined,
+      _activeElement: undefined as unknown as PageElement | undefined,
     }
   },
 
@@ -43,7 +43,17 @@ const useEditorSettingsStore = defineStore('editorStore',{
 
     activeElement: (state) => {
       return state._activeElement;
-    }
+    },
+
+    getActiveElementName: (state) => {
+      const element = state._activeElement;
+      const elementName = element?.name;
+      console.log('%c⧭', 'color: #5200cc', typeof elementName);
+      if (typeof elementName !== 'string') {
+        return ''
+      }
+      return elementName;
+    },
   },
 
   actions: {

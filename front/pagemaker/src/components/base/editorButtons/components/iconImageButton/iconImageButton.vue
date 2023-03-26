@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row justify-center items-center relative cursor-pointer hover:bg-gray-600"
-    :class="getIsActive"
+    :class="getIsActive()"
     >
     <img :src="getPath(buttonData.displayIcon)"
       @mouseover="showToolTip=!showToolTip"
@@ -12,56 +12,39 @@
     <Tooltip :tooltip="buttonData.tooltip" :showToolTip="showToolTip" class="left-8"/>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import toolTip from '@/components/utility/notifications/tooltip/toolTip.vue';
+<script lang="ts" setup>
+import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import { getImageUrl } from '@/common/getIcon';
 import type { EditorButtonBase } from '../../model';
+import { ref } from '@vue/reactivity';
+import type { CommandProperties } from '@/classes/command/model/command';
 
-export default defineComponent({
-  name: 'iconImageButton',
+  const props = defineProps<{
+    buttonData: EditorButtonBase,
+    activeCommandName: string 
+  }>();
 
-  props: {
-    buttonData: {
-      type: Object as PropType<EditorButtonBase>,
-      required: true,
-    },
-    activeCommandName: {
-      type: String,
-      default: false,
-    }
-  },
+  const emits = defineEmits(['onClick']);
+  let showToolTip = ref(false);
 
-  emits: ['onClick'],
-  
-  data() {
-    return {
-      showToolTip: false,
-    }
-  },
 
-  components: {
-    Tooltip: toolTip,
-  },
+    const getIsActive = () => {
+      return props.buttonData.commandName === props.activeCommandName ? 'border border-solid border-white' : '';
+    };
 
-  computed: {
-    getIsActive() {
-      return this.buttonData.commandName === this.activeCommandName ? 'border border-solid border-white' : '';
-    }
-  },
-
-  methods: {
-    getPath(image: string): string {
+    const getPath = (image: string): string => {
       return getImageUrl(image);
-    },
+    };
 
-    handleClick() {
-      this.$emit('onClick', this.buttonData);
-    },
+    const handleClick = () => {
+      const commandProperties: CommandProperties = {
+        commandName: props.buttonData.commandName,
+        commandType: props.buttonData.commandType,
+        payload: props.buttonData.commandName,
+      }
+      emits('onClick', commandProperties);
+    };
 
-  
-  },
-})
 
 </script>
 

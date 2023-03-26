@@ -4,7 +4,7 @@
   >
     <input type="file"
       id="file"
-      accept="image/png, image/jpg"
+      accept="image/png, image/jpeg"
       @change="handleClick($event)"
     >
     <label for="file">
@@ -14,25 +14,25 @@
         class="icon-img hover:bg-gray-600"
       />
     </label>
-    <Tooltip :tooltip="buttonData.tooltip" :showToolTip="showToolTip" class="left-48"/>
+    <Tooltip :tooltip="buttonData.tooltip" :showToolTip="showToolTip" class="left-10"/>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { EditorButtonBase } from '../../model';
+import type { EditorButtonBase, EditorButtonContent } from '../../model';
 import { getImageUrl } from '@/common/getIcon';
 import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
+import type { CommandProperties } from '@/classes/command/model/command';
 
-const emit = defineEmits(['onButtonClick']);
+const emit = defineEmits(['onClick']);
 
 const props = defineProps<{
   buttonData: EditorButtonBase,
-  activeCommandName: string,
+  activeCommandName?: string,
 }>();
 
 let showToolTip = ref(false);
-let inputValue = ref('');
 
 const getIsActive = () => {
   return props.buttonData.commandName === props.activeCommandName ? 'border border-solid border-white' : '';
@@ -41,8 +41,13 @@ const getIsActive = () => {
 const handleClick = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const files = target.files;
-  if(files) {
-    emit('onButtonClick', props.buttonData, files[0]);
+  if(files && files?.length > 0) {
+    const commandProperties: CommandProperties = {
+      commandName: props.buttonData.commandName,
+      commandType: props.buttonData.commandType,
+      payload: files[0],
+    }
+    emit('onClick', commandProperties);
   }
 };
 

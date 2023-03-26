@@ -1,5 +1,6 @@
 import type { BucketImage, ImageCardProps, UsersBucket } from '@/components/base/pickers/imageGallery/types';
 import { useImagesStore } from '@/stores/images.store';
+import { useAuthStore } from '@/stores/auth.store';
 import { axiosClient } from '../httpService';
 
 function userService() {
@@ -30,7 +31,8 @@ function userService() {
     }
   }
 
-  async function retrieveImages(userId: string) {
+  async function retrieveImages() {
+    const userId = useAuthStore().userUid;
     const imageListRaw = await getUsersImagesRaw(userId);
     imageStore.setImageListRaw(imageListRaw);
     const files = imageListRaw.map(file => file.name);

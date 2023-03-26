@@ -1,23 +1,23 @@
 <template>
-  <section class="flex flex-col justify-start wrapper rounded-sm bg-white shadow-lg border-2 border-gray-400 p-1">
-    <p class="flex justify-end flex-row w-full">
-      <CloseButton @onClick="closeClicked()"/>
-    </p>
-    <div class="flex flex-row w-100 h-72 justify-between min-w-fit">
-      <img
+  <teleport to="#library-target" v-if="isOpen">
+    <section class="z-50 bg-white shadow-lg border-2 rounded-lg border-gray-400 p-1 w-8/12 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <p class="flex justify-end flex-row w-full">
+        <CloseButton @onClick="closeClicked()"/>
+      </p>
+      <div class="flex flex-row h-72 justify-between min-w-fit">
+        <img
         src="@/assets/icons/left-grey-32.png"
         alt=""
         class="nav-arrow"
         @click="leftArrowClick()"
-      >
-      <span
-        v-for="image in getImages"
-        :key="image.url"
-        class="w-44 inline-block ml-1 mr-1"
-      >
+        >
+        <span
+          v-for="image in getImages"
+          :key="image.url"
+          class="w-44 inline-block ml-1 mr-1"
+        >
         <span class="inline-block h-auto border border-gray-200">
           <img :src="image.url" alt="" @click="imageClicked(image.url)" class="cursor-pointer w-full">
-
         </span>
       </span>
       <img
@@ -25,26 +25,25 @@
         alt=""
         class="nav-arrow"
         @click="rightArrowClick()"
-      >
-    </div>
-  </section>
+        >
+      </div>
+    </section>
+    </teleport>
 </template>
 
 <script lang="ts">
 import type { UsersBucket, ImageCardProps } from './types';
 import  { defineComponent, type PropType } from 'vue';
 import  CloseButton from '@/components/base/baseButton/closeButton/closeButton.vue';
+import { imageLibrary } from '../../editorButtons/model/borderButtonData';
+import { useImagesStore } from '@/stores/images.store';
 
 export default defineComponent({
   name: 'ImageGallery',
   
-  emits: ['imageClicked', 'closeClicked'],
+  emits: ['imageClicked', 'closeClicked', 'openClicked'],
   
   props: {
-    userId: {
-      type: String,
-      required: true,
-    },
     imageDetails: {
       type: Object as PropType<ImageCardProps[]>,
       required: true,
@@ -53,12 +52,14 @@ export default defineComponent({
   
   data() {
     return {
-      NUMBER_OF_IMAGES_TO_DISPLAY: 4,
+      NUMBER_OF_IMAGES_TO_DISPLAY: 5,
       imagePointer: 0,
-      maxImages:0,
+      maxImages: 0,
       tags: [] as string[],
       filters: [] as string[],
       userBucket: Object as any as UsersBucket,
+      imageLibrary,
+      imagesStore: useImagesStore(),
     }
   },
 
@@ -75,11 +76,15 @@ export default defineComponent({
         imageBuffer.push(this.imageDetails[index]);
       }
       return imageBuffer;
-    }
+    },
+
+    isOpen() {
+      return this.imagesStore.showGallery;
+    },
   },
-
+  
   methods: {
-
+    
     closeClicked() {
       this.$emit('closeClicked')
     },
@@ -97,6 +102,14 @@ export default defineComponent({
       this.imagePointer++;
       if (this.imagePointer + this.maxImages > this.imageDetails.length) this.imagePointer = 0;
     },
+
+    showImageGallery() {
+      this.$emit('openClicked');
+    },
+
+    closeImageGallery() {
+      this.$emit('closeClicked');
+    }
   }
 
 })

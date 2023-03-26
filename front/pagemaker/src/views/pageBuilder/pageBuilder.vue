@@ -21,19 +21,15 @@
       :class="sidePanelWidth"
       @toggle-clicked="resizePanel()"
     >
-      <TabstripContainer :labels="getEditorCommandButtons.tabNames">
-        <template v-slot:[getTab(index)] v-for="(buttonContainer, index) in getEditorCommandButtons.tabElements" >
-          <component 
-            :is="buttonContainer"
-            :key="index"
-            @on-button-click="handleButtonClick($event)"
-            @on-change="handleButtonClick($event)"
-            @on-clear-command="handleClearCommand($event)"
-          >
-          </component>
-        </template>
-      </TabstripContainer>
+      <TabstripContainer :data="getTabsForElement"
+        @onClick="tabClicked($event)"
+        @onButtonClick="handleButtonClick($event)"/>
     </SettingsPanelVue>
+    <ImageGallery :image-details="getImagesForGallery" 
+      @image-clicked="handleGalleryImageClicked($event)"
+      @close-clicked="handleGalleryClose()"
+    />
+    />
   </div>
 </template>
 
@@ -51,14 +47,13 @@ import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue'
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 import type { CommandProperties } from '@/classes/command/model/command';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
-import bordersContainer from '@/components/base/editorButtons/editorContainers/borders/bordersContainer.vue'
 import ColoursContainer from '@/components/base/editorButtons/editorContainers/colours/coloursContainer.vue';
 import { CommandHistory } from '@/classes/history/history';
-import { containerButtons } from '@/components/base/editorButtons/model/borderButtonData';
-import { EditorSettingsService } from '@/services/editor.settings.service';
-import type { EditorComponentButtons } from '@/components/base/editorButtons/model';
-import ImagesContainer from '@/components/base/editorButtons/editorContainers/images/imagesContainer.vue';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
+import { CommandsService } from '@/services/commandButtons/commandButtons.service';
 import layoutContainer from '@/components/base/editorButtons/editorContainers/layout/layoutContainer.vue';
+import type { TabPanel } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
+import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -82,10 +77,9 @@ const sliderPosition: SliderPosition = {
       Scaler,
       SettingsPanelVue: settingsPanelVue,
       TabstripContainer: tabstripContainer,
-      BordersContainer: bordersContainer,
       ColoursContainer,
-      ImagesContainer,
       LayoutContainer: layoutContainer,
+      ImageGallery
     },
     
     data() {
@@ -102,6 +96,8 @@ const sliderPosition: SliderPosition = {
         sidePanelWidth: 'w-2/12',
         commandHistory: Object as unknown as  CommandHistory<CommandProperties>,
         editorSettingsService: new EditorSettingsService(),
+        commandButtonService: CommandsService(),
+        tabContent: [] as TabPanel[],
       }
     },
     
@@ -120,16 +116,18 @@ const sliderPosition: SliderPosition = {
         return classDef 
       },
 
-      getEditorCommandButtons(): EditorComponentButtons {
-        const editorButtons = this.editorSettingsService.getContainerCommands();
-        return editorButtons ? editorButtons : containerButtons;
+      getTabsForElement() {
+        return this.commandButtonService.getTabs() || [];
       },
+
+      getImagesForGallery() {
+        return this.editorSettingsService.getImagesForGallery();
+      }
     },
 
     methods: {
-
-      getTab(index: number | string) {
-        return `tab-${index}`;
+      getTab(commandGroupId: string) {
+        return commandGroupId;
       },
 
       toolbarToggleClicked() {
@@ -154,12 +152,35 @@ const sliderPosition: SliderPosition = {
       },
 
       handleButtonClick(payload: CommandProperties): void {
+        console.log('%c⧭', 'color: #733d00', payload)
         this.pageBuilderService.processButtonCommand(payload, this.commandHistory as CommandHistory<CommandProperties>);
+      },
+
+      handleGalleryImageClicked(imageUrl: string) {
+        const command: CommandProperties = {
+          commandType: 'direct',
+          commandName: 'set-image',
+          payload: imageUrl,
+        };
+        this.handleButtonClick(command);
+      },
+
+      handleGalleryClose() {
+        const payload: CommandProperties = {
+          commandName: 'show-gallery',
+          commandType: 'direct',
+          payload: false,
+        };
+        this.handleButtonClick(payload);
       },
 
       handleClearCommand(payload: CommandProperties): void {
         this.pageBuilderService.clearButtonCommand(payload, this.commandHistory as CommandHistory<CommandProperties>);
       },
+
+      tabClicked(commandGroupId: string) {
+      console.log('%c⧭', 'color: #00a3cc', commandGroupId)
+      }
     },
 
   })

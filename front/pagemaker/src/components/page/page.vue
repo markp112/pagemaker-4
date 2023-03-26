@@ -15,7 +15,7 @@
       @dragover.prevent
       @drop.prevent="onDrop($event)"
       @OnClick="containedElementClick($event)"
-    >{{ component }}</component>
+    ></component>
   </div>
 </template>
 

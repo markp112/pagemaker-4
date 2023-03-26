@@ -1,46 +1,45 @@
-import type { ComponentTypesString } from '@/components/page/model/pageElement/pageElement';
-import type { EditorButtonBase, EditorButtonNumericSelectList, EditorButtonSelectList, EditorComponentButtons } from '.';
+import type {  EditorButtonBase, EditorButtonNumericSelectList, EditorButtonSelectList, } from '.';
 
-const borderButtonDataMock: EditorButtonSelectList = {
-  buttonType: 'iconList',
-  commandName: 'border',
-  commandType: 'direct',
-  displayIcon: 'border_all-32.png',
-  name: 'Borders',
-  tooltip: 'Borders',
-  listValues: [
-    {
-      classToApply: 'border',
-      icon: 'border_outside-32.png',
-      tooltip: 'border all round',
-    },
-    {
-      classToApply: 'border-top',
-      icon: 'border_top-32.png',
-      tooltip: 'border top',
-    },
-    {
-      classToApply: 'border-bottom',
-      icon: 'border_bottom-32.png',
-      tooltip: 'border bottom',
-    },
-    {
-      classToApply: 'border-right',
-      icon: 'border_right-32.png',
-      tooltip: 'border right',
-    },
-    {
-      classToApply: 'border-left',
-      icon: 'border_left-32.png',
-      tooltip: 'border left',
-    },
-    {
-      classToApply: 'border-none',
-      icon: 'border_none-32.png',
-      tooltip: 'remove border',
-    },
-  ]
-};
+// const borderButtonDataMock: EditorButtonSelectList = {
+//   buttonType: 'iconList',
+//   commandName: 'border',
+//   commandType: 'direct',
+//   displayIcon: 'border_all-32.png',
+//   name: 'Borders',
+//   tooltip: 'Borders',
+//   listValues: [
+//     {
+//       classToApply: 'border',
+//       icon: 'border_outside-32.png',
+//       tooltip: 'border all round',
+//     },
+//     {
+//       classToApply: 'border-top',
+//       icon: 'border_top-32.png',
+//       tooltip: 'border top',
+//     },
+//     {
+//       classToApply: 'border-bottom',
+//       icon: 'border_bottom-32.png',
+//       tooltip: 'border bottom',
+//     },
+//     {
+//       classToApply: 'border-right',
+//       icon: 'border_right-32.png',
+//       tooltip: 'border right',
+//     },
+//     {
+//       classToApply: 'border-left',
+//       icon: 'border_left-32.png',
+//       tooltip: 'border left',
+//     },
+//     {
+//       classToApply: 'border-none',
+//       icon: 'border_none-32.png',
+//       tooltip: 'remove border',
+//     },
+//   ]
+// };
 
 const lineStyleButtonMock: EditorButtonSelectList = {
   buttonType: 'iconList',
@@ -113,7 +112,7 @@ const borderRadius: EditorButtonNumericSelectList = {
 };
 
 const flexRow: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'flex-row',
   commandType: 'direct',
   displayIcon: 'row-32.png',
@@ -122,7 +121,7 @@ const flexRow: EditorButtonBase = {
 };
 
 const flexColumn: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'flex-col',
   commandType: 'direct',
   displayIcon: 'column-32.png',
@@ -131,7 +130,7 @@ const flexColumn: EditorButtonBase = {
 };
 
 const justifyStart: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-start',
   commandType: 'direct',
   displayIcon: 'align_horizontal_left-32.png',
@@ -140,7 +139,7 @@ const justifyStart: EditorButtonBase = {
 };
 
 const justifyCenter: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-center',
   commandType: 'direct',
   displayIcon: 'align_horizontal_center-32.png',
@@ -149,7 +148,7 @@ const justifyCenter: EditorButtonBase = {
 };
 
 const justifyEnd: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-end',
   commandType: 'direct',
   displayIcon: 'align_horizontal_right-32.png',
@@ -158,7 +157,7 @@ const justifyEnd: EditorButtonBase = {
 };
 
 const justifyBetween: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-between',
   commandType: 'direct',
   displayIcon: 'space_between_horizontal-32.png',
@@ -167,7 +166,7 @@ const justifyBetween: EditorButtonBase = {
 };
 
 const justifyEvenly: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-evenly',
   commandType: 'direct',
   displayIcon: 'space_evenly_horizontal-32.png',
@@ -176,7 +175,7 @@ const justifyEvenly: EditorButtonBase = {
 };
 
 const justifyAround: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'justify-around',
   commandType: 'direct',
   displayIcon: 'space_around_horizontal-32.png',
@@ -185,7 +184,7 @@ const justifyAround: EditorButtonBase = {
 };
 
 const itemsStart: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'items-start',
   commandType: 'direct',
   displayIcon: 'align_vertical_top-32.png',
@@ -193,23 +192,23 @@ const itemsStart: EditorButtonBase = {
   tooltip: 'align items to start'
 };
 const itemsCenter: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'items-center',
   commandType: 'direct',
   displayIcon: 'align_vertical_center-32.png',
-  name: 'alignTop',
+  name: 'alignCenter',
   tooltip: 'align items to center'
 };
 const itemsEnd: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'items-end',
   commandType: 'direct',
   displayIcon: 'align_vertical_bottom-32.png',
-  name: 'alignTop',
+  name: 'alignBottom',
   tooltip: 'align items to end'
 };
 const bringToFront: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'bring-to-front',
   commandType: 'direct',
   displayIcon: 'bring_to_front-32.png',
@@ -217,7 +216,7 @@ const bringToFront: EditorButtonBase = {
   tooltip: 'bring to front'
 };
 const sendToBack: EditorButtonBase = {
-  buttonType: 'basic',
+  buttonType: 'iconImageButton',
   commandName: 'send-to-back',
   commandType: 'direct',
   displayIcon: 'send_to_back-32.png',
@@ -225,53 +224,48 @@ const sendToBack: EditorButtonBase = {
   tooltip: 'send to back'
 };
 const uploadImage: EditorButtonBase = {
-  buttonType: 'basic',
-  commandName: 'border-radius',
+  buttonType: 'uploadButton',
+  commandName: 'upload-image-file',
   commandType: 'direct',
   displayIcon: 'folder_images-32.png',
   name: 'uploadImage',
   tooltip: 'upload image',
 };
 const pasteImageUrl: EditorButtonBase = {
-  buttonType: 'basic',
-  commandName: 'border-radius',
+  buttonType: 'textInputButton',
+  commandName: 'set-image',
   commandType: 'direct',
   displayIcon: 'paste-32.png',
   name: 'pasteImageUrl',
   tooltip: 'paste image url',
 };
-const imageButtons: EditorComponentButtons = {
-  id: 'ImageEditorButtons',
-  tabNames: ['Borders', 'Colours', 'Image'],
-  tabElements: ['BordersContainer', 'ColoursContainer', 'ImagesContainer']
+const imageLibrary: EditorButtonBase = {
+  buttonType: 'iconImageButton',
+  commandName: 'show-gallery',
+  commandType: 'direct',
+  displayIcon: 'gallery-32.png',
+  name: 'imageLibrary',
+  tooltip: 'select from library',
 };
-const containerButtons: EditorComponentButtons = {
-  id: 'ContainerEditorButtons',
-  tabNames: ['Borders', 'Colours', 'Layout'],
-  tabElements: ['BordersContainer', 'ColoursContainer', 'LayoutContainer']
-};
-type EditorKey = {[key in ComponentTypesString]: EditorComponentButtons }
+// const imageButtons: EditorComponentButtons = {
+//   id: ['BordersContainer', 'ColoursContainer', 'ImagesContainer'],
+//   tabNames: ['Borders', 'Colours', 'Image'],
+//   tabElements: ['BordersContainer', 'ColoursContainer', 'ImagesContainer']
+// };
+// const containerButtons: EditorComponentButtons = {
+//   id: ['BordersContainer', 'ColoursContainer', 'LayoutContainer'],
+//   tabNames: ['Borders', 'Colours', 'Layout'],
+//   tabElements: ['BordersContainer', 'ColoursContainer', 'LayoutContainer']
+// };
 
-const editorComponentButtons: EditorKey = {
-  'imageElement': imageButtons,
-  'jumbo': containerButtons,
-  'buttonElement': containerButtons,
-  'container': containerButtons,
-  'navBar': containerButtons,
-  'page': containerButtons,
-  'pageTemplate': containerButtons,
-  'rootContainer': containerButtons,
-  'text': imageButtons,
-};
 
 export { 
-  borderButtonDataMock,
+  // borderButtonDataMock,
   lineStyleButtonMock,
   lineThicknessButton,
   borderRadius,
-  imageButtons,
-  containerButtons,
-  editorComponentButtons,
+  // imageButtons,
+  // editorComponentButtons,
   justifyStart,
   justifyEnd,
   justifyCenter,
@@ -286,5 +280,6 @@ export {
   bringToFront,
   sendToBack,
   uploadImage,
-  pasteImageUrl
+  pasteImageUrl,
+  imageLibrary,
 };

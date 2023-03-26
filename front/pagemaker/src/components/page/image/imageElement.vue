@@ -1,4 +1,4 @@
-<template>
+s<template>
   <div class="relative select-none overflow-hidden"
     :ref="getId()"
     :id="getId()"
@@ -35,7 +35,7 @@ import resize from '@/components/base/resize/resize.vue';
 import { stylesToString } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
-import { EditorSettingsService } from '@/services/editor.settings.service';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { useDrag } from '@/composables/drag/drag';
 
 

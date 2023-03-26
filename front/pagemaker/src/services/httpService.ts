@@ -16,7 +16,7 @@ const backEndClient = axios.create({
 });
 const backEndClientMultiPart = axios.create({
   baseURL: import.meta.env.BASE_URL,
-  timeout: 4000,
+  timeout: 8000,
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'multipart/form-data',
@@ -88,6 +88,7 @@ async function performMultipartPost<T, U>(path: string, payload: T, config: Axio
         'Authorization': `Bearer ${getToken()}`,
     };
     const response = await backEndClientMultiPart.post(route, payload, config);
+    console.log('%c⧭', 'color: #ffa640', response);
     return new Promise((resolve, reject) => {
       if (response.status >= 400) {
         reject(response.data.err);
@@ -95,6 +96,7 @@ async function performMultipartPost<T, U>(path: string, payload: T, config: Axio
       resolve(response.data.data);
     })
   } catch (error) {
+    console.log('%c⧭', 'color: #d90000', error);
     const err = error as AxiosError;
     const errContent = err.response?.data;
     const errMsg = errContent as Response;

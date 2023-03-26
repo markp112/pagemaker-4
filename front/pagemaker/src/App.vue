@@ -13,10 +13,8 @@
     </div>
     <div class="w-80">
       <Snackbar/>
-
     </div>
   </main>
-
 </template>
 
 <script lang="ts">
