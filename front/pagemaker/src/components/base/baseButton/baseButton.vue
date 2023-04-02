@@ -38,6 +38,7 @@ export default defineComponent({
       }
     },
     buttonShape: {
+      type: String as PropType<ButtonShape>,
       default: (): ButtonShape => {
         return 'rectangular';
       },
