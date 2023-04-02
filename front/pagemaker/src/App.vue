@@ -1,7 +1,7 @@
 
 <template>
   <main class="w-screen flex flex-col bg-site-background text-site-primary-dark h-98">
-    <Navbar :nav-menu-items="getMenuItems"
+    <Navbar :nav-menu-items="getMenuItems()"
       @nav-menu-clicked="navMenuClicked"
     />
     <div class="w-98 ml-4">
@@ -72,12 +72,12 @@ export default defineComponent({
   },
 
   computed: {
+  },
+  
+  methods: {
     getMenuItems(): NavMenuItem[] {
       return this.store.getMenuItems;
-    }
-  },
-
-  methods: {
+    },
     navMenuClicked(route: string) {
       this.$router.push(route);
     }

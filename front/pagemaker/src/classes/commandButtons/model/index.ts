@@ -3,7 +3,6 @@ import type { EditorButtonTypes } from '@/components/base/editorButtons/model';
 import type { TabPanel } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 
 interface EditorButtonBase {
-  name: string;
   tooltip: string;
   displayIcon: string;
   buttonType: EditorButtonTypes;
@@ -29,7 +28,11 @@ interface EditorButtonNumericSelectList extends EditorButtonBase {
   listValues: string[];
 };
 
+type CommandButtonTypes = EditorButtonBase | EditorButtonContent | EditorButtonNumericSelectList | EditorButtonSelectList; 
 
+interface Command {
+  [key: string]: CommandButtonTypes;
+}
 
 interface TabGroup {
   displayName: string,
@@ -44,9 +47,10 @@ interface CommandMap {
   [key: string]: CommandTabs;
 }
 
-
 export type { EditorButtonBase,
     CommandMap,
     CommandTabs,
     TabGroup,
-} 
+    Command,
+    CommandButtonTypes,
+};

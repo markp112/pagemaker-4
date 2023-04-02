@@ -38,6 +38,7 @@ export default defineComponent({
       }
     },
     buttonShape: {
+      type: String as PropType<ButtonShape>,
       default: (): ButtonShape => {
         return 'rectangular';
       },
@@ -76,7 +77,7 @@ export default defineComponent({
 
     getStyling(): string {
       const baseStyling = `${this.getSize} flex items-center justify-center p-2 border border-gray-400`;
-      const active = `cursor-pointer hover:bg-site-primary-dark hover:text-gray-200 transition ease-in-out delay-150`;
+      const active = `cursor-pointer hover:bg-site-primary-dark text-site-surface hover:text-gray-200 transition ease-in-out delay-150`;
       const activeOutline = `cursor-pointer hover:bg-border-${this.buttonType} hover:text-site-surface hover:bg-site-primary-dark`;
       const activeText = `cursor-pointer hover:text-site-primary-dark text-site-${this.buttonType}`;
       const inActiveText = `cursor-pointer hover:text-accent-1 text-gray-400`;
@@ -86,7 +87,7 @@ export default defineComponent({
         return `bg-gray-200 text-dark ${baseStyling} ${style}`;
       }
       if (this.variant === 'solid') {
-        return `bg-site-${this.buttonType}-light text-site-${this.buttonType} ${baseStyling} ${active} shadow-md ${style}`;
+        return `bg-site-${this.buttonType}-light text-site-surface ${baseStyling} ${active} shadow-md ${style}`;
       }
       if (this.variant === 'outline') {
         return `border border-site-${this.buttonType}-light ${baseStyling} ${activeOutline} shadow-md ${style}`;

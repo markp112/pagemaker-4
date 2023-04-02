@@ -19,7 +19,7 @@
           v-if="toggleMenu"
         >
           <ul
-            class="w-20 mr-1 dropdown-menu-background z-10 rounded-lg shadow-lg text-sm h-auto"
+            class="w-32 mr-1 dropdown-menu-background z-10 rounded-lg shadow-lg text-sm h-auto"
             @mouseleave="toggleMenu = !toggleMenu"
           >
             <li
@@ -27,7 +27,7 @@
               :key="idx"
               @click="menuItemClick(idx)"
               v-show="menuItem.isVisible"
-              class="block p-1 text-left dropdown-menu-item"
+              class="block p-1 text-left dropdown-menu-item w-auto"
             >
               {{ menuItem.navText }}
             </li>
