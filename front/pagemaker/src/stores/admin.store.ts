@@ -1,5 +1,4 @@
-import type { Command, CommandButtonTypes, EditorButtonBase } from '@/classes/commandButtons/model';
-import type { EditorButtonContent } from '@/components/base/editorButtons/model';
+import type { Command, CommandButtonTypes } from '@/classes/commandButtons/model';
 import { defineStore } from 'pinia';
 
 export const useAdminStore = defineStore({

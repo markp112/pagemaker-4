@@ -1,5 +1,4 @@
 import type { Command, CommandButtonTypes } from '@/classes/commandButtons/model';
-import type { EditorButtonTypes } from '@/components/base/editorButtons/model';
 import { axiosClient } from '@/services/httpService';
 import { useAdminStore } from '@/stores/admin.store';
 

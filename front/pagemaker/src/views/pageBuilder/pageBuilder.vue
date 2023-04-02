@@ -150,7 +150,6 @@ const sliderPosition: SliderPosition = {
       },
 
       handleButtonClick(payload: CommandProperties): void {
-        console.log('%c⧭', 'color: #733d00', payload)
         this.pageBuilderService.processButtonCommand(payload, this.commandHistory as CommandHistory<CommandProperties>);
       },
 

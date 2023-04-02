@@ -46,7 +46,7 @@ import { ref } from 'vue';
     emit('onDragStart', index);
   };
 
-  const getClass = () => isDragging ? 'cursor-move' : '';
+  const getClass = () => isDragging.value ? 'cursor-move' : '';
 
   const onDrop = (index: number) => {
     emit('onDrop', index);

@@ -5,8 +5,9 @@
     <p class="h-12 mr-6">Select list items:</p>
       <BaseButton button-type="primary" @on-click="showEditorForm()">Add</BaseButton>
       <SelectListItem :index="index"
+      v-for="(item, index) in getItems"
         :item="item"
-        v-for="(item, index) in getItems"
+        :key="index"
         @on-drag-start="currentlyDraggedItem = $event"
         @on-drop="onDrop($event)"
         @on-delete-click="deleteItem($event)"

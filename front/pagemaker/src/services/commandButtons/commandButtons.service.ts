@@ -17,13 +17,11 @@ function CommandsService() {
 
   function getEditorCommand() {
     const commandName = editorSettingsStore.getActiveElementName;
-    console.log('%c⧭', 'color: #00258c', editorSettingsStore.getActiveElementName);
     return commandName ? store.getCommandMap[commandName] : undefined;
   }
 
   function getTabs(): TabStrip[] {
     const command = getEditorCommand();
-    console.log('%c⧭', 'color: #00ff88', command);
     if (!command) {
       return [];
     } 

@@ -6,6 +6,7 @@
         <ul class="p-2">
           <li v-for="commandName in getCommands" 
             class="text-site-background p-1 hover:bg-site-background hover:text-site-primary"
+            :key="commandName"
             @click="onCommandListClick(commandName)"
           >{{ commandName }}</li>
         </ul>
@@ -60,7 +61,7 @@
               placeholder="button type to use"
               v-model="command.buttonType"
             >
-              <option :value="button" v-for="button in getButtonTypes()">
+              <option :value="button" v-for="button in getButtonTypes()" :key="button">
                 {{ button }}
               </option>
             </select>
