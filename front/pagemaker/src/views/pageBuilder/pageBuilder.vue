@@ -51,7 +51,6 @@ import ColoursContainer from '@/components/base/editorButtons/editorContainers/c
 import { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { CommandsService } from '@/services/commandButtons/commandButtons.service';
-import layoutContainer from '@/components/base/editorButtons/editorContainers/layout/layoutContainer.vue';
 import type { TabPanel } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
 
@@ -78,7 +77,6 @@ const sliderPosition: SliderPosition = {
       SettingsPanelVue: settingsPanelVue,
       TabstripContainer: tabstripContainer,
       ColoursContainer,
-      LayoutContainer: layoutContainer,
       ImageGallery
     },
     

@@ -29,26 +29,26 @@
           class="hover:bg-site-secondary-light hover:text-accent-1 p-1 mt-1 cursor-pointer rounded-md flex flex-row justify-start w-full ml-2"
           @click="pageRowClick(page.name)"
         >
-              <span class="basis-1/12 self-end"></span>
-              <span class="basis-2/12">
-                <img :src="getIcon(page.icon)" alt="" class="w-8 h-8 inline-block mr-2 -ml-8"/>
-                {{ page.name }}
-              </span>
-              <span class="basis-2/12">
-                {{ formatDate(page.created) }}
-              </span>
-              <span class="basis-2/12">
-                {{ formatDate(page.edited) }}
-              </span>
-              <span class="basis-2/12 -ml-16">
-                <input type="checkbox" value="page.active" readonly />
-              </span>
-              <img
-              src="@/assets/icons/pencil-24.png"
-              alt="Edit pencil"
-              @click="editPageClick(page.name)"
-              class="w-8 h-8 hover:shadow-xl cursor-pointer"
-              />
+          <span class="basis-1/12 self-end"></span>
+          <span class="basis-2/12">
+            <img :src="getIcon(page.icon)" alt="" class="w-8 h-8 inline-block mr-2 -ml-8"/>
+            {{ page.name }}
+          </span>
+          <span class="basis-2/12">
+            {{ formatDate(page.created) }}
+          </span>
+          <span class="basis-2/12">
+            {{ formatDate(page.edited) }}
+          </span>
+          <span class="basis-2/12 -ml-16">
+            <input type="checkbox" value="page.active" readonly />
+          </span>
+          <img
+          src="@/assets/icons/pencil-24.png"
+          alt="Edit pencil"
+          @click="editPageClick(page.name)"
+          class="w-8 h-8 hover:shadow-xl cursor-pointer"
+          />
         </li>
       </ul>
     </div>

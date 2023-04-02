@@ -19,6 +19,7 @@
 
 <script lang="ts">
 import { auth } from '@/services/auth/';
+import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
 import  { defineComponent } from 'vue';
 import loginFormVue from './loginForm.vue';
 import type { Credentials } from './types';
@@ -29,6 +30,7 @@ export default defineComponent({
   data() {
     return {
       formErrors: [] as string[],
+      store: useNavMenuItemStore(),
     }
   },
 
@@ -46,6 +48,7 @@ export default defineComponent({
       try {
         const loggedIn = await auth().login(credential);
         if (loggedIn) {
+          this.store.fetchMenuItems(loggedIn);
           this.$router.push('/sites');
         } else {
           this.formErrors.push('Login failed !');

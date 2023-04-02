@@ -35,7 +35,6 @@
 import type { UsersBucket, ImageCardProps } from './types';
 import  { defineComponent, type PropType } from 'vue';
 import  CloseButton from '@/components/base/baseButton/closeButton/closeButton.vue';
-import { imageLibrary } from '../../editorButtons/model/borderButtonData';
 import { useImagesStore } from '@/stores/images.store';
 
 export default defineComponent({
@@ -58,7 +57,6 @@ export default defineComponent({
       tags: [] as string[],
       filters: [] as string[],
       userBucket: Object as any as UsersBucket,
-      imageLibrary,
       imagesStore: useImagesStore(),
     }
   },
