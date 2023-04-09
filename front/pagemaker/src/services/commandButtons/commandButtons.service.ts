@@ -1,4 +1,4 @@
-import type { CommandMap } from '@/classes/commandButtons/model';
+import type { Command, CommandButtonTypes, CommandMap } from '@/classes/commandButtons/model';
 import type { TabStrip } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import { useCommandButtonStore } from '@/stores/commandButton.store';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
@@ -11,7 +11,8 @@ function CommandsService() {
   const editorSettingsStore = useEditorSettingsStore()
   
   async function fetchCommandHierarchy() {
-    const commandMap = await axiosClient().get<CommandMap>(BASE_ROUTE);
+    const route = `${BASE_ROUTE}/hierarchy`
+    const commandMap = await axiosClient().get<CommandMap>(route);
     store.setCommandMap(commandMap);
   }
 
@@ -34,9 +35,28 @@ function CommandsService() {
     })
   }
 
+  function setActiveTab(pageElement: string, tab: string) {
+    store.setActiveTab(pageElement, tab);
+  }
+
+  async function fetchAllCommands() {
+    const route = `${BASE_ROUTE}/commands`
+    const allCommands = await axiosClient().get<Command>(route);
+    store.setCommands(allCommands);
+  }
+
+  async function postCommand(key: string, command: CommandButtonTypes ) {
+    const commandToPost = { ...command, key };
+    await axiosClient().post<{},{}>(BASE_ROUTE, commandToPost);
+    store.addCommand(key, command);
+  }
+
   return { fetchCommandHierarchy,
     getEditorCommand,
     getTabs,
+    setActiveTab,
+    fetchAllCommands,
+    postCommand
   };
 
 }

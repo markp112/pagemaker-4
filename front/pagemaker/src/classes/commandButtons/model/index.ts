@@ -1,6 +1,13 @@
 import type { CommandName, CommandTypes } from '@/classes/command/model/command';
-import type { EditorButtonTypes } from '@/components/base/editorButtons/model';
 import type { TabPanel } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
+type EditorButtonTypes = 'list'
+  | 'iconList' 
+  | 'plusMinus'
+  | 'iconImageButton'
+  | 'numericWithSelect'
+  | 'textInputButton'
+  | 'uploadButton'
+  | 'imageLibrary';
 
 interface EditorButtonBase {
   tooltip: string;

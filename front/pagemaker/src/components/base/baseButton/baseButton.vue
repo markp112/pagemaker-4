@@ -87,7 +87,7 @@ export default defineComponent({
         return `bg-gray-200 text-dark ${baseStyling} ${style}`;
       }
       if (this.variant === 'solid') {
-        return `bg-site-${this.buttonType}-light text-site-surface ${baseStyling} ${active} shadow-md ${style}`;
+        return `bg-site-primary-light text-site-surface ${baseStyling} ${active} shadow-md ${style}`;
       }
       if (this.variant === 'outline') {
         return `border border-site-${this.buttonType}-light ${baseStyling} ${activeOutline} shadow-md ${style}`;
