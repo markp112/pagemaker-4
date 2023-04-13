@@ -3,10 +3,12 @@
         <fieldset>
           <label for="pageElementInput" class="w-32 pb-2">{{ label }}</label>
           <input type="text" name="pageElementInput" 
-          id="pageElementId" class="w-full" 
-          :value="localValue"
-          @input="updatedValue=$event.target.value"
-            />
+            id="pageElementId" 
+            class="w-full disabled:bg-gray-400 disabled:border-gray-400" 
+            :value="localValue"
+            @input="updatedValue=$event.target.value"
+            :disabled="!newClicked"
+          />
         </fieldset>
         <p class="flex flex-row justify-between p-4">
           <BaseButton variant="solid" 
@@ -43,15 +45,18 @@ const props = defineProps({
 
 const emit = defineEmits(['onSaveClick', 'onNewClick']);
 const updatedValue = ref('');
+const newClicked = ref(false);
 const localValue = computed((): string => 
   updatedValue.value === '' ? props.textValue : updatedValue.value
 );
 
 const newClick = () => {
+  newClicked.value = true;
   emit('onNewClick');
 };
 
 const onSaveClick = () => {
+  newClicked.value = false;
   emit('onSaveClick', updatedValue.value);
 };
 

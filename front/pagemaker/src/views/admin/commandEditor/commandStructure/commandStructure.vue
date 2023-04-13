@@ -12,7 +12,7 @@
         id="tabs"
         :is-draggable="true"
         label="Tabs"
-        :list-items="getTabs"
+        :list-items="getAllTabNames"
         @listItemClick="tabElement=$event"
         @drag-started="sourceDragElementType=$event"
       />
@@ -90,33 +90,41 @@ const sourceDragElementType = ref();
     return commandList.value;
   });
 
+  const getPageElements = computed(() => {
+    const pageElements = store.getCommandMap;
+    if (pageElements) {
+      return Object.keys(pageElements)
+    }
+    return [];
+  });
 
-const getPageElements = computed(() => {
-  const pageElements = store.getCommandMap;
-  return Object.keys(pageElements)
-});
+  const getTabs = computed(() => {
+    return store.getTabList;
+  });
 
-const getTabs = computed(() => {
-  return store.getTabList;
-});
+  const getAllTabNames = computed(() => store.getAllTabNames)
 
-const getTabGroups = computed(() => {
-  return store.getTabGroupList;
-});
+  const getTabGroups = computed(() => {
+    return store.getTabGroupList;
+  });
 
-const setPageElement = (item: string) => pageElement.value = item;
+  const setPageElement = (item: string) => {
+    pageElement.value = item;
+    store.setTabList(item);
+  }
 
-const createNewPageElement = (element: string) => {
-  store.createNewPageElement(element);
-};
+  const createNewPageElement = async (element: string) => {
+    await service.createPageElement(element);
+    store.createNewPageElement(element);
+  };
 
-const addNewTabElement = (tabName: string) => {
-  store.createNewTabElement(tabName);
-};
+  const addNewTabElement = (tabName: string) => {
+    store.createNewTabElement(tabName);
+  };
 
-const addNewTabGroup = (tabGroupName: string) => {
-  store.createNewTabGroupElement(tabGroupName);
-};
+  const addNewTabGroup = (tabGroupName: string) => {
+    store.createNewTabGroupElement(tabGroupName);
+  };
 
 
 </script>

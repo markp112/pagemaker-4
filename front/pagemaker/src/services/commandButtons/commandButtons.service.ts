@@ -51,12 +51,26 @@ function CommandsService() {
     store.addCommand(key, command);
   }
 
+  async function createPageElement(pageElementName: string, tabs: string[] = []) {
+    const key = pageElementName;
+    const data = { [key]: { tabs: tabs } };
+    await axiosClient().post<{[key: string]: {tabs: string[]}}, string>(`${BASE_ROUTE}/page-element`, data);
+  }
+
+  async function updatePageElementTabs(pageElement: string, tabs: string[]) {
+    const key = pageElement;
+    const data = { [key]: { tabs: tabs} };
+    await axiosClient().put<{[key: string]: {tabs: string[]}}, string[]>(`${BASE_ROUTE}/page-element/tabs`, data);
+  }
+
   return { fetchCommandHierarchy,
     getEditorCommand,
     getTabs,
     setActiveTab,
     fetchAllCommands,
-    postCommand
+    postCommand, 
+    createPageElement,
+    updatePageElementTabs,
   };
 
 }

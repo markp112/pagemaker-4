@@ -43,6 +43,7 @@ interface Command {
 
 interface TabGroup {
   displayName: string,
+  key: string,
   tabContent: TabPanel[],
 };
 

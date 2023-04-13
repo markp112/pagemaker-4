@@ -2,7 +2,7 @@
   <p class="ml-4 font-semibold h-48"
     >
       <h3 class="font-semibold">{{ label }}</h3>
-      <ul class="border p-2 w-48 h-44 border-gray-500 overflow-y-auto"
+      <ul class="border p-2 w-64 container h-44 border-gray-500 overflow-y-auto"
         dropzone="true"
         @drop="onItemDrop($event)"
         @dragover.prevent="onDragEnter($event)"
@@ -17,7 +17,14 @@
           class="list-item"
           :class="{'selected': listItem === activeItem,  }"
           @click="listItemClicked(listItem)"
-        >{{ listItem }}</li>
+        >
+          <span class="flex flex-row justify-between">
+            {{ listItem }}
+            <span class="delete-symbol"
+              @click="emits('deleteClicked', listItem)"
+            >-</span>
+          </span>  
+        </li>
       </ul>
     </p>
 </template>
@@ -33,7 +40,7 @@ const props = defineProps<{
   draggedItem: string,
 }>();
 
-const emits = defineEmits(['onDragDrop', 'listItemClicked']);
+const emits = defineEmits(['onDragDrop', 'listItemClicked', 'deleteClicked']);
 const activeItem = ref();
 const isDropable = ref(false);
 
@@ -72,13 +79,23 @@ const onDragEnter = (dragEnter: DragEvent) => {
 }
 
 .list-container {
-  @apply border p-2 h-auto w-44 mt-2
+  @apply border p-2 h-auto w-56 mt-2;
 }
 
 .selected {
   @apply bg-zinc-600;
   @apply text-white;
   @apply p-2;
+}
+
+.delete-symbol {
+  @apply bg-red-700; 
+  @apply w-4;
+  @apply h-6;
+  @apply text-center;
+  @apply text-white;
+  @apply font-semibold;
+  @apply hover:cursor-crosshair;
 }
 
 </style>

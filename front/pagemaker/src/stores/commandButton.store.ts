@@ -47,6 +47,20 @@ const useCommandButtonStore = defineStore({
       return state._tabList;
     },
 
+    getAllTabNames: (state) => {
+      const tabs: string[] = [] ;
+      if(state._commandMap) {
+        const keys = Object.keys(state._commandMap);
+        keys.forEach(key => {
+          const pageElement = state._commandMap[key]; 
+          const tabKeys = pageElement.tabs;
+          tabKeys.forEach(tab => tabs.push(tab.key))
+        })
+        return  [...new Set(tabs)];
+      }
+      return tabs;
+    },
+
     getTabGroupList: (state) => {
       return state._tabGroupList;
     }
@@ -61,29 +75,37 @@ const useCommandButtonStore = defineStore({
       this._commandButtons = commands;
     },
 
-    setTabList() {
+    setTabList(pageElementName: string = '' ) {
+      if (pageElementName === '') {
+        this._tabList = [];
+        return;
+      }
       const tabs = new Set<string>();
-      const pageElementKeys = Object.keys(this._commandMap);
-      pageElementKeys.forEach(pageElement => {
-        const element = this._commandMap[pageElement];
-        element.tabs.forEach(tab => tabs.add(tab.displayName));
-      });
+      const pageElement = this._commandMap[pageElementName]; 
+      pageElement.tabs.forEach(tab => tabs.add(tab.key));
       this._tabList = Array.from(tabs.values());
+    },
+
+    deleteTabFromActiveTabs(tabname: string) {
+      this._tabList = this._tabList.filter(tab => tab !== tabname)
     },
     
     setTabGroups() {
       const groups = new Set<string>();
       const pageElementKeys = Object.keys(this._commandMap);
-      pageElementKeys.forEach(pageElement => {
-        const element = this._commandMap[pageElement];
-        element.tabs.forEach(tab => {
-          tab.tabContent.forEach(group => {
-            const key = Object.keys(group)[0];
-            groups.add(key);
-          })
-        });
-      })
-      this._tabGroupList = Array.from(groups.values());
+      console.log('%c⧭', 'color: #1d3f73', pageElementKeys);
+      if (pageElementKeys) {
+        pageElementKeys.forEach(pageElement => {
+          const element = this._commandMap[pageElement];
+          element.tabs.forEach(tab => {
+            tab.tabContent.forEach(group => {
+              const key = Object.keys(group)[0];
+              groups.add(key);
+            })
+          });
+        })
+        this._tabGroupList = Array.from(groups.values());
+      }
     },  
 
     createNewPageElement(element: string) {
@@ -102,6 +124,10 @@ const useCommandButtonStore = defineStore({
       this._tabGroupList = tabGroups;
     },
 
+    deleteTabGroup(pageElementName: string, tabGroupName: string) {
+      this._activeTabGroups = this._activeTabGroups.filter(tabGroup => tabGroup !== tabGroupName); 
+    },
+
     addCommand(key: string, buttonType: CommandButtonTypes) {
       this._commandButtons[key] = buttonType;
     },
@@ -110,24 +136,31 @@ const useCommandButtonStore = defineStore({
       this._activeTabElements = tabElements;
     },
 
-    AddTabToElement(pageElementName: string, tabName: string) {
-      let tabGroupToAdd;
+    addTabToElement(pageElementName: string, tabName: string) {
+      let tabToAdd;
       const keys = Object.keys(this._commandMap);
       for (const key of keys) {
         const pageElement = this._commandMap[key];
         for (const tab of pageElement.tabs) {
-          if (tab.displayName === tabName && key !== pageElementName) {
-            tabGroupToAdd = tab;
+          if (tab.key === tabName && key !== pageElementName) {
+            tabToAdd = tab;
             break;
           }
         }
-        if (tabGroupToAdd) {
+        if (tabToAdd) {
           break;
         }
       }
-      if(tabGroupToAdd) {
-        this._commandMap[pageElementName].tabs.push(tabGroupToAdd);
+      if(tabToAdd) {
+        this._commandMap[pageElementName].tabs.push(tabToAdd);
+        this._tabList.push(tabName);
       }
+    },
+
+    addTabGroup(tabGroupName: string) {
+      const tabGroups = this._activeTabGroups.filter(tabGroup => tabGroup !== tabGroupName);
+      tabGroups.push(tabGroupName);
+      this._activeTabGroups = tabGroups;
     },
 
     setActiveTabCommands(tabCommands: TabContent[]) {
@@ -135,8 +168,8 @@ const useCommandButtonStore = defineStore({
     },
 
     getActiveTabPanel(pageElement: string, tabName: string) {
-      const tabs = this._commandMap[pageElement].tabs.filter(tabStrip => tabStrip.displayName === tabName);
-      return tabs.filter(tab => tab.displayName === tabName);
+      const tabs = this._commandMap[pageElement].tabs.filter(tabStrip => tabStrip.key === tabName);
+      return tabs.filter(tab => tab.key === tabName);
     },
 
     setActiveTab(pageElement: string, tabName: string) {
@@ -154,6 +187,16 @@ const useCommandButtonStore = defineStore({
         const activeTabGroup = tabPanel[0].tabContent.filter(tabGroup => tabGroup[tabGroupName])[0];
         activeTabGroup[tabGroupName].forEach(commandItem => this._activeCommands.push(commandItem.commandName));
       }
+    },
+
+    addCommandToActiveCommands(commandName: string) {
+      const commands = this._activeCommands.filter(item => item !== commandName);
+      commands.push(commandName);
+      this._activeCommands = commands;
+    },
+
+    deleteCommandFromActiveCommands(commandName: string) {
+      this._activeCommands = this._activeCommands.filter(command => command !== commandName);
     }
   }
 });
