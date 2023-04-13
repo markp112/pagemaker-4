@@ -1,8 +1,8 @@
-import type { EditorButtonBase } from '@/classes/commandButtons/model';
+import type { CommandButtonTypes } from '@/classes/commandButtons/model';
 
 interface TabPanel {
-  commands: EditorButtonBase[];
-}
+  [key: string]: CommandButtonTypes[];
+};
 
 interface TabStrip {
   id: string;
@@ -12,6 +12,6 @@ interface TabStrip {
 
 interface TabContent {
   panels: TabPanel[];
-}
+};  
 
 export type { TabStrip, TabContent, TabPanel };

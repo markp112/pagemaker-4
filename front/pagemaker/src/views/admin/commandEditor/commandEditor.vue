@@ -112,17 +112,17 @@
 <script setup lang="ts">
 import type { CommandButtonTypes } from '@/classes/commandButtons/model';
 import type { EditorButtonNumericSelectList, EditorButtonSelectList, SelectListIcon } from '@/components/base/editorButtons/model';
-import { AdminCommands } from '@/services/admin/commands/commands.service';
-import { useAdminStore } from '@/stores/admin.store';
 import { displayMessage } from '@/common/displayMessage';
 import { computed, } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
 import SelectListItemContainer from './iconSelectList/selectListItemContainer.vue';
 import NumericSelectList from './numericSelectList/numericSelectList.vue';
 import BaseButton from '@/components/base/baseButton/baseButton.vue';
+import { CommandsService } from '@/services/commandButtons/commandButtons.service';
+import { useCommandButtonStore } from '@/stores/commandButton.store';
 
-  const service = AdminCommands();
-  const store = useAdminStore();
+  const service = CommandsService();
+  const store = useCommandButtonStore();
   const commandList = ref<string[]>([]);
   const commandListRefs = ([]);
   const selectListItems = ref<SelectListIcon[]>([]);
@@ -145,7 +145,7 @@ import BaseButton from '@/components/base/baseButton/baseButton.vue';
 
   onMounted(async () => {
     await service.fetchAllCommands();
-    const commands = store.commands;
+    const commands = store.getAllCommandButtons;
     Object.keys(commands).forEach(key => {
       commandList.value.push(key)});
   });
@@ -155,7 +155,7 @@ import BaseButton from '@/components/base/baseButton/baseButton.vue';
   });
 
   const onCommandListClick = (key: string) => {
-    command.value = store.commands[key];
+    command.value = store.getAllCommandButtons[key];
     commandKey.value = key;
   };
 

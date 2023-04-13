@@ -62,8 +62,6 @@
         place-holder="Enter max height for page height"
         @on-field-change="($event) => page.height.value = $event"
       />
-
-
       <div class="field-wrapper">
         <label for="edited">Last Edited:</label>
         <span class="bg-white p-2 w-2/12 leading-4 text-site-primary-light">

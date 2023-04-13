@@ -15,7 +15,6 @@
 <script lang="ts" setup>
 import type { CommandProperties } from '@/classes/command/model/command';
 import { ref, type Component } from 'vue';
-import type { EditorButtonBase, EditorButtonContent, EditorButtonNumericSelectList } from '../../model';
 import TextInputButton from '../../components/textInputButton/textInput.vue';
 import IconImageButton from '../../components/iconImageButton/iconImageButton.vue';
 import plusMinusButton from '../../components/plusMinusbutton/plusMinusButton.vue';
@@ -24,6 +23,7 @@ import selectButtonWithIcon from '../../components/selectButtonWithIcon/selectBu
 import UploadButton from '../../components/uploadButton/uploadButton.vue';
 import type { EditorButtonTypes } from '../../model';
 import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
+import type { CommandButtonTypes } from '@/classes/commandButtons/model';
 
 type ComponentKey = { [buttonType in EditorButtonTypes]: Component }
 
@@ -39,7 +39,7 @@ const commandButtons: ComponentKey = {
 };
 
   defineProps<{
-    buttonData: EditorButtonBase[] | EditorButtonNumericSelectList[],
+    buttonData: CommandButtonTypes[],
   }>();
   
   const emit = defineEmits(['onButtonClick']);
