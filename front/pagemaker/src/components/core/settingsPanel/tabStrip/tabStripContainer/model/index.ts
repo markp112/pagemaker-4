@@ -1,4 +1,4 @@
-import type { CommandButtonTypes, EditorButtonBase } from '@/classes/commandButtons/model';
+import type { CommandButtonTypes } from '@/classes/commandButtons/model';
 
 interface TabPanel {
   [key: string]: CommandButtonTypes[];

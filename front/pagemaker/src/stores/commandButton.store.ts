@@ -1,4 +1,4 @@
-import type { Command, CommandButtonTypes, CommandMap, TabGroup } from '@/classes/commandButtons/model';
+import type { Command, CommandButtonTypes, CommandMap } from '@/classes/commandButtons/model';
 import type { TabContent, TabStrip } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import { defineStore } from 'pinia';
 
@@ -75,7 +75,7 @@ const useCommandButtonStore = defineStore({
       this._commandButtons = commands;
     },
 
-    setTabList(pageElementName: string = '' ) {
+    setTabList(pageElementName = '' ) {
       if (pageElementName === '') {
         this._tabList = [];
         return;
@@ -93,7 +93,6 @@ const useCommandButtonStore = defineStore({
     setTabGroups() {
       const groups = new Set<string>();
       const pageElementKeys = Object.keys(this._commandMap);
-      console.log('%c⧭', 'color: #1d3f73', pageElementKeys);
       if (pageElementKeys) {
         pageElementKeys.forEach(pageElement => {
           const element = this._commandMap[pageElement];

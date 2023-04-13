@@ -1,6 +1,5 @@
 <template>
-  <p class="ml-4 font-semibold h-48"
-    >
+  <p class="ml-4 font-semibold h-48">
       <h3 class="font-semibold">{{ label }}</h3>
       <ul class="border p-2 w-64 container h-44 border-gray-500 overflow-y-auto"
         dropzone="true"
@@ -15,6 +14,7 @@
       >
         <li v-for="listItem in listItems" 
           class="list-item"
+          :key="listItem"
           :class="{'selected': listItem === activeItem,  }"
           @click="listItemClicked(listItem)"
         >

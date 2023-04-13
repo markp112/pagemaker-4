@@ -47,19 +47,19 @@ function CommandsService() {
 
   async function postCommand(key: string, command: CommandButtonTypes ) {
     const commandToPost = { ...command, key };
-    await axiosClient().post<{},{}>(BASE_ROUTE, commandToPost);
+    await axiosClient().post(BASE_ROUTE, commandToPost);
     store.addCommand(key, command);
   }
 
   async function createPageElement(pageElementName: string, tabs: string[] = []) {
     const key = pageElementName;
-    const data = { [key]: { tabs: tabs } };
+    const data = { [key]: { tabs } };
     await axiosClient().post<{[key: string]: {tabs: string[]}}, string>(`${BASE_ROUTE}/page-element`, data);
   }
 
   async function updatePageElementTabs(pageElement: string, tabs: string[]) {
     const key = pageElement;
-    const data = { [key]: { tabs: tabs} };
+    const data = { [key]: { tabs } };
     await axiosClient().put<{[key: string]: {tabs: string[]}}, string[]>(`${BASE_ROUTE}/page-element/tabs`, data);
   }
 
