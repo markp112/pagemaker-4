@@ -23,6 +23,20 @@ export const navMenu: NavMenuItemInterface[] = [
     isLoggedIn: true,
   },
   {
+    id: 5,
+    navText: 'Admin Commands',
+    navLink: '/command-editor',
+    isVisible: true,
+    isLoggedIn: true,
+  },
+  {
+    id: 7,
+    navText: 'Command Structure',
+    navLink: '/command-structure',
+    isVisible: true,
+    isLoggedIn: true,
+  },
+  {
     id: 3,
     navText: 'Image Library',
     navLink: '/imageLibrary',

@@ -4,12 +4,14 @@
     <input
       :type="inputType"
       id="input-field"
-      v-model="inputValue"
+      :value="getLocalValue"
+      @input="updateLocalValue($event)"
       :placeholder="placeHolder"
-      class="p-2 leading-4 border ml-2"
+      class="p-2 leading-4 border ml-2 disabled:bg-gray-400 disabled:border-gray-400"
       :name="name"
+      :disabled="disabled"
       :class="getClasses"
-      @change="onFieldChange()"
+      @change="onFieldChange($event)"
       @blur="checkIsValid()"
     />
   </div>
@@ -57,6 +59,10 @@ export default defineComponent({
     name: {
       type: String,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     }
   },
 
@@ -64,7 +70,7 @@ export default defineComponent({
 
   data() {
     return {
-      inputValue: this.value,
+      inputValue: this.$props.value,
       isValid: 'valid' as ValidateStates,
       failedValidationMessage: '',
       fieldWidthMap: {
@@ -79,6 +85,10 @@ export default defineComponent({
     getClasses() {
       const fieldWidth = this.fieldWidthMap[this.inputType];
       return `${this.isValid} ${fieldWidth}`;
+    },
+
+    getLocalValue() {
+      return this.inputValue === '' ? this.value : this.inputValue;
     }
   },
 
@@ -92,8 +102,12 @@ export default defineComponent({
   },
 
   methods: {
-    onFieldChange() {
-      this.$emit('onFieldChange', this.inputValue)
+    onFieldChange(event: Event) {
+      this.$emit('onFieldChange', (event.target as HTMLInputElement).value)
+    },
+
+    updateLocalValue(event: Event) {
+      this.inputValue = (event.target as HTMLInputElement).value;
     },
 
     checkIsValid() {

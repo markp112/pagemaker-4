@@ -9,7 +9,7 @@ class DomainError extends Error {
     super(message);
     this._status = status;
     Error.captureStackTrace(this, this.constructor);
-    logger.error(message);
+    logger.info(message);
   }
 
   getResponse(): Response {
@@ -30,7 +30,7 @@ class ResourceNotFoundError extends DomainError {
 
 class InsufficientPermissions extends DomainError {
   constructor() {
-    super(`Insufficent Permissions: there was an issue accessing the requested resource`, httpStatusCodes.FORBIDDEN)
+    super('Insufficent Permissions: there was an issue accessing the requested resource', httpStatusCodes.FORBIDDEN)
   }
 }
 

@@ -2,8 +2,9 @@
   <InputBase input-type="text"
     :is-validated="isValidated"
     :label="label"
-    :value="value.toString()"
+    :value="value"
     :place-holder="placeHolder"
+    :disabled="disabled"
     @on-field-change="onFieldChange($event)"
     @validate-field="validateField($event)"
   />
@@ -24,7 +25,7 @@
     },
     value: {
       type: String,
-      default: 0
+      default: ''
     },
     placeHolder: {
       type: String,
@@ -33,7 +34,11 @@
     isValidated: {
       type:  Object as PropType<ValidField>,
       default: undefined,
-    }
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     InputBase: inputBaseVue,

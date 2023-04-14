@@ -1,13 +1,12 @@
 <template>
   <div class="flex-col flex w-84 justify-center border-t-zinc-600 border p-4">
     <fieldset>
-      <label for="pageElementInput" class="w-32 pb-2">{{ label }}</label>
-      <input type="text" name="pageElementInput" 
-        id="pageElementId" 
-        class="w-full disabled:bg-gray-400 disabled:border-gray-400" 
+      <InputText 
+        :label="label"
         :value="localValue"
-        @input="updatedValue=$event.target.value"
+        place-holder="fred"
         :disabled="!newClicked"
+        @on-field-change="updatedValue=$event" 
       />
     </fieldset>
     <p class="flex flex-row justify-between p-4">
@@ -32,6 +31,7 @@
 
 <script lang="ts" setup>
 import BaseButton from '@/components/base/baseButton/baseButton.vue';
+import  InputText from '@/components/base/formFields/inputText/inputText.vue';
 import { computed, ref } from 'vue';
 
 const props = defineProps({
