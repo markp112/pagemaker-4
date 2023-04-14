@@ -26,7 +26,6 @@ function pageController() {
       const statusCode = isPost ? httpStatusCodes.CREATED : httpStatusCodes.OK
       return constructResponse<PageMetaData>(page, statusCode);
     }  catch (err) {
-      console.log('%c⧭', 'color: #364cd9', err);
       const errToThrow = handleError(err);
       throw errToThrow;
     }

@@ -9,7 +9,7 @@ class DomainError extends Error {
     super(message);
     this._status = status;
     Error.captureStackTrace(this, this.constructor);
-    logger.error(message);
+    logger.info(message);
   }
 
   getResponse(): Response {

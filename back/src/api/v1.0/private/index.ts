@@ -10,7 +10,7 @@ privateRouter.use(PRIVATE, navMenuRouter);
 privateRouter.use(PRIVATE, toolBarRouter);
 privateRouter.use(PRIVATE, fontsRouter);
 privateRouter.use(PRIVATE, commandGroupRouter);
-privateRouter.get(PRIVATE, function(req,res, next) {
+privateRouter.get(PRIVATE, function(req,res) {
   res.send('V1/private route is working');
 });
 

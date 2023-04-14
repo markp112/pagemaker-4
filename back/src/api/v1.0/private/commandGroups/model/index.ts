@@ -8,16 +8,19 @@ interface EditorButtonBase {
   commandType: string;
 };
 
+type Command = EditorButtonBase & {key: string };
+
 interface CommandGroup {
   commands: string[];
 }; 
 
 interface CommandPanel {
-  commands: EditorButtonBase[];
+  [key: string]: EditorButtonBase[];
 }
 
 interface TabGroup {
   displayName: string;
+  key: string;
   tabContent: CommandPanel[];
 }
 
@@ -52,6 +55,7 @@ interface CommandsCollectionStored {
 
 export {
   EditorButtonBase,
+  Command,
   CommandElement,
   CommandElementCollection,
   CommandsCollectionStored,
