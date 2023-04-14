@@ -30,7 +30,7 @@ class ResourceNotFoundError extends DomainError {
 
 class InsufficientPermissions extends DomainError {
   constructor() {
-    super(`Insufficent Permissions: there was an issue accessing the requested resource`, httpStatusCodes.FORBIDDEN)
+    super('Insufficent Permissions: there was an issue accessing the requested resource', httpStatusCodes.FORBIDDEN)
   }
 }
 

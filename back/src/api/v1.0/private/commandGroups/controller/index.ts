@@ -43,6 +43,7 @@ function commandGroups() {
       return commandElement;
     } catch (err) {
       console.log(err);
+      throw new GenericError(err);
     }
   }
 

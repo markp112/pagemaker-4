@@ -33,7 +33,7 @@ function Commands() {
   async function createPageElement(key: string, tabs: string[]): Promise<Response> {
     try {
       const docRef = doc(firebaseDb, COMMAND_COLLECTION, key);
-      const dataToStore = { tabs: tabs };
+      const dataToStore = { tabs };
       await setDoc(docRef, dataToStore);
       return constructResponse<string>(key, httpStatusCodes.OK);
 
@@ -57,7 +57,7 @@ function Commands() {
   async function updatePageElementTabs(pageElementName: string, tabs: string[]): Promise<Response> {
     try {
       const docRef = doc(firebaseDb, COMMAND_COLLECTION, pageElementName);
-      const dataTostore = { tabs: tabs };
+      const dataTostore = { tabs };
       await updateDoc(docRef, dataTostore);
       return constructResponse<string[]>(tabs, httpStatusCodes.OK);
     } catch (err) {
