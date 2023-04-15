@@ -32,12 +32,10 @@ const getIsActive = () => {
   };
 
 const getFontColour = computed(() => {
-  console.log('%c⧭', 'color: #514080', 'getFontColour', colour.value)
   if(!colour) return '#00'
   const rgbColour = hexToRgb(colour.value);
   if(rgbColour) {
     const inverseRGB = inverseColour(rgbColour);
-    console.log('%c⧭', 'color: #605189', rgbToHex(rgbNumberToString(inverseRGB)));
     return rgbToHex(rgbNumberToString(inverseRGB)); 
   }
   return colour.value;

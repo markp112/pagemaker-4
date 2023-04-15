@@ -21,7 +21,7 @@ import type { EditorButtonBase } from '@/classes/commandButtons/model';
 
   const props = defineProps<{
     buttonData: EditorButtonBase,
-    activeCommandName: string 
+    activeCommandName: string
   }>();
 
   const emits = defineEmits(['onClick']);
