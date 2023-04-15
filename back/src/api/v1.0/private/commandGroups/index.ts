@@ -1,3 +1,4 @@
+import { GenericError } from '@errors/index';
 import express from 'express';
 import { logger } from '../../../../logger';
 import { commandGroups } from './controller';
@@ -59,6 +60,18 @@ commandGroupRouter
       const key = Object.keys(pageElement)[SINGLE_KEY];
       const tabs = pageElement[key].tabs;
       const response = await Commands().updatePageElementTabs(key, tabs);
+      res.status(response.status).send(response);
+    } catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response);  
+    }
+  })
+
+  .post(`${ROUTE_PATH}/page-element/tab-group`, async (req, res) => {
+    logger.info(`${ROUTE_PATH}/page-element/tabGroups - called`);
+    try {
+      const tabGroup = req.body;
+      const response = await Commands().addTabGroup(tabGroup);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();

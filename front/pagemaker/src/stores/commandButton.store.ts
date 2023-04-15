@@ -1,4 +1,4 @@
-import type { Command, CommandButtonTypes, CommandMap } from '@/classes/commandButtons/model';
+import type { Command, CommandButtonTypes, CommandMap, TabGroup } from '@/classes/commandButtons/model';
 import type { TabContent, TabStrip } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import { defineStore } from 'pinia';
 
@@ -18,6 +18,7 @@ const useCommandButtonStore = defineStore({
       _editedCommand: {} as CommandButtonTypes,
       _tabList: [] as string[],
       _tabGroupList: [] as string[],
+      _existingTabItems: [] as TabGroup[],
     }
   },
 
@@ -48,17 +49,7 @@ const useCommandButtonStore = defineStore({
     },
 
     getAllTabNames: (state) => {
-      const tabs: string[] = [] ;
-      if(state._commandMap) {
-        const keys = Object.keys(state._commandMap);
-        keys.forEach(key => {
-          const pageElement = state._commandMap[key]; 
-          const tabKeys = pageElement.tabs;
-          tabKeys.forEach(tab => tabs.push(tab.key))
-        })
-        return  [...new Set(tabs)];
-      }
-      return tabs;
+      return state._existingTabItems;
     },
 
     getTabGroupList: (state) => {
@@ -105,16 +96,33 @@ const useCommandButtonStore = defineStore({
         })
         this._tabGroupList = Array.from(groups.values());
       }
-    },  
+    },
+
+    setExistingTabs() {
+      const tabs: TabGroup[] = [];
+      if(this._commandMap) {
+        const keys = Object.keys(this._commandMap);
+        keys.forEach(key => {
+          const pageElement = this._commandMap[key]; 
+          const tabKeys = pageElement.tabs;
+          tabKeys.forEach(tab => {
+            if(tabs.filter(tabkey => tabkey.key === tab.key).length === 0) {
+              tabs.push(tab);
+            }
+          })
+        })
+        this._existingTabItems = tabs;
+      }
+    },
 
     createNewPageElement(element: string) {
       this._commandMap[element] = { tabs: [] };
     },
 
-    createNewTabElement(tabName: string) {
-      const tabs = this._tabList.filter(tab => tab !== tabName);
-      tabs.push(tabName);
-      this._tabList = tabs;
+    addTabGroupToExistingTabs(tabGroup: TabGroup) {
+      const tabs = this._existingTabItems.filter(tab => tab.key !== tabGroup.key);
+      tabs.push(tabGroup);  
+      this._existingTabItems = tabs;
     },
 
     createNewTabGroupElement(tabGroupName: string) {
@@ -135,25 +143,24 @@ const useCommandButtonStore = defineStore({
       this._activeTabElements = tabElements;
     },
 
-    addTabToElement(pageElementName: string, tabName: string) {
-      let tabToAdd;
-      const keys = Object.keys(this._commandMap);
-      for (const key of keys) {
-        const pageElement = this._commandMap[key];
-        for (const tab of pageElement.tabs) {
-          if (tab.key === tabName && key !== pageElementName) {
-            tabToAdd = tab;
-            break;
-          }
-        }
-        if (tabToAdd) {
-          break;
-        }
+    addTabToPageElement(pageElementName: string, tabName: string) {
+      if(this.existsTab(this._commandMap[pageElementName].tabs, tabName)) {
+        return;
       }
+      const tabToAdd = this._existingTabItems.filter(tab => tab.key === tabName)[0];
       if(tabToAdd) {
         this._commandMap[pageElementName].tabs.push(tabToAdd);
         this._tabList.push(tabName);
+      } 
+    },
+
+    existsTab(tabs: TabGroup[], tabNameToFind: string) {
+      for (const tab of tabs) {
+        if (tab.key === tabNameToFind) {
+          return tab;
+        }
       }
+      return undefined;
     },
 
     addTabGroup(tabGroupName: string) {

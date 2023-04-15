@@ -1,4 +1,5 @@
-import type { Command, CommandButtonTypes, CommandMap } from '@/classes/commandButtons/model';
+import type { Command, CommandButtonTypes, CommandMap, TabGroup } from '@/classes/commandButtons/model';
+import { displayMessage } from '@/common/displayMessage';
 import type { TabStrip } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import { useCommandButtonStore } from '@/stores/commandButton.store';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
@@ -63,6 +64,19 @@ function CommandsService() {
     await axiosClient().put<{[key: string]: {tabs: string[]}}, string[]>(`${BASE_ROUTE}/page-element/tabs`, data);
   }
 
+  async function createNewTabElement(tabGroupPartial:  Omit<TabGroup, 'tabContent'>): Promise<TabGroup> {
+    const tabGroup: TabGroup = {
+      key: tabGroupPartial.key,
+      displayName: tabGroupPartial.displayName,
+      tabContent: []
+    };
+    return await createNewTabGroup(tabGroup);
+  }
+
+  async function createNewTabGroup(tabGroup: TabGroup): Promise<TabGroup> {
+    return await axiosClient().post<TabGroup, TabGroup>(`${BASE_ROUTE}/page-element/tab-group`, tabGroup);
+  }
+
   return { fetchCommandHierarchy,
     getEditorCommand,
     getTabs,
@@ -71,8 +85,10 @@ function CommandsService() {
     postCommand, 
     createPageElement,
     updatePageElementTabs,
+    createNewTabElement,
   };
 
 }
 
 export { CommandsService };
+

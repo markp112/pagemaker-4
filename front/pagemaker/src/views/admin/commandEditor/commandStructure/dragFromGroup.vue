@@ -18,7 +18,6 @@
 
 <script lang="ts" setup>import { ref } from '@vue/reactivity';
 
-
 const props = defineProps<{
   label: string,
   listItems: string[];
@@ -36,6 +35,7 @@ const listItemClick = (item: string) => {
 };
 
 const startDrag = (evt: DragEvent, item: string) => {
+  console.log('%c⧭', 'color: #e5de73', item)
   if(props.isDraggable) {
     evt.dataTransfer!.dropEffect = 'move';
     evt.dataTransfer!.effectAllowed = 'move';

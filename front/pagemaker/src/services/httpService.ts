@@ -1,3 +1,4 @@
+import { displayMessage } from '@/common/displayMessage';
 import { useAuthStore } from '@/stores/auth.store';
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
 
@@ -67,7 +68,7 @@ async function performPost<T, U>(path: string, payload: T, config: AxiosRequestC
     const response = await backEndClient.post(route, payload, config);
     return new Promise((resolve, reject) => {
       if (response.status >= 400) {
-        reject(response.data.err);
+        displayMessage(response.data.err, 'error', 'Failed')
       } 
       resolve(response.data.data);
     })

@@ -1,6 +1,6 @@
 <template>
   <div class="ml-8 bg-gray-200 p-4 grid grid-rows-8">
-    <h2 class="font-bold text-xl mb-4 row-start-1">{{ pageElement }}</h2>
+    <h2 class="font-bold text-xl mb-4 row-start-1 h-8">{{ pageElement }}</h2>
     <CommandHierarchyElement id="tabs"
       class="row-start-2 row-end-3"
       label="tabs"
@@ -74,7 +74,7 @@ const getCommands = computed(() => store.getActiveCommands);
 const isDirty = ref(false);
 
 const onTabDrop = (tabName: string) => {
-  store.addTabToElement(props.pageElement, tabName);
+  store.addTabToPageElement(props.pageElement, tabName);
   isDirty.value = true;
   isDirtyElement.value.tabs = true;
 };
