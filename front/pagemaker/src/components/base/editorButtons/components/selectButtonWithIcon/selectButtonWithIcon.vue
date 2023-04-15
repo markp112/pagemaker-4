@@ -51,9 +51,9 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
 import toolTip from '@/components/utility/notifications/tooltip/toolTip.vue';
-import type { EditorButtonSelectList, SelectListIcon } from '../../model';
 import { getImageUrl } from '@/common/getIcon';
 import type { CommandProperties } from '@/classes/command/model/command';
+import type { EditorButtonSelectList, SelectListIcon } from '@/classes/commandButtons/model';
 
 export default defineComponent({
   name:'Select-Button',

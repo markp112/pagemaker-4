@@ -7,7 +7,8 @@ type EditorButtonTypes = 'list'
   | 'numericWithSelect'
   | 'textInputButton'
   | 'uploadButton'
-  | 'imageLibrary';
+  | 'imageLibrary'
+  | 'colourButton';
 
 interface EditorButtonBase {
   tooltip: string;
@@ -56,6 +57,11 @@ interface CommandMap {
 }
 
 export type { EditorButtonBase,
+    EditorButtonTypes,
+    SelectListIcon,
+    EditorButtonNumericSelectList,
+    EditorButtonSelectList,
+    EditorButtonContent,
     CommandMap,
     CommandTabs,
     TabGroup,

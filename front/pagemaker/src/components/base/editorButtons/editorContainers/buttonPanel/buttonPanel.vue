@@ -21,9 +21,9 @@ import plusMinusButton from '../../components/plusMinusbutton/plusMinusButton.vu
 import numericButtonwithSelectlist from '../../components/numericButton/numericButtonwithSelectlist.vue';
 import selectButtonWithIcon from '../../components/selectButtonWithIcon/selectButtonWithIcon.vue';
 import UploadButton from '../../components/uploadButton/uploadButton.vue';
-import type { EditorButtonTypes } from '../../model';
 import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
-import type { CommandButtonTypes } from '@/classes/commandButtons/model';
+import type { CommandButtonTypes, EditorButtonTypes } from '@/classes/commandButtons/model';
+import ColourButton from '../../components/colourButton/colour-button.vue';
 
 type ComponentKey = { [buttonType in EditorButtonTypes]: Component }
 
@@ -36,12 +36,14 @@ const commandButtons: ComponentKey = {
   'numericWithSelect': numericButtonwithSelectlist,
   'plusMinus': plusMinusButton,
   'imageLibrary': () => ImageGallery,
+  'colourButton': ColourButton,
 };
 
-  defineProps<{
+const props=   defineProps<{
     buttonData: CommandButtonTypes[],
   }>();
   
+  console.log('%c⧭', 'color: #8c0038', props.buttonData)
   const emit = defineEmits(['onButtonClick']);
 
   let activeCommandButton = ref('');

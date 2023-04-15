@@ -15,9 +15,9 @@
 <script lang="ts" setup>
 import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import { getImageUrl } from '@/common/getIcon';
-import type { EditorButtonBase } from '../../model';
 import { ref } from '@vue/reactivity';
 import type { CommandProperties } from '@/classes/command/model/command';
+import type { EditorButtonBase } from '@/classes/commandButtons/model';
 
   const props = defineProps<{
     buttonData: EditorButtonBase,
@@ -27,23 +27,22 @@ import type { CommandProperties } from '@/classes/command/model/command';
   const emits = defineEmits(['onClick']);
   let showToolTip = ref(false);
 
+  const getIsActive = () => {
+    return props.buttonData.commandName === props.activeCommandName ? 'border border-solid border-white' : '';
+  };
 
-    const getIsActive = () => {
-      return props.buttonData.commandName === props.activeCommandName ? 'border border-solid border-white' : '';
-    };
+  const getPath = (image: string): string => {
+    return getImageUrl(image);
+  };
 
-    const getPath = (image: string): string => {
-      return getImageUrl(image);
+  const handleClick = () => {
+    const commandProperties: CommandProperties = {
+      commandName: props.buttonData.commandName,
+      commandType: props.buttonData.commandType,
+      payload: props.buttonData.commandName,
     };
-
-    const handleClick = () => {
-      const commandProperties: CommandProperties = {
-        commandName: props.buttonData.commandName,
-        commandType: props.buttonData.commandType,
-        payload: props.buttonData.commandName,
-      }
-      emits('onClick', commandProperties);
-    };
+    emits('onClick', commandProperties);
+  };
 
 
 </script>
