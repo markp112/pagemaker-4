@@ -4,8 +4,9 @@ interface RGB {
   b: number,
 };
 
+const splitRgb = (rgbColour: string) => rgbColour.split('(')[1].split(')')[0].split(',');
+
 function rgbToHex(rgbColour: string): string {
-  console.log('%c⧭', 'color: #99614d', rgbColour);
   const splitColours = splitRgb(rgbColour);
   if(splitColours.length > 3) splitColours.pop();
   const coloursAsHex = splitColours.map((colour) => {     
@@ -16,7 +17,6 @@ function rgbToHex(rgbColour: string): string {
 }
 
 function hexToRgb(hex: string): RGB | null {
-  console.log('%c⧭', 'color: #00736b', hex);
   let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
     r: parseInt(result[1], 16),
@@ -36,8 +36,6 @@ function inverseColour(rgbColour: RGB): RGB {
 function rgbNumberToString(rgbNumber: RGB): string {
   return `(${rgbNumber.r},${rgbNumber.g},${rgbNumber.b})`;
 }
-
-const splitRgb = (rgbColour: string) => rgbColour.split('(')[1].split(')')[0].split(',');
 
 export { rgbToHex, hexToRgb, inverseColour, rgbNumberToString };
 
