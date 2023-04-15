@@ -1,7 +1,7 @@
 <template>
   <div class="tab-wrapper">
     <div class="tabs">
-      <div class="tab" v-for="(label, index) in labels ">
+      <div class="tab" v-for="(label, index) in labels " :key="index">
         <input type="radio" 
           :name="`tab-${index}`" 
           :id="`tab-${index}`"
