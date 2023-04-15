@@ -7,6 +7,7 @@
       class="w-6/12 border-2 p-5 bg-gray-50 h-2/3 relative"
       >
         <div class="field-wrapper">
+          
           <label for="name">Site Name:</label>
           <input
             type="text"
@@ -96,7 +97,7 @@
       :class="sidePanelWidth"
       @toggle-clicked="resizePanel()"
     >
-      <TabstripContainer :labels="['Palette Editor', 'Material colours', 'Typography']">
+      <TabstripContainerEditor :labels="['Palette Editor', 'Material colours', 'Typography']">
         <template v-slot:tab-0>
           <ColourPalettes :sitePalette="colourSwatches"
             :save-enabled="isNewSite"
@@ -121,7 +122,7 @@
             @on-change="updateTypography($event)"
           />
         </template>
-      </TabstripContainer>
+      </TabstripContainerEditor>
     </settingsPanelVue>
 </div>
 </template>
@@ -137,7 +138,6 @@ import { siteService } from '@/services/site/site.service';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import SiteMaterialColour from '@/components/base/pickers/colour/sidePanel/materialColours/siteMaterialColour.vue';
 import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPlatettes/colourPalettes.vue';
-import TabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 import { getSiteAndUser, } from '@/classes/siteAndUser/siteAndUser';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
@@ -146,7 +146,7 @@ import type { SiteTypography } from '@/classes/sites/typography/model';
 import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
 import type { UploadImage } from '@/components/base/pickers/uploadImage/model';
 import { swatchesService } from '@/services/swatches/swatches.service';
-
+import TabstripContainerEditor from '@/components/core/settingsPanel/tabStripContainerEditor/tabStripContainerEditor.vue'
 
 export default defineComponent({
   name: 'SiteEditor',
@@ -157,7 +157,7 @@ export default defineComponent({
     settingsPanelVue,
     MaterialColours: SiteMaterialColour,
     ColourPalettes,
-    TabstripContainer,
+    TabstripContainerEditor,
     Typography: typographyVue,
     SaveButton
 },
