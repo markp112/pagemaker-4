@@ -1,4 +1,3 @@
-import { GenericError } from '@errors/index';
 import express from 'express';
 import { logger } from '../../../../logger';
 import { commandGroups } from './controller';

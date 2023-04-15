@@ -2,9 +2,9 @@
   <div class="flex-col flex w-full h-full justify-center border-t-zinc-600 border p-1">
     <span v-for="(field, index) in fields"
       class="mt-2"
+      :key="index"
     >
       <InputText
-        :key="index"
         :label="field.label"
         :value="getLocalValue(index)"
         place-holder=""

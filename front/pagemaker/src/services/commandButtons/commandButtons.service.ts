@@ -1,5 +1,4 @@
 import type { Command, CommandButtonTypes, CommandMap, TabGroup } from '@/classes/commandButtons/model';
-import { displayMessage } from '@/common/displayMessage';
 import type { TabStrip } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import { useCommandButtonStore } from '@/stores/commandButton.store';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
