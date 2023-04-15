@@ -35,7 +35,6 @@ const listItemClick = (item: string) => {
 };
 
 const startDrag = (evt: DragEvent, item: string) => {
-  console.log('%c⧭', 'color: #e5de73', item)
   if(props.isDraggable) {
     evt.dataTransfer!.dropEffect = 'move';
     evt.dataTransfer!.effectAllowed = 'move';
