@@ -110,8 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CommandButtonTypes } from '@/classes/commandButtons/model';
-import type { EditorButtonNumericSelectList, EditorButtonSelectList, SelectListIcon } from '@/components/base/editorButtons/model';
+import type { CommandButtonTypes, EditorButtonContent, EditorButtonNumericSelectList, EditorButtonSelectList, SelectListIcon } from '@/classes/commandButtons/model';
 import { displayMessage } from '@/common/displayMessage';
 import { computed, } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
@@ -141,6 +140,7 @@ import { useCommandButtonStore } from '@/stores/commandButton.store';
     'uploadButton',
     'textInputButton',
     'iconList',
+    'colourButton',
   ];
 
   onMounted(async () => {
@@ -151,7 +151,7 @@ import { useCommandButtonStore } from '@/stores/commandButton.store';
   });
 
   const getCommands = computed(() => {
-    return commandList.value;
+    return commandList.value.sort();
   });
 
   const onCommandListClick = (key: string) => {
@@ -177,6 +177,9 @@ import { useCommandButtonStore } from '@/stores/commandButton.store';
   const saveCommand = async () => {
     if(command.value) {
       const commandToSave: CommandButtonTypes = { ...command.value };
+      if(commandToSave.buttonType === 'colourButton') {
+        (commandToSave as EditorButtonContent).content = '#ffffff';
+      }
       await service.postCommand(commandKey.value, commandToSave);
       displayMessage('Saved', 'success' ,'Command Added');
       commandList.value.push(commandKey.value);

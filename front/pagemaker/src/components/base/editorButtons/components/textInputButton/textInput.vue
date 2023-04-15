@@ -19,10 +19,10 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { EditorButtonBase, EditorButtonContent } from '../../model';
 import { getImageUrl } from '@/common/getIcon';
 import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import type { CommandProperties } from '@/classes/command/model/command';
+import type { EditorButtonBase } from '@/classes/commandButtons/model';
 
   const emit = defineEmits(['onClick']);
 

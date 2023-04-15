@@ -9,7 +9,7 @@
 <script lang="ts">
 import type { CommandProperties } from '@/classes/command/model/command';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
-import { rgbToHex } from '@/common/rgbToHex';
+import { rgbToHex } from '@/common/colourUtils';
 import ColourPalettes from '@/components/base/pickers/colour/sidePanel/colourPlatettes/colourPalettes.vue';
 import ColourBackForeBorder from '@/components/colourBackForeBorder/colourBackForeBorder.vue';
 import { useSiteStore } from '@/stores/site.store';

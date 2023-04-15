@@ -21,8 +21,8 @@
 import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import { getImageUrl } from '@/common/getIcon';
 import type { CommandProperties } from '@/classes/command/model/command';
-import type { EditorButtonBase } from '../../model';
 import { ref } from 'vue';
+import type { EditorButtonBase } from '@/classes/commandButtons/model';
 
   const props = defineProps<{
     buttonData: EditorButtonBase,
