@@ -10,17 +10,17 @@ function handleError(err: Error | FirebaseError): DomainError {
   if(isTypeOfFirebaseError(err)) {
     return handleFireBaseError(err);
   } else {
-    logger.error(err.message);
+    logger.info(err.message);
     return new GenericError(err.message);
   }
 }
 
 function handleFireBaseError(err: FirebaseError): DomainError {
-  logger.error(err.code);
+  logger.info(err.code);
   return errorMap[err.code]();
 } 
 
-function isTypeOfFirebaseError(error: any): error is FirebaseError {
+function isTypeOfFirebaseError(error: FirebaseError | Error): error is FirebaseError {
   return error instanceof FirebaseError;
 }
 

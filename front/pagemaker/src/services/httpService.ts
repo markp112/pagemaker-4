@@ -1,3 +1,4 @@
+import { displayMessage } from '@/common/displayMessage';
 import { useAuthStore } from '@/stores/auth.store';
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
 
@@ -67,7 +68,8 @@ async function performPost<T, U>(path: string, payload: T, config: AxiosRequestC
     const response = await backEndClient.post(route, payload, config);
     return new Promise((resolve, reject) => {
       if (response.status >= 400) {
-        reject(response.data.err);
+        displayMessage(response.data.data.err, 'error', 'Failed');
+        reject(response.data.data)
       } 
       resolve(response.data.data);
     })
@@ -88,7 +90,6 @@ async function performMultipartPost<T, U>(path: string, payload: T, config: Axio
         'Authorization': `Bearer ${getToken()}`,
     };
     const response = await backEndClientMultiPart.post(route, payload, config);
-    console.log('%c⧭', 'color: #ffa640', response);
     return new Promise((resolve, reject) => {
       if (response.status >= 400) {
         reject(response.data.err);

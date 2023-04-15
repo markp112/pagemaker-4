@@ -6,7 +6,7 @@ import { doc, setDoc, updateDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
 import { logger } from '@logger/logger';
 import { commandGroups, COMMANDS, COMMAND_COLLECTION, COMMAND_ELEMENT_COLLECTION } from '../../commandGroups/controller';
-import { Command, EditorButtonBase } from '../../commandGroups/model';
+import { Command, EditorButtonBase, TabGroup } from '../../commandGroups/model';
 
 function Commands() {
 
@@ -65,11 +65,22 @@ function Commands() {
     }
   }
 
+  async function addTabGroup(tabGroup: TabGroup): Promise<Response> {
+    try {
+    const docRef = doc(firebaseDb, COMMAND_COLLECTION, tabGroup.key);
+    await setDoc(docRef, tabGroup);
+    return constructResponse<TabGroup>(tabGroup, httpStatusCodes.CREATED);
+    } catch (err) {
+      throw new GenericError(err);
+    }
+  }
+
   return { get,
     post,
     createPageElement,
     addPageElementNameToCommandCollection, 
     updatePageElementTabs,
+    addTabGroup,
   };
 }
 

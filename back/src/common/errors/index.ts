@@ -16,7 +16,7 @@ class DomainError extends Error {
     const response: Response = {
       data: this.stack,
       status: this._status,
-      err: {msg: this.message, systemErr: this.name }
+      err: {msg: this.message, systemErr: this.name },
     };
     return response;
   }

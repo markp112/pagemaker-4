@@ -1,13 +1,13 @@
 <template>
-  <div class="flex flex-row justify-evenly">
-    <label for="input-field" class="ml-2 mr-1 w-auto">{{ label }}</label>
+  <div class="grid grid-cols-2">
+    <label for="input-field" class="w-auto p-2">{{ label }}:</label>
     <input
       :type="inputType"
       id="input-field"
       :value="getLocalValue"
       @input="updateLocalValue($event)"
       :placeholder="placeHolder"
-      class="p-2 leading-4 border ml-2 disabled:bg-gray-400 disabled:border-gray-400"
+      class="border disabled:bg-gray-200 disabled:border-gray-400 input-field"
       :name="name"
       :disabled="disabled"
       :class="getClasses"
@@ -74,7 +74,7 @@ export default defineComponent({
       isValid: 'valid' as ValidateStates,
       failedValidationMessage: '',
       fieldWidthMap: {
-        'text': 'w-9/12',
+        'text': 'w-full',
         'number': 'w-2/12',
         'radio': 'w-8/12'
       } as Record<string, string>,
@@ -118,10 +118,11 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
   .input-field {
     @apply bg-site-surface;
     @apply text-site-primary-dark;
+    @apply h-8;
   }
 /* 
   .field-wrapper {

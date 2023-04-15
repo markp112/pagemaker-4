@@ -66,4 +66,16 @@ commandGroupRouter
     }
   })
 
+  .post(`${ROUTE_PATH}/page-element/tab-group`, async (req, res) => {
+    logger.info(`${ROUTE_PATH}/page-element/tabGroups - called`);
+    try {
+      const tabGroup = req.body;
+      const response = await Commands().addTabGroup(tabGroup);
+      res.status(response.status).send(response);
+    } catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response);  
+    }
+  })
+
 export { commandGroupRouter };

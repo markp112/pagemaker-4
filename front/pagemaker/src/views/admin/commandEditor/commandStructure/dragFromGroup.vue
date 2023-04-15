@@ -18,7 +18,6 @@
 
 <script lang="ts" setup>import { ref } from '@vue/reactivity';
 
-
 const props = defineProps<{
   label: string,
   listItems: string[];

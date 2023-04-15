@@ -25,19 +25,19 @@
         @drag-started="sourceDragElementType=$event"
       />
     </div>
-    <div class="grid grid-rows-3 col-span-1 gap-8 bg-gray-100 p-2 items-start">
-      <InputField :text-value="pageElement"
-        label="Page Element"
+    <div class="grid grid-rows-3 col-span-1 gap-4 bg-gray-100 ">
+      <InputFieldBasic :fields="[{label: 'Page Element', value: pageElement}]"
         @onNewClick="setPageElement('')"
         @on-save-click="createNewPageElement($event)"
       />
-      <InputField :text-value="tabElement"
-        label="Tabs"
+      <InputFieldBasic :fields="[
+        { label: 'Key', value: tabKey },
+        { label: 'Display Name', value: displayName },
+        ]"
         @on-new-click="tabElement=''"
         @on-save-click="addNewTabElement($event)"
       />
-      <InputField :text-value="groupElement"
-        label="Groups"
+      <InputFieldBasic :fields="[{label: 'Groups', value: groupElement}]"
         @on-new-click="groupElement = ''"
         @on-save-click="addNewTabGroup($event)"  
       />
@@ -64,15 +64,25 @@
 import { CommandsService } from '@/services/commandButtons/commandButtons.service';
 import { useCommandButtonStore } from '@/stores/commandButton.store';
 import { computed, onMounted, ref } from 'vue';
-import InputField from './inputField.vue';
+import InputFieldBasic from './inputFieldBasic.vue';
 import PageElementBuilder from './pageElementBuilder.vue';
 import DragFromGroup from './dragFromGroup.vue';
+import type { TabGroup } from '@/classes/commandButtons/model';
+import { displayMessage } from '@/common/displayMessage';
+
+type Field = {
+  label: string,
+  value: string,
+};
+
 
 const store = useCommandButtonStore();
 const service = CommandsService();
 const commandList = ref<string[]>([]);
 const pageElement = ref();
 const tabElement = ref();
+const displayName = ref('');
+const tabKey = ref('');
 const groupElement = ref();
 const sourceDragElementType = ref();
 
@@ -81,6 +91,7 @@ const sourceDragElementType = ref();
     await service.fetchCommandHierarchy();
     store.setTabList();
     store.setTabGroups();
+    store.setExistingTabs();
     const commands = store.getAllCommandButtons;
     Object.keys(commands).forEach(key => {
       commandList.value.push(key)});
@@ -98,11 +109,7 @@ const sourceDragElementType = ref();
     return [];
   });
 
-  const getTabs = computed(() => {
-    return store.getTabList;
-  });
-
-  const getAllTabNames = computed(() => store.getAllTabNames)
+  const getAllTabNames = computed(() => store.getAllTabNames.map(tab => tab.key));
 
   const getTabGroups = computed(() => {
     return store.getTabGroupList;
@@ -118,8 +125,14 @@ const sourceDragElementType = ref();
     store.createNewPageElement(element);
   };
 
-  const addNewTabElement = (tabName: string) => {
-    store.createNewTabElement(tabName);
+  const addNewTabElement = async (tabName: Field[]) => {
+    const tabElement: Omit<TabGroup, 'tabContent'> = {
+      displayName: tabName.filter(tab => tab.label === 'Display Name')[0].value,
+      key: tabName.filter(tab => tab.label === 'Key')[0].value,
+    }
+    const tabGroup = await service.createNewTabElement(tabElement);
+    store.addTabGroupToExistingTabs(tabGroup);
+    displayMessage('Tab group created', 'success', 'Created');
   };
 
   const addNewTabGroup = (tabGroupName: string) => {
