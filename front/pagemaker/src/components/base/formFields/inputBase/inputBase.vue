@@ -7,7 +7,7 @@
       :value="getLocalValue"
       @input="updateLocalValue($event)"
       :placeholder="placeHolder"
-      class="border disabled:bg-gray-200 disabled:border-gray-400 input-field"
+      class="border disabled:bg-gray-200 disabled:border-gray-400 input-field input"
       :name="name"
       :disabled="disabled"
       :class="getClasses"
@@ -76,7 +76,7 @@ export default defineComponent({
       fieldWidthMap: {
         'text': 'w-full',
         'number': 'w-2/12',
-        'radio': 'w-8/12'
+        'radio': ''
       } as Record<string, string>,
     }
   },
@@ -119,7 +119,7 @@ export default defineComponent({
 </script>
 
 <style lang="css" scoped>
-  .input-field {
+  input[type="text"] {
     @apply bg-site-surface;
     @apply text-site-primary-dark;
     @apply h-8;
@@ -134,5 +134,12 @@ export default defineComponent({
   }
   .valid {
     @apply border-solid border-site-primary;
+  }
+
+  input [type="radio"] {
+    @apply w-4;
+    @apply h-4;
+    @apply bg-site-primary-light;
+    @apply p-2;
   }
 </style>

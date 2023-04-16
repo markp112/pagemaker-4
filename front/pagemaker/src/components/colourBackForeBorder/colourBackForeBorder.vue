@@ -1,9 +1,17 @@
 <template>
     <span>Apply colour to:</span>
-    <fieldset class="flex flex-row justify-between flex-wrap">
-      <InputRadio label="back" name="colourSelect" value="background-color" :checked="selection" @on-field-change="onSelectionChange($event)"/>
+    <fieldset class="flex flex-row justify-between flex-nowrap">
+      <InputRadio label="back" 
+        name="colourSelect" 
+        value="background-color" 
+        :checked="selection" 
+        @on-field-change="onSelectionChange($event)"/>
       <InputRadio label="fore" name="colourSelect" value="color" @on-field-change="onSelectionChange($event)"/>
-      <InputRadio label="border" name="colourSelect" value="border"/>
+      <InputRadio label="border"
+        name="colourSelect"
+        value="border"
+        @on-field-change="onSelectionChange($event)"
+      />
     </fieldset>
 </template>
 
@@ -15,7 +23,7 @@ import InputRadio from '../base/formFields/inputRadio/inputRadio.vue';
 export default defineComponent({
   name: 'ColourForeBackBorder',
 
-  emits: ['onChange'],
+  emits: ['onClick'],
 
   data() {
     return {
@@ -33,7 +41,7 @@ export default defineComponent({
         commandType: 'direct',
         payload: value,
       }
-      this.$emit('onChange', payload);
+      this.$emit('onClick', payload);
     }
   }
 })

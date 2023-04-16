@@ -31,11 +31,11 @@ class EditorSettingsService {
     return this.store.getLineThickness;
   }
 
-  setBorderElement(borderElement: StyleTags) {
+  setBorderElement(borderElement: StyleTags | '') {
     this.store.setBorderElement(borderElement);
   }
 
-  getBorderElement(): StyleTags {
+  getBorderElement(): StyleTags | '' {
     return this.store.borderElement;
   }
 
@@ -57,7 +57,11 @@ class EditorSettingsService {
 
   setColourAppliesTo(appliesTo: string) {
     this.store.setColourAppliesTo(appliesTo)
-  } 
+  }
+
+  getColourAppliesTo() {
+    return this.store.colourAppliesTo;
+  }
 
   setActiveElement(element: PageElement) {
     if(this.store.activeElement === undefined) {

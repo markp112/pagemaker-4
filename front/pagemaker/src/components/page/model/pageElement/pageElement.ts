@@ -86,8 +86,7 @@ type StyleTags =
   | 'background-size'
   | 'background-repeat'
   | 'padding'
-  | 'transparency'
-  | '';
+  | 'transparency';
 
 type Style =  {
   style: StyleTags | CssStyleTypes;

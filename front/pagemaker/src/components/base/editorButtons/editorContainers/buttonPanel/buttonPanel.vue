@@ -1,14 +1,16 @@
 <template>
   <div class="flex flex-row justify-start flex-wrap gap-2 bg-gray-300 p-2 shadow-md mb-2">
-    <component v-for="(commandButton, index) in buttonData" 
-      track-by="$index"
-      :is="commandButtons[commandButton.buttonType]"
-      :key="index"
-      :index="index"
-      :button-data = "commandButton"
-      :active-command-name="activeCommandButton"
-      @onClick="handleButtonClick($event)"
-    />
+    <keep-alive>
+      <component v-for="(commandButton, index) in buttonData" 
+        track-by="$index"
+        :is="commandButtons[commandButton.buttonType]"
+        :key="index"
+        :index="index"
+        :button-data = "commandButton"
+        :active-command-name="activeCommandButton"
+        @onClick="handleButtonClick($event)"
+      />
+    </keep-alive>
   </div>
 </template>
 
@@ -24,6 +26,7 @@ import UploadButton from '../../components/uploadButton/uploadButton.vue';
 import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
 import type { CommandButtonTypes, EditorButtonTypes } from '@/classes/commandButtons/model';
 import ColourButton from '../../components/colourButton/colour-button.vue';
+import ColourBackForeBorder from '@/components/colourBackForeBorder/colourBackForeBorder.vue';
 
 type ComponentKey = { [buttonType in EditorButtonTypes]: Component }
 
@@ -37,19 +40,23 @@ const commandButtons: ComponentKey = {
   'plusMinus': plusMinusButton,
   'imageLibrary': () => ImageGallery,
   'colourButton': ColourButton,
+  'colourApplyTo': ColourBackForeBorder
 };
 
 const props=   defineProps<{
     buttonData: CommandButtonTypes[],
   }>();
   
-  console.log('%c⧭', 'color: #8c0038', props.buttonData)
   const emit = defineEmits(['onButtonClick']);
 
   let activeCommandButton = ref('');
   
   const handleButtonClick = (payload: CommandProperties) => {
-    setActiveButton(payload.commandName);
+    if (payload.commandName === 'set-colour') {
+      setActiveButton(payload.payload as string);
+    } else {
+      setActiveButton(payload.commandName);
+    }
     emit('onButtonClick', payload);
   };
 

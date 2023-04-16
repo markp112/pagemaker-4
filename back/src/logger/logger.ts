@@ -12,7 +12,7 @@ const logOptions = {
     colorize: false,
   },
   console: {
-    level: 'debug',
+    level: 'error',
     handleExceptions: true,
     json: true,
     colorize: true,
