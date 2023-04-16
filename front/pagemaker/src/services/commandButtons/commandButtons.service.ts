@@ -1,5 +1,4 @@
 import type { Command, CommandButtonTypes, CommandMap, TabGroup } from '@/classes/commandButtons/model';
-import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { TabStrip } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import { useCommandButtonStore } from '@/stores/commandButton.store';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
