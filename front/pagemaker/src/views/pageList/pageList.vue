@@ -123,7 +123,8 @@ export default defineComponent({
     },
     
     async pageRowClick(pageName: string) {
-      await CommandsService().fetchCommandHierarchy(),
+
+      await CommandsService().fetchCommandHierarchy(this.siteId, this.userId),
       this.$router.push({
         name: 'pagebuilder',
       });

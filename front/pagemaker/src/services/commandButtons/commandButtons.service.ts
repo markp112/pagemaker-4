@@ -1,4 +1,5 @@
 import type { Command, CommandButtonTypes, CommandMap, TabGroup } from '@/classes/commandButtons/model';
+import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { TabStrip } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import { useCommandButtonStore } from '@/stores/commandButton.store';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
@@ -10,8 +11,9 @@ function CommandsService() {
   const store = useCommandButtonStore();
   const editorSettingsStore = useEditorSettingsStore()
   
-  async function fetchCommandHierarchy() {
-    const route = `${BASE_ROUTE}/hierarchy`
+  async function fetchCommandHierarchy(siteId: string, userId: string) {
+    const route = `${BASE_ROUTE}/hierarchy/${siteId}/${userId}`;
+
     const commandMap = await axiosClient().get<CommandMap>(route);
     store.setCommandMap(commandMap);
   }

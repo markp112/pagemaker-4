@@ -5,6 +5,8 @@ import { GenericError } from '@errors/index';
 import { logger } from '@logger/index';
 import { CommandElement, CommandsCollectionStored, EditorButtonBase, TabGroup } from '../model';
 import { httpStatusCodes } from '@api/httpStatusCodes';
+import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
+import { buildColourCommandTabGroups } from './colourPalettes';
 
 export const COMMAND_COLLECTION = 'command-containers';
 export const COMMAND_ELEMENT_COLLECTION = 'CommandElementCollection';
@@ -12,9 +14,12 @@ export const COMMANDS = 'commands';
 
 function commandGroups() {
 
-  async function get(): Promise<Response> {
+  let colourCommandGroups;
+
+  async function get(colourPalettes: ColourSwatches): Promise<Response> {
     try {
       const commandCollection = await getAllCommands();
+      colourCommandGroups = buildColourCommandTabGroups(colourPalettes);
       const commands = await getCommands();
       const commandElements: CommandElement = await buildCommandsMap(commandCollection, commands);
       return constructResponse<CommandElement>(commandElements, httpStatusCodes.OK);
@@ -66,6 +71,13 @@ function commandGroups() {
       tabContent: string[],
     };
     if (tabContentStored) {
+      if (tabContentStored.key === 'coloursTab') {
+        return {
+          displayName: tabContentStored.displayName,
+          key: tabContentStored.key,
+          tabContent: buildPanelsFromColours(),
+        }
+      }
       return {
         displayName: tabContentStored.displayName,
         key: tabContentStored.key,
@@ -106,6 +118,10 @@ function commandGroups() {
       logger.error(err);
       throw new GenericError(err);
     }
+  }
+
+  function buildPanelsFromColours() {
+    return colourCommandGroups;
   }
 
   return { get, getCommands, getAllCommands };

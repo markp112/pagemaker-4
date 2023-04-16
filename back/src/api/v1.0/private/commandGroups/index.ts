@@ -2,16 +2,24 @@ import express from 'express';
 import { logger } from '../../../../logger';
 import { commandGroups } from './controller';
 import { Commands } from './controller/comands';
+import { sitesController } from '../../sites/controller';
+import { httpStatusCodes } from '@api/httpStatusCodes';
+import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
 
 const commandGroupRouter = express.Router();
 const ROUTE_PATH = '/editor/command-buttons';
 
 commandGroupRouter
-  .get(`${ROUTE_PATH}/hierarchy`, async (req, res) => {
+  .get(`${ROUTE_PATH}/hierarchy/:siteId/:userId`, async (req, res) => {
     logger.info('commandGroup.get callled');
     try {
-      const response = await commandGroups().get();
-      res.status(response.status).send(response);
+      const {siteId, userId} = {...req.params};
+      let response = await sitesController().getSiteColourPalette(userId, siteId);
+      if (response.status === httpStatusCodes.OK) {
+        const colourPalettes = response.data as unknown as ColourSwatches;
+        response = await commandGroups().get(colourPalettes);
+        res.status(response.status).send(response);
+      }
     } catch (error) {
       const response = error.getResponse();
       res.status(error._status).send(response);
