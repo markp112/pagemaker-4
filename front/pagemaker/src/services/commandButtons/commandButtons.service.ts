@@ -10,8 +10,9 @@ function CommandsService() {
   const store = useCommandButtonStore();
   const editorSettingsStore = useEditorSettingsStore()
   
-  async function fetchCommandHierarchy() {
-    const route = `${BASE_ROUTE}/hierarchy`
+  async function fetchCommandHierarchy(siteId: string, userId: string) {
+    const route = `${BASE_ROUTE}/hierarchy/${siteId}/${userId}`;
+
     const commandMap = await axiosClient().get<CommandMap>(route);
     store.setCommandMap(commandMap);
   }

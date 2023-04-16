@@ -1,12 +1,16 @@
 
 interface EditorButtonBase {
-  name: string;
+  key: string;
   tooltip: string;
   displayIcon: string;
   buttonType: string;
   commandName: string;
   commandType: string;
 };
+
+interface EditorButtonContent extends EditorButtonBase {
+  content: string;
+}
 
 type Command = EditorButtonBase & {key: string };
 
@@ -15,7 +19,7 @@ interface CommandGroup {
 }; 
 
 interface CommandPanel {
-  [key: string]: EditorButtonBase[];
+  [key: string]: EditorButtonBase[] | EditorButtonContent[];
 }
 
 interface TabGroup {
@@ -55,6 +59,7 @@ interface CommandsCollectionStored {
 
 export {
   EditorButtonBase,
+  EditorButtonContent,
   Command,
   CommandElement,
   CommandElementCollection,

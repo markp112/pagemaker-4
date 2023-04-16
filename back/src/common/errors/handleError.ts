@@ -11,6 +11,7 @@ function handleError(err: Error | FirebaseError): DomainError {
     return handleFireBaseError(err);
   } else {
     logger.info(err.message);
+    logger.info(err);
     return new GenericError(err.message);
   }
 }
