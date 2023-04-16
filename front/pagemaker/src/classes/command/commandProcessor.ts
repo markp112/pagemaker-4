@@ -29,7 +29,7 @@ class CommandProcessor {
     'line-thickness': () => new LineThicknessCommand(),
     'border-radius': (pageElement: PageElement) => new BorderRadiusCommand(pageElement),
     'set-units': () => new UnitsCommand(),
-    'set-colour': () => new ColourCommand(),
+    'set-colour': (pageElement: PageElement) => new ColourCommand(pageElement),
     'set-image': (pageElement: PageElement) => new ImageCommand(pageElement),
     'set-colour-applies-to': (pageElement: PageElement) => new ApplyColourTo(pageElement),
     'justify-start': (pageElement: PageElement) => new justifyCommand(pageElement),
@@ -50,8 +50,8 @@ class CommandProcessor {
   };
 
   processCommand(commandProperties: CommandProperties) {
+  
     const getCommand = (this.commandMap[commandProperties.commandName]);
-    console.log('%c⧭', 'color: #917399', getCommand);
     const command = getCommand(this.pageElement);
     if (commandProperties.commandType === 'direct') {
       this.pageElement = command.execute(commandProperties.payload);

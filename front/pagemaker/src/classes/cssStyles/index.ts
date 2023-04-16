@@ -50,7 +50,6 @@ type CssStyleNames =
 | 'right'
 | 'none'
 | 'hidden'
-| ''
 | 'undefined';
 
 export type { CssStyleNames };

@@ -141,6 +141,7 @@ import { useCommandButtonStore } from '@/stores/commandButton.store';
     'textInputButton',
     'iconList',
     'colourButton',
+    'colourApplyTo',
   ];
 
   onMounted(async () => {

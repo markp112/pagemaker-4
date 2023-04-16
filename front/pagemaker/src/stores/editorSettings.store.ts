@@ -10,7 +10,7 @@ const useEditorSettingsStore = defineStore('editorStore',{
       _currentColor: '#000000' as string,
       _colourAppliesTo: 'fore' as string,
       _lineThickness: 1,
-      _borderElement: '' as StyleTags,
+      _borderElement: '' as StyleTags | '',
       _units: 'px' as Units,
       _activeElement: undefined as unknown as PageElement | undefined,
     }
@@ -72,7 +72,7 @@ const useEditorSettingsStore = defineStore('editorStore',{
       this._lineThickness = byAmount;
     },
 
-    setBorderElement(borderElement: StyleTags): void {
+    setBorderElement(borderElement: StyleTags | ''): void {
       this._borderElement = borderElement;
     },
 

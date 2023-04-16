@@ -8,11 +8,10 @@
 
 <script lang="ts" setup>
 import type { CommandProperties } from '@/classes/command/model/command';
-import type { CommandButtonTypes } from '@/classes/commandButtons/model';
 import ButtonPanel from '@/components/base/editorButtons/editorContainers/buttonPanel/buttonPanel.vue';
 import type { TabPanel } from '../tabStripContainer/model';
 
-  const props = defineProps<{
+  defineProps<{
     tabContent: TabPanel[],
   }>();
   

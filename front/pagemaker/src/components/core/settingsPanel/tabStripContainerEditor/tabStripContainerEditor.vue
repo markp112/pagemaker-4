@@ -15,11 +15,11 @@
       </div>
     </div>
   </div>
-  <div>
-    <slot name="tab-0" v-if="getActiveTab(0)" class="tab-content"></slot>
-    <slot name="tab-1" v-if="getActiveTab(1)"  class="tab-content"></slot>
-    <slot name="tab-2" v-if="getActiveTab(2)"  class="tab-content"></slot>
-    <slot name="tab-3" v-if="getActiveTab(3)"  class="tab-content"></slot>
+  <div class="tab-content">
+    <slot name="tab-0" v-if="getActiveTab(0)"></slot>
+    <slot name="tab-2" v-if="getActiveTab(2)"></slot>
+    <slot name="tab-3" v-if="getActiveTab(3)"></slot>
+    <slot name="tab-1" v-if="getActiveTab(1)"></slot>
   </div>
 </template>
 
@@ -94,9 +94,7 @@ export default defineComponent({
   @apply w-full;
   @apply flex;
   @apply flex-col;
-  @apply mt-4;
-  padding: 1rem;
-  opacity: 0;
+  @apply mt-2;
 }
 
 .activeTab {

@@ -87,8 +87,9 @@ const groupElement = ref();
 const sourceDragElementType = ref();
 
   onMounted(async () => {
+    const IGNORE_USER_SITE_ID = '-1';
     await service.fetchAllCommands();
-    await service.fetchCommandHierarchy();
+    await service.fetchCommandHierarchy(IGNORE_USER_SITE_ID, IGNORE_USER_SITE_ID);
     store.setTabList();
     store.setTabGroups();
     store.setExistingTabs();

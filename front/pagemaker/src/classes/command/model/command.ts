@@ -5,7 +5,6 @@ type CommandName = | 'border'
   | 'line-style'
   | 'line-thickness'
   | 'border-radius'
-  | 'border-top'
   | 'set-units'
   | 'set-colour'
   | 'set-image'
@@ -37,7 +36,7 @@ type CommandTypes = 'direct' | 'indirect';
 
 interface CommandProperties {
   commandType: CommandTypes; 
-  commandName: CommandName | StyleTags |CssStyleNames;
+  commandName: CommandName;
   payload: CommandParameter;
 };
 

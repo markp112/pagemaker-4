@@ -8,7 +8,8 @@ type EditorButtonTypes = 'list'
   | 'textInputButton'
   | 'uploadButton'
   | 'imageLibrary'
-  | 'colourButton';
+  | 'colourButton'
+  | 'colourApplyTo';
 
 interface EditorButtonBase {
   tooltip: string;

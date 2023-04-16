@@ -3,7 +3,7 @@ import { firebaseGetDocsFromCollection } from '@common/classes/firebaseCommon/ge
 import { constructResponse } from '@common/functions/constructResponse';
 import { GenericError } from '@errors/index';
 import { logger } from '@logger/index';
-import { CommandElement, CommandsCollectionStored, EditorButtonBase, TabGroup } from '../model';
+import { CommandElement, CommandPanel, CommandsCollectionStored, EditorButtonBase, TabGroup } from '../model';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
 import { buildColourCommandTabGroups } from './colourPalettes';
@@ -14,18 +14,20 @@ export const COMMANDS = 'commands';
 
 function commandGroups() {
 
-  let colourCommandGroups;
+  let colourCommandGroups: CommandPanel[];
 
   async function get(colourPalettes: ColourSwatches): Promise<Response> {
     try {
       const commandCollection = await getAllCommands();
-      colourCommandGroups = buildColourCommandTabGroups(colourPalettes);
+      if(colourPalettes) {
+        colourCommandGroups = buildColourCommandTabGroups(colourPalettes);
+      }
       const commands = await getCommands();
       const commandElements: CommandElement = await buildCommandsMap(commandCollection, commands);
       return constructResponse<CommandElement>(commandElements, httpStatusCodes.OK);
     }
     catch (err) {
-      logger.error(err, 'err');
+      logger.error(err);
       throw new GenericError(err);
     }
   }
@@ -71,11 +73,11 @@ function commandGroups() {
       tabContent: string[],
     };
     if (tabContentStored) {
-      if (tabContentStored.key === 'coloursTab') {
+      if (tabContentStored.key === 'coloursTab' && colourCommandGroups) {
         return {
           displayName: tabContentStored.displayName,
           key: tabContentStored.key,
-          tabContent: buildPanelsFromColours(),
+          tabContent: await buildPanelsFromColours(tabContentStored.tabContent, commands),
         }
       }
       return {
@@ -120,8 +122,10 @@ function commandGroups() {
     }
   }
 
-  function buildPanelsFromColours() {
-    return colourCommandGroups;
+  async function buildPanelsFromColours(tabContent: string[], commands: EditorButtonBase[]):Promise<CommandPanel[]> {
+    const panels = await getCommandPanels(tabContent, commands);
+    panels.push(...colourCommandGroups)
+    return panels;
   }
 
   return { get, getCommands, getAllCommands };

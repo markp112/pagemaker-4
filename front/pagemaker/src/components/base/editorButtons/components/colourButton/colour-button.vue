@@ -14,21 +14,19 @@
 <script setup lang="ts">
 
 import type { CommandProperties } from '@/classes/command/model/command';
-import type { EditorButtonBase, EditorButtonContent } from '@/classes/commandButtons/model';
+import type {  EditorButtonContent } from '@/classes/commandButtons/model';
 import { hexToRgb, inverseColour, rgbNumberToString, rgbToHex } from '@/common/colourUtils';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
-  buttonData: EditorButtonBase,
+  buttonData: EditorButtonContent,
   activeCommandName: string,
 }>();
 
-const colour = ref((props.buttonData as EditorButtonContent).content as string);
-
+const colour = ref(props.buttonData.content as string);
 const emits = defineEmits(['onClick']);
-
 const getIsActive = () => {
-    return props.buttonData.commandName === props.activeCommandName ? 'border border-solid border-white' : '';
+    return props.buttonData.content === props.activeCommandName ? 'border border-solid border-white' : '';
   };
 
 const getFontColour = computed(() => {

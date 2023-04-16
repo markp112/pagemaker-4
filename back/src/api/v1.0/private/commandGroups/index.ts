@@ -8,19 +8,25 @@ import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
 
 const commandGroupRouter = express.Router();
 const ROUTE_PATH = '/editor/command-buttons';
+const IGNORE_USER_SITE_ID = '-1';
 
 commandGroupRouter
   .get(`${ROUTE_PATH}/hierarchy/:siteId/:userId`, async (req, res) => {
     logger.info('commandGroup.get callled');
     try {
-      const {siteId, userId} = {...req.params};
-      let response = await sitesController().getSiteColourPalette(userId, siteId);
-      if (response.status === httpStatusCodes.OK) {
-        const colourPalettes = response.data as unknown as ColourSwatches;
-        response = await commandGroups().get(colourPalettes);
-        res.status(response.status).send(response);
+      let response;
+      let colourPalettes: ColourSwatches;
+      const { siteId, userId } = { ...req.params };
+      if(userId !== IGNORE_USER_SITE_ID && siteId !== IGNORE_USER_SITE_ID) {
+        response = await sitesController().getSiteColourPalette(userId, siteId);
+        if (response.status === httpStatusCodes.OK) {
+          colourPalettes = response.data as unknown as ColourSwatches;
+        }
       }
+      response = await commandGroups().get(colourPalettes);
+      res.status(response.status).send(response);
     } catch (error) {
+      console.log('%c⧭', 'color: #ff0000', error);
       const response = error.getResponse();
       res.status(error._status).send(response);
     }
