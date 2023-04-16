@@ -61,7 +61,7 @@ export default defineComponent({
 
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 
 input[type="radio"] {
   -webkit-appearance: none;

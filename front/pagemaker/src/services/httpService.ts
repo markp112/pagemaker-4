@@ -51,6 +51,7 @@ async function performGet<T>(path: string): Promise<T> {
   console.log('%c⧭', 'color: #e50000', response.data);
   return new Promise((resolve, reject) => {
     if (response.status !== 200) {
+      displayMessage(response.data.data.err, 'error', 'Failed');
       reject(response.data.err);
     } else {
       resolve(response.data.data);
@@ -92,6 +93,7 @@ async function performMultipartPost<T, U>(path: string, payload: T, config: Axio
     const response = await backEndClientMultiPart.post(route, payload, config);
     return new Promise((resolve, reject) => {
       if (response.status >= 400) {
+        displayMessage(response.data.data.err, 'error', 'Failed');
         reject(response.data.err);
       } 
       resolve(response.data.data);
@@ -116,6 +118,7 @@ async function performPut<T, U>(path: string, payload: T, config: AxiosRequestCo
   const response = await backEndClient.put(route, payload, config);
   return new Promise((resolve, reject) => {
     if (response.status >= 400) {
+      displayMessage(response.data.data.err, 'error', 'Failed');
       reject(response.data.err);
     }
     resolve(response.data.data);

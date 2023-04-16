@@ -37,7 +37,7 @@ export default defineComponent({
 
     data() {
       return {
-        sliderValue: 0,
+        sliderValue: 100,
       }
     },
 

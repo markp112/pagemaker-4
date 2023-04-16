@@ -1,5 +1,4 @@
 <template>
-  <div class="tabs">
     <div class="tab">
       <input type="radio" 
         :name="`tab-${tab.id}`" 
@@ -12,7 +11,6 @@
         @click="setActiveTab(tab.id)"
       >{{ tab.displayName }}</label>
     </div>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -31,13 +29,6 @@
   };
 </script>
 <style lang="css" scoped>
-.tabs {
-  @apply relative;
-  @apply bg-site-surface;
-  @apply w-full; 
-  @apply flex flex-row justify-start;
-
-}
 .tabs::before,
 .tabs::after {
   content: "";
@@ -89,7 +80,6 @@
   @apply bg-site-primary-dark;
   @apply text-site-surface;
   @apply rounded-tr-lg;
-  border-bottom: 0;
   transition: all 0.35s;
   z-index: 1;
 }
