@@ -15,6 +15,7 @@ import type { CommandName, CommandProperties } from './model/command';
 import { UnitsCommand } from './units/units.command';
 import { UploadImageCommand } from './uploadImageFile/uploadImageFile.command';
 import { ZindexCommand } from './zIndex/zindexCommand';
+import { FontCommand } from './fontCommand/fontCommand';
 
 // rome-ignore lint/suspicious/noExplicitAny: <explanation>
 type  CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any }
@@ -32,6 +33,7 @@ class CommandProcessor {
     'set-colour': (pageElement: PageElement) => new ColourCommand(pageElement),
     'set-image': (pageElement: PageElement) => new ImageCommand(pageElement),
     'set-colour-applies-to': (pageElement: PageElement) => new ApplyColourTo(pageElement),
+    'set-font': () => new FontCommand(),
     'justify-start': (pageElement: PageElement) => new justifyCommand(pageElement),
     'justify-center': (pageElement: PageElement) => new justifyCommand(pageElement),
     'justify-end': (pageElement: PageElement) => new justifyCommand(pageElement),
@@ -47,6 +49,7 @@ class CommandProcessor {
     'bring-to-front': (pageElement: PageElement) => new ZindexCommand(pageElement),
     'show-gallery': () => new ImageLibraryCommand(),
     'upload-image-file': (pageElement: PageElement) => new UploadImageCommand(pageElement),
+
   };
 
   processCommand(commandProperties: CommandProperties) {
