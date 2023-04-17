@@ -9,6 +9,8 @@ export function drag() {
       (e.target as HTMLDivElement).style.border = 'dashed 0.5px red';
     if (e.dataTransfer) {
       if (e.target) {
+        e.dataTransfer!.dropEffect = 'move';
+        e.dataTransfer!.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', (e.target as HTMLDivElement).id);
         store.setIsDragging(true);
       }
