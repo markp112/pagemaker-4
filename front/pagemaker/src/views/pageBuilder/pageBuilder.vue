@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <Scaler :slider="sliderSettings"
-    :position="sliderPosition"
+      :position="sliderPosition"
     @slider-change="sliderChange($event)"
     />
   </div>
@@ -57,7 +57,7 @@ import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vu
 const scalerSettings: SliderSettings = {
   min: 0,
   max: 200,
-  initialValue: 0,
+  initialValue: 100,
   width: 400,
   label: 'Zoom',
 };

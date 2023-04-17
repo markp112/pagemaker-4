@@ -3,7 +3,7 @@
     <Tab 
       v-for="(tab) in data"
       :tab="tab"
-      :active-tab="activeTab"
+      :active-tab="getActiveTab()"
       @on-click="($event) => activeTab=$event"
     />
   </div>
@@ -37,22 +37,31 @@ export default defineComponent({
   },
 
   data() {
-      return {
-          activeTab: '',
-      };
+    return {
+        activeTab: '',
+    };
+  },
+
+  mounted() {
+    this.activeTab = this.$props.data[0].id;
   },
 
   methods: {
     setActiveTab(id: string) {
-        this.$emit("onClick", id);
+        this.$emit('onClick', id);
         this.activeTab = id;
     },
-    getActiveTab(id: string) {
-        return this.activeTab === id;
+
+    getActiveTab() {
+        if(this.$props.data.filter(tab => tab.id === this.activeTab).length === 0) {
+          this.activeTab = this.$props.data[0].id;
+        } 
+        return this.activeTab;
     },
+
     handleButtonClick(command: CommandProperties) {
       this.$emit('onButtonClick', command);
-    }
+    },
   },
 })
 

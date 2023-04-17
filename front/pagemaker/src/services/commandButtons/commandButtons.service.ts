@@ -5,6 +5,7 @@ import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 import { axiosClient } from '../httpService';
 
 const BASE_ROUTE = '/private/editor/command-buttons';
+const DEFAULT_TABS = 'Splash';
 
 function CommandsService() {
   const store = useCommandButtonStore();
@@ -12,21 +13,17 @@ function CommandsService() {
   
   async function fetchCommandHierarchy(siteId: string, userId: string) {
     const route = `${BASE_ROUTE}/hierarchy/${siteId}/${userId}`;
-
     const commandMap = await axiosClient().get<CommandMap>(route);
     store.setCommandMap(commandMap);
   }
 
   function getEditorCommand() {
     const commandName = editorSettingsStore.getActiveElementName;
-    return commandName ? store.getCommandMap[commandName] : undefined;
+    return commandName ? store.getCommandMap[commandName] : store.getCommandMap[DEFAULT_TABS];
   }
 
   function getTabs(): TabStrip[] {
     const command = getEditorCommand();
-    if (!command) {
-      return [];
-    } 
     return command.tabs.map(tab => {
       return {
         displayName: tab.displayName,

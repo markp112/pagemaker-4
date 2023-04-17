@@ -1,13 +1,13 @@
 <template>
-  <div class="grid grid-cols-2">
-    <label for="input-field" class="w-auto p-2">{{ label }}:</label>
+  <div class="grid grid-cols-5 relative">
+    <label for="input-field" class="w-auto p-2 col-span-2">{{ label }}:</label>
     <input
       :type="inputType"
       id="input-field"
       :value="getLocalValue"
       @input="updateLocalValue($event)"
       :placeholder="placeHolder"
-      class="border disabled:bg-gray-200 disabled:border-gray-400 input-field input"
+      class="border disabled:bg-gray-200 disabled:border-gray-400 col-span-3"
       :name="name"
       :disabled="disabled"
       :class="getClasses"
@@ -76,7 +76,7 @@ export default defineComponent({
       fieldWidthMap: {
         'text': 'w-full',
         'number': 'w-2/12',
-        'radio': ''
+        'radio': 'w-32'
       } as Record<string, string>,
     }
   },
@@ -141,5 +141,6 @@ export default defineComponent({
     @apply h-4;
     @apply bg-site-primary-light;
     @apply p-2;
+
   }
 </style>
