@@ -1,4 +1,4 @@
-import type { PageElement, Style } from '@/components/page/model/pageElement/pageElement';
+import type { Style } from '@/components/page/model/pageElement/pageElement';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import type { Command } from '../model/command';
 
