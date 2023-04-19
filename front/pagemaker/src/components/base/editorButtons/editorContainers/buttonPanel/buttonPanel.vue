@@ -27,6 +27,7 @@ import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vu
 import type { CommandButtonTypes, EditorButtonTypes } from '@/classes/commandButtons/model';
 import ColourButton from '../../components/colourButton/colour-button.vue';
 import ColourBackForeBorder from '@/components/colourBackForeBorder/colourBackForeBorder.vue';
+import editorFontPicker from '../../components/editorFontPicker/editorFontPicker.vue';
 
 type ComponentKey = { [buttonType in EditorButtonTypes]: Component }
 
@@ -40,10 +41,11 @@ const commandButtons: ComponentKey = {
   'plusMinus': plusMinusButton,
   'imageLibrary': () => ImageGallery,
   'colourButton': ColourButton,
-  'colourApplyTo': ColourBackForeBorder
+  'colourApplyTo': ColourBackForeBorder,
+  'setFont': editorFontPicker,
 };
 
-const props=   defineProps<{
+  defineProps<{
     buttonData: CommandButtonTypes[],
   }>();
   

@@ -1,5 +1,5 @@
 import type { Units } from '@/components/page/model/model';
-import type { LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { LineStyle, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia';
 
 const useEditorSettingsStore = defineStore('editorStore',{
@@ -45,6 +45,10 @@ const useEditorSettingsStore = defineStore('editorStore',{
       return state._activeElement;
     },
 
+    getStyles: (state) => {
+      return state._activeElement ? state._activeElement.styles : [];
+    },
+
     getActiveElementName: (state) => {
       const element = state._activeElement;
       const elementName = element?.name;
@@ -83,6 +87,12 @@ const useEditorSettingsStore = defineStore('editorStore',{
     setActiveElement(pageElement: PageElement | undefined) {
       this._activeElement = pageElement
     },
+
+    setStyles(styles: Style[]) {
+      if(this._activeElement) {
+        this._activeElement.styles = styles;
+      }
+    }
 
   }
 });

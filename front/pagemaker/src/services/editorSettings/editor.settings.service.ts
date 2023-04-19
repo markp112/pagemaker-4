@@ -1,5 +1,5 @@
 import type { Units } from '@/components/page/model/model';
-import type { LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { LineStyle, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 import { useImagesStore } from '@/stores/images.store';
 import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
@@ -75,6 +75,7 @@ class EditorSettingsService {
     this.store.setActiveElement(element);
   }
 
+
   getActiveElement() {
     return this.store.activeElement;
   }
@@ -92,6 +93,14 @@ class EditorSettingsService {
 
   async uploadImageFile(file: File) {
     return await this.fileUploadService.uploadFile(file, this.authStore.userUid);
+  }
+
+  applyStyle(style: Style) {
+    const styles = this.store.getStyles.filter(currentStyle => currentStyle.style !== style.style);
+    if(styles) {
+      styles?.push(style);
+      this.store.setStyles(styles);
+    }
   }
 
 }

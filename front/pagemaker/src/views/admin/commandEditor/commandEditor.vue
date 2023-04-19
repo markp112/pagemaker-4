@@ -142,6 +142,7 @@ import { useCommandButtonStore } from '@/stores/commandButton.store';
     'iconList',
     'colourButton',
     'colourApplyTo',
+    'fontPicker'
   ];
 
   onMounted(async () => {
