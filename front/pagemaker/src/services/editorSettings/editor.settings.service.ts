@@ -103,6 +103,15 @@ class EditorSettingsService {
     }
   }
 
+  applyClass(className: string, classNameStem: string) {
+    if (this.store.activeElement) {
+      let classes = this.store.activeElement.classDefinition.split(' ');
+      classes = classes.filter(className => !className.includes(classNameStem));
+      classes.push(className);
+      this.store.setClasses(classes.join(' '));
+    }
+  }
+
 }
 
 export  { EditorSettingsService };
