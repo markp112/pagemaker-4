@@ -16,6 +16,7 @@ import { UnitsCommand } from './units/units.command';
 import { UploadImageCommand } from './uploadImageFile/uploadImageFile.command';
 import { ZindexCommand } from './zIndex/zindexCommand';
 import { FontCommand } from './fontCommand/fontCommand';
+import { DropShadowCommand } from './dropShadow/dropShadow.command';
 
 // rome-ignore lint/suspicious/noExplicitAny: <explanation>
 type  CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any }
@@ -26,9 +27,10 @@ class CommandProcessor {
   
   private commandMap: CommandKey = {
     'border': (pageElement: PageElement) => new BordersCommand(pageElement),
+    'border-radius': (pageElement: PageElement) => new BorderRadiusCommand(pageElement),
     'line-style': () => new LineStyleCommand(),
     'line-thickness': () => new LineThicknessCommand(),
-    'border-radius': (pageElement: PageElement) => new BorderRadiusCommand(pageElement),
+    'drop-shadow': () => new DropShadowCommand(),
     'set-units': () => new UnitsCommand(),
     'set-colour': (pageElement: PageElement) => new ColourCommand(pageElement),
     'set-image': (pageElement: PageElement) => new ImageCommand(pageElement),

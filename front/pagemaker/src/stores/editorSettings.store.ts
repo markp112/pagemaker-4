@@ -92,7 +92,18 @@ const useEditorSettingsStore = defineStore('editorStore',{
       if(this._activeElement) {
         this._activeElement.styles = styles;
       }
-    }
+    },
+
+    setClasses(classes: string) {
+      if(this._activeElement) {
+        this._activeElement.classDefinition = classes;
+      }
+    },
+
+    getClasses(): string {
+      return this._activeElement ? this._activeElement.classDefinition : '';
+    },
+
 
   }
 });
