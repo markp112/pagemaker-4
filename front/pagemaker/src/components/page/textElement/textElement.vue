@@ -8,7 +8,7 @@
     @drag.stop="onDrag($event)"
     @dragend.stop="onDragEnd()"
     @click.stop="onClick()"
-
+    @blur="isSizing=false"
   >
     <p
       ref="text-element"
@@ -21,7 +21,7 @@
     <Resize :is-active="isActive" 
       @resize-started="resizeStarted($event)"
       @on-resize="onResize($event)"
-      @resize-stopped="isSizing=!isSizing"
+      @resize-stopped="isSizing=false"
       onclick.stop=""
     />
   </div>
@@ -38,7 +38,6 @@ import { computed, ref } from '@vue/reactivity';
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import { useDrag } from '@/composables/drag/drag';
 import { stylesToString } from '../functions/stylesToString';
-
 
 
 const props = defineProps<{
@@ -77,9 +76,7 @@ const onDragEnd = () => {
 };
 
 const onClick = () => {
-  if (isSizing.value) {
-    return
-  };
+  isSizing.value = false;
   emits('onClick', thisComponent.value);
 }
 
