@@ -8,6 +8,7 @@ s<template>
     @dragstart.stop="onDragStart($event)"
     @drag.stop="onDrag($event)"
     @dragend.stop="onDragEnd()"
+    @drop.stop
 
   >
     <img
@@ -37,7 +38,6 @@ import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { useDrag } from '@/composables/drag/drag';
-
 
 export default  defineComponent({
   name: 'imageComponent',

@@ -15,10 +15,11 @@ export function useDrag(thisComponent: PageElement, mouse: useMouse ) {
   
   const onDrag = (event: MouseEvent) => {
     mouse.updatePositionCoordinates(getMousePosition(event));
-    const location = thisComponent.location;
+    const location = thisComponent.location ;
     location.left.value = Number(location.left.value) + mouse.deltaX;
     location.top.value = Number(location.top.value) + mouse.deltaY;
-    thisComponent.location = location;
+    thisComponent.location.left = { ...location.left };
+    thisComponent.location.top = { ...location.top };
   }
 
   const onDragEnd = () => {

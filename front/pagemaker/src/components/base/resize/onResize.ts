@@ -14,7 +14,7 @@ function Resize(thisComponent: PageElement, mouse: useMouse) {
       thisComponent.ref
     );
     if (boundingRect) {
-      mouse.updatePositionCoordinates({x: elementDimensions.clientX, y: elementDimensions.clientY });
+      mouse.updatePositionCoordinates({ x: elementDimensions.clientX, y: elementDimensions.clientY });
       const boxDimensions: Dimension = {
         height: calculateChangeInDimension(boundingRect.height, mouse.deltaY),
         width: calculateChangeInDimension(boundingRect.width, mouse.deltaX),
@@ -38,16 +38,16 @@ function Resize(thisComponent: PageElement, mouse: useMouse) {
 
   function constrainDimensionToParent(dimension: ValueAndUnit, parentDimension: ValueAndUnit): ValueAndUnit {
     const checkedDimension = { ...dimension }
-    if(dimension.value  > parentDimension.value) {
+    if (dimension.value > parentDimension.value) {
       checkedDimension.value = parentDimension.value;
     }
     return checkedDimension;
   }
 
   function resizeComponent(boxDimensions: Dimension){
-    thisComponent.dimension.height = boxDimensions.height;
-    thisComponent.dimension.width = boxDimensions.width;
-    if(thisComponent.type === 'imageElement') {
+    thisComponent.dimension.height = { ...boxDimensions.height };
+    thisComponent.dimension.width = { ...boxDimensions.width };
+    if (thisComponent.type === 'imageElement') {
       (thisComponent as ImageElement).container.naturalSize.height = boxDimensions.height;
       (thisComponent as ImageElement).container.naturalSize.width = boxDimensions.width
     }

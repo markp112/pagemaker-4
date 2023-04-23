@@ -20,5 +20,8 @@ interface ImageElement extends PageElement {
 };
 
 interface ButtonElement extends PageElement {};
+interface TextElement extends PageElement {
+  content: string;
+}
 
-export type {ContainerProps, ImageProps, ImageElement, ButtonElement };
+export type {ContainerProps, ImageProps, ImageElement, ButtonElement, TextElement };

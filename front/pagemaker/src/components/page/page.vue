@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5 overflow-hidden relative" 
+  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5 overflow-auto relative" 
     :style="getScaledPageSize"
     ref="page"
     id="page"
@@ -12,6 +12,7 @@
       :key="index"
       :index="index"
       v-bind="getProps(component)"
+      :thisComponent="component"
       @dragover.prevent
       @drop.prevent="onDrop($event)"
       @OnClick="containedElementClick($event)"
@@ -30,6 +31,7 @@ import type { Dimension } from '@/classes/dimension';
 import type { ValueAndUnit } from '@/classes/units';
 import imageElement from './image/imageElement.vue';
 import buttonElement from './button/button-element.vue';
+import textElement from './textElement/textElement.vue';
 
 const PAGE_REF = 'page';
 
@@ -51,7 +53,7 @@ export default defineComponent({
     container: Container,
     imageElement: imageElement,
     buttonElement: buttonElement,
-
+    textElement: textElement
   },
 
   data() {
@@ -83,7 +85,7 @@ export default defineComponent({
     
   methods: {
     getProps(component: PageElement) {
-      return {component: ContainerVue, props: {thisComponent: component}};
+      return { component: ContainerVue, props: { thisComponent: component } };
     },
 
     getDimension(dimension: ValueAndUnit): string {

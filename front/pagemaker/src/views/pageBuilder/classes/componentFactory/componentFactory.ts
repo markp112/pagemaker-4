@@ -3,7 +3,7 @@ import { ADimension } from '@/classes/dimension';
 import { ALocation } from '@/classes/location';
 import type { ValueAndUnit } from '@/classes/units';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
-import type { ButtonElement, ImageElement } from '@/components/page/model/imageElement/imageElement';
+import type { ButtonElement, ImageElement, TextElement } from '@/components/page/model/imageElement/imageElement';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
 import type { PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
@@ -18,14 +18,14 @@ function ComponentFactory() {
     'buttonElement':(component: ToolbarComponentItem, parentReference: string) => createButton(component, parentReference),
     'navBar':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'pageTemplate':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
-    'text':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'textElement':(component: ToolbarComponentItem, parentReference: string) => createText(component, parentReference),
     'imageElement':(component: ToolbarComponentItem, parentReference: string) => createImage(component, parentReference),
     'rootContainer': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'page': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
   };
 
-  function createComponent(component: ToolbarComponentItem, parentRefernce: string): PageElement | PageContainerInterface {
-    const pageElement = ComponentMap[component.type](component, parentRefernce);
+  function createComponent(component: ToolbarComponentItem, parentReference: string): PageElement | PageContainerInterface {
+    const pageElement = ComponentMap[component.type](component, parentReference);
     return pageElement;
   }
 
@@ -65,6 +65,12 @@ function ComponentFactory() {
     buttonElement.content = 'Click me';
     return buttonElement;
   }
+
+  function createText(component: ToolbarComponentItem, parentReference: string): TextElement {
+    const textElement = createBaseElement(component, parentReference);
+    textElement.content = 'hello world';
+    return textElement;
+  } 
 
   function createBaseElement(component: ToolbarComponentItem, parentReference: string): PageElement {
     const ref = component.componentRef;
