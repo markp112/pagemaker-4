@@ -115,7 +115,7 @@ type ComponentTypesString =
   | 'buttonElement'
   | 'navBar'
   | 'pageTemplate'
-  | 'text'
+  | 'textElement'
   | 'imageElement'
   | 'rootContainer'
   | 'page';
@@ -140,7 +140,8 @@ interface PageElement {
 type PropsDefinition = { thisComponent: PageElement };
 
 
-export type { PageElement, 
+export type {
+  PageElement, 
   StyleTags, 
   ComponentTypesString, 
   Style,

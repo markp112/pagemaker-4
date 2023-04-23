@@ -1,6 +1,7 @@
 import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
 import { usePagesStore } from '@/stores/pages.store';
 import { axiosClient } from '../httpService';
+import { displayMessage } from '@/common/displayMessage';
 
 function pagesService() {
 
@@ -15,7 +16,7 @@ function pagesService() {
         store.setPages(pages);
       }
     } catch (error) {
-      console.log('%c⧭', 'color: #607339', error);
+      displayMessage((error as Error).message, 'error', 'Error');
       
     }
   }

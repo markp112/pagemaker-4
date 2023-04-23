@@ -24,13 +24,16 @@ function CommandsService() {
 
   function getTabs(): TabStrip[] {
     const command = getEditorCommand();
-    return command.tabs.map(tab => {
-      return {
-        displayName: tab.displayName,
-        commandPanels: tab.tabContent,
-        id: tab.displayName
-      }
-    })
+    if (command) {
+      return command.tabs.map(tab => {
+        return {
+          displayName: tab.displayName,
+          commandPanels: tab.tabContent,
+          id: tab.displayName
+        }
+      })
+    }
+    return [];
   }
 
   function setActiveTab(pageElement: string, tab: string) {
@@ -67,11 +70,11 @@ function CommandsService() {
       displayName: tabGroupPartial.displayName,
       tabContent: []
     };
-    return await createNewTabGroup(tabGroup);
+    return createNewTabGroup(tabGroup);
   }
 
   async function createNewTabGroup(tabGroup: TabGroup): Promise<TabGroup> {
-    return await axiosClient().post<TabGroup, TabGroup>(`${BASE_ROUTE}/page-element/tab-group`, tabGroup);
+    return axiosClient().post<TabGroup, TabGroup>(`${BASE_ROUTE}/page-element/tab-group`, tabGroup);
   }
 
   return { fetchCommandHierarchy,
