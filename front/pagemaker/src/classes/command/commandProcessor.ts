@@ -26,7 +26,7 @@ class CommandProcessor {
   
   constructor(private pageElement: PageElement, private commandHistory: CommandHistory<CommandProperties>) {};
   
-  private commandMap: CommandKey = {
+  private readonly commandMap: CommandKey = {
     'border': (pageElement: PageElement) => new BordersCommand(pageElement),
     'border-radius': (pageElement: PageElement) => new BorderRadiusCommand(pageElement),
     'line-style': () => new LineStyleCommand(),

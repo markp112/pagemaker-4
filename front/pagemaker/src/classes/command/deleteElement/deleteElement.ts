@@ -3,7 +3,9 @@ import type { Command } from '../model/command';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 
 class DeleteElementCommand implements Command {
-  constructor(private pageElement: PageElement, private service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly pageElement: PageElement,
+    private readonly service: EditorSettingsService = new EditorSettingsService()
+  ) {};
 
   execute(): void {
       const elementRef = this.pageElement.ref;

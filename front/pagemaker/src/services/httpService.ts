@@ -2,9 +2,9 @@ import { displayMessage } from '@/common/displayMessage';
 import { useAuthStore } from '@/stores/auth.store';
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
 
-export type HttpResponse = {
+export type HttpResponse<T> = {
   status: number,
-  data?: {}
+  data?: T
 };
 
 const backEndClient = axios.create({
@@ -143,19 +143,19 @@ async function performDelete(path: string, config: AxiosRequestConfig = {}): Pro
 function  axiosClient() {
 
   async function get<T>(path: string): Promise<T> {
-    return await performGet<T>(path);
+    return performGet<T>(path);
   }
 
   async function post<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
-    return await performPost<T, U>(path, payload, config);
+    return performPost<T, U>(path, payload, config);
   }
 
   async function postMultiPart<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
-    return await performMultipartPost<T, U>(path, payload, config);
+    return performMultipartPost<T, U>(path, payload, config);
   }
 
   async function put<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
-    return await performPut<T, U>(path, payload, config);
+    return performPut<T, U>(path, payload, config);
   }
 
   async function deleteResource(path: string): Promise<void> {

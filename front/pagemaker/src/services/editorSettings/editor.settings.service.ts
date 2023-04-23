@@ -10,12 +10,12 @@ import type { PageContainerInterface } from '@/components/page/model/pageContain
 
 class EditorSettingsService {
 
-  constructor(private store = useEditorSettingsStore(), 
-    private imagesStore = useImagesStore(),
-    private fileUploadService = FileUploadService(),
-    private authStore = useAuthStore(),
-    private useUserService = userService(),
-    private pageStore = usePageStore(),
+  constructor(private readonly store = useEditorSettingsStore(), 
+    private readonly imagesStore = useImagesStore(),
+    private readonly fileUploadService = FileUploadService(),
+    private readonly authStore = useAuthStore(),
+    private readonly useUserService = userService(),
+    private readonly pageStore = usePageStore(),
   ) {}
 
   getLineStyle(): LineStyle {
@@ -95,7 +95,7 @@ class EditorSettingsService {
   }
 
   async uploadImageFile(file: File) {
-    return await this.fileUploadService.uploadFile(file, this.authStore.userUid);
+    return this.fileUploadService.uploadFile(file, this.authStore.userUid);
   }
 
   applyStyle(style: Style) {
@@ -107,11 +107,12 @@ class EditorSettingsService {
   }
 
   applyClass(className: string, classNameStem: string) {
+    const CLASS_NAME_SEPARATOR = ' ';
     if (this.store.activeElement) {
-      let classes = this.store.activeElement.classDefinition.split(' ');
+      let classes = this.store.activeElement.classDefinition.split(CLASS_NAME_SEPARATOR);
       classes = classes.filter(className => !className.includes(classNameStem));
       classes.push(className);
-      this.store.setClasses(classes.join(' '));
+      this.store.setClasses(classes.join(CLASS_NAME_SEPARATOR));
     }
   }
 

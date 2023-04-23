@@ -52,7 +52,6 @@ import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue'
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 import type { CommandProperties } from '@/classes/command/model/command';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
-import ColoursContainer from '@/components/base/editorButtons/editorContainers/colours/coloursContainer.vue';
 import { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { CommandsService } from '@/services/commandButtons/commandButtons.service';
@@ -90,7 +89,6 @@ const trashCan: Icon = {
     Scaler,
     SettingsPanelVue: settingsPanelVue,
     TabstripContainer: tabstripContainer,
-    ColoursContainer,
     ImageGallery,
     IconButton: icon
 },
