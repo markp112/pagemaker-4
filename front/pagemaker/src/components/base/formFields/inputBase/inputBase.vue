@@ -136,11 +136,4 @@ export default defineComponent({
     @apply border-solid border-site-primary;
   }
 
-  input [type="radio"] {
-    @apply w-4;
-    @apply h-4;
-    @apply bg-site-primary-light;
-    @apply p-2;
-
-  }
 </style>

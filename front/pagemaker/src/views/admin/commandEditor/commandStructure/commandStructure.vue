@@ -121,9 +121,11 @@ const sourceDragElementType = ref();
     store.setTabList(item);
   }
 
-  const createNewPageElement = async (element: string) => {
-    await service.createPageElement(element);
-    store.createNewPageElement(element);
+  const createNewPageElement = async (element: Field[]) => {
+    console.log('%c⧭', 'color: #f200e2', element)
+    const newEelement =element[0].value;
+    await service.createPageElement(newEelement);
+    store.createNewPageElement(newEelement);
   };
 
   const addNewTabElement = async (tabName: Field[]) => {

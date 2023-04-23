@@ -12,12 +12,14 @@
     @dragend.self.stop="onDragEnd"
     @click.stop.self="onClick()"
     @drop.prevent="onDrop($event)"
+    @blur="onBlur()"
   >
     <component v-for="(pageElement, index) in getPageElements()"
       :is="pageElement.componentHTMLTag"
       :key="index"
       :index="index"
       v-bind="getProps(pageElement)"
+      :thisComponent="pageElement"
       @onClick="containedElementClick($event)"
       @dragover.prevent
       @drop.stop="onDrop"
@@ -25,6 +27,7 @@
     <Resize :is-active="isActive" 
       @resize-started="resizeStarted($event)"
       @on-resize="onResize($event)"
+      @resize-stopped="isSizing=false"
     />
   </div>
 </template>
@@ -39,6 +42,7 @@ import { Resize } from '../../base/resize/onResize';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import imageElement from '../image/imageElement.vue';
 import buttonElement from '../button/button-element.vue';
+import textElement from '../textElement/textElement.vue';
 import type { PageContainerInterface } from '../model/pageContainer/container';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { useDrag } from '@/composables/drag/drag';
@@ -50,6 +54,7 @@ export default defineComponent({
     Resize: resize,
     imageElement: imageElement,
     buttonElement: buttonElement,
+    textElement,
   },
 
   emits:['onClick'],
@@ -61,6 +66,7 @@ export default defineComponent({
       mouse: new useMouse(),
       editorSettings: new EditorSettingsService(),
       isDragging: false,
+      isSizing: false,
       elementDrag: useDrag,
     }
   },
@@ -115,15 +121,25 @@ export default defineComponent({
     },
 
     resizeStarted(event: MouseEvent ) {
+      this.isSizing=true;
       this.mouse.updatePositionEvent(event)
     },
       
     onResize(aDimension: ClientCoordinates) {
-      Resize(this.thisComponent as PageContainerInterface, this.mouse as useMouse).onResize(aDimension);
+      if (this.isSizing) {
+        Resize(this.thisComponent as PageContainerInterface, this.mouse as useMouse).onResize(aDimension);
+      }
     },
 
     onClick() {
+      this.isSizing = false;
       this.$emit('onClick', this.thisComponent);
+    },
+
+    onBlur() {
+      this.isActive = false;
+      this.isDragging = false;
+      this.isSizing = false;
     },
 
     containedElementClick(pageElement: PageElement): void {

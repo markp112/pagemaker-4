@@ -1,5 +1,5 @@
 s<template>
-  <div class="relative select-none overflow-hidden"
+  <div class="relative select-none overflow-hidden "
     :ref="getId()"
     :id="getId()"
     :class="thisComponent.classDefinition"
@@ -9,6 +9,7 @@ s<template>
     @drag.stop="onDrag($event)"
     @dragend.stop="onDragEnd()"
     @drop.stop
+    @blur="isSizing=false"
 
   >
     <img
@@ -81,9 +82,7 @@ export default  defineComponent({
     },
 
     onImageClick() {
-      if(this.isSizing) {
-        return;
-      }
+      this.isSizing = false;
       this.$emit('onClick', this.thisComponent);
     },
 

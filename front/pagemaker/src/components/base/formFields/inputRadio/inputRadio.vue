@@ -61,13 +61,15 @@ export default defineComponent({
 
 </script>
 
-<style lang="css" scoped>
+<style lang="css">
 
 input[type="radio"] {
   -webkit-appearance: none;
   appearance: none;
-  background-color: #ffeeee;
+  background-color: #dad0d0;
   margin: 0;
+  margin-left: 1em;
+  margin-bottom: 0.5em;
   font: inherit;
   color: #4a3d94;
   width: 0.8em;
