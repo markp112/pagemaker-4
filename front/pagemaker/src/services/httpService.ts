@@ -2,9 +2,9 @@ import { displayMessage } from '@/common/displayMessage';
 import { useAuthStore } from '@/stores/auth.store';
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
 
-export type HttpResponse = {
+export type HttpResponse<T> = {
   status: number,
-  data?: {}
+  data?: T
 };
 
 const backEndClient = axios.create({
@@ -43,20 +43,21 @@ function getRoute(path: string): string {
 
 async function performGet<T>(path: string): Promise<T> {
   const route = getRoute(path);
-  const response = await backEndClient.get(route, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`,
-    }
-  });
-  console.log('%c⧭', 'color: #e50000', response.data);
-  return new Promise((resolve, reject) => {
+  try {
+    const response = await backEndClient.get(route, {
+      headers: {
+        'Authorization': `Bearer ${getToken()}`,
+      }
+    });
     if (response.status !== 200) {
       displayMessage(response.data.data.err, 'error', 'Failed');
-      reject(response.data.err);
-    } else {
-      resolve(response.data.data);
     }
-  });
+    return <T>response.data.data;
+  } catch (err) {
+    const msg = (err as Error).message;
+    displayMessage(msg, 'error', 'Error');
+    return <T>null;
+  }
 }
 
 async function performPost<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
@@ -142,19 +143,19 @@ async function performDelete(path: string, config: AxiosRequestConfig = {}): Pro
 function  axiosClient() {
 
   async function get<T>(path: string): Promise<T> {
-    return await performGet<T>(path);
+    return performGet<T>(path);
   }
 
   async function post<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
-    return await performPost<T, U>(path, payload, config);
+    return performPost<T, U>(path, payload, config);
   }
 
   async function postMultiPart<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
-    return await performMultipartPost<T, U>(path, payload, config);
+    return performMultipartPost<T, U>(path, payload, config);
   }
 
   async function put<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
-    return await performPut<T, U>(path, payload, config);
+    return performPut<T, U>(path, payload, config);
   }
 
   async function deleteResource(path: string): Promise<void> {

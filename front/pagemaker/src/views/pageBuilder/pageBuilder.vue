@@ -21,6 +21,11 @@
       :class="sidePanelWidth"
       @toggle-clicked="resizePanel()"
     >
+      <span class="flex flex-row justify-end">
+        <IconButton :iconImage="trashCan"
+          @icon-click="deletePageElement()"
+        />
+      </span>
       <TabstripContainer :data="getTabsForElement"
         @onClick="tabClicked($event)"
         @onButtonClick="handleButtonClick($event)"/>
@@ -47,12 +52,13 @@ import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue'
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
 import type { CommandProperties } from '@/classes/command/model/command';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
-import ColoursContainer from '@/components/base/editorButtons/editorContainers/colours/coloursContainer.vue';
 import { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { CommandsService } from '@/services/commandButtons/commandButtons.service';
 import type { TabPanel } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
 import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
+import icon from '@/components/utility/icon/icon.vue';
+import type { Icon } from '@/components/utility/icon/model/model';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -67,18 +73,25 @@ const sliderPosition: SliderPosition = {
   top: 'top-0',
 };
 
+const trashCan: Icon = {
+  classDef: '',
+  icon: 'trash_can_32.png',
+  tooltip: 'delete element',
+  id: 'deleteElement'
+};
+
   export default defineComponent({
     name: 'pageBuilder',
     
     components: {
-      PageCanvas,
-      Toolbar: toolbarPanelVue,
-      Scaler,
-      SettingsPanelVue: settingsPanelVue,
-      TabstripContainer: tabstripContainer,
-      ColoursContainer,
-      ImageGallery
-    },
+    PageCanvas,
+    Toolbar: toolbarPanelVue,
+    Scaler,
+    SettingsPanelVue: settingsPanelVue,
+    TabstripContainer: tabstripContainer,
+    ImageGallery,
+    IconButton: icon
+},
     
     data() {
       return {
@@ -96,6 +109,7 @@ const sliderPosition: SliderPosition = {
         editorSettingsService: new EditorSettingsService(),
         commandButtonService: CommandsService(),
         tabContent: [] as TabPanel[],
+        trashCan: trashCan,
       }
     },
     
@@ -177,7 +191,18 @@ const sliderPosition: SliderPosition = {
 
       tabClicked(commandGroupId: string) {
       console.log('%c⧭', 'color: #00a3cc', commandGroupId)
+      },
+
+      deletePageElement() {
+        const payload: CommandProperties = {
+          commandName: 'delete-element',
+          commandType: 'direct',
+          payload: true,
+        }
+        this.handleButtonClick(payload);
       }
+
+
     },
 
   })

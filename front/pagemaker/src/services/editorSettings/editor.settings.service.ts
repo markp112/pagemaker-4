@@ -2,17 +2,20 @@ import type { Units } from '@/components/page/model/model';
 import type { LineStyle, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 import { useImagesStore } from '@/stores/images.store';
+import { usePageStore } from '@/stores/page.store';
 import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
 import { userService } from '@/services/user/userService';
 import { useAuthStore } from '@/stores/auth.store';
+import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
 
 class EditorSettingsService {
 
-  constructor(private store = useEditorSettingsStore(), 
-    private imagesStore = useImagesStore(),
-    private fileUploadService = FileUploadService(),
-    private authStore = useAuthStore(),
-    private useUserService = userService()
+  constructor(private readonly store = useEditorSettingsStore(), 
+    private readonly imagesStore = useImagesStore(),
+    private readonly fileUploadService = FileUploadService(),
+    private readonly authStore = useAuthStore(),
+    private readonly useUserService = userService(),
+    private readonly pageStore = usePageStore(),
   ) {}
 
   getLineStyle(): LineStyle {
@@ -92,7 +95,7 @@ class EditorSettingsService {
   }
 
   async uploadImageFile(file: File) {
-    return await this.fileUploadService.uploadFile(file, this.authStore.userUid);
+    return this.fileUploadService.uploadFile(file, this.authStore.userUid);
   }
 
   applyStyle(style: Style) {
@@ -104,13 +107,36 @@ class EditorSettingsService {
   }
 
   applyClass(className: string, classNameStem: string) {
+    const CLASS_NAME_SEPARATOR = ' ';
     if (this.store.activeElement) {
-      let classes = this.store.activeElement.classDefinition.split(' ');
+      let classes = this.store.activeElement.classDefinition.split(CLASS_NAME_SEPARATOR);
       classes = classes.filter(className => !className.includes(classNameStem));
       classes.push(className);
-      this.store.setClasses(classes.join(' '));
+      this.store.setClasses(classes.join(CLASS_NAME_SEPARATOR));
     }
   }
+
+  deleteElement(elementRef: string) {
+    if (this.store.activeElement) {
+      const pageElements: PageElement[] = <PageElement[]>this.pageStore.pageElements;
+      this.findAndDeleteElement(elementRef, pageElements)
+    }
+  }
+
+
+  findAndDeleteElement(elementRef: string, pageElements: PageElement[]) {
+    for (let index = 0; index < pageElements.length; index++) {
+      if (pageElements[index].ref === elementRef) {
+        pageElements.splice(index, 1);
+        break;
+      } else {
+        if (pageElements[index].isContainer) {
+          const container: PageContainerInterface = <PageContainerInterface>pageElements[index];
+          this.findAndDeleteElement(elementRef, container.elements);
+        }
+      }
+    }
+}
 
 }
 

@@ -8,7 +8,7 @@
       @mouseover="displayTooltip(true)"
       @mouseleave="displayTooltip(false)"
     />
-    <tooltip :showToolTip="showToolTip" :tooltip="iconImage.tooltip"></tooltip>
+    <tooltip :showToolTip="showToolTip" :tooltip="iconImage.tooltip" ></tooltip>
   </div>
 </template>
 
