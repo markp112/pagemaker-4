@@ -17,6 +17,7 @@ import { UploadImageCommand } from './uploadImageFile/uploadImageFile.command';
 import { ZindexCommand } from './zIndex/zindexCommand';
 import { FontCommand } from './fontCommand/fontCommand';
 import { DropShadowCommand } from './dropShadow/dropShadow.command';
+import { DeleteElementCommand } from './deleteElement/deleteElement';
 
 // rome-ignore lint/suspicious/noExplicitAny: <explanation>
 type  CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any }
@@ -51,7 +52,7 @@ class CommandProcessor {
     'bring-to-front': (pageElement: PageElement) => new ZindexCommand(pageElement),
     'show-gallery': () => new ImageLibraryCommand(),
     'upload-image-file': (pageElement: PageElement) => new UploadImageCommand(pageElement),
-
+    'delete-element': (pageElement: PageElement) => new DeleteElementCommand(pageElement),
   };
 
   processCommand(commandProperties: CommandProperties) {

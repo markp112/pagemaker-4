@@ -2,9 +2,11 @@ import type { Units } from '@/components/page/model/model';
 import type { LineStyle, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 import { useImagesStore } from '@/stores/images.store';
+import { usePageStore } from '@/stores/page.store';
 import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
 import { userService } from '@/services/user/userService';
 import { useAuthStore } from '@/stores/auth.store';
+import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
 
 class EditorSettingsService {
 
@@ -12,7 +14,8 @@ class EditorSettingsService {
     private imagesStore = useImagesStore(),
     private fileUploadService = FileUploadService(),
     private authStore = useAuthStore(),
-    private useUserService = userService()
+    private useUserService = userService(),
+    private pageStore = usePageStore(),
   ) {}
 
   getLineStyle(): LineStyle {
@@ -111,6 +114,28 @@ class EditorSettingsService {
       this.store.setClasses(classes.join(' '));
     }
   }
+
+  deleteElement(elementRef: string) {
+    if (this.store.activeElement) {
+      const pageElements: PageElement[] = <PageElement[]>this.pageStore.pageElements;
+      this.findAndDeleteElement(elementRef, pageElements)
+    }
+  }
+
+
+  findAndDeleteElement(elementRef: string, pageElements: PageElement[]) {
+    for (let index = 0; index < pageElements.length; index++) {
+      if (pageElements[index].ref === elementRef) {
+        pageElements.splice(index, 1);
+        break;
+      } else {
+        if (pageElements[index].isContainer) {
+          const container: PageContainerInterface = <PageContainerInterface>pageElements[index];
+          this.findAndDeleteElement(elementRef, container.elements);
+        }
+      }
+    }
+}
 
 }
 

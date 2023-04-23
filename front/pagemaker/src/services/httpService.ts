@@ -43,20 +43,21 @@ function getRoute(path: string): string {
 
 async function performGet<T>(path: string): Promise<T> {
   const route = getRoute(path);
-  const response = await backEndClient.get(route, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`,
-    }
-  });
-  console.log('%c⧭', 'color: #e50000', response.data);
-  return new Promise((resolve, reject) => {
+  try {
+    const response = await backEndClient.get(route, {
+      headers: {
+        'Authorization': `Bearer ${getToken()}`,
+      }
+    });
     if (response.status !== 200) {
       displayMessage(response.data.data.err, 'error', 'Failed');
-      reject(response.data.err);
-    } else {
-      resolve(response.data.data);
     }
-  });
+    return <T>response.data.data;
+  } catch (err) {
+    const msg = (err as Error).message;
+    displayMessage(msg, 'error', 'Error');
+    return <T>null;
+  }
 }
 
 async function performPost<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
