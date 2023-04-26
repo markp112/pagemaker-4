@@ -79,17 +79,6 @@ export default defineComponent({
 })
 </script>
 <style lang="css">
-.fade-enter-active {
-  transition: opacity 0.5s;
-}
-
-.fade-leave-active {
-  transition: opacity 0.7s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
 
 .tooltip-container {
   position: relative;
@@ -105,7 +94,7 @@ export default defineComponent({
 .tooltip {
   padding: 8px;
   z-index: 100;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 2s ease-in-out;
   top: 0;
   left: 0;
   transform: translate(-100%, -100%)
