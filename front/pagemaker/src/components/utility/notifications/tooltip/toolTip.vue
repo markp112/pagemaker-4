@@ -1,11 +1,15 @@
 <template>
-  <span v-if="show"
-    class="tooltip-box"
-    :class="tooltipPosition"
-    role="alert"
-  >
-    {{ $props.tooltip }}
+  <div class="tooltip-container" ref="tooltipContainer">
+    <span class="tooltip-trigger" @mouseenter="setTooltipPosition($event)">
+    <slot></slot>
   </span>
+    <div class="tooltip tooltip-box"
+      v-if="show"
+      :style="{ top: tooltipTop , left: tooltipLeft }"
+      ref="tooltip"
+    >{{ tooltip }}
+  </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -22,48 +26,55 @@ export default defineComponent({
 
   data() {
     return {
-      tooltipPosition: '',
+      tooltipLeft: '0px',
+      tooltipTop: '0px',
     }
   },
 
   computed: {
     show(): boolean {
-      return this.$props.showToolTip && this.tooltip !=='';
+      if (this.$props.tooltip) {
+        return this.$props.showToolTip ;
+      }
+      return false;
     },
   },
 
   methods: {
-    showTooltip(event: MouseEvent) {
-      if (!event.target) {
+
+    setTooltipPosition(event: MouseEvent) {
+      const tooltipElement = <HTMLElement>(this.$refs.tooltip);
+      if(!tooltipElement) {
         return;
       }
-      const eventTarget = event.target as HTMLElement;
-      const tooltip = eventTarget.previousElementSibling as HTMLDivElement;
-      const spaceAbove = eventTarget.offsetTop - tooltip.offsetHeight;
-      const spaceBelow = window.innerHeight - eventTarget.offsetTop - eventTarget.offsetHeight - tooltip.offsetHeight;
-      const spaceLeft = eventTarget.offsetLeft - tooltip.offsetWidth;
-      const spaceRight = window.innerWidth - eventTarget.offsetLeft - eventTarget.offsetWidth - tooltip.offsetWidth;
-      
-      this.tooltipPosition = '';
-      
-      if (spaceAbove > 0) {
-        this.tooltipPosition = 'top';
-    } else if (spaceBelow > 0) {
-      this.tooltipPosition = 'bottom';
-    }
+      const tooltipWidth = tooltipElement.offsetWidth;
+      const tooltipHeight = tooltipElement.offsetHeight;
+      const containerElement = this.$refs.tooltipContainer as HTMLElement;
+      const containerRect = containerElement.getBoundingClientRect();
+      const availableSpace = {
+        top: containerRect.top,
+        right: window.innerWidth - containerRect.right,
+        bottom: window.innerHeight - containerRect.bottom,
+        left: containerRect.left
+      };
+      if (availableSpace.bottom >= tooltipHeight) {
+        this.tooltipTop = containerRect.bottom - containerRect.top + 'px';
+      } else if (availableSpace.top >= tooltipHeight) {
+        this.tooltipTop = (containerRect.top - tooltipHeight) + 'px';
+      } else {
+        this.tooltipTop = (window.innerHeight - tooltipHeight) + 'px';
+      }
 
-    if ((spaceLeft > 0 && this.tooltipPosition === 'bottom') || (spaceRight < 0 && this.tooltipPosition === 'top')) {
-      this.tooltipPosition += ' left';
-    } else if ((spaceRight > 0 && this.tooltipPosition === 'bottom') || (spaceLeft < 0 && this.tooltipPosition === 'top')) {
-      this.tooltipPosition += ' right';
-    }
-
-    tooltip.style.display = 'block';
-  },
-    hideTooltip(event: MouseEvent) {
-      const tooltip = (event.target as HTMLElement).previousElementSibling;
-      // tooltip.style.display = 'none';
+      if (availableSpace.right <= tooltipWidth) {
+        this.tooltipLeft = containerRect.right - containerRect.left - (tooltipWidth / 2) + 'px';
+      } else if (containerRect.left <= tooltipWidth) {
+        console.log('here')
+        this.tooltipLeft = (containerRect.right + (tooltipWidth)) + 'px';
+      } else {
+        this.tooltipLeft = '0';
+      }
     },
+  
   }
 })
 </script>
@@ -80,50 +91,34 @@ export default defineComponent({
   opacity: 0;
 }
 
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
 .tooltip-box {
   @apply absolute text-xs z-20 bg-site-surface;
-  @apply -right-36 top-0 border-t-4 border-site-secondary-light;
+  @apply border-t-4 border-site-secondary-light;
   @apply rounded-md py-2 shadow-lg w-32 text-center text-on-surface;
 }
 
-.tooltip-container {
-  position: relative;
-}
-
 .tooltip {
-  display: none;
-  position: absolute;
-  padding: 5px;
-  background-color: #000;
-  color: #fff;
+  padding: 8px;
+  z-index: 100;
+  transition: opacity 0.3s ease-in-out;
+  top: 0;
+  left: 0;
+  transform: translate(-100%, -100%)
 }
 
-.tooltip.top {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+.tooltip-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 
-.tooltip.bottom {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-}
 
-.tooltip.left {
-  top: 50%;
-  right: 100%;
-  transform: translateY(-50%);
-}
 
-.tooltip.right {
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-}
 
-.btn {
-  margin-top: 100px;
-}
+
 
 </style>

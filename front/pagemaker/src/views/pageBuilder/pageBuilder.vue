@@ -109,7 +109,7 @@ const trashCan: Icon = {
         editorSettingsService: new EditorSettingsService(),
         commandButtonService: CommandsService(),
         tabContent: [] as TabPanel[],
-        trashCan: trashCan,
+        trashCan,
       }
     },
     

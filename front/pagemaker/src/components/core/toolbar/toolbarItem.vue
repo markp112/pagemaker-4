@@ -1,21 +1,23 @@
 <template>
-  <span class="relative p-1">
+  <ToolTip
+    v-if="toolbarItem.tooltip !== ''"
+    :tooltip="toolbarItem.tooltip"
+    :showToolTip="getShowToolTip"
+    :tooltipPosition="tooltipPosition"
+  >
+  <span class="relative p-1 w-12">
     <img
       :src="getIcon"
       :id="toolbarItem.componentName"
       class="cursor-pointer hover:bg-secondary-100 w-12 inline-block py-2"
       @click="iconClick(toolbarItem.componentName)"
-      @mouseover="showToolTip=true"
+      @mouseover="displayTooltip(true)"
       @mouseleave="showToolTip=false"
       @dragstart="dragStart($event)"
       @dragleave="dragLeave($event)"
-      />
-    <ToolTip
-      v-if="toolbarItem.tooltip !== ''"
-      :tooltip="toolbarItem.tooltip"
-      :showToolTip="getShowToolTip"
-    ></ToolTip>
+    />
   </span>
+  </ToolTip>
 </template>
 
 <script lang="ts">
@@ -45,13 +47,13 @@ import { drag } from '@/components/utility/composables/draggable/draggable';
       return {
         showToolTip: false,
         drag: drag(),
+        tooltipPosition: ''
       }
     },
 
     setup() {
       return { getImageUrl }
     },
-
 
     computed: {
       getIcon(): string {
@@ -64,6 +66,10 @@ import { drag } from '@/components/utility/composables/draggable/draggable';
     },
 
     methods: {
+
+      displayTooltip(show: boolean) {
+        this.showToolTip = show;
+      },
 
       iconClick(componentName: string) {
         this.$emit('onClick', componentName)

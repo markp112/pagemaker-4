@@ -1,15 +1,17 @@
 <template>
-  <div class="w-8 inline-block">
-    <img
-      :id="iconImage.id"
-      class="hover: cursor-pointer"
-      :src="getIcon"
-      @click="iconClick"
-      @mouseover="displayTooltip(true)"
-      @mouseleave="displayTooltip(false)"
-    />
-    <tooltip :showToolTip="showToolTip" :tooltip="iconImage.tooltip" ></tooltip>
-  </div>
+  <tooltip :showToolTip="showToolTip" :tooltip="iconImage.tooltip">
+    <div class="w-8 inline-block">
+      <img
+        :id="iconImage.id"
+        :ref="iconImage.id"
+        class="hover: cursor-pointer"
+        :src="getIcon"
+        @click="iconClick"
+        @mouseover="displayTooltip(true)"
+        @mouseleave="displayTooltip(false)"
+      />
+    </div>
+</tooltip>
 </template>
 
 <script lang="ts">
@@ -43,8 +45,10 @@ export default defineComponent ({
   data() {
     return {
       showToolTip: false,
+      tooltipPosition:  ' left',
     }
   },
+
 
   computed: {
 
@@ -68,9 +72,11 @@ export default defineComponent ({
     },
 
     displayTooltip(show: boolean): void {
+  
       this.showToolTip = show && this.$props.iconImage.tooltip !== undefined;
-    }
-  }
+    },
+
+  },
 
 })
 </script>

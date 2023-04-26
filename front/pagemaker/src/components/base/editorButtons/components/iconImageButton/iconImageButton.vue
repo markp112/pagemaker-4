@@ -1,4 +1,5 @@
 <template>
+  <Tooltip :tooltip="buttonData.tooltip" :showToolTip="showToolTip" class="left-8">
   <div class="flex flex-row justify-center items-center relative cursor-pointer hover:bg-gray-600"
     :class="getIsActive()"
     >
@@ -9,8 +10,8 @@
       @click="handleClick()"
     />
     <slot></slot>
-    <Tooltip :tooltip="buttonData.tooltip" :showToolTip="showToolTip" class="left-8"/>
   </div>
+  </Tooltip>
 </template>
 <script lang="ts" setup>
 import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
