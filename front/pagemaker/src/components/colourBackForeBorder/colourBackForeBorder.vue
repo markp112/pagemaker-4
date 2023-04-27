@@ -9,7 +9,7 @@
       <InputRadio label="fore" name="colourSelect" value="color" @on-field-change="onSelectionChange($event)"/>
       <InputRadio label="border"
         name="colourSelect"
-        value="border"
+        value="border-color"
         @on-field-change="onSelectionChange($event)"
       />
     </fieldset>
