@@ -54,7 +54,6 @@ function ComponentFactory() {
     const defaultHeight: ValueAndUnit = { value: 200, unit: 'px' };
     const defaulWidth: ValueAndUnit = { value: 100, unit: 'px' };
     imageElement.image.scaledSize.height = { ...defaultHeight };
-    imageElement.image.scaledSize.height = { ...defaultHeight };
     imageElement.image.scaledSize.width = { ...defaulWidth };
     imageElement.image.naturalSize.height = { ...defaultHeight };
     imageElement.image.naturalSize.width = { ...defaulWidth };

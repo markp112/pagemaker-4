@@ -35,7 +35,7 @@ function pageController() {
   async function firebaseGetCollection(collectionName: string, siteId: string, pageId: string) {
     try {
       const docRef = getDocRef(collectionName, siteId, pageId);
-      return await getDoc(docRef);
+      return getDoc(docRef);
     } catch (err) {
       logger.error(err);
       throw handleError(err);
@@ -63,10 +63,10 @@ function pageController() {
       const docRef = doc(firebaseDb, collection, 'pageContent');
       const firebaseResponse = await getDoc(docRef);
       const pageContent = firebaseResponse.data() as unknown as PageContainerData;
-      console.log('%c⧭', 'color: #00e600', pageContent, 'pageConent');
       return constructResponse<PageContainerData>(pageContent, httpStatusCodes.OK);
     } catch (err) {
-      throw err;
+      const errToThrow = handleError(err);
+      throw errToThrow;
     }
   }
 

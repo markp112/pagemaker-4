@@ -6,7 +6,7 @@ import { usePageStore } from '@/stores/page.store';
 import { useSiteStore } from '@/stores/site.store';
 import { axiosClient } from '../httpService';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-import { constructPageElementContainerFromMetaData } from './dto/page.dto';
+import { constructPageElementContainerFromMetaData } from '../dto/page.dto';
 
 function PageService() {
   const NEW_PAGE = '-1';
@@ -65,7 +65,7 @@ async function createPage(page: PageMetaData) {
 }
 
   async function createPageMetaData(page: PageMetaData) {
-    return await axiosClient().post<PageMetaData, PageMetaData>(`${getRoute(page.siteId, page.pageId)}/metadata`, page);
+    return axiosClient().post<PageMetaData, PageMetaData>(`${getRoute(page.siteId, page.pageId)}/metadata`, page);
   }
 
   async function createPageContent(pageContent: PageContainerInterface, pageId: string, siteId: string) {

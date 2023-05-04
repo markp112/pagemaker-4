@@ -23,7 +23,6 @@ function swatchesController() {
       return constructResponse<ColourSwatch[]>(saturatedSwatches, httpStatusCodes.OK);
       
     } catch (err) {
-      console.log('%c⧭', 'color: #eeff00', err);
       logger.error(err);
       throw new GenericError(err);
       

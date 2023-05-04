@@ -120,7 +120,7 @@ const trashCan: Icon = {
     
     mounted() {
       this.commandHistory = new CommandHistory<CommandProperties>();
-      this.pageTitle = <string>this.$route.params.pageName
+      this.pageTitle = <string>this.$route.params.pageName;
     },
 
     computed: {

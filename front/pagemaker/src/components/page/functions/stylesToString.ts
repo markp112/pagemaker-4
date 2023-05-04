@@ -1,7 +1,6 @@
 import type { BorderStyle, Style, } from '../model/pageElement/pageElement';
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
-import { load } from 'webfontloader';
 
 function stylesToString(styleCollection: Style[]): string {
   let styles = '';

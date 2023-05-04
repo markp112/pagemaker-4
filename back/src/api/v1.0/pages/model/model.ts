@@ -16,8 +16,6 @@ interface Location {
   left: Unit,
 };
 
-type ActionEventTypes = 'Navigation' | 'none';
-
 type PageMetaData = {
   siteId: string,
   pageId: string,
