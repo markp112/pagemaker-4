@@ -34,7 +34,7 @@ import { useMouse } from '../classes/mouse/mouse';
 import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';
 import { Resize } from '../../base/resize/onResize';
 import resize from '@/components/base/resize/resize.vue';
-import { stylesToString } from '../functions/stylesToString';
+import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
@@ -101,7 +101,7 @@ export default  defineComponent({
     getDimensions(): string {
       let dimension = '' 
       if(this.thisComponent.dimension) {
-        dimension = this.thisComponent.dimension.toStyle();
+        dimension = dimensionToStyle(this.thisComponent.dimension);
       }
       return dimension;
     },
@@ -132,10 +132,10 @@ export default  defineComponent({
     getContainerStyles(): string {
       let styles = '';
       if(this.thisComponent.isAbsolute) {
-        styles = this.thisComponent.location.toStyle();
+        styles = locationToStyle(this.thisComponent.location);
       }
       if((this.thisComponent as ImageElement).container) {
-        styles += (this.thisComponent as ImageElement).container.naturalSize.toStyle();
+        styles += dimensionToStyle((this.thisComponent as ImageElement).container.naturalSize);
       }
       return styles;
     }

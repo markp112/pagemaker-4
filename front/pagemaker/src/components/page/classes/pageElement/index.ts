@@ -1,235 +1,235 @@
-import type { AnActionEvent } from '@/classes/actionEvent';
-import type { ADimension, Dimension } from '@/classes/dimension';
-import type { ALocation } from '@/classes/location';
-import type { ValueAndUnit } from '@/classes/units';
-import type { ComponentTypesString } from '@/components/core/toolbar/model';
-import type { PageElement, Style, StyleTags } from '../../model/pageElement/pageElement';
-import type { PageContainer } from '../pageContainer';
+// import type { AnActionEvent } from '@/classes/actionEvent';
+// import type { ADimension, Dimension } from '@/classes/dimension';
+// import type { ALocation } from '@/classes/location';
+// import type { ValueAndUnit } from '@/classes/units';
+// import type { PageElement, Style, StyleTags } from '../../model/pageElement/pageElement';
+// import type { PageContainerInterface } from '../../model/pageContainer/container';
 
-export class APageElement implements PageElement {
 
-  constructor(pageElementBuilder: PageElementBuilder) {
-    this._name = pageElementBuilder.name;
-    this._ref = pageElementBuilder.ref;
-    this._componentHTMLTag = pageElementBuilder.componentHTMLTag;
-    this._isContainer = pageElementBuilder.isContainer;
-    this._styles = pageElementBuilder.styles;
-    this._parent = pageElementBuilder.parent;
-    this._parentRef = pageElementBuilder.parentRef;
-    this._classDefinition = pageElementBuilder.classDefinition;
-    this._type = pageElementBuilder.type;
-    this._dimension = pageElementBuilder.dimension;
-    this._location = pageElementBuilder.location;
-    this._actionEvent = pageElementBuilder.actionEvent;
-    this.classList = pageElementBuilder.classDefinition.split(" ");
-    this._content = pageElementBuilder.content;
-    this._isAbsolute = pageElementBuilder.isAbsolute;
-  }
+// export class APageElement implements PageElement {
 
-  private _name: string; //** name of the component  */
-  private _ref: string; //**  unique ref of this component sin the Dom */
-  private _componentHTMLTag: string; //** component tag */
-  private _isContainer: boolean; //** can contain  other elements */
-  private _styles: Style[]; //** css styles */
-  private _parent!: PageContainer; //** parent Object */
-  private _parentRef: string; //** string ref to the parent */
-  private _classDefinition: string; //** String of tailwind classes to be applied to an element */
-  private _type: ComponentTypesString; //** what is this component as in image text etc */
-  private _dimension: ADimension;
-  private _location: ALocation;
-  private _actionEvent: AnActionEvent; //** if this component support events ActionEvent defines the event type and action */
-  private _content: string;
-  private classList: string[] = [];
-  private _isAbsolute = false;
+//   constructor(pageElementBuilder: PageElementBuilder) {
+//     this._name = pageElementBuilder.name;
+//     this._ref = pageElementBuilder.ref;
+//     this._componentHTMLTag = pageElementBuilder.componentHTMLTag;
+//     this._isContainer = pageElementBuilder.isContainer;
+//     this._styles = pageElementBuilder.styles;
+//     this._parent = pageElementBuilder.parent;
+//     this._parentRef = pageElementBuilder.parentRef;
+//     this._classDefinition = pageElementBuilder.classDefinition;
+//     this._type = pageElementBuilder.type;
+//     this._dimension = pageElementBuilder.dimension;
+//     this._location = pageElementBuilder.location;
+//     this._actionEvent = pageElementBuilder.actionEvent;
+//     this.classList = pageElementBuilder.classDefinition.split(" ");
+//     this._content = pageElementBuilder.content;
+//     this._isAbsolute = pageElementBuilder.isAbsolute;
+//   }
 
-  get name(): string {
-    return this._name;
-  }
+//   private _name: string; //** name of the component  */
+//   private _ref: string; //**  unique ref of this component sin the Dom */
+//   private _componentHTMLTag: string; //** component tag */
+//   private _isContainer: boolean; //** can contain  other elements */
+//   private _styles: Style[]; //** css styles */
+//   private _parent!: PageContainer; //** parent Object */
+//   private _parentRef: string; //** string ref to the parent */
+//   private _classDefinition: string; //** String of tailwind classes to be applied to an element */
+//   private _type: ComponentTypesString; //** what is this component as in image text etc */
+//   private _dimension: ADimension;
+//   private _location: ALocation;
+//   private _actionEvent: AnActionEvent; //** if this component support events ActionEvent defines the event type and action */
+//   private _content: string;
+//   private classList: string[] = [];
+//   private _isAbsolute = false;
 
-  set name(newName: string) {
-    this._name = newName;
-  }
+//   get name(): string {
+//     return this._name;
+//   }
 
-  get ref(): string {
-    return this._ref;
-  }
+//   set name(newName: string) {
+//     this._name = newName;
+//   }
 
-  set ref(newRef: string) {
-    this._ref = newRef;
-  }
+//   get ref(): string {
+//     return this._ref;
+//   }
 
-  get componentHTMLTag(): string {
-    return this._componentHTMLTag;
-  }
+//   set ref(newRef: string) {
+//     this._ref = newRef;
+//   }
 
-  set componentHTMLTag(newComponent: string) {
-    this._componentHTMLTag = newComponent;
-  }
+//   get componentHTMLTag(): string {
+//     return this._componentHTMLTag;
+//   }
 
-  get isContainer(): boolean {
-    return this._isContainer;
-  }
+//   set componentHTMLTag(newComponent: string) {
+//     this._componentHTMLTag = newComponent;
+//   }
 
-  set isContainer(newValue: boolean) {
-    this._isContainer = newValue;
-  }
+//   get isContainer(): boolean {
+//     return this._isContainer;
+//   }
 
-  get styles(): Style[] {
-    return this._styles;
-  }
+//   set isContainer(newValue: boolean) {
+//     this._isContainer = newValue;
+//   }
 
-  get type(): ComponentTypesString {
-    return this._type;
-  }
+//   get styles(): Style[] {
+//     return this._styles;
+//   }
 
-  set type(type: ComponentTypesString) {
-    this._type = type;
-  }
+//   get type(): ComponentTypesString {
+//     return this._type;
+//   }
 
-  get classDefinition(): string {
-    return this.classList.join(' ').trim();
-  }
+//   set type(type: ComponentTypesString) {
+//     this._type = type;
+//   }
 
-  set classDefinition(definition: string) {
-    this._classDefinition = definition;
-  }
+//   get classDefinition(): string {
+//     return this.classList.join(' ').trim();
+//   }
 
-  get parent(): PageContainer {
-    return this._parent;
-  }
+//   set classDefinition(definition: string) {
+//     this._classDefinition = definition;
+//   }
 
-  set parent(newParent: PageContainer) {
-    this._parent = newParent;
-  }
+//   get parent(): PageContainer {
+//     return this._parent;
+//   }
 
-  get parentRef(): string {
-    return this._parentRef;
-  }
+//   set parent(newParent: PageContainer) {
+//     this._parent = newParent;
+//   }
 
-  set parentRef(parentRef: string) {
-    this._parentRef = parentRef;
-  }
+//   get parentRef(): string {
+//     return this._parentRef;
+//   }
 
-  get dimension(): ADimension {
-    return this._dimension;
-  }
+//   set parentRef(parentRef: string) {
+//     this._parentRef = parentRef;
+//   }
 
-  get location(): ALocation {
-    return this._location;
-  }
+//   get dimension(): ADimension {
+//     return this._dimension;
+//   }
 
-  get actionEvent(): AnActionEvent {
-    return this._actionEvent;
-  }
+//   get location(): ALocation {
+//     return this._location;
+//   }
 
-  set actionEvent(actionEvent: AnActionEvent) {
-    this._actionEvent = actionEvent;
-  }
+//   get actionEvent(): AnActionEvent {
+//     return this._actionEvent;
+//   }
 
-  get id(): number {
-    const index = this._ref.indexOf("::");
-    return parseInt(this._ref.substring(index + 1));
-  }
+//   set actionEvent(actionEvent: AnActionEvent) {
+//     this._actionEvent = actionEvent;
+//   }
 
-  get content(): string {
-    return this._content;
-  }
+//   get id(): number {
+//     const index = this._ref.indexOf("::");
+//     return parseInt(this._ref.substring(index + 1));
+//   }
 
-  set content(content: string) {
-    this._content = content;
-  }
+//   get content(): string {
+//     return this._content;
+//   }
 
-  get isAbsolute(): boolean {
-    return this._isAbsolute;
-  }
+//   set content(content: string) {
+//     this._content = content;
+//   }
 
-  set isAbsolute(isAbsolute: boolean) {
-    this._isAbsolute = isAbsolute;
-  }
+//   get isAbsolute(): boolean {
+//     return this._isAbsolute;
+//   }
 
-  public reSize(boxdimension: Dimension): void {
-    this._dimension.height = boxdimension.height;
-    this._dimension.width = boxdimension.width;
-  }
+//   set isAbsolute(isAbsolute: boolean) {
+//     this._isAbsolute = isAbsolute;
+//   }
 
-  public setLocation(top: ValueAndUnit, left: ValueAndUnit): void {
-    this._location.top = top;
-    this._location.left = left;
-  }
+//   public reSize(boxdimension: Dimension): void {
+//     this._dimension.height = boxdimension.height;
+//     this._dimension.width = boxdimension.width;
+//   }
 
-  public updateLocation(newX: number, newY: number): void {
-    this.location.top.value = newY;
-    this.location.left.value = newX;
-  }
+//   public setLocation(top: ValueAndUnit, left: ValueAndUnit): void {
+//     this._location.top = top;
+//     this._location.left = left;
+//   }
 
-  constructStyle(styleName: StyleTags, value: string): Style {
-    const style: Style = {
-      style: styleName,
-      value: value
-    };
-    return style;
-  }
+//   public updateLocation(newX: number, newY: number): void {
+//     this.location.top.value = newY;
+//     this.location.left.value = newX;
+//   }
 
-  setDefaultStyle() {
-    // to be implemented in inherited classes
-  }
+//   constructStyle(styleName: StyleTags, value: string): Style {
+//     const style: Style = {
+//       style: styleName,
+//       value: value
+//     };
+//     return style;
+//   }
 
-  addStyle(newStyle: Style) {
-    if (newStyle.style === 'transparency') {
-      const backgroundColour = this._styles.filter(el => el.style === 'background-color');
-      if (backgroundColour.length > 0) {
-        const currentStyle = backgroundColour[0];
-        const hexValue = parseInt(newStyle.value).toString(16);
-        currentStyle.value = `${currentStyle.value.substring(0,7)}${hexValue}`;
-        currentStyle.style = 'background-color'
-      }
-    }
-    this._styles = this._styles.filter(el => el.style !== newStyle.style);
-    this._styles.push(newStyle);
-  }
+//   setDefaultStyle() {
+//     // to be implemented in inherited classes
+//   }
 
-  addStyles(styles: Style[]) {
-    this._styles = [...styles];
-  }
+//   addStyle(newStyle: Style) {
+//     if (newStyle.style === 'transparency') {
+//       const backgroundColour = this._styles.filter(el => el.style === 'background-color');
+//       if (backgroundColour.length > 0) {
+//         const currentStyle = backgroundColour[0];
+//         const hexValue = parseInt(newStyle.value).toString(16);
+//         currentStyle.value = `${currentStyle.value.substring(0,7)}${hexValue}`;
+//         currentStyle.style = 'background-color'
+//       }
+//     }
+//     this._styles = this._styles.filter(el => el.style !== newStyle.style);
+//     this._styles.push(newStyle);
+//   }
 
-  removeStyle(styleToRemove: string) {
-    this._styles = this._styles.filter(el => !el.style.includes(styleToRemove));
-  }
+//   addStyles(styles: Style[]) {
+//     this._styles = [...styles];
+//   }
 
-  public updateRefWithNewId(id: string) {
-    const index = this._ref.indexOf("::");
-    const newRef = this._ref.substring(0, index + 1);
-    this._ref = `${newRef}${id}`;
-  }
+//   removeStyle(styleToRemove: string) {
+//     this._styles = this._styles.filter(el => !el.style.includes(styleToRemove));
+//   }
 
-  addClass(classDef: string): void {
-    const stem = !classDef.includes("-")
-      ? classDef
-      : classDef.substr(0, classDef.indexOf("-") + 1);
-    this.removeClass(stem);
-    this.classList.push(classDef);
-  }
+//   public updateRefWithNewId(id: string) {
+//     const index = this._ref.indexOf("::");
+//     const newRef = this._ref.substring(0, index + 1);
+//     this._ref = `${newRef}${id}`;
+//   }
 
-  getStylesToString(): string {
-    let style = "";
-    const styles: Style[] = this.styles;
-    if (styles.length > 0) {
-      styles.forEach(element => {
-        style += `${element.style}:${element.value};`;
-      });
-    }
-    style += `${this._dimension.toStyle()};`;
-    if (this.isAbsolute) {
-      style += `${this._location.toStyle()};`;
-    }
-    return style;
-  }
+//   addClass(classDef: string): void {
+//     const stem = !classDef.includes("-")
+//       ? classDef
+//       : classDef.substr(0, classDef.indexOf("-") + 1);
+//     this.removeClass(stem);
+//     this.classList.push(classDef);
+//   }
 
-  /** removeClass removes a class from the component, but it must be the full class name */
-  removeClass(classDef: string): void {
-    const tempClassList = this.classList.filter(
-      className => !className.includes(classDef)
-    );
-    this.classList = tempClassList;
-  }
-}
+//   getStylesToString(): string {
+//     let style = "";
+//     const styles: Style[] = this.styles;
+//     if (styles.length > 0) {
+//       styles.forEach(element => {
+//         style += `${element.style}:${element.value};`;
+//       });
+//     }
+//     style += `${this._dimension.toStyle()};`;
+//     if (this.isAbsolute) {
+//       style += `${this._location.toStyle()};`;
+//     }
+//     return style;
+//   }
+
+//   /** removeClass removes a class from the component, but it must be the full class name */
+//   removeClass(classDef: string): void {
+//     const tempClassList = this.classList.filter(
+//       className => !className.includes(classDef)
+//     );
+//     this.classList = tempClassList;
+//   }
+// }

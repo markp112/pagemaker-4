@@ -1,9 +1,13 @@
 <template>
-  <div class="relative">
+  <div class="ml-64 grid grid-cols-4">
+    <span class=""></span>
     <Scaler :slider="sliderSettings"
       :position="sliderPosition"
     @slider-change="sliderChange($event)"
     />
+    <span class="col-span-2 font-semibold inline-block">
+      {{ pageTitle }}
+    </span>
   </div>
   <div class="flex flex-row justify-center w-100 relative">
     <div class="mt-8 w-full">
@@ -98,6 +102,7 @@ const trashCan: Icon = {
         store: useNavMenuItemStore(),
         pageStore: usePageStore(),
         pageBuilderService: PageBuilderService(),
+        pageTitle: '',
         menuItems: [] as NavMenuItem[],
         toolbarWidth: 'w-64',
         toolbarHidden: false,
@@ -115,6 +120,7 @@ const trashCan: Icon = {
     
     mounted() {
       this.commandHistory = new CommandHistory<CommandProperties>();
+      this.pageTitle = <string>this.$route.params.pageName
     },
 
     computed: {

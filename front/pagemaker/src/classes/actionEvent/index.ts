@@ -4,7 +4,7 @@ type ActionEventTypes = 'Navigation' | 'none';
 interface ActionEvent {
   actionType: ActionEventTypes;
   eventAction: string;
-}
+};
 
 class AnActionEvent implements ActionEvent {
   private _actionType: ActionEventTypes = 'Navigation';
@@ -31,4 +31,4 @@ class AnActionEvent implements ActionEvent {
   }
 }
 
-export { AnActionEvent };
+export type { ActionEvent, ActionEventTypes };

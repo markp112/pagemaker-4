@@ -11,7 +11,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/pagebuilder',
+      path: '/pagebuilder/:pageName',
       name: 'pagebuilder',
       component:() => import('../views/pageBuilder/pageBuilder.vue'),
       meta: {

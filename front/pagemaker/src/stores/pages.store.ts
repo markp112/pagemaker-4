@@ -11,7 +11,7 @@ const usePagesStore = defineStore({
   },
 
   getters: {
-    pages: (state) => {
+    pages: (state): PageMetaData[] => {
       return state._pages;
     },
 

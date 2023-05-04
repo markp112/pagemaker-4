@@ -122,7 +122,6 @@ const sourceDragElementType = ref();
   }
 
   const createNewPageElement = async (element: Field[]) => {
-    console.log('%c⧭', 'color: #f200e2', element)
     const newEelement =element[0].value;
     await service.createPageElement(newEelement);
     store.createNewPageElement(newEelement);

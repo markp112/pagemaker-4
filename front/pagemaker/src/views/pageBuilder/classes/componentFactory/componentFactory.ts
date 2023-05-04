@@ -1,12 +1,14 @@
-import { AnActionEvent } from '@/classes/actionEvent';
-import { ADimension } from '@/classes/dimension';
-import { ALocation } from '@/classes/location';
+import type { ActionEvent } from '@/classes/actionEvent';
 import type { ValueAndUnit } from '@/classes/units';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
 import type { ButtonElement, ImageElement, TextElement } from '@/components/page/model/imageElement/imageElement';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
 import type { PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
+
+const BASE_UNIT: ValueAndUnit = { value: 0, unit: 'px' };
+const BASE_DIMENSION = { width: BASE_UNIT, height: BASE_UNIT };
+const BASE_LOCATION = { top: BASE_UNIT, left: BASE_UNIT };
 
 function ComponentFactory() {
 
@@ -41,22 +43,23 @@ function ComponentFactory() {
     const imageElement = createBaseElement(component, parentReference) as ImageElement;
     imageElement.content ='imageplaceholder-100x83.png';
     imageElement.container = {
-      naturalSize: new ADimension (),
-      location: new ALocation(),
+      naturalSize: BASE_DIMENSION,
+      location: BASE_LOCATION,
     };
     imageElement.image = {
-      naturalSize: new ADimension (),
-      location: new ALocation(),
-      scaledSize: new ADimension(),
+      naturalSize: BASE_DIMENSION,
+      location: BASE_LOCATION,
+      scaledSize: BASE_DIMENSION,
     };
     const defaultHeight: ValueAndUnit = { value: 200, unit: 'px' };
     const defaulWidth: ValueAndUnit = { value: 100, unit: 'px' };
-    imageElement.image.scaledSize.height = {...defaultHeight};
-    imageElement.image.scaledSize.width = {...defaulWidth};
-    imageElement.image.naturalSize.height = {...defaultHeight};
-    imageElement.image.naturalSize.width = {...defaulWidth};
-    imageElement.container.naturalSize.height = {...defaultHeight};
-    imageElement.container.naturalSize.width = {...defaulWidth};
+    imageElement.image.scaledSize.height = { ...defaultHeight };
+    imageElement.image.scaledSize.height = { ...defaultHeight };
+    imageElement.image.scaledSize.width = { ...defaulWidth };
+    imageElement.image.naturalSize.height = { ...defaultHeight };
+    imageElement.image.naturalSize.width = { ...defaulWidth };
+    imageElement.container.naturalSize.height = { ...defaultHeight };
+    imageElement.container.naturalSize.width = { ...defaulWidth };
     return imageElement;
   }
 
@@ -79,9 +82,9 @@ function ComponentFactory() {
     const styles: Style[] = createBaseStyles();
     const parentRef = parentReference;
     const classDefinition = component.classes;
-    const location = new ALocation(component.location.left, component.location.top);
-    const dimension = new ADimension(component.dimension.height, component.dimension.width);
-    const actionEvent = new AnActionEvent('none','');
+    const location = {...component.location };
+    const dimension = { ...component.dimension }
+    const actionEvent: ActionEvent = {actionType: 'none', eventAction: '' };
     const content = '';
     const isContainer = false;
     const isAbsolute = false;

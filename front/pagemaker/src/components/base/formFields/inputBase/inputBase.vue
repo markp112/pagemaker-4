@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-5 relative">
+  <div class="grid grid-cols-5 relative w-full">
     <label for="input-field" class="w-auto p-2 col-span-2">{{ label }}:</label>
     <input
       :type="inputType"
@@ -124,10 +124,14 @@ export default defineComponent({
     @apply text-site-primary-dark;
     @apply h-8;
   }
-/* 
-  .field-wrapper {
-    @apply flex flex-row justify-start mb-2 ml-1;
-  } */
+
+  input[type="number"] {
+    @apply bg-site-surface;
+    @apply text-site-primary-dark;
+    @apply h-8;
+    @apply w-auto;
+    @apply text-right;
+  }
 
   .invalid {
     @apply border-site-warning border-dashed;

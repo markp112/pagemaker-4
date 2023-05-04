@@ -37,7 +37,7 @@ import { useMouse } from '../classes/mouse/mouse';
 import { computed, ref } from '@vue/reactivity';
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import { useDrag } from '@/composables/drag/drag';
-import { stylesToString } from '../functions/stylesToString';
+import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 
 
 const props = defineProps<{
@@ -81,7 +81,7 @@ const onClick = () => {
 }
 
 const getDimensions = (): string => {
-  return thisComponent.value.dimension.toStyle();
+  return dimensionToStyle(thisComponent.value.dimension);
 };
 
 const getId = () => {
@@ -115,7 +115,7 @@ const getStyles = (): string => {
 const getContainerStyles = (): string => {
   let styles = getStyles();
   if(thisComponent.value.isAbsolute) {
-    styles += thisComponent.value.location.toStyle();
+    styles += locationToStyle(thisComponent.value.location);
   }
   return styles;
 };
