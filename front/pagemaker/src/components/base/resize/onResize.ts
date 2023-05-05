@@ -1,5 +1,5 @@
 import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
-import { ADimension, type Dimension } from '@/classes/dimension';
+import type  { Dimension } from '@/classes/dimension';
 import type { ValueAndUnit } from '@/classes/units';
 import type { ImageElement } from '@/components/page/model/imageElement/imageElement';
 import type { useMouse } from '../../page/classes/mouse/mouse';
@@ -53,11 +53,12 @@ function Resize(thisComponent: PageElement, mouse: useMouse) {
     }
   }
 
-  function getElementDimension(htmlElement: string): ADimension {
+  function getElementDimension(htmlElement: string): Dimension {
     const element = document.getElementById(htmlElement) as HTMLDivElement;
-    const boundingRect = new ADimension();
-    boundingRect.width.value = element.getBoundingClientRect().width;
-    boundingRect.height.value = element.getBoundingClientRect().height;
+    const boundingRect: Dimension = {
+      width: { value: element.getBoundingClientRect().width, unit: 'px' },
+      height: { value: element.getBoundingClientRect().height, unit: 'px' },
+    }
     return boundingRect;
   }
 

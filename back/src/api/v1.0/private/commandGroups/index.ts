@@ -26,7 +26,6 @@ commandGroupRouter
       response = await commandGroups().get(colourPalettes);
       res.status(response.status).send(response);
     } catch (error) {
-      console.log('%c⧭', 'color: #ff0000', error);
       const response = error.getResponse();
       res.status(error._status).send(response);
     }

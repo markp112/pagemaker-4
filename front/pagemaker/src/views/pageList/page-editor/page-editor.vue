@@ -1,72 +1,87 @@
 <template>
-  <div class="flex justify-center mt-24 w-full flex-wrap h-full">
-    <div class="w-7/12 flex flex-row mb-2">
-      <p class="m-4 text-site-primary text-3xl">Page Editor</p>
-    </div>
-    <form
-      @submit.prevent="saveClick"
-      class="w-7/12 border-2 p-5 bg-gray-50"
-    >
-      <TextInput label="Name:"
-        :value="page.name"
-        :required="true"
-        place-holder="e.g Home, Blog Home and must be unique"
-        :is-validated="pageNameIsValid"
-        @validate-field="validatePageName($event)"
-        @onFieldChange="($event) => page.name = $event"
-      />
+  <div class="mt-24 w-full h-full flex flex-row justify-center flex-wrap">
+      <div class="w-7/12 flex flex-row mb-2">
+        <p class="m-4 text-site-primary text-3xl">Page Editor</p>
+      </div>
+      <form
+        @submit.prevent="saveClick"
+        class=" w-6/12 border-2 p-5 bg-gray-50 shadow-sm"
+      >
       <div class="field-wrapper">
-        <label for="icon">Select Page Icon:</label>
-        <div class="flex flex-row justify-start">
-          <span
-            class="h-8 w-8 bg-accent1 text-center font-bold align-middle border cursor-pointer relative inline-block"
-            @click="iconPickerClicked()"
-          >
-            ...
-          </span>
-          <span>
-          <img :src="getIcon(page.icon)" alt="">
-          </span>
-          <IconPicker @iconClick="iconClick($event)"
-            @on-close-click="showIconPicker = !showIconPicker"
-            id="icon" 
-            :show="showIconPicker"/>
-        </div>
+        <TextInput label="Name:"
+          :value="page.name"
+          :required="true"
+          place-holder="e.g Home, Blog Home and must be unique"
+          :is-validated="pageNameIsValid"
+          @validate-field="validatePageName($event)"
+          @onFieldChange="($event) => page.name = $event"
+        />
       </div>
       <div class="field-wrapper">
-        <label for="created">Created:</label>
+        <div class="grid grid-cols-5 w-full">
+          <label for="icon" class="col-span-2 w-full p-2">Select Page Icon:</label>
+          <div class="col-span-3 w-full">
+            <span
+              class="h-8 w-8 bg-accent1 text-center font-bold align-middle border cursor-pointer relative inline-block"
+              @click="iconPickerClicked()"
+            >
+            ...
+            </span>
+            <img :src="getIcon(page.icon)" alt="" class="inline-block h-12 w-12 ml-2">
+            <IconPicker @iconClick="iconClick($event)"
+              @on-close-click="showIconPicker = !showIconPicker"
+              id="icon" 
+              :show="showIconPicker"
+            />
+        </div>
+      </div>
+    </div>
+    <div class="field-wrapper">
+      <div class="grid grid-cols-5 w-full">
+        <label for="created" class="col-span-2 p-2">Created:</label>
         <datepicker
           v-model="page.created"
           name="created"
-          class="w-9/12 border-solid border bg-white py-1 px-2 leading-4 text-site-primary-light "
-          inputFormat="dd-MM-yyyy">
+          class="border-solid border bg-white py-1 px-2 text-site-primary-light col-span-3 w-full "
+          inputFormat="dd-MMM-yyyy">
         </datepicker>
       </div>
+    </div>
       <div class="field-wrapper">
-        <label for="edited">Background Colour:</label>
-        <span class="h-8 w-8" :style="{ 'background-color': page.backgroundColour }">
-        </span>
+        <div class="grid grid-cols-5 w-full">
+          <label for="edited" class="col-span-2 p-2 w-full">Background Colour:</label>
+          <span class="h-8 w-8 col-span-3" :style="{ 'background-color': page.backgroundColour }">
+          </span>
+        </div>
       </div>
       <div class="field-wrapper">
-        <label for="edited">Text Colour:</label>
-        <span class="h-8 w-8" :style="{ 'background-color': page.colour }">
-        </span>
+        <div class="grid grid-cols-5 w-full">
+          <label for="edited" class="col-span-2 w-full p-2">Text Colour:</label>
+          <span class="h-8 w-8 col-span-3" :style="{ 'background-color': page.colour }">
+          </span>
+        </div>
       </div>
-        <NumberInput label="Screen Width (px):"
-        :value="page.width.value"
-        place-holder="Enter max width for page width"
-        @on-field-change="($event) => page.width.value = $event"
+      <div class="field-wrapper">
+        <NumberInput label="Screen Width (px)"
+          :value="page.width.value"
+          place-holder="Enter max width for page width"
+          @on-field-change="($event) => page.width.value = $event"
         /> 
-      <NumberInput label="Screen Height (px):"
+      </div>
+      <div class="field-wrapper">
+        <NumberInput label="Screen Height (px)"
         :value="page.height.value"
         place-holder="Enter max height for page height"
         @on-field-change="($event) => page.height.value = $event"
-      />
+        />
+      </div> 
       <div class="field-wrapper">
-        <label for="edited">Last Edited:</label>
-        <span class="bg-white p-2 w-2/12 leading-4 text-site-primary-light">
+          <div class="grid grid-cols-5 w-full">
+          <label for="edited" class="w-full col-span-2 p-2">Last Edited:</label>
+          <span class="bg-white p-2 leading-4 text-site-primary-light col-span-3 w-full">
             {{ formatDate(page.edited) }}
-        </span>
+          </span>
+        </div>
       </div>
       <div class="w-full mt-8 flex justify-between">
         <BaseButton
@@ -75,16 +90,16 @@
           size="small"
           @onClick="cancelClick"
         >
-          Cancel
-        </BaseButton>
-        <SaveButton
-          :is-enabled="enableSave"
-          @onClick="saveClick()"
+        Cancel
+      </BaseButton>
+      <SaveButton
+        :is-enabled="enableSave"
+        @onClick="saveClick()"
         />
-      </div>
-      <InvalidForm :formErrors="formErrors"></InvalidForm>
-    </form>
-  </div>
+    </div>
+    <InvalidForm :formErrors="formErrors"></InvalidForm>
+  </form>
+</div>
 </template>
 
 <script lang="ts">
@@ -177,7 +192,7 @@ export default defineComponent ({
     },
     
     async saveClick() {
-      await this.pageService.savePage(this.page); 
+      await this.pageService.createPage(this.page);
       
     },
 },
@@ -185,21 +200,16 @@ export default defineComponent ({
 })
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 
+  datepicker,
+  textarea {
+    @apply w-9/12 border-solid border bg-site-surface p-2 leading-4;
+    @apply text-site-primary-dark;
+  }
 
-label {
-  @apply text-sm justify-self-start inline-block w-2/12 text-left;
-}
-
-input[type='text'],
-datepicker,
-textarea {
-  @apply w-9/12 border-solid border bg-site-surface p-2 leading-4;
-  @apply text-site-primary-dark;
-}
-
-.field-wrapper {
-  @apply flex flex-row justify-start mb-2 ml-1;
+  .field-wrapper {
+    @apply mb-2 ml-1;
+    @apply w-6/12;
 }
 </style>

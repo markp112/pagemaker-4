@@ -5,7 +5,7 @@ import { handleError } from '@errors/handleError';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
 import { logger } from '@logger/logger';
-import { PageMetaData } from '../model/model';
+import { PageContainerData, PageMetaData } from '../model/model';
 import { pagesCollectionBase, pageCollectionBase } from './common';
 
 const PAGE_COLLECTION = 'pageMetaData';
@@ -35,7 +35,7 @@ function pageController() {
   async function firebaseGetCollection(collectionName: string, siteId: string, pageId: string) {
     try {
       const docRef = getDocRef(collectionName, siteId, pageId);
-      return await getDoc(docRef);
+      return getDoc(docRef);
     } catch (err) {
       logger.error(err);
       throw handleError(err);
@@ -46,8 +46,31 @@ function pageController() {
     const collection = pageCollectionBase(siteId, pageId);
     return doc(firebaseDb, collection, collectionName);
   }
+  
+  async function savePageContent(pageContent: PageContainerData, siteId: string, pageId: string): Promise<Response> {
+    try {
+      await setDoc(doc(firebaseDb, `${siteId}${pageId}`,'pageContent'), pageContent);
+      return constructResponse<PageContainerData>(pageContent, httpStatusCodes.CREATED);
+    }  catch (err) {
+      const errToThrow = handleError(err);
+      throw errToThrow;
+    }
+  }
 
-  return { getPageMetaData, savePageMetaData };
+  async function getPageContent(siteId: string, pageId: string): Promise<Response> {
+    try {
+      const collection = `${siteId}${pageId}`
+      const docRef = doc(firebaseDb, collection, 'pageContent');
+      const firebaseResponse = await getDoc(docRef);
+      const pageContent = firebaseResponse.data() as unknown as PageContainerData;
+      return constructResponse<PageContainerData>(pageContent, httpStatusCodes.OK);
+    } catch (err) {
+      const errToThrow = handleError(err);
+      throw errToThrow;
+    }
+  }
+
+  return { getPageMetaData, savePageMetaData, savePageContent, getPageContent };
 }
 
 export { pageController };

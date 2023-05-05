@@ -33,7 +33,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { stylesToString } from '../functions/stylesToString';
+import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';
 import resize from '@/components/base/resize/resize.vue';
 import { useMouse } from '../classes/mouse/mouse';
@@ -95,7 +95,7 @@ export default defineComponent({
     getStyles(): string {
       let styles = '';
       if(this.thisComponent.isAbsolute) {
-        styles = this.thisComponent.location.toStyle();
+        styles =locationToStyle(this.thisComponent.location);
       }
       if(this.thisComponent.styles) {
         styles += stylesToString(this.thisComponent.styles)
@@ -107,7 +107,7 @@ export default defineComponent({
     getDimensions(): string {
       let dimension = '' 
       if(this.thisComponent.dimension) {
-        dimension = this.thisComponent.dimension.toStyle();
+        dimension = dimensionToStyle(this.thisComponent.dimension);
       }
       return dimension;
     },

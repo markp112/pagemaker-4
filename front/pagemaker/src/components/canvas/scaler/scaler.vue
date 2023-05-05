@@ -1,5 +1,5 @@
 <template>
-  <div :style="{'width': slider.width + 'px' }" :class="getPosition" class="z-50">
+  <div :style="{'width': slider.width + 'px' }" class="z-50">
     <label for="" class="block">{{ slider.label }}</label>
     <span class="rangeValue">{{ slider.min }}</span>
     <input class="range" 

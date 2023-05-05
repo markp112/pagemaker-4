@@ -1,5 +1,5 @@
 import { httpStatusCodes } from '../../../httpStatusCodes';
-import { ColourSwatch, ColourSwatches} from '../../../v1.0/sites/model/colourPalette';
+import { ColourSwatch, ColourSwatches} from '../../sites/model/colourPalette';
 import { constructResponse } from '../../../../common/functions/constructResponse';
 import { TinyColor } from '@ctrl/tinycolor';
 import { SwatchBuilder } from './utils/swatchBuilder';
@@ -23,7 +23,6 @@ function swatchesController() {
       return constructResponse<ColourSwatch[]>(saturatedSwatches, httpStatusCodes.OK);
       
     } catch (err) {
-      console.log('%c⧭', 'color: #eeff00', err);
       logger.error(err);
       throw new GenericError(err);
       

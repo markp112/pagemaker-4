@@ -12,7 +12,6 @@ fontsRouter
       const response = await fontsController().getGoogleFonts();
       res.status(response.status).send(response);
     } catch (error) {
-      console.log('%c⧭', 'color: #733d00', error);
       const response = error.getResponse();
       res.status(error._status).send(response);
     }

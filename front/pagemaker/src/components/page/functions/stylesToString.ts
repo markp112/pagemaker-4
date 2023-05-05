@@ -1,4 +1,6 @@
 import type { BorderStyle, Style, } from '../model/pageElement/pageElement';
+import type { Dimension } from '@/classes/dimension';
+import type { Location } from '@/classes/location';
 
 function stylesToString(styleCollection: Style[]): string {
   let styles = '';
@@ -12,10 +14,23 @@ function stylesToString(styleCollection: Style[]): string {
     } else {
       styles += getRegularStyles(style);
     }
-    styles += `;`;
+    styles += ';';
   }
   return styles;
 }
+
+function locationToStyle(location: Location): string {
+  const left = `left:${location.left.value}${location.left.unit};`;
+  const top = `top:${location.top.value}${location.top.unit};`;
+  return `${left}${top}`;
+}
+
+function dimensionToStyle(dimension: Dimension): string {
+  const height = `height:${dimension.height.value}${dimension.height.unit};`
+  const width = `width:${dimension.width.value}${dimension.width.unit};`;
+  return `${height}${width}`;
+}
+
 
 function getRegularStyles(style: Style) {
   let styleValue = `${style.style}:${style.value}`;
@@ -34,4 +49,4 @@ function getBorderStyle(borderStyle: BorderStyle) {
   return `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.colour} ${borderStyle.value}${borderStyle.unit}`;
 }
 
-export { stylesToString };
+export { stylesToString, locationToStyle, dimensionToStyle };

@@ -1,3 +1,4 @@
+
 <template>
   <div class="ml-8 bg-gray-200 p-4 grid grid-rows-8">
     <h2 class="font-bold text-xl mb-4 row-start-1 h-8">{{ pageElement }}</h2>

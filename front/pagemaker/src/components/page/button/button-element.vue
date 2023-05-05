@@ -33,7 +33,7 @@ import { EditorSettingsService } from '@/services/editorSettings/editor.settings
 import { defineComponent } from 'vue';
 import { useMouse } from '../classes/mouse/mouse';
 import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';
-import { stylesToString } from '../functions/stylesToString';
+import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 
 export default defineComponent({
   name:'buttonElement',
@@ -89,7 +89,7 @@ export default defineComponent({
     getStyles(): string {
       let styles = '';
       if(this.thisComponent.isAbsolute) {
-        styles = this.thisComponent.location.toStyle();
+        styles = locationToStyle(this.thisComponent.location);
       }
       if(this.thisComponent.styles) {
         styles += stylesToString(this.thisComponent.styles)
@@ -101,7 +101,7 @@ export default defineComponent({
   getDimensions(): string {
     let dimension = '' 
     if(this.thisComponent.dimension) {
-      dimension = this.thisComponent.dimension.toStyle();
+      dimension = dimensionToStyle(this.thisComponent.dimension);
     }
     return dimension;
   },

@@ -10,6 +10,7 @@ const usePageStore = defineStore({
   state: () => {
     return {
       _page: {} as PageMetaData,
+      _pageElement: {} as PageContainerInterface,
       _pageElements: [] as PageElement[],
       _scaledDimension: {} as Dimension,
     }
@@ -33,6 +34,12 @@ const usePageStore = defineStore({
   actions: {
     setPage(page: PageMetaData): void {
       this._page = page;
+    },
+
+    setPageElementRoot(pageElement: PageContainerInterface) {
+      this._pageElements = [];
+      this._pageElement = pageElement;
+      this._pageElements = [ ...pageElement.elements ];
     },
 
     addNewElement(pageElement: PageElement) {

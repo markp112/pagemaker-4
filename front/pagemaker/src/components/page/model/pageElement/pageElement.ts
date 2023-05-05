@@ -1,6 +1,6 @@
-import type { AnActionEvent } from '@/classes/actionEvent';
-import type { ADimension } from '@/classes/dimension';
-import type { ALocation } from '@/classes/location';
+import type { ActionEvent } from '@/classes/actionEvent';
+import type { Dimension } from '@/classes/dimension';
+import type { Location } from '@/classes/location';
 import type { Units } from '@/classes/units';
 
 type CssStyleTypes =
@@ -130,18 +130,20 @@ interface PageElement {
   parentRef: string;
   classDefinition: string;
   type: ComponentTypesString;
-  location: ALocation;
-  dimension: ADimension;
-  actionEvent: AnActionEvent;
+  location: Location;
+  dimension: Dimension;
+  actionEvent: ActionEvent;
   content: string;
   isAbsolute: boolean;
 };
+
+
 
 type PropsDefinition = { thisComponent: PageElement };
 
 
 export type {
-  PageElement, 
+  PageElement,
   StyleTags, 
   ComponentTypesString, 
   Style,

@@ -38,15 +38,6 @@ interface CommandElementCollection {
   elements: CommandElement[];
 };
 
-interface PageElementsRoot {
-  tabs: string[];
-};
-
-interface PageElementStored {
-  commandGroups: string[];
-  displayName: string;
-};
-
 interface TabContentStored {
   displayName: string,
   tabContent: string[];
@@ -64,8 +55,6 @@ export {
   CommandElement,
   CommandElementCollection,
   CommandsCollectionStored,
-  PageElementsRoot,
-  PageElementStored,
   TabContentStored,
   TabGroup,
   CommandGroup,
