@@ -65,11 +65,11 @@ async function createPage(page: PageMetaData) {
 }
 
   async function createPageMetaData(page: PageMetaData) {
-    return axiosClient().post<PageMetaData, PageMetaData>(`${getRoute(page.siteId, page.pageId)}/metadata`, page);
+    return await axiosClient().post<PageMetaData, PageMetaData>(`${getRoute(page.siteId, page.pageId)}/metadata`, page);
   }
 
   async function createPageContent(pageContent: PageContainerInterface, pageId: string, siteId: string) {
-      await axiosClient().post<PageContainerInterface, PageContainerInterface>(`${getRoute(siteId, 'page')}/${pageId}`, pageContent )
+    return await axiosClient().post<PageContainerInterface, PageContainerInterface>(`${getRoute(siteId, 'page')}/${pageId}`, pageContent )
   }
 
   async function getPageContent(siteId: string, pageId: string) {
