@@ -30,8 +30,7 @@ function sitesController() {
       });
       return constructResponse<Site[]>(sites, httpStatusCodes.OK);
     } catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -42,8 +41,7 @@ function sitesController() {
       const statusCode = isPost ? 201 : httpStatusCodes.OK
       return constructResponse<Site>(site, statusCode);
     }  catch (err) {
-      const errToThrow = handleError(err);
-      throw errToThrow;
+        handleError(err);
     }
   }
 
@@ -58,7 +56,7 @@ function sitesController() {
       ]);
       return constructResponse<void>(null, httpStatusCodes.OK)
     } catch (error) {
-      throw handleError(error);
+      handleError(error);
     }
   }
 
@@ -68,11 +66,15 @@ function sitesController() {
  }
 
   async function getSiteMaterialColours(userId: string, siteId: string) {
-    const firebaseResponse = await firebaseGetCollection('materialcolours', userId, siteId);
-    if (firebaseResponse.exists()) {
-      const materialColours = firebaseResponse.data().materialColours as unknown as MaterialColours;
-      return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
-    }
+    try {
+      const firebaseResponse = await firebaseGetCollection('materialcolours', userId, siteId);
+      if (firebaseResponse.exists()) {
+        const materialColours = firebaseResponse.data().materialColours as unknown as MaterialColours;
+        return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
+      }
+      } catch (error) {
+        handleError(error);
+      }
   }
 
   async function saveMaterialColours(userId: string, siteId: string, materialcolours: MaterialColours) {
@@ -83,16 +85,20 @@ function sitesController() {
       await setDoc(docRef, colourPalette);
       return constructResponse<MaterialColours>(materialcolours, httpStatusCodes.OK)
     } catch (err) {
-        logger.info(err);
-        throw new GenericError(err);
-      }
+        handleError(err);
+    }
   }
 
   async function getSiteColourPalette(userId: string, siteId: string) {
-    const firebaseResponse = await firebaseGetCollection(SITE_PALETTE_COLLECTION, userId, siteId);
-    if (firebaseResponse.exists()) {
-      const colourSwatches = firebaseResponse.data() as unknown as ColourSwatches;
-      return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK);
+    try {
+
+      const firebaseResponse = await firebaseGetCollection(SITE_PALETTE_COLLECTION, userId, siteId);
+      if (firebaseResponse) {
+        const colourSwatches = firebaseResponse.data() as unknown as ColourSwatches;
+        return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK);
+      }
+    } catch (err) {
+        handleError(err);
     }
   }
 
@@ -104,8 +110,7 @@ function sitesController() {
       return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK)
     }
     catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -115,10 +120,14 @@ function sitesController() {
   }
 
   async function getTypography(userId: string, siteId: string) {
-    const firebaseResponse = await firebaseGetCollection(TYPOGRAPHY, userId, siteId);
-    if (firebaseResponse.exists()) {
-      const typography = firebaseResponse.data() as unknown as SiteTypography;
-      return constructResponse<SiteTypography>(typography, httpStatusCodes.OK);
+      try {
+      const firebaseResponse = await firebaseGetCollection(TYPOGRAPHY, userId, siteId);
+      if (firebaseResponse.exists()) {
+        const typography = firebaseResponse.data() as unknown as SiteTypography;
+        return constructResponse<SiteTypography>(typography, httpStatusCodes.OK);
+      } 
+    } catch (err) {
+      handleError(err);
     }
   }
 
@@ -128,8 +137,7 @@ function sitesController() {
       await setDoc(docRef, typography);
       return constructResponse<SiteTypography>(typography, httpStatusCodes.OK)
     } catch (err) {
-      logger.info(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -143,8 +151,7 @@ function sitesController() {
       const docRef = getDocRef(collectionName, userId, siteId);
       return await getDoc(docRef);
     } catch (err) {
-      logger.error(err);
-      throw handleError(err);
+      handleError(err);
     }
   }
 

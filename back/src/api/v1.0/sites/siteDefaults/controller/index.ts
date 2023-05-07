@@ -4,11 +4,12 @@ import { constructResponse } from '@common/functions/constructResponse';
 import { GenericError } from '@errors/index';
 import { getDoc, doc, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
-import { logger } from '@logger/logger';
+import { logger } from '@logger/index';
 import { sitesController } from '../../controller';
 import { ColourSwatch, ColourSwatches, ColourSwatchesFirebase } from '../../model/colourPalette';
 import { FirebaseMaterialColours, MaterialColours } from '../../model/materialColours';
 import { SiteTypography } from '../../model/typography';
+import { handleError } from '@errors/handleError';
 
 function SiteDefaultsController() {
 
@@ -53,8 +54,7 @@ function SiteDefaultsController() {
         const docRef = doc(firebaseDb, collection, collectionName);
         return await getDoc(docRef);
       } catch (err) {
-        logger.error(err);
-        throw new GenericError(err);
+        handleError(err);
       }
     }
 

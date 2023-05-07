@@ -8,17 +8,20 @@ import { MaterialColours } from './model/materialColours';
 import { SiteTypography } from './model/typography';
 import { siteDefaultsRouter } from './siteDefaults'
 import { DomainError } from '@errors/index';
+import { handleError } from '@errors/handleError';
+
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
 const sitePathBase = (collectionName: string) => `${ROUTE_PATH}/:userId/:siteId/${collectionName}`;
+const log = logger.child({ module: 'router-sites' });
 
 sitesRouter.use(ROUTE_PATH, siteDefaultsRouter);
 
 sitesRouter
   
   .get(`${ROUTE_PATH}/:userId`, async (req, res) => {
-    logger.info('GET: sites.get called');
+    log.info('Sites - called');
     const userId = req.params.userId;
     try {
       const response = await sitesController().getSites(userId);
@@ -29,8 +32,8 @@ sitesRouter
     }
   })
 
-  .get(sitePathBase(`materialcolours`), async (req, res) => {
-    logger.info('GET: material colours called');
+  .get(sitePathBase('materialcolours'), async (req, res) => {
+    log.info('GET: material colours called');
     const userId = req.params.userId;
     const siteId = req.params.siteId;
     try {
@@ -42,7 +45,7 @@ sitesRouter
     }
   })
   
-  .post(sitePathBase(`materialcolours`), async (req, res) => {
+  .post(sitePathBase('materialcolours'), async (req, res) => {
     logger.info('POST: material colours called');
     try {
       const materialcolours = req.body as MaterialColours;
@@ -57,8 +60,8 @@ sitesRouter
 
   })
 
-  .get(sitePathBase(`colourpalette`), async (req, res) => {
-    logger.info('GET: site colour palette called');
+  .get(sitePathBase('colourpalette'), async (req, res) => {
+    log.info('GET: site colour palette called');
     const userId = req.params.userId;
     const siteId = req.params.siteId;
     try {
@@ -70,7 +73,7 @@ sitesRouter
     }
   })
 
-  .post(sitePathBase(`colourpalette`), async (req, res) => {
+  .post(sitePathBase('colourpalette'), async (req, res) => {
     try {
       logger.info('POST: site colour palette called');
       const userId = req.params.userId;
@@ -85,7 +88,7 @@ sitesRouter
     }
   })
 
-  .get(sitePathBase(`typography`), async (req, res) => {
+  .get(sitePathBase('typography'), async (req, res) => {
     const userId = req.params.userId;
     const siteId = req.params.siteId;
     try {
@@ -97,9 +100,9 @@ sitesRouter
     }
   })
 
-  .post(sitePathBase(`typography`), async (req, res) => {
+  .post(sitePathBase('typography'), async (req, res) => {
     try {
-      logger.info('POST: site typography called');
+      log.info('POST: site typography called');
       const userId = req.params.userId;
       const siteId = req.params.siteId;
       const typography: SiteTypography = req.body;
@@ -112,7 +115,7 @@ sitesRouter
   })
 
   .post(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
-    logger.info(`${ROUTE_PATH}/:userId/:siteId`);
+    log.info(`${ROUTE_PATH}/:userId/:siteId`);
     const site: Site = req.body;
     site.siteId = Guid.newGuid();
     try {
@@ -125,7 +128,7 @@ sitesRouter
   })
 
   .put(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
-    logger.info(`${ROUTE_PATH}/:userId/:siteId`);
+    log.info(`${ROUTE_PATH}/:userId/:siteId`);
     const site = req.body;
     try {
       const response = await sitesController().saveSite(site, true);
@@ -138,14 +141,16 @@ sitesRouter
   })
 
   .delete(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
-    logger.info('DELETE: site called');
+    log.info('DELETE: site called');
     try {
       const userId = req.params.userId;
       const siteId = req.params.siteId;
       const response = await sitesController().deleteSite(userId, siteId);
       res.status(response.status).send();
-    } catch (error) {
-      
+    } catch (err) {
+      const error = err as DomainError;
+      const response = error.getResponse();
+      res.status(error._status).send(response);
     }
   });
 

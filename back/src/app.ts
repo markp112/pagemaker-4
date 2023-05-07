@@ -3,9 +3,12 @@ import YAML from 'yamljs';
 import swaggerUI from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { logger, morganMiddleware } from './logger';
+import { logger } from './logger';
 import { authMiddleware } from './middleware';
 import { router } from './api';
+import pinoHttp from 'pino-http';
+import { httpStatusCodes } from '@api/httpStatusCodes';
+import { genReqId } from '@logger/pino';
 
 const PORT = 3000;
 const app = express();
@@ -25,7 +28,17 @@ app.use((req, res, next) => {
 
 const swaggerDoc = YAML.load('./src/api/swagger/_build/swagger.yaml');
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
-app.use(morganMiddleware);
+app.use((req, res, next) => {
+	const id = genReqId(req, res);
+	logger.setBindings( { pid: id });
+	logger.info({ url: req.url }); 
+	next();
+});
+app.use(pinoHttp({
+	logger,
+	level: 'silent',
+}));
+
 app.use(authMiddleware);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -36,9 +49,11 @@ app.use('/api', router);
 app.use((req, res) => {
 	logger.error(res.statusMessage);
 	return res.status(404).json({
-		message:res.statusMessage
+		message: 'Route not found',
+		status: httpStatusCodes.RESOURCE_NOT_FOUND,
 	});
 });
+
 
 app.listen(PORT, () => {
 	return console.log(`Express is listening at http://localhost:${PORT}`);

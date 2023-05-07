@@ -4,7 +4,7 @@ import { constructResponse } from '@common/functions/constructResponse';
 import { handleError } from '@errors/handleError';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
-import { logger } from '@logger/logger';
+import { logger } from '@logger/index';
 import { PageContainerData, PageMetaData } from '../model/model';
 import { pagesCollectionBase, pageCollectionBase } from './common';
 
@@ -26,8 +26,7 @@ function pageController() {
       const statusCode = isPost ? httpStatusCodes.CREATED : httpStatusCodes.OK
       return constructResponse<PageMetaData>(page, statusCode);
     }  catch (err) {
-      const errToThrow = handleError(err);
-      throw errToThrow;
+      handleError(err);
     }
     
   }
@@ -37,8 +36,7 @@ function pageController() {
       const docRef = getDocRef(collectionName, siteId, pageId);
       return getDoc(docRef);
     } catch (err) {
-      logger.error(err);
-      throw handleError(err);
+      handleError(err);
     }
   }
 
@@ -52,8 +50,7 @@ function pageController() {
       await setDoc(doc(firebaseDb, `${siteId}${pageId}`,'pageContent'), pageContent);
       return constructResponse<PageContainerData>(pageContent, httpStatusCodes.CREATED);
     }  catch (err) {
-      const errToThrow = handleError(err);
-      throw errToThrow;
+      handleError(err);
     }
   }
 
@@ -65,8 +62,7 @@ function pageController() {
       const pageContent = firebaseResponse.data() as unknown as PageContainerData;
       return constructResponse<PageContainerData>(pageContent, httpStatusCodes.OK);
     } catch (err) {
-      const errToThrow = handleError(err);
-      throw errToThrow;
+      handleError(err);
     }
   }
 

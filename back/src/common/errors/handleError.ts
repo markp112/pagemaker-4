@@ -1,28 +1,25 @@
 import { FirebaseError } from '@firebase/util';
-import { logger } from '@logger/index';
 import { DomainError, GenericError, InsufficientPermissions } from '.';
 
 const errorMap = {
   'permission-denied': () => new InsufficientPermissions(),
+  'generic': (err: Error) => new GenericError(err.message)
 };
 
 function handleError(err: Error | FirebaseError): DomainError {
   if(isTypeOfFirebaseError(err)) {
-    return handleFireBaseError(err);
+    throw handleFireBaseError(err);
   } else {
-    logger.info(err.message);
-    logger.info(err);
-    return new GenericError(err.message);
+    throw errorMap['generic'](err); 
   }
 }
 
 function handleFireBaseError(err: FirebaseError): DomainError {
-  logger.info(err.code);
-  return errorMap[err.code]();
+  throw errorMap[err.code]();
 } 
 
 function isTypeOfFirebaseError(error: FirebaseError | Error): error is FirebaseError {
-  return error instanceof FirebaseError;
+  return 'code' in error; 
 }
 
 export { handleError };

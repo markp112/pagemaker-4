@@ -1,6 +1,7 @@
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
+import { handleError } from '@errors/handleError';
 import { GenericError } from '@errors/index';
 import { storage, storageRef } from '@firebase/initFirebase';
 import { getDownloadURL, uploadBytes } from '@firebase/storage';
@@ -14,8 +15,8 @@ function StorageController() {
       await uploadBytes(bucketRef, file.buffer);
       const downloadURL = await getDownloadURL(bucketRef);
       return constructResponse(downloadURL, httpStatusCodes.OK);
-    } catch (error) {
-      throw new GenericError(error.message);
+    } catch (err) {
+      handleError(err);
     }
   }
 

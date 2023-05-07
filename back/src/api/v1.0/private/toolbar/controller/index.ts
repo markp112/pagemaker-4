@@ -5,6 +5,7 @@ import { firebaseDb } from '../../../../../firebase/initFirebase';
 import { Response } from '../../../../../api/types';
 import { GenericError } from '../../../../../common/errors';
 import { logger } from '../../../../../logger';
+import { handleError } from '@errors/handleError';
 
 export type ComponentTypesString =
   | undefined
@@ -47,8 +48,7 @@ function toolbarElements() {
       return response
     }
     catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 

@@ -7,6 +7,7 @@ import { CommandElement, CommandPanel, CommandsCollectionStored, EditorButtonBas
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
 import { buildColourCommandTabGroups } from './colourPalettes';
+import { handleError } from '@errors/handleError';
 
 export const COMMAND_COLLECTION = 'command-containers';
 export const COMMAND_ELEMENT_COLLECTION = 'CommandElementCollection';
@@ -27,8 +28,7 @@ function commandGroups() {
       return constructResponse<CommandElement>(commandElements, httpStatusCodes.OK);
     }
     catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -49,8 +49,7 @@ function commandGroups() {
       }));
       return commandElement;
     } catch (err) {
-      console.log(err);
-      throw new GenericError(err);
+      handleError(err)
     }
   }
 
@@ -117,8 +116,7 @@ function commandGroups() {
       return commands;
     }
     catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 

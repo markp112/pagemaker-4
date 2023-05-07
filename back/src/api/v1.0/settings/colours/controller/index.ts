@@ -4,6 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { firebaseDb } from '../../../../../firebase/initFirebase';
 import { GenericError } from '../../../../../common/errors';
 import { logger } from '../../../../../logger';
+import { handleError } from '@errors/handleError';
 
 type Colour = {
   colourName: string;
@@ -25,8 +26,7 @@ function colourSettings() {
       });
         return constructResponse<Colour[]>(defaultColours, 200);
     } catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 

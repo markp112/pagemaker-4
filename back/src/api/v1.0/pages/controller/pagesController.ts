@@ -1,10 +1,9 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
 import { collection, getDocs } from '@firebase/firestore';
-import { logger } from '../../../../logger';
 import { firebaseDb } from '../../../../firebase/initFirebase';
 import { PageMetaData } from '../model/model';
-import { GenericError } from '../../../../common/errors';
 import { pagesCollectionBase } from './common';
+import { handleError } from '@errors/handleError';
 
 function pagesController() {
 
@@ -19,8 +18,7 @@ function pagesController() {
       });
       return constructResponse<PageMetaData[]>(pages, 200);
     } catch (err) {
-      logger.error('error:',err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
   return {
