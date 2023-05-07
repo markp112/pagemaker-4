@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h2 class="font-semibold">{{ label }}</h2>
-    <ul class="list-container">
+    <ul class="list-container bg-blend-darken bg-gradient-to-t bg-site-primary overflow-y-auto scrollbar">
       <li v-for="item in listItems"
         class="list-item"
         :class="{'selected': item === activeElement}"
@@ -13,13 +11,11 @@
         {{ item }}
       </li>
     </ul>
-  </div>
 </template>
 
 <script lang="ts" setup>import { ref } from '@vue/reactivity';
 
 const props = defineProps<{
-  label: string,
   listItems: string[];
   id: string;
   isDraggable: boolean;
@@ -44,7 +40,6 @@ const startDrag = (evt: DragEvent, item: string) => {
   }
 };
 
-
 </script>
 
 <style lang="css" scoped>
@@ -53,7 +48,7 @@ const startDrag = (evt: DragEvent, item: string) => {
 }
 
 .list-container {
-  @apply border p-2 h-auto w-48 mt-2
+  @apply p-2 w-10/12;
 }
 
 .selected {
@@ -61,4 +56,24 @@ const startDrag = (evt: DragEvent, item: string) => {
   @apply text-white;
   @apply p-2;
 }
+
+.scrollbar::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #f7f4ed;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #e0cbcb;
+    border-radius: 100vh;
+    border: 3px solid #f6f7ed;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+  }
 </style>

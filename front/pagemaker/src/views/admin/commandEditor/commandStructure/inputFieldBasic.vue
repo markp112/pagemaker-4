@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col flex w-full h-full justify-center border-t-zinc-600 border p-1">
+  <div class="flex-col flex w-full h-full justify-center p-1">
     <span v-for="(field, index) in fields"
       class="mt-2"
       :key="index"

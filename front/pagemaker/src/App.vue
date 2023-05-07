@@ -1,13 +1,13 @@
 
 <template>
-  <main class="w-screen flex flex-col bg-site-background text-site-primary-dark h-98">
+  <main class="w-screen flex flex-col bg-site-background text-site-primary-dark">
     <Navbar :nav-menu-items="getMenuItems()"
       @nav-menu-clicked="navMenuClicked"
     />
     <div class="w-98 ml-4">
       <Breadcumb/>
     </div>
-    <div class="w-full border-box font-body ">
+    <div class="w-full border-box font-body">
       <RouterView>
       </RouterView>
     </div>
