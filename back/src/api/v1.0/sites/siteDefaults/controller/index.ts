@@ -1,14 +1,13 @@
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
-import { GenericError } from '@errors/index';
 import { getDoc, doc, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
-import { logger } from '@logger/logger';
 import { sitesController } from '../../controller';
 import { ColourSwatch, ColourSwatches, ColourSwatchesFirebase } from '../../model/colourPalette';
 import { FirebaseMaterialColours, MaterialColours } from '../../model/materialColours';
 import { SiteTypography } from '../../model/typography';
+import { handleError } from '@errors/handleError';
 
 function SiteDefaultsController() {
 
@@ -42,7 +41,7 @@ function SiteDefaultsController() {
       const  materialColours = data.data as MaterialColours;
       const coloursCollection = 'site-defaults';
       const docRef = doc(firebaseDb, coloursCollection, 'material-colours');
-      const colourPalette: FirebaseMaterialColours  = { materialColours: materialColours };
+      const colourPalette: FirebaseMaterialColours  = { materialColours };
       await setDoc(docRef, colourPalette);
       return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK)
     }
@@ -53,8 +52,7 @@ function SiteDefaultsController() {
         const docRef = doc(firebaseDb, collection, collectionName);
         return await getDoc(docRef);
       } catch (err) {
-        logger.error(err);
-        throw new GenericError(err);
+        handleError(err);
       }
     }
 

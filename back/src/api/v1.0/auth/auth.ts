@@ -1,15 +1,16 @@
 import express from 'express';
-import { logger } from '../../../logger';
+import { logger } from 'logger';
 import { auth, type Credentials } from './controller';
-import { GenericError, ResourceNotFoundError } from '../../../common/errors';
+import { GenericError, ResourceNotFoundError } from '@common/errors';
+import { handleError } from '@errors/handleError';
 
 
 const authRouter = express.Router();
 const ROUTE_PATH = '/auth';
 
-authRouter.post(`${ROUTE_PATH}/login`, async (req, res, next) => {
+authRouter.post(`${ROUTE_PATH}/login`, async (req, res) => {
   try {
-    logger.info(`Route Called: auth/login`);
+    logger.info({ method:  'auth/login' });
     const credentials: Credentials = req.body;
     const response = await auth().login(credentials);
     res.status(response.status).send(response);
@@ -18,7 +19,7 @@ authRouter.post(`${ROUTE_PATH}/login`, async (req, res, next) => {
       const response = error.getResponse();
       res.status(error._status).send(response);
     } else {
-      logger.info(error);
+      handleError(error);
     }
   }
 })

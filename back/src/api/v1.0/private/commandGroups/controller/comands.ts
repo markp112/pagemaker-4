@@ -1,12 +1,11 @@
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
-import { GenericError } from '@errors/index';
 import { doc, setDoc, updateDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
-import { logger } from '@logger/logger';
 import { commandGroups, COMMANDS, COMMAND_COLLECTION, COMMAND_ELEMENT_COLLECTION } from '../../commandGroups/controller';
 import { Command, EditorButtonBase, TabGroup } from '../../commandGroups/model';
+import { handleError } from '@errors/handleError';
 
 function Commands() {
 
@@ -15,8 +14,7 @@ function Commands() {
       const commands = await commandGroups().getCommands();
       return constructResponse<EditorButtonBase[]>(commands, httpStatusCodes.OK)
     } catch (error) {
-      logger.error(error);
-      throw new GenericError(error);
+      handleError(error);
     }
   }
 
@@ -38,7 +36,7 @@ function Commands() {
       return constructResponse<string>(key, httpStatusCodes.OK);
 
     } catch (err) {
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -50,7 +48,7 @@ function Commands() {
       await updateDoc(docRef, dataToStore);
       return constructResponse<string>(pageElementName, httpStatusCodes.CREATED);
     } catch (err) {
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -61,7 +59,7 @@ function Commands() {
       await updateDoc(docRef, dataTostore);
       return constructResponse<string[]>(tabs, httpStatusCodes.OK);
     } catch (err) {
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -71,7 +69,7 @@ function Commands() {
     await setDoc(docRef, tabGroup);
     return constructResponse<TabGroup>(tabGroup, httpStatusCodes.CREATED);
     } catch (err) {
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 

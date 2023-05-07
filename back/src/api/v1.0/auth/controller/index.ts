@@ -1,9 +1,9 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth as firebaseAuth } from '../../../../firebase/initFirebase';
-import { logger } from '../../../../logger/index';
 import type { Response } from 'api/types';
-import { ResourceNotFoundError, GenericError } from '../../../../common/errors';
+import { ResourceNotFoundError } from '../../../../common/errors';
+import { handleError } from '@errors/handleError';
 
 export type Credentials = {
   email: string;
@@ -27,13 +27,12 @@ function auth() {
 			const user: User = { uid:  userInfo.uid, email:  userInfo.email, displayName:  userInfo.displayName, tokenId: token };
 			return constructResponse<User>(user, 200);
 		} catch (error) {
-			logger.error(error);
 			switch(error.code) {
 				case 'auth/user-not-found':
 				case 'auth/wrong-password':
 					throw new ResourceNotFoundError(credentials.email);
 				default:
-					throw new GenericError(error.message);
+					handleError(error);
 			}
 		}
 	}

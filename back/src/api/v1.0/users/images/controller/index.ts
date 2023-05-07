@@ -2,8 +2,8 @@ import { constructResponse } from '../../../../../common/functions/constructResp
 import { Response } from '@api/types';
 import { FullMetadata, getDownloadURL, getMetadata, listAll } from '@firebase/storage';
 import { storage, storageRef } from '../../../../../firebase/initFirebase';
-import { GenericError } from '../../../../../common/errors';
 import { logger } from '../../../../../logger';
+import { handleError } from '@errors/handleError';
 
 type UsersBucket = {
   bucket: string,
@@ -43,8 +43,7 @@ function userImages() {
       return constructResponse<BucketImage[]>(files, 200);
     } 
     catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -54,8 +53,7 @@ function userImages() {
       const url = await getDownloadURL(storageRef(storage, `${path}/${fileName}`));
       return url;
     } catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   };
 
@@ -66,7 +64,7 @@ function userImages() {
       return metaData;
     } catch (err) {
       logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 
@@ -76,7 +74,7 @@ function userImages() {
       const url = await getImageUrl(userId, bucket, file);
       const imageFile: MetaData = {
         name: metaData.name,
-        url: url,
+        url,
         tags: metaData.customMetadata?.tags.split(',')
       };
       return imageFile;

@@ -1,7 +1,2 @@
-import { logger } from './logger';
-import morganMiddleware from './morgan';
-
-export {
-  morganMiddleware,
-  logger,
-};
+import { logger } from './pino';
+export { logger };

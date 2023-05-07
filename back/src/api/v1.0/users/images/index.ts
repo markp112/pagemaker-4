@@ -25,7 +25,7 @@ imagesRouter
     logger.info(`users/:userId/${ROUTE_PATH}/metadata/bucket/:userBucket`);
     const userId = req.params.userId;
     const bucket = req.params.userBucket;
-    const files = req.body as any as string[];
+    const files = req.body as string[];
     try {
       const response = await userImages().getMetaDataForList(userId, bucket, files);
       res.status(response.status).send(response);

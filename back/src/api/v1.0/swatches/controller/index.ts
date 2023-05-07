@@ -4,8 +4,7 @@ import { constructResponse } from '../../../../common/functions/constructRespons
 import { TinyColor } from '@ctrl/tinycolor';
 import { SwatchBuilder } from './utils/swatchBuilder';
 import { Response } from '../../../types';
-import { GenericError } from '../../../../common/errors';
-import { logger } from '../../../../logger/logger';
+import { handleError } from '@errors/handleError';
 
 function swatchesController() {
 
@@ -23,8 +22,7 @@ function swatchesController() {
       return constructResponse<ColourSwatch[]>(saturatedSwatches, httpStatusCodes.OK);
       
     } catch (err) {
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
       
     }
   }
@@ -58,9 +56,7 @@ function swatchesController() {
       newSwatches.colourSwatches = SwatchBuilder(colourSwatches).createSwatchesFromColour(baseColourHex);
       return constructResponse<ColourSwatches>(newSwatches, httpStatusCodes.OK);
     } catch (err) {
-      console.log('%c⧭', 'color: #eeff00', err);
-      logger.error(err);
-      throw new GenericError(err);
+      handleError(err);
     }
   }
 

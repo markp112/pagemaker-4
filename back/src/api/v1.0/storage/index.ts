@@ -1,4 +1,4 @@
-import { logger } from '@logger/logger';
+import { logger } from '@logger/index';
 import express from 'express';
 import {  multerMemory } from 'middleware/multer';
 import { StorageController } from './controller';

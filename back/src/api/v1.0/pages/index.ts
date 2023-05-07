@@ -1,4 +1,4 @@
-import { logger } from '../../../logger/index';
+import { logger } from '@logger/index';
 import express from 'express';
 import { pagesController } from './controller/pagesController';
 import { pageController } from './controller/pageController';
@@ -12,14 +12,14 @@ pagesRouter
 
   .get(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
     const siteId = req.params.siteId;
-    logger.info('site pages called');
+    logger.info({ method: 'site-pages' });
     try {
       const response = await pagesController().getPages(siteId);
       res.status(response.status).send(response);
-      } catch (error) {
+    } catch (error) {
         const response = error.getResponse();
         res.status(error._status).send(response);
-      }
+    }
   })
 
   .get(`${ROUTE_PATH}/:siteId/:pageId/metadata`, async (req, res) => {
@@ -35,7 +35,7 @@ pagesRouter
   })
 
   .post(`${ROUTE_PATH}/:siteId/:pageId/metadata`, async (req, res) => {
-    logger.info('POST:siteId/PageId/metadata');
+    logger.info({ method: 'meta-data' });
     try {
       const page: PageMetaData = req.body;
       page.pageId = Guid.newGuid();
@@ -61,7 +61,7 @@ pagesRouter
   })
 
   .get(`${ROUTE_PATH}/:siteId/page/:pageId`,async (req, res) => {
-    logger.info('get pageContent');
+    logger.info({ method: 'page-content' });
     const siteId = req.params.siteId;
     const pageId = req.params.pageId;
     try {
