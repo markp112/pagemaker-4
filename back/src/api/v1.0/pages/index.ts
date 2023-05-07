@@ -1,4 +1,4 @@
-import { logger } from '../../../logger/index';
+import { logger } from '@logger/index';
 import express from 'express';
 import { pagesController } from './controller/pagesController';
 import { pageController } from './controller/pageController';

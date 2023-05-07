@@ -1,10 +1,10 @@
 import { constructResponse } from '@common/functions/constructResponse';
 import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
-import { firebaseDb } from '../../../../firebase/initFirebase';
-import { Response } from '../../../../api/types';
+import { firebaseDb } from '@firebase/initFirebase';
+import { Response } from '@api/types';
 import { Site } from '../model/site';
 import {  ColourSwatches, } from '../model/colourPalette';
-import { httpStatusCodes } from '../../../../api/httpStatusCodes';
+import { httpStatusCodes } from '@api/httpStatusCodes';
 import { FirebaseMaterialColours, MaterialColours } from '../model/materialColours';
 import { SiteTypography } from '../model/typography';
 import { handleError } from '@errors/handleError';

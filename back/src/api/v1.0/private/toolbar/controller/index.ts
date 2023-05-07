@@ -1,8 +1,8 @@
-import { Dimension } from '../../../../../common/models/dimension';
-import { Location } from '../../../../../common/models/location';
+import { Dimension } from '@common/models/dimension';
+import { Location } from '@common/models/location';
 import { getDocs, collection } from 'firebase/firestore';
-import { firebaseDb } from '../../../../../firebase/initFirebase';
-import { Response } from '../../../../../api/types';
+import { firebaseDb } from '@firebase/initFirebase';
+import { Response } from '@api/types';
 import { handleError } from '@errors/handleError';
 
 export type ComponentTypesString =

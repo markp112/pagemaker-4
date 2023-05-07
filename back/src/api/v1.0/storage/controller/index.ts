@@ -2,7 +2,6 @@ import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
 import { handleError } from '@errors/handleError';
-import { GenericError } from '@errors/index';
 import { storage, storageRef } from '@firebase/initFirebase';
 import { getDownloadURL, uploadBytes } from '@firebase/storage';
 

@@ -1,9 +1,9 @@
-import { logger } from '../../../logger';
+import { logger } from 'logger';
 import express from 'express';
 import { Site } from './model/site';
-import { Guid } from '../../../common/classes/guid';
+import { Guid } from '@common/classes/guid';
 import { ColourSwatches } from './model/colourPalette';
-import { sitesController } from './controller/';
+import { sitesController } from './controller';
 import { MaterialColours } from './model/materialColours';
 import { SiteTypography } from './model/typography';
 import { siteDefaultsRouter } from './siteDefaults'
