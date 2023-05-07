@@ -65,7 +65,7 @@ function sitesController() {
 
   async function getSiteMaterialColours(userId: string, siteId: string) {
     try {
-      const firebaseResponse = await firebaseGetCollection('materialcolours', userId, siteId);
+      const firebaseResponse = await firebaseGetCollection(MATERIAL_COLOURS, userId, siteId);
       if (firebaseResponse.exists()) {
         const materialColours = firebaseResponse.data().materialColours as unknown as MaterialColours;
         return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
@@ -78,7 +78,7 @@ function sitesController() {
   async function saveMaterialColours(userId: string, siteId: string, materialcolours: MaterialColours) {
     try {
       const coloursCollection = siteCollectionBase(userId, siteId);
-      const docRef = doc(firebaseDb, coloursCollection, 'materialcolours');
+      const docRef = doc(firebaseDb, coloursCollection, MATERIAL_COLOURS);
       const colourPalette: FirebaseMaterialColours  = { materialColours: materialcolours };
       await setDoc(docRef, colourPalette);
       return constructResponse<MaterialColours>(materialcolours, httpStatusCodes.OK)
