@@ -10,7 +10,7 @@ function handleError(err: Error | FirebaseError): DomainError {
   if(isTypeOfFirebaseError(err)) {
     throw handleFireBaseError(err);
   } else {
-    throw errorMap['generic'](err); 
+    throw errorMap.generic(err); 
   }
 }
 

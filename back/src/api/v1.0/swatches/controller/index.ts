@@ -4,8 +4,6 @@ import { constructResponse } from '../../../../common/functions/constructRespons
 import { TinyColor } from '@ctrl/tinycolor';
 import { SwatchBuilder } from './utils/swatchBuilder';
 import { Response } from '../../../types';
-import { GenericError } from '../../../../common/errors';
-import { logger } from '../../../../logger/';
 import { handleError } from '@errors/handleError';
 
 function swatchesController() {

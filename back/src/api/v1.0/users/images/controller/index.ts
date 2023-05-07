@@ -2,7 +2,6 @@ import { constructResponse } from '../../../../../common/functions/constructResp
 import { Response } from '@api/types';
 import { FullMetadata, getDownloadURL, getMetadata, listAll } from '@firebase/storage';
 import { storage, storageRef } from '../../../../../firebase/initFirebase';
-import { GenericError } from '../../../../../common/errors';
 import { logger } from '../../../../../logger';
 import { handleError } from '@errors/handleError';
 
@@ -75,7 +74,7 @@ function userImages() {
       const url = await getImageUrl(userId, bucket, file);
       const imageFile: MetaData = {
         name: metaData.name,
-        url: url,
+        url,
         tags: metaData.customMetadata?.tags.split(',')
       };
       return imageFile;

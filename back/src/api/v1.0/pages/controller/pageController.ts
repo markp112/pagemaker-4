@@ -4,15 +4,12 @@ import { constructResponse } from '@common/functions/constructResponse';
 import { handleError } from '@errors/handleError';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
-import { logger } from '@logger/index';
 import { PageContainerData, PageMetaData } from '../model/model';
 import { pagesCollectionBase, pageCollectionBase } from './common';
 
 const PAGE_COLLECTION = 'pageMetaData';
 
 function pageController() {
-
-
 
   async function getPageMetaData(siteId: string, pageId: string): Promise<Response> {
     const firebaseResponse = await firebaseGetCollection(PAGE_COLLECTION, siteId, pageId);

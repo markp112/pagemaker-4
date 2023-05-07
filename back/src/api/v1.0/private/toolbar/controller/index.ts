@@ -3,8 +3,6 @@ import { Location } from '../../../../../common/models/location';
 import { getDocs, collection } from 'firebase/firestore';
 import { firebaseDb } from '../../../../../firebase/initFirebase';
 import { Response } from '../../../../../api/types';
-import { GenericError } from '../../../../../common/errors';
-import { logger } from '../../../../../logger';
 import { handleError } from '@errors/handleError';
 
 export type ComponentTypesString =
@@ -36,7 +34,7 @@ function toolbarElements() {
   async function get(): Promise<Response> {
 		try {
 			const firebaseResponse = await getDocs(collection(firebaseDb, COLLECTION));
-      let toolbarElements: Toolbar[] = []; 
+      const toolbarElements: Toolbar[] = []; 
       firebaseResponse.docs.forEach(doc => {
         const toolbarElement = doc.data() as unknown as Toolbar;
         toolbarElements.push(toolbarElement);

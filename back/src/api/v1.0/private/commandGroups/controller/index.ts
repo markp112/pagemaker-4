@@ -1,8 +1,6 @@
 import { Response } from '@api/types';
 import { firebaseGetDocsFromCollection } from '@common/classes/firebaseCommon/getCollection';
 import { constructResponse } from '@common/functions/constructResponse';
-import { GenericError } from '@errors/index';
-import { logger } from '@logger/index';
 import { CommandElement, CommandPanel, CommandsCollectionStored, EditorButtonBase, TabGroup } from '../model';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
@@ -54,7 +52,7 @@ function commandGroups() {
   }
 
   async function getContentForTabs(elementsTabsList: string[], commands: EditorButtonBase[]): Promise<TabGroup[]> {
-    return await Promise.all(elementsTabsList.map(async tabName => {
+    return Promise.all(elementsTabsList.map(async tabName => {
       return await getTabs(tabName, commands);
     }));
   }
@@ -94,7 +92,7 @@ function commandGroups() {
 
   async function getCommandPanels(tabContent: string[], commands: EditorButtonBase[]) {
     if (tabContent) {
-      return await Promise.all(tabContent.map(async tabGroupName => {
+      return Promise.all(tabContent.map(async tabGroupName => {
         const firebaseData = await firebaseGetDocsFromCollection(COMMAND_COLLECTION, tabGroupName);
         const commandList = firebaseData.data() as unknown as { commands: string[] };
         return { [tabGroupName]: await getCommandsForPanel(commandList.commands, commands)}
@@ -104,7 +102,7 @@ function commandGroups() {
   }
 
   async function getCommandsForPanel(commandsList: string[], commands: EditorButtonBase[]) {
-    return await Promise.all(commandsList.map(command => {
+    return Promise.all(commandsList.map(command => {
       return commands[command];
     }));
   } 

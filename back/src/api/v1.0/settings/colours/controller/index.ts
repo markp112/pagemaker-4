@@ -2,8 +2,6 @@ import { constructResponse } from '../../../../../common/functions/constructResp
 import { Response } from '../../../../../api/types';
 import { collection, getDocs } from 'firebase/firestore';
 import { firebaseDb } from '../../../../../firebase/initFirebase';
-import { GenericError } from '../../../../../common/errors';
-import { logger } from '../../../../../logger';
 import { handleError } from '@errors/handleError';
 
 type Colour = {

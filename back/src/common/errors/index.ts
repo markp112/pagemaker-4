@@ -5,7 +5,7 @@ import { logger } from '../../logger';
 class DomainError extends Error {
   _status: number;
   
-  constructor(message: string, status: number, name: string = 'Custom error') {
+  constructor(message: string, status: number, name = 'Custom error') {
     super(message);
     this.name = name;
     this._status = status;

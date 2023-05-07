@@ -1,8 +1,6 @@
 import { handleError } from '@errors/handleError';
-import { GenericError } from '@errors/index';
 import { getDoc, doc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
-import { logger } from '@logger/index';
 
 async function firebaseGetDocsFromCollection(collection: string, document: string) {
   try {

@@ -8,8 +8,6 @@ import { MaterialColours } from './model/materialColours';
 import { SiteTypography } from './model/typography';
 import { siteDefaultsRouter } from './siteDefaults'
 import { DomainError } from '@errors/index';
-import { handleError } from '@errors/handleError';
-
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';

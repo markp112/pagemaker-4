@@ -3,8 +3,6 @@ import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from '@firebase/f
 import { firebaseDb } from '../../../../firebase/initFirebase';
 import { Response } from '../../../../api/types';
 import { Site } from '../model/site';
-import { GenericError } from '../../../../common/errors/';
-import { logger } from '../../../../logger';
 import {  ColourSwatches, } from '../model/colourPalette';
 import { httpStatusCodes } from '../../../../api/httpStatusCodes';
 import { FirebaseMaterialColours, MaterialColours } from '../model/materialColours';
@@ -54,7 +52,7 @@ function sitesController() {
         deleteTypography(userId, siteId),
         deleteDoc(docRef)
       ]);
-      return constructResponse<void>(null, httpStatusCodes.OK)
+      return constructResponse(null, httpStatusCodes.OK)
     } catch (error) {
       handleError(error);
     }
@@ -149,7 +147,7 @@ function sitesController() {
   async function firebaseGetCollection(collectionName: string, userId: string, siteId: string) {
     try {
       const docRef = getDocRef(collectionName, userId, siteId);
-      return await getDoc(docRef);
+      return getDoc(docRef);
     } catch (err) {
       handleError(err);
     }
