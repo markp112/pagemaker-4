@@ -1,10 +1,10 @@
 
 <template>
-  <div class="ml-8 bg-gray-200 p-4 grid grid-rows-8">
-    <h2 class="font-bold text-xl mb-4 row-start-1 h-8">{{ pageElement }}</h2>
+  <h2 class="font-bold text-xl row-start-1 row-end-1">{{ pageElement }}</h2>
+  <div class="p-4 grid grid-rows-4 gap-4">
     <CommandHierarchyElement id="tabs"
-      class="row-start-2 row-end-3"
-      label="tabs"
+      class="row-start-1 row-end-2"
+      label="Tabs"
       :list-items="getTabs"
       :dragged-item="sourceDragElementType"
       @list-item-clicked="tabItemClicked($event)"
@@ -13,7 +13,7 @@
     />
     <CommandHierarchyElement id="tabGroups"
       label="Tab Groups"
-      class="ml-12 row-start-3 row-end-5"
+      class="ml-12 row-start-2 row-end-3"
       :list-items="getTabGroups"
       :dragged-item="sourceDragElementType"
       @list-item-clicked="tabGroupClicked($event)"
@@ -21,14 +21,14 @@
       @delete-clicked="deleteTabGroup($event)"
     />
     <CommandHierarchyElement id="commands"
-      class="row-start-5 ml-24"
+      class="row-start-3 row-end-4 ml-24"
       label="Commands in Group"
       :list-items="getCommands"
       :dragged-item="sourceDragElementType"
       @on-drag-drop="onCommandGroupDrop($event)"
       @delete-clicked="onCommandGroupDelete($event)"
     />
-    <p class="flex flex-row justify-end mt-16 row-start-7 items-end">
+    <p class="row-start-4 mr-auto ml-auto">
       <BaseButton 
         size="medium" 
         button-type="primary"

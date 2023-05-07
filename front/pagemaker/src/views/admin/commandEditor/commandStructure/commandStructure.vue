@@ -1,60 +1,63 @@
 <template>
-  <div class="grid grid-cols-5 p-8 gap-8 overflow-hidden">
-    <div class="grid grid-rows-3 col-span-1">
-      <DragFromGroup 
-        id="pageElements"
-        :is-draggable="false"
+  <div class="grid grid-cols-5 p-8 gap-8">
+    <div class="col-span-2">
+      <commandStructureCard
         label="Page Elements"
-        :list-items="getPageElements"
+        :elements="getPageElements"
+        :is-draggable="false"
         @listItemClick="setPageElement($event)"
-      />
-      <DragFromGroup 
-        id="tabs"
-        :is-draggable="true"
+      >
+        <InputFieldBasic :fields="[{label: 'Page Element', value: pageElement}]"
+          @onNewClick="setPageElement('')"
+          @on-save-click="createNewPageElement($event)"
+        />
+      </commandStructureCard>
+      <commandStructureCard
+        class="mt-2"
         label="Tabs"
-        :list-items="getAllTabNames"
+        :elements="getAllTabNames"
+        :is-draggable="true"
         @listItemClick="tabElement=$event"
         @drag-started="sourceDragElementType=$event"
-      />
-      <DragFromGroup 
-        id="tabGroups"
-        :is-draggable="true"
+      >
+        <InputFieldBasic :fields="[
+          { label: 'Key', value: tabKey },
+          { label: 'Display Name', value: displayName },
+          ]"
+          @on-new-click="tabElement=''"
+          @on-save-click="addNewTabElement($event)"
+        />
+      </commandStructureCard>
+      <commandStructureCard
+        class="mt-2"
         label="Tab Groups"
-        :list-items="getTabGroups"
+        :elements="getTabGroups"
+        :is-draggable="true"
         @listItemClick="groupElement=$event"
         @drag-started="sourceDragElementType=$event"
-      />
-    </div>
-    <div class="grid grid-rows-3 col-span-1 gap-4 bg-gray-100 ">
-      <InputFieldBasic :fields="[{label: 'Page Element', value: pageElement}]"
-        @onNewClick="setPageElement('')"
-        @on-save-click="createNewPageElement($event)"
-      />
-      <InputFieldBasic :fields="[
-        { label: 'Key', value: tabKey },
-        { label: 'Display Name', value: displayName },
-        ]"
-        @on-new-click="tabElement=''"
-        @on-save-click="addNewTabElement($event)"
-      />
+      >
       <InputFieldBasic :fields="[{label: 'Groups', value: groupElement}]"
         @on-new-click="groupElement = ''"
         @on-save-click="addNewTabGroup($event)"  
       />
+      </commandStructureCard>
     </div>
-    <div class="grid grid-rows-1 col-span-2">
+    <div class="col-span-2">
       <PageElementBuilder :page-element="pageElement"
         :source-drag-element-type="sourceDragElementType"
       />
     </div>
-    <div class="col-span-1 flex flex-col items-end">
-      <DragFromGroup 
-        id="commands"
-        :is-draggable="true"
-        label="Commands"
-        :list-items="getCommands"
-        @drag-started="sourceDragElementType=$event"
-      />
+    <div class="col-span-1 bg-site-primary-dark w-11/12 text-site-background h-5/6 rounded-xl shadow-xl">
+      <h2  class="bg-site-primary h-12 text-xl p-2 font-semibold rounded-t-xl mb-1">Commands</h2>
+      <div class="full h-5/6 content-center grid grid-rows-1 ml-8 mt-12 ">
+        <DragFromGroup 
+          class="h-full"
+          id="commands"
+          :is-draggable="true"
+          :list-items="getCommands"
+          @drag-started="sourceDragElementType=$event"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -69,12 +72,12 @@ import PageElementBuilder from './pageElementBuilder.vue';
 import DragFromGroup from './dragFromGroup.vue';
 import type { TabGroup } from '@/classes/commandButtons/model';
 import { displayMessage } from '@/common/displayMessage';
+import commandStructureCard from './commandStructureCard.vue';
 
 type Field = {
   label: string,
   value: string,
 };
-
 
 const store = useCommandButtonStore();
 const service = CommandsService();
@@ -144,13 +147,13 @@ const sourceDragElementType = ref();
 
 </script>
 
-<style lang="css" scoped>
+<style lang="css" >
 .list-item {
   @apply hover:bg-site-primary-dark hover:text-on-primary p-2 cursor-pointer;
 }
 
 .list-container {
-  @apply border p-2 h-auto w-48 mt-2
+  @apply p-2  w-48 mt-2
 }
 
 .selected {
