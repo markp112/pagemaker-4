@@ -1,12 +1,12 @@
 <template>
-  <div class="flex justify-center items-center flex-row h-auto mt-32 mx-4 ">
+  <div class="flex justify-center items-center flex-row mt-32">
     <div class="flex flex-row justify-center w-full h-full">
       <img
           src="@/assets/images/bank-vault.jpg"
           alt="picture of a bank vault"
           class="object-fit"
         />
-      <div class="border-2 rounded-md p-5 text-left w-2/6 h-98 flex flex-col justify-start">
+      <div class="border-2 rounded-md p-4 text-left w-4/12 h-98 flex flex-col justify-center items-center">
         <Login-Form
           :form-errors="formErrors"
           @cancel-clicked="cancelClicked"

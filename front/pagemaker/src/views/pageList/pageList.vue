@@ -1,5 +1,5 @@
 <template>
-  <section class="col-span-3 w-full">
+  <section class="">
     <div class="flex flex-row justify-between mt-8">
       <h2 class="page-heading ml-4">My Pages</h2>
       <div class="w-auto mr-10">
@@ -23,10 +23,10 @@
           <span class="w-2/12"></span>
       </div>  
     
-      <ul class="font-semibold text-lg mt-8 ">
+      <ul class="font-semibold text-lg mt-8">
         <li v-for="page in pageList" 
           :key="page.name"
-          class="mx-auto w-8/12 hover:bg-site-secondary-light hover:text-accent-1 mt-1 cursor-pointer rounded-md grid grid-cols-6"
+          class="mx-auto w-8/12 std-list-item mt-1 cursor-pointer rounded-md grid grid-cols-6"
           @click="pageRowClick(page)"
         >
           <span class="flex justify-end mr-8">
@@ -139,4 +139,5 @@ export default defineComponent({
     },
   })
   </script>
+  
   

@@ -1,43 +1,34 @@
 <template>
-  <div class="ml-64 grid grid-cols-4">
-    <span class=""></span>
+  <div class="ml-12 mt-2 flex-row flex justify-start w-full relative">
     <Scaler :slider="sliderSettings"
-      :position="sliderPosition"
-    @slider-change="sliderChange($event)"
+      @slider-change="sliderChange($event)"
     />
-    <span class="col-span-2 font-semibold inline-block">
+    <h2 class="col-span-2 font-semibold text-lg">
       {{ pageTitle }}
-    </span>
+    </h2>
   </div>
-  <div class="flex flex-row justify-center w-100 relative">
-    <div class="mt-8 w-full">
-      <div class="h-full absolute left-0 top-4 border-r border-gray-400 mr-2 z-50 shadow-lg" :class="getToolbarClasses" >
-        <Toolbar @toggle-clicked="toolbarToggleClicked"
-          :toolbarHidden="toolbarHidden"
-        /> 
-      </div>
-      <div class="mt-4 bg-white w-full z-0" >
-        <PageCanvas :zoom-page="zoomPage" :page-elements="getPageElements()"/>
-      </div>
-    </div>
-    <SettingsPanelVue :toolbar-hidden="false" 
-      class="h-full"
-      :class="sidePanelWidth"
-      @toggle-clicked="resizePanel()"
-    >
+  <div class="top-32 fixed z-50">
+    <Toolbar/>
+  </div>
+  <div class="top-32 fixed z-50 -right-2">
+    <SettingsPanelVue :toolbar-hidden="false" width="w-86">
       <span class="flex flex-row justify-end">
         <IconButton :iconImage="trashCan"
-          @icon-click="deletePageElement()"
+        @icon-click="deletePageElement()"
         />
       </span>
       <TabstripContainer :data="getTabsForElement"
-        @onClick="tabClicked($event)"
         @onButtonClick="handleButtonClick($event)"/>
-    </SettingsPanelVue>
+      </SettingsPanelVue>
+  </div>
+  <div class="flex flex-row justify-center w-100 relative">
+    <div class="mt-4 bg-white w-full z-0" >
+      <PageCanvas :zoom-page="zoomPage" :page-elements="getPageElements()"/>
+    </div>
+
     <ImageGallery :image-details="getImagesForGallery" 
-      @image-clicked="handleGalleryImageClicked($event)"
-      @close-clicked="handleGalleryClose()"
-    />
+    @image-clicked="handleGalleryImageClicked($event)"
+    @close-clicked="handleGalleryClose()"
     />
   </div>
 </template>
@@ -47,7 +38,7 @@ import type { NavMenuItem } from '@/components/core/navbar/navbar';
 import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
 import { defineComponent } from 'vue';
 import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
-import type { SliderPosition, SliderSettings } from '@/components/canvas/scaler/model';
+import type { SliderSettings } from '@/components/canvas/scaler/model';
 import Scaler from '@/components/canvas/scaler/scaler.vue';
 import { usePageStore } from '@/stores/page.store';
 import type { PageElement } from '@/components/page/model/pageElement/pageElement';
@@ -70,11 +61,6 @@ const scalerSettings: SliderSettings = {
   initialValue: 100,
   width: 400,
   label: 'Zoom',
-};
-
-const sliderPosition: SliderPosition = {
-  left: 'left-64',
-  top: 'top-0',
 };
 
 const trashCan: Icon = {
@@ -104,12 +90,9 @@ const trashCan: Icon = {
         pageBuilderService: PageBuilderService(),
         pageTitle: '',
         menuItems: [] as NavMenuItem[],
-        toolbarWidth: 'w-64',
         toolbarHidden: false,
         sliderSettings: scalerSettings,
-        sliderPosition: sliderPosition,
         zoomPage: 1,
-        sidePanelWidth: 'w-2/12',
         commandHistory: Object as unknown as  CommandHistory<CommandProperties>,
         editorSettingsService: new EditorSettingsService(),
         commandButtonService: CommandsService(),
@@ -124,15 +107,6 @@ const trashCan: Icon = {
     },
 
     computed: {
-      getToolbarClasses(): string {
-        let classDef = '';
-        if (this.toolbarHidden) {
-          classDef = `${this.toolbarWidth}`
-        } else {
-          classDef = `${this.toolbarWidth}`
-        }
-        return classDef 
-      },
 
       getTabsForElement() {
         return this.commandButtonService.getTabs() || [];
@@ -148,25 +122,12 @@ const trashCan: Icon = {
         return commandGroupId;
       },
 
-      toolbarToggleClicked() {
-        if (this.toolbarHidden) {
-          this.toolbarWidth = 'w-64';
-        }  else {
-          this.toolbarWidth = 'w-2';
-        }
-        this.toolbarHidden = !this.toolbarHidden;
-      },
-
       sliderChange(newValue: number) {
         this.zoomPage = newValue / 100;;
       },
 
       getPageElements(): PageElement[] {
         return this.pageStore.pageElements as PageElement[];
-      },
-
-      resizePanel() {
-        this.sidePanelWidth=this.sidePanelWidth === 'w-1' ? 'w-2/12' : 'w-1';
       },
 
       handleButtonClick(payload: CommandProperties): void {
@@ -193,10 +154,6 @@ const trashCan: Icon = {
 
       handleClearCommand(payload: CommandProperties): void {
         this.pageBuilderService.clearButtonCommand(payload, this.commandHistory as CommandHistory<CommandProperties>);
-      },
-
-      tabClicked(commandGroupId: string) {
-      console.log('%c⧭', 'color: #00a3cc', commandGroupId)
       },
 
       deletePageElement() {

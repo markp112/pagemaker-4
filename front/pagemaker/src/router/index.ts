@@ -6,6 +6,7 @@ import pageListVue from '@/views/pageList/pageList.vue';
 import pageEditor from '@/views/pageList/page-editor/page-editor.vue';
 import commandEditor from '@/views/admin/commandEditor/commandEditor.vue';
 import commandStructure from '@/views/admin/commandEditor/commandStructure/commandStructure.vue';
+import PlainLayout from '@/layouts/plain.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,8 +17,8 @@ const router = createRouter({
       component:() => import('../views/pageBuilder/pageBuilder.vue'),
       meta: {
         breadcrumb: [{ name: 'sites', link: 'sites' }, 
-        {name: 'pages', link: '/pagelist'},
-        {name: 'page-builder'}]
+        { name: 'pages', link: '/pagelist'},
+        { name: 'page-builder'}],
       }
     },
     {
@@ -30,7 +31,8 @@ const router = createRouter({
       name: 'sites',
       component: sitesVue,
       meta: {
-        breadcrumb: [{ name: 'sites' }]
+        breadcrumb: [{ name: 'sites' }],
+        layout: PlainLayout,
       }
     },
     {
@@ -38,7 +40,8 @@ const router = createRouter({
       name: 'site-editor',
       component: SiteEditor, 
       meta: {
-        breadcrumb: [{ name: 'sites', link: 'sites' }, {name: 'site-editor'}]
+        breadcrumb: [{ name: 'sites', link: 'sites' }, {name: 'site-editor'}],
+        layout: PlainLayout,
       }
     },
     {
@@ -46,7 +49,8 @@ const router = createRouter({
       name: 'pageList',
       component: pageListVue,
       meta: {
-        breadcrumb: [{ name: 'sites', link: 'sites' }]
+        breadcrumb: [{ name: 'sites', link: 'sites' }],
+        layout: PlainLayout,
       }
     },
     {
@@ -57,7 +61,8 @@ const router = createRouter({
         breadcrumb:  [{ name: 'sites', link: 'sites' }, 
           {name: 'pages', link: '/pagelist'},
           {name: 'page-editor'}
-        ]
+        ],
+        layout: PlainLayout,
       }
     },
     { 

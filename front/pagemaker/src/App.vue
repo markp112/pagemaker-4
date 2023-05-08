@@ -8,8 +8,10 @@
       <Breadcumb/>
     </div>
     <div class="w-full border-box font-body">
-      <RouterView>
-      </RouterView>
+      <component :is="$route.meta.layout || 'div'">
+        <RouterView >
+        </RouterView>
+      </component>
     </div>
     <div class="w-80">
       <Snackbar/>
@@ -38,7 +40,7 @@ export default defineComponent({
     RouterView,
     Snackbar: SnackbarVue,
     Breadcumb
-},
+  },
 
   data() {
     return {

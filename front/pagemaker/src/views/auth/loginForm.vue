@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="w-4/6">
     <p class="text-center text-2xl font-bold">Welcome Back</p>
     <p class=" text-lg font-bold mt-4 mb-4">Login</p>
-    <form  class="mt-6 w-4/6 ml-8">
+    <form  class="mt-6 p-4 rounded-xl shadow-xl">
       <label for="email" class="text-sm">E-Mail</label>
       <input
         type="email"

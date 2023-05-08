@@ -1,13 +1,12 @@
 <template>
-  <div class="relative w-full h-86vh">
-    <p class="m-4 text-site-primary text-3xl">Site Editor</p>
-    <div class=" items-center w-11/12 flex-wrap ml-48">
+  <div class="relative">
+    <p class="m-4 text-site-primary text-3xl text-center mb-8">Site Editor</p>
+    <div class="flex flex-row items-center flex-wrap justify-evenly">
       <form
-      @submit.prevent="saveClicked"
-      class="w-6/12 border-2 p-5 bg-gray-50 h-2/3 relative"
+        @submit.prevent="saveClicked"
+        class="w-6/12 border-2 p-6 bg-site-primary-dark h-2/3 relative shadow-2xl text-site-background font-medium"
       >
         <div class="field-wrapper">
-          
           <label for="name">Site Name:</label>
           <input
             type="text"
@@ -92,11 +91,7 @@
         </div>
       </form>
     </div>
-    <settingsPanelVue :toolbar-hidden="false" 
-      class="h-full"
-      :class="sidePanelWidth"
-      @toggle-clicked="resizePanel()"
-    >
+    <settingsPanelVue width="w-4/12">
       <TabstripContainerEditor :labels="['Palette Editor', 'Material colours', 'Typography']">
         <template v-slot:tab-0>
           <ColourPalettes :sitePalette="colourSwatches"
@@ -336,15 +331,18 @@ label {
 
 input,
 textarea {
-  @apply w-10/12 border-solid border self-end;
-  @apply bg-accent-2;
+  @apply w-10/12 self-end;
+  @apply bg-site-primary;
+  @apply leading-6;
 }
 
 .field-wrapper {
   @apply flex flex-row justify-start mb-2 ml-1;
 }
 
-input {
-  @apply p-1;
+input[type="text"],
+input[type="date"]
+{
+  @apply p-2;
 }
 </style>

@@ -1,9 +1,10 @@
 <template>
-  <div class="flex flex-row justify-start flex-wrap gap-2 bg-gray-300 p-2 shadow-md mb-2">
+  <div class="flex flex-row justify-start  bg-gray-300 shadow-md mb-2">
     <keep-alive>
       <component v-for="(commandButton, index) in buttonData" 
         track-by="$index"
         :is="commandButtons[commandButton.buttonType]"
+        class="p-2"
         :key="index"
         :index="index"
         :button-data = "commandButton"
