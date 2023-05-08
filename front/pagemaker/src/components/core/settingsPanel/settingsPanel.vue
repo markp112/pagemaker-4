@@ -25,7 +25,6 @@ import { LEFT_ARROW, RIGHT_ARROW } from '../common/models/showHideIcons';
 
 const TOOLBAR_ICON_UNHIDE = LEFT_ARROW;
 const TOOLBAR_ICON_HIDE = RIGHT_ARROW;
-type WIDTHS = 'w-full' | 'w-0 -right-6';
 
 export default defineComponent({
   name: 'settingsPanel',

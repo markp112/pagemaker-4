@@ -7,7 +7,7 @@
       {{ pageTitle }}
     </h2>
   </div>
-  <div class="top-32 fixed z-50 ">
+  <div class="top-32 fixed z-50">
     <Toolbar/>
   </div>
   <div class="top-32 fixed z-50 -right-2">
