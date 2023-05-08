@@ -1,5 +1,5 @@
 <template>
-  <Tooltip :tooltip="buttonData.tooltip" :showToolTip="showToolTip" class="left-8">
+  <Tooltip :tooltip="buttonData.tooltip" :showToolTip="showToolTip" class="">
   <div class="flex flex-row justify-center items-center relative cursor-pointer hover:bg-gray-600"
     :class="getIsActive()"
     >

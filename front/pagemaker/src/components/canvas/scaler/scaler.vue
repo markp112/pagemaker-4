@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
-import type { SliderPosition, SliderSettings } from './model';
+import type { SliderSettings } from './model';
 
 export default defineComponent({
     name:'slider',
@@ -26,9 +26,6 @@ export default defineComponent({
         type: Object as PropType<SliderSettings>,
         required: true
       },
-      position: {
-        type: Object as PropType<SliderPosition>
-      }
     },
 
     mounted() {
@@ -46,9 +43,6 @@ export default defineComponent({
         return `width:${this.$props.slider.width};`;
       },
 
-      getPosition() {
-        return `${this.$props.position?.left} ${this.$props.position?.top}`;
-      }
     },
 
     methods: {
@@ -60,10 +54,8 @@ export default defineComponent({
   })
 </script>
 
-<style scoped>
-div {
-  @apply absolute;
-}
+<style scoped lang="css">
+
 .rangeValue {
   @apply relative;
   @apply text-center;

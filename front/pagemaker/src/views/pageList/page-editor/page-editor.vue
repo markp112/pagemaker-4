@@ -1,11 +1,11 @@
 <template>
-  <div class="mt-24 w-full h-full flex flex-row justify-center flex-wrap">
+  <div class="mt-24 flex flex-row justify-center flex-wrap">
       <div class="w-7/12 flex flex-row mb-2">
         <p class="m-4 text-site-primary text-3xl">Page Editor</p>
       </div>
       <form
         @submit.prevent="saveClick"
-        class=" w-6/12 border-2 p-5 bg-gray-50 shadow-sm"
+        class=" w-6/12 border-2 p-5"
       >
       <div class="field-wrapper">
         <TextInput label="Name:"

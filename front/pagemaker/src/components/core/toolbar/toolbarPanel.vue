@@ -1,18 +1,21 @@
 <template>
-  <div class="mt-3 bg-white h-full p-2 flex flex-col justify-start">
-    <ToolbarContainer v-if="!toolbarHidden"
+  <div class="absolute left-0 top-12 border border-gray-400 rounded-r-md mr-2 z-50 
+    shadow-lg  transition-all ease-out-in duration-1000 transform translate-x-0" :class="getToolbarClasses" >
+    <div class="bg-white h-full p-2 flex flex-col justify-start rounded-md nav-content">
+      <ToolbarContainer v-if="!isHidden"
       :toolbar-items="containerItems"
       title="Containers"
-    />
-    <ToolbarContainer v-if="!toolbarHidden"
+      />
+      <ToolbarContainer v-if="!isHidden"
       :toolbar-items="elementItems"
       title="Elements"
-    />
-    <span class="absolute -right-10 w-10 p-1 bottom-44 border border-gray-400 rounded-r-full z-10 bg-white">
-      <Icon-Image :icon-image="activeIcon" 
-        @icon-click="toggleToolbar($event as string)" 
       />
-    </span>
+      <span class="absolute -right-10 w-10 p-1 border border-gray-400 rounded-r-full z-10 bg-white">
+        <Icon-Image :icon-image="activeIcon" 
+        @icon-click="toggleToolbar()" 
+        />
+      </span>
+    </div>
   </div>
 </template>
 
@@ -35,20 +38,13 @@ import { LEFT_ARROW, RIGHT_ARROW } from '../common/models/showHideIcons';
 export default defineComponent({
   name: 'toolbarPanel', 
 
-  emits: ['toggle-clicked'],
-  
-  props: {
-    toolbarHidden: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
   data() {
     return {
       activeIcon: TOOLBAR_ICON_HIDE,
       showToolbar: true,
       store: useToolbarStore(),
+      width: 'w-64',
+      isHidden: false,
     }
   },
 
@@ -57,7 +53,7 @@ export default defineComponent({
   },
 
   components: {
-    "Icon-Image": iconVue,
+    'Icon-Image': iconVue,
     ToolbarItem,
     ToolbarContainer
   },
@@ -70,13 +66,16 @@ export default defineComponent({
     elementItems(): ToolbarComponentItem[] {
       return this.containerElements(false);
     },
-    
+    getToolbarClasses(): string {
+      return this.width;
+      },
   },
 
   methods: {
-    toggleToolbar(event: string): void {
-      this.activeIcon = event === 'hideToolbar' ? TOOLBAR_ICON_UNHIDE : TOOLBAR_ICON_HIDE;
-      this.$emit('toggle-clicked')
+    toggleToolbar(): void {
+      this.width = this.width === 'w-64' ? 'w-1' : 'w-64';
+      this.isHidden = !this.isHidden;
+      this.activeIcon = this.isHidden ? TOOLBAR_ICON_UNHIDE : TOOLBAR_ICON_HIDE;
     },
 
     containerElements(isContainer: boolean): ToolbarComponentItem[] {
@@ -86,3 +85,7 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="css" scoped>
+
+</style>

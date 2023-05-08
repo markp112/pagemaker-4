@@ -5,8 +5,3 @@ export type SliderSettings = {
   initialValue: number,
   width: number,
 };
-
-export type SliderPosition = {
-  left: string,
-  top: string,
-};

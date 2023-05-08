@@ -2,6 +2,10 @@
   @apply border border-gray-400;
 }
 
+.std-list-item {
+  @apply hover:bg-site-primary-dark hover:text-on-primary p-2 cursor-pointer;
+}
+
 .page-heading {
   @apply font-bold;
   @apply text-on-surface;
@@ -65,7 +69,6 @@
 .sidebar-radio-container input {
   @apply w-4;
 }
-
 
 @screen md {
   .sidebar-button-panel {

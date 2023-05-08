@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col justify-center align-middle w-full text-sm relative">
     <input
-      class="w-full app-input-field text-site-primary-dark mb-1"
+      class="w-full app-input-field  mb-1"
       type="file"
       @change="uploadImage($event)"
       accept="image/png, image/jpeg"
     />
     <input
-      class="w-full app-input-field text-sm text-site-primary-dark  mb-1"
+      class="w-full app-input-field text-sm mb-1"
       type="text"
       @change="getImageFromUrl()"
       placeholder="or paste URL"
@@ -30,7 +30,7 @@
       </h3>
       <img
         :src="url"
-        class="border object-contain h-32 mt-2"
+        class="object-contain h-32 mt-2 mb-2 bg-site"
         ref="imagePlaceholder"
         @load="onImageLoad()"
       />
