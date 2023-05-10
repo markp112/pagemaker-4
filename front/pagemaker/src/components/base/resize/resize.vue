@@ -3,7 +3,7 @@
     <span
       ref='resize-div-tr'
       class="handle top-right"
-      :class="getClass()"
+      :class="isSelected()"
       @mousedown.stop.prevent="handleDown($event)"
       @mouseup="handleMouseUp($event)"
       @mousemove="handleMouseMove($event)"
@@ -12,7 +12,7 @@
     <span
       ref='resize-div-br'
       class="handle bottom-right"
-      :class="getClass()"
+      :class="isSelected()"
       @mousedown.stop.prevent="handleDown($event)"
       @mouseup="handleMouseUp($event)"
       @mousemove="handleMouseMove($event)"
@@ -21,7 +21,7 @@
     <span
       ref='resize-div-tl'
       class="handle top-left"
-      :class="getClass()"
+      :class="isSelected()"
       @mousedown.stop.prevent="handleDown($event)"
       @mouseup.stop="handleMouseUp($event)"
       @mousemove.stop="handleMouseMove($event)"
@@ -30,7 +30,7 @@
     <span
       ref='resize-div-bl'
       class="handle bottom-left"
-      :class="getClass()"
+      :class="isSelected()"
       @mousedown.stop.prevent="handleDown($event)"
       @mouseup.stop="handleMouseUp($event)"
       @mousemove.stop="handleMouseMove($event)"
@@ -65,7 +65,7 @@ export default defineComponent({
 
   methods: {
 
-    getClass(): string {
+    isSelected(): string {
       return this.isActive ? 'active ' : 'in-active ';
     },
     
@@ -77,7 +77,7 @@ export default defineComponent({
     
     handleDown(ev: MouseEvent) {
       if (!this.isActive) return;
-      if (!this.isSizing) {
+      if (this.isSizing = true) {
         this.resizeStarted(ev);
       }
     },

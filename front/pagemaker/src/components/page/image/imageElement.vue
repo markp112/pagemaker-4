@@ -1,5 +1,5 @@
 s<template>
-  <div class="relative select-none overflow-hidden "
+  <div class="relative select-none overflow-hidden"
     :ref="getId()"
     :id="getId()"
     :class="thisComponent.classDefinition"
@@ -9,8 +9,6 @@ s<template>
     @drag.stop="onDrag($event)"
     @dragend.stop="onDragEnd()"
     @drop.stop
-    @blur="isSizing=false"
-
   >
     <img
       ref="image-element"
@@ -78,6 +76,8 @@ export default  defineComponent({
     },
       
     onResize(aDimension: ClientCoordinates) {
+      if (!this.isSizing) { return };
+      console.log('%c⧭', 'color: #99614d', 'onResize')
       Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
     },
 
@@ -87,6 +87,7 @@ export default  defineComponent({
     },
 
     onDragStart(event: MouseEvent) {
+      if (this.isSizing){ return };
       this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragStart(event)
     },
     
