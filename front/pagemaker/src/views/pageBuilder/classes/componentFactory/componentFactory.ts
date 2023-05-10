@@ -43,13 +43,13 @@ function ComponentFactory() {
     const imageElement = createBaseElement(component, parentReference) as ImageElement;
     imageElement.content ='imageplaceholder-100x83.png';
     imageElement.container = {
-      naturalSize: BASE_DIMENSION,
-      location: BASE_LOCATION,
+      naturalSize: { ...BASE_DIMENSION },
+      location: { ...BASE_LOCATION },
     };
     imageElement.image = {
-      naturalSize: BASE_DIMENSION,
-      location: BASE_LOCATION,
-      scaledSize: BASE_DIMENSION,
+      naturalSize: { ...BASE_DIMENSION },
+      location: { ...BASE_LOCATION },
+      scaledSize: { ...BASE_DIMENSION },
     };
     const defaultHeight: ValueAndUnit = { value: 200, unit: 'px' };
     const defaulWidth: ValueAndUnit = { value: 100, unit: 'px' };

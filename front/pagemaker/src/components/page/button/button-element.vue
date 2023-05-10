@@ -12,7 +12,6 @@
     @dragstart="onDragStart($event)"
     @drag="onDrag($event)"
     @dragend="onDragEnd()"
-
   >
     {{ getData() }}
     <Resize :is-active="isActive" 
@@ -57,7 +56,6 @@ export default defineComponent({
 
   mounted() {
     this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
-    console.log('%c⧭', 'color: #733d00',  this.thisComponent)
   },
   
   computed: {
@@ -79,6 +77,7 @@ export default defineComponent({
     },
       
     onResize(aDimension: ClientCoordinates) {
+      if (!this.isSizing) { return };
       Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
     },
 
@@ -122,6 +121,7 @@ export default defineComponent({
   },
 
   onDragStart(event: MouseEvent) {
+    if (this.isSizing) { return }
     this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragStart(event);
     this.isDragging = true;
   },
