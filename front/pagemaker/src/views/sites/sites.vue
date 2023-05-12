@@ -88,11 +88,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
       },
       
       siteClicked(siteId: string) {
-        try {
-          this.getSiteData(siteId, `/pagelist` );
-        } catch (error) {
-            console.log('%c⧭', 'color: #5200cc', error)
-        }
+        this.getSiteData(siteId, `/pagelist` );
       },
 
       async siteDeleteClicked(siteId: string) {
@@ -100,12 +96,8 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
       },
 
       async siteEditClick(siteId: string) {
-        try {
-          await this.getSiteData(siteId, `/site-editor`);
-          this.$router.push({ name: 'site-editor', params: { title: 'edit site' }})
-        } catch (error) {
-            console.log('%c⧭', 'color: #5200cc', error)
-        }
+        await this.getSiteData(siteId, `/site-editor`);
+        this.$router.push({ name: 'site-editor', params: { title: 'edit site' }})
       }
 
     },

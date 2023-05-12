@@ -77,7 +77,6 @@ export default  defineComponent({
       
     onResize(aDimension: ClientCoordinates) {
       if (!this.isSizing) { return };
-      console.log('%c⧭', 'color: #99614d', 'onResize')
       Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
     },
 

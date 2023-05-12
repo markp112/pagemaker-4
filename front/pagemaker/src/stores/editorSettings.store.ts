@@ -1,6 +1,7 @@
 import type { Units } from '@/components/page/model/model';
 import type { LineStyle, PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia';
+const ELEMENT_NAME_NOT_DEFINED = '';
 
 const useEditorSettingsStore = defineStore('editorStore',{
 
@@ -49,13 +50,14 @@ const useEditorSettingsStore = defineStore('editorStore',{
       return state._activeElement ? state._activeElement.styles : [];
     },
 
-    getActiveElementName: (state) => {
+    getActiveElementType: (state) => {
       const element = state._activeElement;
-      const elementName = element?.name;
-      if (typeof elementName !== 'string') {
-        return ''
+      console.log('%c⧭', 'color: #ff6600', element);
+      const elementType = element?.type;
+      if (typeof elementType !== 'string') {
+        return ELEMENT_NAME_NOT_DEFINED;
       }
-      return elementName;
+      return elementType;
     },
   },
 

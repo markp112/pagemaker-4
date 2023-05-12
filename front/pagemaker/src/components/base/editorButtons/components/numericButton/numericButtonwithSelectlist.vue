@@ -1,17 +1,17 @@
 <template>
   <Tooltip :showToolTip="showTooltip" :tooltip="buttonData.tooltip">
-  <div class="flex flex-row justify-start numeric-input-layout items-center">
-    <span class="relative">
-      <img :src="getPath(buttonData.displayIcon)"
-        class="text-accent-600 cursor-pointer hover:bg-gray-600 mr-2 relative h-10"
-        @mouseover="showTooltip = !showTooltip"
-        @mouseleave="showTooltip = !showTooltip"
-      />
-    </span>
+    <div class="flex flex-row justify-start numeric-input-layout items-center">
+      <span class="relative">
+        <img :src="getPath(buttonData.displayIcon)"
+          class="text-accent-600 cursor-pointer hover:bg-gray-600 mr-2 relative h-10 w-16"
+          @mouseover="showTooltip = !showTooltip"
+          @mouseleave="showTooltip = !showTooltip"
+        />
+      </span>
       <input type="number"
         v-model="inputValue"
         size="2"
-        class="w-10 bg-site-surface text-on-surface text-sm text-right self-center "
+        class="w-8 bg-site-surface text-on-surface text-sm text-right self-center"
         @change="onInputChange()"
       />
   </div>

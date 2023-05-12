@@ -19,11 +19,11 @@ function Resize(thisComponent: PageElement, mouse: useMouse) {
         height: calculateChangeInDimension(boundingRect.height, mouse.deltaY),
         width: calculateChangeInDimension(boundingRect.width, mouse.deltaX),
       };
-      if (thisComponent.isContainer) {
-        const parentDimension = getParentDimensions(thisComponent.parentRef);
-        boxDimensions.height = constrainDimensionToParent(boxDimensions.height, parentDimension.height);
-        boxDimensions.width = constrainDimensionToParent(boxDimensions.width, parentDimension.width);
-      }
+      // if (thisComponent.isContainer) {
+      //   const parentDimension = getParentDimensions(thisComponent.parentRef);
+      //   boxDimensions.height = constrainDimensionToParent(boxDimensions.height, parentDimension.height);
+      //   boxDimensions.width = constrainDimensionToParent(boxDimensions.width, parentDimension.width);
+      // }
       resizeComponent(boxDimensions);
     }
   }

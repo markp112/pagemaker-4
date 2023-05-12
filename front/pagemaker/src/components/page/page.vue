@@ -1,23 +1,27 @@
 <template>
-  <div class="border border-gray-800 page-shadow flex flex-col justify-start p-5 overflow-auto relative" 
+  <div class="border border-gray-800 page-shadow p-5 overflow-auto relative"
+    :class="thisPage.classDefinition"
     :style="getScaledPageSize"
     ref="page"
     id="page"
     @dragover.prevent
     @drop.prevent="onDrop($event)"
+    @click="setActiveElementToPage"
   >
     <component v-for="(component, index) in pageElements"
-      track-by="$index"
-      :is="component.componentHTMLTag"
-      :key="index"
-      :index="index"
-      v-bind="getProps(component)"
-      :thisComponent="component"
-      @dragover.prevent
-      @drop.prevent="onDrop($event)"
-      @OnClick="containedElementClick($event)"
-    ></component>
-  </div>
+    track-by="$index"
+    :is="component.componentHTMLTag"
+    :key="index"
+    :index="index"
+    v-bind="getProps(component)"
+    :thisComponent="component"
+    @dragover.prevent
+    @drop.prevent="onDrop($event)"
+    @OnClick="containedElementClick($event)"
+  ></component>
+  <Resize :is-active="isActive">
+  </Resize>
+</div>
 </template>
 
 <script lang="ts">
@@ -32,6 +36,10 @@ import type { ValueAndUnit } from '@/classes/units';
 import imageElement from './image/imageElement.vue';
 import buttonElement from './button/button-element.vue';
 import textElement from './textElement/textElement.vue';
+import Resize from '../base/resize/resize.vue';
+import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
+import { usePageStore } from '@/stores/page.store';
+import { stylesToString } from './functions/stylesToString';
 
 const PAGE_REF = 'page';
 
@@ -49,17 +57,21 @@ export default defineComponent({
       default: 100,
     }
   },
+
   components: {
     container: Container,
     imageElement: imageElement,
     buttonElement: buttonElement,
-    textElement: textElement
-  },
+    textElement: textElement,
+    Resize,
+},
 
   data() {
     return {
       pageBuilderService: PageBuilderService(),
       container:  defineComponent(() => import('./container/container.vue')),
+      editorSettings: new EditorSettingsService(),
+      thisPage: usePageStore().pageElement,
     }
   },
 
@@ -76,11 +88,20 @@ export default defineComponent({
         const scaledDimension = this.pageBuilderService.calcPageSize(scale, dimensions);
         this.pageBuilderService.setScaledDimension(scaledDimension);
         pageSize = `width:${this.getDimension(scaledDimension.width)}; height:${this.getDimension(scaledDimension.height)};`;
-
       }
+      pageSize += this.getStyles;
       return pageSize;
     },
 
+    isActive() {
+      return this.editorSettings.getActiveElement()?.ref === PAGE_REF;
+    },
+
+    getStyles(): string {
+      let styles = '';
+      styles = stylesToString(this.thisPage.styles)
+      return styles;
+    },
   },
     
   methods: {
@@ -94,7 +115,7 @@ export default defineComponent({
 
     onDrop(event: DragEvent): void {
       const componentName = this.getComponentName(event);
-      this.pageBuilderService.createNewComponent(componentName, 'page');
+      this.pageBuilderService.createNewComponent(componentName, PAGE_REF);
     },
     
     getComponentName(event: DragEvent): string {
@@ -105,6 +126,15 @@ export default defineComponent({
     containedElementClick(pageElement: PageElement): void {
       this.pageBuilderService.setActiveElement(pageElement);
     },
+
+    getClasses() {
+      return this.thisPage.classDefinition;
+    },
+  
+
+    setActiveElementToPage() {
+      this.editorSettings.setActiveElement(this.thisPage);
+    }
 
   },
 })

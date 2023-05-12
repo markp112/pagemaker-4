@@ -5,7 +5,7 @@ import { useEditorSettingsStore } from '@/stores/editorSettings.store';
 import { axiosClient } from '../httpService';
 
 const BASE_ROUTE = '/private/editor/command-buttons';
-const DEFAULT_TABS = 'Splash';
+const SHOW_PAGE_TABS = 'page';
 
 function CommandsService() {
   const store = useCommandButtonStore();
@@ -18,8 +18,8 @@ function CommandsService() {
   }
 
   function getEditorCommand() {
-    const commandName = editorSettingsStore.getActiveElementName;
-    return commandName ? store.getCommandMap[commandName] : store.getCommandMap[DEFAULT_TABS];
+    const commandName = editorSettingsStore.getActiveElementType;
+    return commandName ? store.getCommandMap[commandName] : store.getCommandMap[SHOW_PAGE_TABS];
   }
 
   function getTabs(): TabStrip[] {
