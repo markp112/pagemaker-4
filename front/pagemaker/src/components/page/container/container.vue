@@ -121,7 +121,7 @@ export default defineComponent({
     },
 
     resizeStarted(event: MouseEvent ) {
-      this.isSizing=true;
+      this.isSizing = true;
       this.mouse.updatePositionEvent(event)
     },
       

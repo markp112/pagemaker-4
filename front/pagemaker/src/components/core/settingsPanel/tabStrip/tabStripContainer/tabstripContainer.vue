@@ -75,6 +75,7 @@ export default defineComponent({
   @apply h-auto;
   @apply m-1 pr-3;
   @apply flex flex-row justify-start;
+  min-width: 18em;
 }
 
 </style>

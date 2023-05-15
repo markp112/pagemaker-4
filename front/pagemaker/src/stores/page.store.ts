@@ -29,6 +29,10 @@ const usePageStore = defineStore({
       return state._scaledDimension;
     },
 
+    pageElement: (state) => {
+      return state._pageElement;
+    }
+
   },
 
   actions: {
