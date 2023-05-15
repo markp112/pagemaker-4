@@ -52,7 +52,6 @@ const useEditorSettingsStore = defineStore('editorStore',{
 
     getActiveElementType: (state) => {
       const element = state._activeElement;
-      console.log('%c⧭', 'color: #ff6600', element);
       const elementType = element?.type;
       if (typeof elementType !== 'string') {
         return ELEMENT_NAME_NOT_DEFINED;
