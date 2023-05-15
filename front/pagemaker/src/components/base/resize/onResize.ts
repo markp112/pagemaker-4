@@ -19,11 +19,11 @@ function Resize(thisComponent: PageElement, mouse: useMouse) {
         height: calculateChangeInDimension(boundingRect.height, mouse.deltaY),
         width: calculateChangeInDimension(boundingRect.width, mouse.deltaX),
       };
-      // if (thisComponent.isContainer) {
-      //   const parentDimension = getParentDimensions(thisComponent.parentRef);
-      //   boxDimensions.height = constrainDimensionToParent(boxDimensions.height, parentDimension.height);
-      //   boxDimensions.width = constrainDimensionToParent(boxDimensions.width, parentDimension.width);
-      // }
+      if (thisComponent.isContainer) {
+        const parentDimension = getParentDimensions(thisComponent.parentRef);
+        boxDimensions.height = constrainDimensionToParent(boxDimensions.height, parentDimension.height, parentDimension.padding);
+        boxDimensions.width = constrainDimensionToParent(boxDimensions.width, parentDimension.width, parentDimension.padding);
+      }
       resizeComponent(boxDimensions);
     }
   }
@@ -32,14 +32,15 @@ function Resize(thisComponent: PageElement, mouse: useMouse) {
     const parentDimension = getElementDimension(parentRef);
     const padding = window.getComputedStyle(document.getElementById(parentRef) as HTMLDivElement).paddingLeft;
     const paddingValue = parseInt(padding.slice(0, padding.indexOf('p')));
+    parentDimension.padding = paddingValue;
     parentDimension.width.value = parentDimension.width.value - (paddingValue * BOTH_SIDES);
     return parentDimension;
   }
 
-  function constrainDimensionToParent(dimension: ValueAndUnit, parentDimension: ValueAndUnit): ValueAndUnit {
+  function constrainDimensionToParent(dimension: ValueAndUnit, parentDimension: ValueAndUnit, padding: number | undefined = 0): ValueAndUnit {
     const checkedDimension = { ...dimension }
     if (dimension.value > parentDimension.value) {
-      checkedDimension.value = parentDimension.value;
+      checkedDimension.value = parentDimension.value - padding;
     }
     return checkedDimension;
   }
