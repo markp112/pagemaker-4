@@ -7,7 +7,7 @@ module.exports = {
 			md: "768px",
 			lg: "1024px",
 			xl: "1280px",
-			"2xl": "1536px",
+			"2xl": "1500px",
 		},
 
 		extend: {
@@ -61,6 +61,7 @@ module.exports = {
 			"w-98": "98%",
 			full: "100%",
 			screen: "100vw",
+			"99vw": "99vw",
 			min: "min-content",
 			max: "max-content",
 		}),

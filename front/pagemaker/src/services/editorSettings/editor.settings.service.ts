@@ -78,7 +78,6 @@ class EditorSettingsService {
     this.store.setActiveElement(element);
   }
 
-
   getActiveElement() {
     return this.store.activeElement;
   }

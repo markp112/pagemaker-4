@@ -2,6 +2,7 @@ import type { ActionEvent } from '@/classes/actionEvent';
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
 import type { Units } from '@/classes/units';
+import type { Unit } from '../model';
 
 type CssStyleTypes =
   | 'background-color'
@@ -120,7 +121,6 @@ type ComponentTypesString =
   | 'rootContainer'
   | 'page';
 
-
 interface PageElement {
   name: string;
   ref: string;
@@ -132,12 +132,22 @@ interface PageElement {
   type: ComponentTypesString;
   location: Location;
   dimension: Dimension;
-  actionEvent: ActionEvent;
+  actionEvent?: ActionEvent;
   content: string;
   isAbsolute: boolean;
 };
 
-
+interface Page extends PageElement {
+  pageId: string,
+  siteId: string,
+  name: string,
+  backgroundColour: string,
+  colour: string,
+  created: Date,
+  edited: Date,
+  icon: string,
+  elements: PageElement[],
+};
 
 type PropsDefinition = { thisComponent: PageElement };
 
@@ -150,5 +160,6 @@ export type {
   BorderStyle, 
   CssStyleTypes,
   LineStyle,
-  PropsDefinition
+  PropsDefinition, 
+  Page,
 };

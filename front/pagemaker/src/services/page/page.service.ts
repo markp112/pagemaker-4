@@ -1,4 +1,3 @@
-import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
 import { displayMessage } from '@/common/displayMessage';
 import type { ValidField } from '@/components/base/formFields/inputText/model';
 import { pagesService } from '@/services/pages/pages.service';
@@ -6,11 +5,12 @@ import { usePageStore } from '@/stores/page.store';
 import { useSiteStore } from '@/stores/site.store';
 import { axiosClient } from '../httpService';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-import { constructPageElementContainerFromMetaData } from '../dto/page.dto';
+import type { Page } from '@/components/page/model/pageElement/pageElement';
 
 function PageService() {
   const NEW_PAGE = '-1';
   const BASE_ROUTE = '/pages/';
+  const PAGE = 'page';
   const store = usePageStore();
   const siteStore = useSiteStore();
   const getRoute = (siteId: string, pageId: string) => `${BASE_ROUTE}${siteId}/${pageId}`;
@@ -34,7 +34,7 @@ function PageService() {
     const name = '';
     const backgroundColour = getSiteBackgroundColour();
     const colour = getSiteTextColour();
-    const page: PageMetaData = {
+    const page: Page = {
       created,
       edited,
       icon,
@@ -43,20 +43,26 @@ function PageService() {
       name,
       backgroundColour,
       colour,
-      height: { value: 1024, unit: 'px' },
-      width: { value: 1280, unit: 'px' },
+      classDefinition: '',
+      componentHTMLTag: 'page',
+      content: '',
+      dimension: { width: { value: 1280, unit: 'px' }, height: { value: 1080, unit: 'px' }},
+      location: { top: { value: 0, unit: 'px' }, left: { value: 0, unit: 'px' }},
+      isAbsolute: false,
+      isContainer: true,
+      elements: [],
+      parentRef: '',
+      ref: 'root',
+      styles: [],
+      type: 'page',
     };
     store.setPage(page);
   }
 
-async function createPage(page: PageMetaData) {
+async function createPage(page: Page) {
   try {
     if (page.pageId === NEW_PAGE) {
-      const createdPage = await createPageMetaData(page);
-      const pageContainer = constructPageElementContainerFromMetaData(page);
-      const pageId = createdPage.pageId;
-      const siteId = createdPage.siteId;
-      await createPageContent(pageContainer, pageId, siteId);
+      page = await createPageContent(page);
       displayMessage('Page Created', 'success', 'Saved');
     }
   } catch (error) {
@@ -64,17 +70,25 @@ async function createPage(page: PageMetaData) {
   }
 }
 
-  async function createPageMetaData(page: PageMetaData) {
-    return await axiosClient().post<PageMetaData, PageMetaData>(`${getRoute(page.siteId, page.pageId)}/metadata`, page);
+async function upadatePage(page: Page) {
+  try {
+    await axiosClient().put<Page, Page>(`${getRoute(page.siteId, PAGE)}/${page.pageId}`, page)
+  } catch (err) {
+    displayMessage((err as Error).message, 'error', 'Error');
   }
+  
+}
 
-  async function createPageContent(pageContent: PageContainerInterface, pageId: string, siteId: string) {
-    return await axiosClient().post<PageContainerInterface, PageContainerInterface>(`${getRoute(siteId, 'page')}/${pageId}`, pageContent )
-  }
+async function createPageContent(page: Page) {
+  return await axiosClient().post<Page, Page>(`${getRoute(page.siteId, PAGE)}/${page.pageId}`, page )
+}
 
   async function getPageContent(siteId: string, pageId: string) {
-    const pageContentData = await axiosClient().get<PageContainerInterface>(`${getRoute(siteId, 'page')}/${pageId}`);
-    store.setPageElementRoot(pageContentData);
+    return await axiosClient().get<PageContainerInterface>(`${getRoute(siteId, PAGE)}/${pageId}`);
+  }
+  
+  function setPageContent(page: Page) {
+    store.setPageElementRoot(page);
   }
 
   function getSiteBackgroundColour(): string {
@@ -97,7 +111,7 @@ async function createPage(page: PageMetaData) {
     return isUniquePageName(name);
   }
 
-  return { createNewPage, createPage, validatePageName, getPageContent };
+  return { createNewPage, createPage, validatePageName, getPageContent, setPageContent, upadatePage };
 }
 
 export { PageService };

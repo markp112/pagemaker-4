@@ -69,7 +69,7 @@ import { useSiteStore } from '@/stores/site.store';
 import { PageService } from '@/services/page/page.service';
 import { CommandsService } from '@/services/commandButtons/commandButtons.service';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
+import type { Page } from '@/components/page/model/pageElement/pageElement';
 
 export default defineComponent({
   name: 'PageList',
@@ -126,9 +126,9 @@ export default defineComponent({
       });
     },
     
-    async pageRowClick(page: PageMetaData) {
+    async pageRowClick(page: Page) {
       await CommandsService().fetchCommandHierarchy(this.siteId, this.userId);
-      await PageService().getPageContent(this.siteId, page.pageId);
+      this.pageService.setPageContent(page);
       this.$router.push({
         name: 'pagebuilder',
         params: { 
