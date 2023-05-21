@@ -4,11 +4,12 @@ import type { Page } from '@/components/page/model/pageElement/pageElement';
 
 export class SavePageCommand implements Command {
 
-  constructor(private page: Page, private service = PageService) {}
+  constructor(private readonly page: Page, private readonly service = PageService) {}
 
-  execute(): void {
-    this.service().upadatePage(this.page);
+  async execute(): Promise<void> {
+    await this.service().upadatePage(this.page);
   }
+  
   undo() {
     throw new Error('not implemented');
   }

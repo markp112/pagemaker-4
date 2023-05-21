@@ -2,7 +2,6 @@ import type { ActionEvent } from '@/classes/actionEvent';
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
 import type { Units } from '@/classes/units';
-import type { Unit } from '../model';
 
 type CssStyleTypes =
   | 'background-color'
