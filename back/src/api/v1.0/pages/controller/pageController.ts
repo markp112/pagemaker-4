@@ -5,7 +5,6 @@ import { handleError } from '@errors/handleError';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
 import {  Page, } from '../model/model';
-import { updateDoc } from 'firebase/firestore';
 
 function pageController() {
 
