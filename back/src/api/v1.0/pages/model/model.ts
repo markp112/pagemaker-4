@@ -16,19 +16,6 @@ interface Location {
   left: Unit,
 };
 
-type PageMetaData = {
-  siteId: string,
-  pageId: string,
-  name: string,
-  width: string,
-  height: string,
-  backgroundColour: string,
-  colour: string,
-  created: Date,
-  edited: Date,
-  icon: string,
-};
-
 type CssStyleTypes =
   | 'background-color'
   | 'color'
@@ -142,7 +129,7 @@ interface PageElementData {
   type: ComponentTypesString;
   location: Location,
   dimension: Dimension,
-  actionEvent: {
+  actionEvent?: {
     actionType: string,
     actionEvent: string,
   };
@@ -150,12 +137,17 @@ interface PageElementData {
   isAbsolute: boolean;
 }
 
-type ContainerOrientation = "column" | "row";
-
-interface PageContainerData extends PageElementData {
-  elements: PageElementData[];
-  ContainerOrientation: ContainerOrientation,
+interface Page extends PageElementData {
+  pageId: string,
+  siteId: string,
+  name: string,
+  backgroundColour: string,
+  colour: string,
+  created: Date,
+  edited: Date,
+  icon: string,
+  pageElements: PageElementData[],
 };
 
 
-export { Units, Unit, Dimension, PageMetaData, PageContainerData };
+export { Units, Unit, Dimension, Page };

@@ -63,16 +63,16 @@
       </div>
       <div class="field-wrapper">
         <NumberInput label="Screen Width (px)"
-          :value="page.width.value"
+          :value="page.dimension.width.value"
           place-holder="Enter max width for page width"
-          @on-field-change="($event) => page.width.value = $event"
+          @on-field-change="($event) => page.dimension.width.value = $event"
         /> 
       </div>
       <div class="field-wrapper">
         <NumberInput label="Screen Height (px)"
-        :value="page.height.value"
+        :value="page.dimension.height.value"
         place-holder="Enter max height for page height"
-        @on-field-change="($event) => page.height.value = $event"
+        @on-field-change="($event) => page.dimension.height.value = $event"
         />
       </div> 
       <div class="field-wrapper">
@@ -112,19 +112,19 @@ import inputNumericVue from '@/components/base/formFields/inputNumeric/inputNume
 import Datepicker from 'vue3-datepicker';
 import { defineComponent } from 'vue';
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
-import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
 import { getImageUrl } from '@/common/getIcon';
 import { formatDate } from '@/common/dateFunctions';
 import { usePageStore } from '@/stores/page.store';
 import type { ValidField } from '@/components/base/formFields/inputText/model';
 import { PageService } from '@/services/page/page.service';
+import type { Page } from '@/components/page/model/pageElement/pageElement';
 
 export default defineComponent ({
   name: 'page-editor',
   data() {
     return {
       pageTitle: '',
-      page: Object as unknown as PageMetaData,
+      page: Object as unknown as Page,
       dateCreated: new Date(),
       showIconPicker: false,
       formErrors: [] as string[],
@@ -170,7 +170,7 @@ export default defineComponent ({
     },
 
     getIcon(iconName: string | undefined): string {
-      if (!iconName || iconName === '') return '';
+      if (!iconName || iconName === '') iconName = 'faq-32.png';
       return getImageUrl(iconName);
     },
     
@@ -193,7 +193,6 @@ export default defineComponent ({
     
     async saveClick() {
       await this.pageService.createPage(this.page);
-      
     },
 },
   

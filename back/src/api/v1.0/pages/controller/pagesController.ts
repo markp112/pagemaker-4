@@ -1,9 +1,10 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
 import { collection, getDocs } from '@firebase/firestore';
 import { firebaseDb } from '../../../../firebase/initFirebase';
-import { PageMetaData } from '../model/model';
 import { pagesCollectionBase } from './common';
 import { handleError } from '@errors/handleError';
+import { Page } from '../model/model';
+import { httpStatusCodes } from '@api/httpStatusCodes';
 
 function pagesController() {
 
@@ -11,12 +12,12 @@ function pagesController() {
     try {
       const pagesCollection = pagesCollectionBase(siteId);
       const firebaseResponse = await getDocs(collection(firebaseDb, pagesCollection));
-      const pages: PageMetaData[] = [];
+      const pages: Page[] = [];
       firebaseResponse.docs.forEach(doc => {
-        const page = doc.data() as unknown as PageMetaData;
+        const page = doc.data() as unknown as Page;
         pages.push(page);
       });
-      return constructResponse<PageMetaData[]>(pages, 200);
+      return constructResponse<Page[]>(pages, httpStatusCodes.OK);
     } catch (err) {
       handleError(err);
     }

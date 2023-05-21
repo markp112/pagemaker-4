@@ -1,17 +1,16 @@
 import type { Dimension } from '@/classes/dimension';
-import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
-import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
+import type { Page, PageElement } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia';
+
+const PAGE_ROOT = 'page';
 
 const usePageStore = defineStore({
   id: 'pageStore',
 
   state: () => {
     return {
-      _page: {} as PageMetaData,
-      _pageElement: {} as PageContainerInterface,
-      _pageElements: [] as PageElement[],
+      _page: {} as Page,
+      _pageElement: {} as PageElement,
       _scaledDimension: {} as Dimension,
     }
   },
@@ -22,7 +21,7 @@ const usePageStore = defineStore({
     },
 
     pageElements: (state) => {
-      return state._pageElements;
+      return state._page.elements;
     },
 
     scaledDimension: (state) => {
@@ -36,14 +35,13 @@ const usePageStore = defineStore({
   },
 
   actions: {
-    setPage(page: PageMetaData): void {
+    setPage(page: Page): void {
       this._page = page;
     },
 
-    setPageElementRoot(pageElement: PageContainerInterface) {
-      this._pageElements = [];
+    setPageElementRoot(pageElement: Page) {
       this._pageElement = pageElement;
-      this._pageElements = [ ...pageElement.elements ];
+      this._page = pageElement;
     },
 
     addNewElement(pageElement: PageElement) {
@@ -56,11 +54,11 @@ const usePageStore = defineStore({
     },
 
     findParentElement(parentRef: string): PageElement[] {
-      if(parentRef === 'page') {
-        return this._pageElements as PageElement[];
+      if(parentRef === PAGE_ROOT) {
+        return this._page.elements as PageElement[];
       }
-      const parentElement = this._pageElements.filter(pageElement => pageElement.ref === parentRef)[0];
-      return (parentElement as PageContainerInterface).elements;
+      const parentElement = this._page.elements.filter(pageElement => pageElement.ref === parentRef)[0];
+      return (parentElement as Page).elements;
     }
 
   }

@@ -9,36 +9,34 @@
     @click="setActiveElementToPage"
   >
     <component v-for="(component, index) in pageElements"
-    track-by="$index"
-    :is="component.componentHTMLTag"
-    :key="index"
-    :index="index"
-    v-bind="getProps(component)"
-    :thisComponent="component"
-    @dragover.prevent
-    @drop.prevent="onDrop($event)"
-    @OnClick="containedElementClick($event)"
+      track-by="$index"
+      :is="component.componentHTMLTag"
+      :key="index"
+      :index="index"
+      v-bind="getProps(component)"
+      :thisComponent="component"
+      @dragover.prevent
+      @drop.prevent="onDrop($event)"
+      @OnClick="containedElementClick($event)"
   ></component>
   <Resize :is-active="isActive">
   </Resize>
 </div>
 </template>
 
+
 <script lang="ts">
 import { defineComponent, type PropType, } from 'vue';
-import type { PageMetaData } from '@/classes/pageMetaData/pageMetaData';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
-import type { PageElement } from './model/pageElement/pageElement';
+import type { Page, PageElement } from './model/pageElement/pageElement';
 import ContainerVue from './container/container.vue';
 import Container from './container/container.vue';
-import type { Dimension } from '@/classes/dimension';
 import type { ValueAndUnit } from '@/classes/units';
 import imageElement from './image/imageElement.vue';
 import buttonElement from './button/button-element.vue';
 import textElement from './textElement/textElement.vue';
 import Resize from '../base/resize/resize.vue';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { usePageStore } from '@/stores/page.store';
 import { stylesToString } from './functions/stylesToString';
 
 const PAGE_REF = 'page';
@@ -48,14 +46,10 @@ export default defineComponent({
 
   props: {
     page: {
-      type: Object as PropType<PageMetaData>
+      type: Object as PropType<Page>,
+      required: true,
     },
     scale: Number,
-    pageElements: {
-      type: Array as PropType<PageElement[]>,
-      required: true,
-      default: 100,
-    }
   },
 
   components: {
@@ -71,21 +65,18 @@ export default defineComponent({
       pageBuilderService: PageBuilderService(),
       container:  defineComponent(() => import('./container/container.vue')),
       editorSettings: new EditorSettingsService(),
-      thisPage: usePageStore().pageElement,
+      thisPage: this.$props.page,
     }
   },
 
   computed: {
 
     getScaledPageSize(): string {
+      if(!this.thisPage) return '';
       let pageSize = '';
       const scale = this.$props.scale;
-      if (this.$props.page && scale) {
-        const dimensions: Dimension = {
-          width: this.$props.page.width,
-          height: this.$props.page.height,
-        }
-        const scaledDimension = this.pageBuilderService.calcPageSize(scale, dimensions);
+      if (this.thisPage && scale) {
+        const scaledDimension = this.pageBuilderService.calcPageSize(scale, this.thisPage.dimension);
         this.pageBuilderService.setScaledDimension(scaledDimension);
         pageSize = `width:${this.getDimension(scaledDimension.width)}; height:${this.getDimension(scaledDimension.height)};`;
       }
@@ -102,6 +93,10 @@ export default defineComponent({
       styles = stylesToString(this.thisPage.styles)
       return styles;
     },
+
+    pageElements(): PageElement[] {
+      return this.page.elements
+    }
   },
     
   methods: {
@@ -130,7 +125,6 @@ export default defineComponent({
     getClasses() {
       return this.thisPage.classDefinition;
     },
-  
 
     setActiveElementToPage() {
       this.editorSettings.setActiveElement(this.thisPage);

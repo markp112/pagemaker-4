@@ -1,4 +1,4 @@
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
+import type { Page, PageElement } from '@/components/page/model/pageElement/pageElement';
 import type { CommandHistory } from '../history/history';
 import { AlignmentCommand } from './alignment/alignmentCommand';
 import { BorderRadiusCommand } from './borderRadius/borderRadius.command';
@@ -18,6 +18,7 @@ import { ZindexCommand } from './zIndex/zindexCommand';
 import { FontCommand } from './fontCommand/fontCommand';
 import { DropShadowCommand } from './dropShadow/dropShadow.command';
 import { DeleteElementCommand } from './deleteElement/deleteElement';
+import { SavePageCommand } from './savePage/savePage';
 
 // rome-ignore lint/suspicious/noExplicitAny: <explanation>
 type  CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any }
@@ -51,6 +52,7 @@ class CommandProcessor {
     'send-to-back': (pageElement: PageElement) => new ZindexCommand(pageElement),
     'bring-to-front': (pageElement: PageElement) => new ZindexCommand(pageElement),
     'show-gallery': () => new ImageLibraryCommand(),
+    'save-page': (pageElement: PageElement) => new SavePageCommand(pageElement as Page),
     'upload-image-file': (pageElement: PageElement) => new UploadImageCommand(pageElement),
     'delete-element': (pageElement: PageElement) => new DeleteElementCommand(pageElement),
   };

@@ -4,48 +4,26 @@ import { constructResponse } from '@common/functions/constructResponse';
 import { handleError } from '@errors/handleError';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { firebaseDb } from '@firebase/initFirebase';
-import { PageContainerData, PageMetaData } from '../model/model';
-import { pagesCollectionBase, pageCollectionBase } from './common';
-
-const PAGE_COLLECTION = 'pageMetaData';
+import {  Page, } from '../model/model';
+import { updateDoc } from 'firebase/firestore';
 
 function pageController() {
 
-  async function getPageMetaData(siteId: string, pageId: string): Promise<Response> {
-    const firebaseResponse = await firebaseGetCollection(PAGE_COLLECTION, siteId, pageId);
-    const pageMetaData = firebaseResponse.data() as unknown as PageMetaData;
-    return constructResponse<PageMetaData>(pageMetaData, httpStatusCodes.OK);
-  }
-
-  async function savePageMetaData(page: PageMetaData, isPost: boolean): Promise<Response> {
+  async function updatePageContent(pageContent: Page, siteId: string, pageId: string): Promise<Response> {
     try {
-      await setDoc(doc(firebaseDb, pagesCollectionBase(page.siteId), page.pageId), page);
-      const statusCode = isPost ? httpStatusCodes.CREATED : httpStatusCodes.OK
-      return constructResponse<PageMetaData>(page, statusCode);
-    }  catch (err) {
-      handleError(err);
-    }
-    
-  }
-
-  async function firebaseGetCollection(collectionName: string, siteId: string, pageId: string) {
-    try {
-      const docRef = getDocRef(collectionName, siteId, pageId);
-      return getDoc(docRef);
+      const collection =  `${siteId}::pages`;
+      const docRef = doc(firebaseDb, collection, pageId);
+      await setDoc(docRef, pageContent);
+      return constructResponse<Page>(pageContent, httpStatusCodes.OK);
     } catch (err) {
       handleError(err);
     }
   }
 
-  function getDocRef(collectionName: string, siteId: string, pageId: string) {
-    const collection = pageCollectionBase(siteId, pageId);
-    return doc(firebaseDb, collection, collectionName);
-  }
-  
-  async function savePageContent(pageContent: PageContainerData, siteId: string, pageId: string): Promise<Response> {
+  async function savePageContent(pageContent: Page, siteId: string, pageId: string): Promise<Response> {
     try {
-      await setDoc(doc(firebaseDb, `${siteId}${pageId}`,'pageContent'), pageContent);
-      return constructResponse<PageContainerData>(pageContent, httpStatusCodes.CREATED);
+      await setDoc(doc(firebaseDb, `${siteId}::pages`, pageId), pageContent);
+      return constructResponse<Page>(pageContent, httpStatusCodes.CREATED);
     }  catch (err) {
       handleError(err);
     }
@@ -56,14 +34,14 @@ function pageController() {
       const collection = `${siteId}${pageId}`
       const docRef = doc(firebaseDb, collection, 'pageContent');
       const firebaseResponse = await getDoc(docRef);
-      const pageContent = firebaseResponse.data() as unknown as PageContainerData;
-      return constructResponse<PageContainerData>(pageContent, httpStatusCodes.OK);
+      const pageContent = firebaseResponse.data() as unknown as Page;
+      return constructResponse<Page>(pageContent, httpStatusCodes.OK);
     } catch (err) {
       handleError(err);
     }
   }
 
-  return { getPageMetaData, savePageMetaData, savePageContent, getPageContent };
+  return { savePageContent, getPageContent, updatePageContent };
 }
 
 export { pageController };

@@ -1,11 +1,18 @@
 <template>
-  <div class="ml-12 mt-2 flex-row flex justify-start w-full relative">
+  <div class="mt-2 flex-row flex justify-between relative w-11/12">
     <Scaler :slider="sliderSettings"
+      class="ml-12"
       @slider-change="sliderChange($event)"
     />
-    <h2 class="col-span-2 font-semibold text-lg">
-      {{ pageTitle }}
+    <h2 class="col-span-2 font-semibold text-2xl">
+      {{ pageTitle }} Page
     </h2>
+    <BaseButton button-type="primary" 
+      size="large"
+      @on-click="savePage"
+    >
+      Save
+    </BaseButton>
   </div>
   <div class="top-32 fixed z-50">
     <Toolbar/>
@@ -23,7 +30,7 @@
   </div>
   <div class="flex flex-row justify-center w-100 relative">
     <div class="mt-4 bg-white w-full z-0" >
-      <PageCanvas :zoom-page="zoomPage" :page-elements="getPageElements()"/>
+      <PageCanvas :zoom-page="zoomPage" :page="getPage()"/>
     </div>
 
     <ImageGallery :image-details="getImagesForGallery" 
@@ -41,7 +48,7 @@ import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
 import type { SliderSettings } from '@/components/canvas/scaler/model';
 import Scaler from '@/components/canvas/scaler/scaler.vue';
 import { usePageStore } from '@/stores/page.store';
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
+import type { Page, PageElement } from '@/components/page/model/pageElement/pageElement';
 import PageCanvas from '@/components/canvas/pageCanvas.vue';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
@@ -54,6 +61,7 @@ import type { TabPanel } from '@/components/core/settingsPanel/tabStrip/tabStrip
 import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';
 import icon from '@/components/utility/icon/icon.vue';
 import type { Icon } from '@/components/utility/icon/model/model';
+import baseButton from '@/components/base/baseButton/baseButton.vue';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -80,7 +88,8 @@ const trashCan: Icon = {
     SettingsPanelVue: settingsPanelVue,
     TabstripContainer: tabstripContainer,
     ImageGallery,
-    IconButton: icon
+    IconButton: icon,
+    BaseButton: baseButton,
 },
     
     data() {
@@ -126,8 +135,8 @@ const trashCan: Icon = {
         this.zoomPage = newValue / 100;;
       },
 
-      getPageElements(): PageElement[] {
-        return this.pageStore.pageElements as PageElement[];
+      getPage(): Page {
+        return this.pageStore.page as Page;
       },
 
       handleButtonClick(payload: CommandProperties): void {
@@ -163,9 +172,17 @@ const trashCan: Icon = {
           payload: true,
         }
         this.handleButtonClick(payload);
+      },
+
+      savePage() {
+        const payload: CommandProperties = {
+          commandName: 'save-page',
+          commandType: 'direct',
+          payload: this.pageStore.page,
+        };
+        this.pageBuilderService.setActiveElement(payload.payload as PageElement);
+        this.handleButtonClick(payload);
       }
-
-
     },
 
   })

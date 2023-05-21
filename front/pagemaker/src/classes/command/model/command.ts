@@ -1,5 +1,5 @@
 import type { CssStyleNames } from '@/classes/cssStyles';
-import type { StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { Page, StyleTags } from '@/components/page/model/pageElement/pageElement';
 
 type CommandName = | 'border'
   | 'line-style'
@@ -24,11 +24,12 @@ type CommandName = | 'border'
   | 'items-center'
   | 'items-end'
   | 'bring-to-front'
+  | 'save-page'
   | 'send-to-back'
   | 'show-gallery'
   | 'upload-image-file';
 
-type CommandParameter = StyleTags | CssStyleNames | number | string | boolean | File;
+type CommandParameter = StyleTags | CssStyleNames | number | string | boolean | File | Page;
 
 interface Command {
   execute(styleToApply: CommandParameter ): void;
