@@ -3,7 +3,7 @@ import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
 import { handleError } from '@errors/handleError';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
-import { firebaseDb } from '@firebase/initFirebase';
+import { firebaseDb } from '@fbase/initFirebase';
 import {  Page, } from '../model/model';
 
 function pageController() {

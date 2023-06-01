@@ -1,7 +1,7 @@
 import { Dimension } from '@common/models/dimension';
 import { Location } from '@common/models/location';
 import { getDocs, collection } from 'firebase/firestore';
-import { firebaseDb } from '@firebase/initFirebase';
+import { firebaseDb } from '@fbase/initFirebase';
 import { Response } from '@api/types';
 import { handleError } from '@errors/handleError';
 

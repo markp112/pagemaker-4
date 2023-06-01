@@ -14,7 +14,6 @@ const genReqId = (req?: Request, res?: Response) => {
 
 const logger = pino({
   level: process.env.PINO_LOG_LEVEL || 'info',
-  
   formatters: {
     bindings: (bindings) => {
       return {

@@ -2,18 +2,18 @@
 type Units = | 'px' | '%' | 'em' | 'rem';
 
 type Unit = {
-  unit: Units,
+  unit?: Units,
   value: string,
 };
 
 type Dimension = {
-  height: Unit,
-  width: Unit,
+  height: Style,
+  width: Style,
 };
 
 interface Location {
-  top: Unit,
-  left: Unit,
+  top: Style,
+  left: Style,
 };
 
 type CssStyleTypes =
@@ -103,8 +103,7 @@ type StyleTags =
 
 type Style =  {
   style: StyleTags | CssStyleTypes;
-  value: string;
-  unit?: Units;
+  value: Unit,
 };
 
 type ComponentTypesString =
@@ -123,31 +122,75 @@ interface PageElementData {
   ref: string;
   componentHTMLTag: string;
   isContainer: boolean;
-  styles: Style[];
   parentRef: string;
   classDefinition: string;
   type: ComponentTypesString;
-  location: Location,
   dimension: Dimension,
   actionEvent?: {
     actionType: string,
     actionEvent: string,
   };
-  content: string;
-  isAbsolute: boolean;
-}
+};
 
 interface Page extends PageElementData {
   pageId: string,
   siteId: string,
   name: string,
-  backgroundColour: string,
-  colour: string,
   created: Date,
   edited: Date,
+  lastPublished: Date,
   icon: string,
-  pageElements: PageElementData[],
+  elements: PageElementData[],
+  styles: Style[],
 };
 
+interface ContainerProps  {
+  location: Location;
+  naturalSize: Dimension;
+  styles: Style[];
+  isAbsolute: boolean;
+};
 
-export { Units, Unit, Dimension, Page };
+interface ImageProps extends ContainerProps {
+  scaledSize: Dimension;
+  location: Location,
+  styles: Style[];
+  isAbsolute: boolean;
+};
+
+interface ImageElement extends PageElementData {
+  ratio: number;
+  maintainRatio: boolean;
+  container: ContainerProps;
+  image: ImageProps;
+  content: string;
+};
+
+interface ButtonElement extends PageElementData {
+  content: string;
+  location: Location;
+  isAbsolute: boolean;
+  styles: Style[];
+}
+
+type ContainerOrientation = "column" | "row";
+
+interface PageContainerInterface extends PageElementData {
+  elements: PageElementData[];
+  containerOrientation: ContainerOrientation;
+  location: Location,
+  styles: Style[];
+  isAbsolute: boolean;
+};
+
+export { Units,
+  Unit,
+  Dimension,
+  Location,
+  Page,
+  PageElementData,
+  ImageElement,
+  ButtonElement,
+  PageContainerInterface,
+  Style
+};

@@ -6,17 +6,18 @@ import { default as secret } from '../secrets/firebase-config.json';
 import admin from 'firebase-admin';
 const serviceAccount = require('../secrets/serviceAccountKey.json');
 
-const firebaseConfig= secret;
+const firebaseConfig = secret;
 admin.initializeApp({ 
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://page-maker-69fb1.firebaseio.com"
-})
+  databaseURL: 'https://page-maker-69fb1.firebaseio.com',
+  storageBucket: secret.storageBucket,
+});
 
 const app = initializeApp(firebaseConfig);
-
 const firebaseDb = getFirestore(app);
-
 const auth = getAuth(app);
 const storage = getStorage();
 const storageRef = ref;
-export { firebaseDb, auth, storage, storageRef, admin };
+const firebaseBucket = admin.storage().bucket();
+
+export { firebaseDb, auth, storage, storageRef, admin, firebaseBucket };

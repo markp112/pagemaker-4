@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@ctrl/tinycolor": "^3.5.0",
+    "@firebase/firestore": "^3.12.1",
     "@paralleldrive/cuid2": "^2.2.0",
     "@types/pino": "^7.0.5",
     "@types/pino-http": "^5.8.1",
