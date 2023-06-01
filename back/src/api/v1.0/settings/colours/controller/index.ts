@@ -1,7 +1,7 @@
 import { constructResponse } from '@common/functions/constructResponse';
 import { Response } from '@api/types';
 import { collection, getDocs } from 'firebase/firestore';
-import { firebaseDb } from '@firebase/initFirebase';
+import { firebaseDb } from '@fbase/initFirebase';
 import { handleError } from '@errors/handleError';
 
 type Colour = {

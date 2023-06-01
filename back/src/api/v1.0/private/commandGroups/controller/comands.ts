@@ -2,7 +2,7 @@ import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
 import { doc, setDoc, updateDoc } from '@firebase/firestore';
-import { firebaseDb } from '@firebase/initFirebase';
+import { firebaseDb } from '@fbase/initFirebase';
 import { commandGroups, COMMANDS, COMMAND_COLLECTION, COMMAND_ELEMENT_COLLECTION } from '../../commandGroups/controller';
 import { Command, EditorButtonBase, TabGroup } from '../../commandGroups/model';
 import { handleError } from '@errors/handleError';

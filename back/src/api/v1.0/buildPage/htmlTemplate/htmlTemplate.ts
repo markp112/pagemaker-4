@@ -19,7 +19,6 @@ export function htmlGenerator() {
     return CLOSING_TAGS;
   }
 
-
   return {
     createOpeningTags,
     getClosingTags,

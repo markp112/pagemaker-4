@@ -138,6 +138,7 @@ interface Page extends PageElementData {
   name: string,
   created: Date,
   edited: Date,
+  lastPublished: Date,
   icon: string,
   elements: PageElementData[],
   styles: Style[],

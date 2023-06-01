@@ -1,6 +1,6 @@
 import { constructResponse } from '@common/functions/constructResponse';
 import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
-import { firebaseDb } from '@firebase/initFirebase';
+import { firebaseDb } from '@fbase/initFirebase';
 import { Response } from '@api/types';
 import { Site } from '../model/site';
 import {  ColourSwatches, } from '../model/colourPalette';
@@ -58,10 +58,17 @@ function sitesController() {
     }
   }
 
- async function deleteMaterialColours(userId: string, siteId: string): Promise<void> {
-  const materialColourRef =  getDocRef(MATERIAL_COLOURS, userId, siteId);
-  await deleteDoc(materialColourRef);
- }
+  async function getSite(userId: string, siteId: string): Promise<Site> {
+    const collection = sitesCollection(userId);
+    const docRef = doc(firebaseDb, collection, siteId);
+    const firebaseResponse = await getDoc(docRef);
+    return firebaseResponse.data() as Site;
+  }
+
+  async function deleteMaterialColours(userId: string, siteId: string): Promise<void> {
+    const materialColourRef =  getDocRef(MATERIAL_COLOURS, userId, siteId);
+    await deleteDoc(materialColourRef);
+  }
 
   async function getSiteMaterialColours(userId: string, siteId: string) {
     try {
@@ -164,6 +171,7 @@ function sitesController() {
     saveMaterialColours,
     getSiteColourPalette,
     saveColourPalette,
+    getSite,
     saveSite,
     deleteSite,
     getTypography,

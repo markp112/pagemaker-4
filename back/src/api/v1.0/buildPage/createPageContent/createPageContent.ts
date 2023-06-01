@@ -1,6 +1,7 @@
 import { Page, PageElementData } from '@api/v1.0/pages/model/model';
 import { HtmlElementBuilder } from './htmlBuilder';
 import { elementBuilders } from './buildersMap';
+import { htmlGenerator } from '../htmlTemplate/htmlTemplate';
 
 function createPageContent(page: Page): string {
   const htmlPage = createPageHtml(page);

@@ -16,7 +16,7 @@
       "@errors/*": ["common/errors/*"],
       "@common/*": ["common/*"],
       "@logger/*": ["logger/*"],
-      "@firebase/*": ["firebase/*"]
+      "@fbase/*": ["firebase/*"]
     }
   },
   "include": ["src/**/*"],

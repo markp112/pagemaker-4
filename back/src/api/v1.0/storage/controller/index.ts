@@ -2,7 +2,7 @@ import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
 import { handleError } from '@errors/handleError';
-import { storage, storageRef } from '@firebase/initFirebase';
+import { storage, storageRef } from '@fbase/initFirebase';
 import { getDownloadURL, uploadBytes } from '@firebase/storage';
 
 function StorageController() {

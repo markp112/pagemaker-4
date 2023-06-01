@@ -1,4 +1,3 @@
-import { logger } from '@logger/index';
 import express from 'express';
 import { pageBuilderController } from './controller';
 
@@ -10,9 +9,9 @@ buildPageRouter.post(`${ROUTE_PATH}/:userId/:siteId/:pageId`, async (req, res) =
     siteId: req.params.siteId,
     userId: req.params.userId,
     pageId: req.params.pageId,
-  }
+  };
   try {
-    const response = await pageBuilderController().buildPage(pageParams);
+    const response = await pageBuilderController().publishPage(pageParams);
     res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
