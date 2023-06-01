@@ -44,6 +44,7 @@ const MOCK_PAGE: Page = {
   siteId: '1',
   created: new Date('01 Jan 2023'),
   edited: new Date('01 Jan 2023'),
+  lastPublished: new Date('01 Jan 2023'),
   icon: 'home.png'
 };
 

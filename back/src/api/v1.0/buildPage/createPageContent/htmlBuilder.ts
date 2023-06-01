@@ -53,7 +53,7 @@ class HtmlElementBuilder {
     return `${this.openingTag}${trimmedOptionals}${this.closeTag}${content}${this.terminatingTag}`;
   }
 
-  private convertArrayToString(array: string[], seperator: string = ''): string {
+  private convertArrayToString(array: string[], seperator = ''): string {
     return array.toString().replace(/,/g, seperator);
   }
 }

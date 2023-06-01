@@ -1,7 +1,16 @@
-import { PageContainerInterface } from '@api/v1.0/pages/model/model';
+import { ButtonElement, ImageElement, PageContainerInterface } from '@api/v1.0/pages/model/model';
 import { ElementBuilder } from './model';
 import { HtmlElementBuilder } from './htmlBuilder';
-import { elementBuilders } from './buildersMap';
+import { ButtonBuilder } from './buttonBuilder';
+import { ImageBuilder } from './imageBuilder';
+
+const elementBuilders = {
+  imageElement: (element: ImageElement) => new ImageBuilder(element),
+  jumbo: (element: PageContainerInterface) => new ContainerBuilder(element),
+  buttonElement: (element: ButtonElement) => new ButtonBuilder(element),
+};
+
+export { elementBuilders };
 
 class ContainerBuilder implements ElementBuilder {
 

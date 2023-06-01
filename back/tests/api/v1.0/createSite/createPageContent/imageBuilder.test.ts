@@ -2,10 +2,7 @@ import { ImageBuilder } from '../../../../../src/api/v1.0/buildPage/createPageCo
 import { IMAGE_BASE, IMAGE_BASE_HTML, IMAGE_CLOSING_TAG, MOCK_IMAGE } from './mocks/mockImage';
 
 describe('ImageBuilder', () => {
-  let imageBuilder: ImageBuilder;
 
-  beforeEach(() => {
-  })
   it('should given an imageElement construct an html image tag', () => {
     const imageBuilder = new ImageBuilder(MOCK_IMAGE);
     const imgTag = imageBuilder.build();
@@ -25,7 +22,6 @@ describe('ImageBuilder', () => {
   it('should add a location to the image container if the isAbsolute is set to true', () => {
     const absoluteImage = { ...MOCK_IMAGE };
     absoluteImage.image.isAbsolute = false;
-    console.log('%c⧭', 'color: #917399', absoluteImage);
     absoluteImage.container.isAbsolute = true;
     absoluteImage.classDefinition = 'absolute';
     const imageBuilder = new ImageBuilder(absoluteImage);

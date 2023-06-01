@@ -97,7 +97,7 @@ const MOCK_IMAGE: ImageElement = {
   type: 'imageElement',
 };
 
-const IMAGE_BASE_HTML = `<span style="width:426.92px;height:343.06px;background-color:#0f0f0f;`;
+const IMAGE_BASE_HTML = '<span style="width:426.92px;height:343.06px;background-color:#0f0f0f;';
 const IMAGE_CLOSING_TAG = '</span>';
 const IMAGE_BASE = '<img style="width:426.92px;height:343.06px;';
 

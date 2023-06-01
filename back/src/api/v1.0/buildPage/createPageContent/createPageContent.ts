@@ -1,7 +1,6 @@
 import { Page, PageElementData } from '@api/v1.0/pages/model/model';
 import { HtmlElementBuilder } from './htmlBuilder';
-import { elementBuilders } from './buildersMap';
-import { htmlGenerator } from '../htmlTemplate/htmlTemplate';
+import { elementBuilders } from './containerBuilder';
 
 function createPageContent(page: Page): string {
   const htmlPage = createPageHtml(page);
@@ -10,7 +9,7 @@ function createPageContent(page: Page): string {
 
 function createPageHtml(page: Page): string {
   const htmlBuilder = new HtmlElementBuilder();
-  let pageContent: string = page.elements.map(element => { return createHtmlElement(element)}).join('');
+  const pageContent: string = page.elements.map(element => { return createHtmlElement(element)}).join('');
   return htmlBuilder.createTag('div')
     .withStyle([page.dimension.width, page.dimension.height])
     .withStyle(page.styles)
