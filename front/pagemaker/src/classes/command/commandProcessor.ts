@@ -1,4 +1,3 @@
-import type { Page, PageElement } from '@/components/page/model/pageElement/pageElement';
 import type { CommandHistory } from '../history/history';
 import { AlignmentCommand } from './alignment/alignmentCommand';
 import { BorderRadiusCommand } from './borderRadius/borderRadius.command';
@@ -19,50 +18,52 @@ import { FontCommand } from './fontCommand/fontCommand';
 import { DropShadowCommand } from './dropShadow/dropShadow.command';
 import { DeleteElementCommand } from './deleteElement/deleteElement';
 import { SavePageCommand } from './savePage/savePage';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { Page } from '@/components/page/model/pageElement/pageElement';
 
 // rome-ignore lint/suspicious/noExplicitAny: <explanation>
-type  CommandKey = { [commandName in CommandName]: (pageElement: PageElement) => any }
+type  CommandKey = { [commandName in CommandName]: (ActiveElements: ActiveElements) => any }
 
 class CommandProcessor {
   
-  constructor(private pageElement: PageElement, private commandHistory: CommandHistory<CommandProperties>) {};
+  constructor(private ActiveElements: ActiveElements, private commandHistory: CommandHistory<CommandProperties>) {};
   
   private readonly commandMap: CommandKey = {
-    'border': (pageElement: PageElement) => new BordersCommand(pageElement),
-    'border-radius': (pageElement: PageElement) => new BorderRadiusCommand(pageElement),
+    'border': (ActiveElements: ActiveElements) => new BordersCommand(ActiveElements),
+    'border-radius': (ActiveElements: ActiveElements) => new BorderRadiusCommand(ActiveElements),
     'line-style': () => new LineStyleCommand(),
     'line-thickness': () => new LineThicknessCommand(),
     'drop-shadow': () => new DropShadowCommand(),
     'set-units': () => new UnitsCommand(),
-    'set-colour': (pageElement: PageElement) => new ColourCommand(pageElement),
-    'set-image': (pageElement: PageElement) => new ImageCommand(pageElement),
-    'set-colour-applies-to': (pageElement: PageElement) => new ApplyColourTo(pageElement),
+    'set-colour': (ActiveElements: ActiveElements) => new ColourCommand(ActiveElements),
+    'set-image': (ActiveElements: ActiveElements) => new ImageCommand(ActiveElements),
+    'set-colour-applies-to': (ActiveElements: ActiveElements) => new ApplyColourTo(ActiveElements),
     'set-font': () => new FontCommand(),
-    'justify-start': (pageElement: PageElement) => new justifyCommand(pageElement),
-    'justify-center': (pageElement: PageElement) => new justifyCommand(pageElement),
-    'justify-end': (pageElement: PageElement) => new justifyCommand(pageElement),
-    'justify-between': (pageElement: PageElement) => new justifyCommand(pageElement),
-    'justify-evenly': (pageElement: PageElement) => new justifyCommand(pageElement),
-    'justify-around': (pageElement: PageElement) => new justifyCommand(pageElement),
-    'flex-col': (pageElement: PageElement) => new AlignmentCommand(pageElement),
-    'flex-row': (pageElement: PageElement) => new AlignmentCommand(pageElement),
-    'items-start': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
-    'items-center': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
-    'items-end': (pageElement: PageElement) => new ItemsAlignmentCommand(pageElement),
-    'send-to-back': (pageElement: PageElement) => new ZindexCommand(pageElement),
-    'bring-to-front': (pageElement: PageElement) => new ZindexCommand(pageElement),
+    'justify-start': (ActiveElements: ActiveElements) => new justifyCommand(ActiveElements),
+    'justify-center': (ActiveElements: ActiveElements) => new justifyCommand(ActiveElements),
+    'justify-end': (ActiveElements: ActiveElements) => new justifyCommand(ActiveElements),
+    'justify-between': (ActiveElements: ActiveElements) => new justifyCommand(ActiveElements),
+    'justify-evenly': (ActiveElements: ActiveElements) => new justifyCommand(ActiveElements),
+    'justify-around': (ActiveElements: ActiveElements) => new justifyCommand(ActiveElements),
+    'flex-col': (ActiveElements: ActiveElements) => new AlignmentCommand(ActiveElements),
+    'flex-row': (ActiveElements: ActiveElements) => new AlignmentCommand(ActiveElements),
+    'items-start': (ActiveElements: ActiveElements) => new ItemsAlignmentCommand(ActiveElements),
+    'items-center': (ActiveElements: ActiveElements) => new ItemsAlignmentCommand(ActiveElements),
+    'items-end': (ActiveElements: ActiveElements) => new ItemsAlignmentCommand(ActiveElements),
+    'send-to-back': (ActiveElements: ActiveElements) => new ZindexCommand(ActiveElements),
+    'bring-to-front': (ActiveElements: ActiveElements) => new ZindexCommand(ActiveElements),
     'show-gallery': () => new ImageLibraryCommand(),
-    'save-page': (pageElement: PageElement) => new SavePageCommand(pageElement as Page),
-    'upload-image-file': (pageElement: PageElement) => new UploadImageCommand(pageElement),
-    'delete-element': (pageElement: PageElement) => new DeleteElementCommand(pageElement),
+    'save-page': (ActiveElements: ActiveElements) => new SavePageCommand(ActiveElements as Page),
+    'upload-image-file': (ActiveElements: ActiveElements) => new UploadImageCommand(ActiveElements),
+    'delete-element': (ActiveElements: ActiveElements) => new DeleteElementCommand(ActiveElements),
   };
 
   processCommand(commandProperties: CommandProperties) {
   
     const getCommand = (this.commandMap[commandProperties.commandName]);
-    const command = getCommand(this.pageElement);
+    const command = getCommand(this.ActiveElements);
     if (commandProperties.commandType === 'direct') {
-      this.pageElement = command.execute(commandProperties.payload);
+      this.ActiveElements = command.execute(commandProperties.payload);
     } else {
       command.execute(commandProperties.payload);
       this.applyPropertyToLastDirectComand();
@@ -72,7 +73,7 @@ class CommandProcessor {
 
   undoCommand(commandProperties: CommandProperties) {
     const getCommand = (this.commandMap[commandProperties.commandName]);
-    const command = getCommand(this.pageElement);
+    const command = getCommand(this.ActiveElements);
     command.undo(commandProperties.payload);
     this.commandHistory.pop();
   }

@@ -10,16 +10,17 @@
   >
     <component v-for="(component, index) in pageElements"
       track-by="$index"
-      :is="component.componentHTMLTag"
+      :is="component.type"
       :key="index"
       :index="index"
-      v-bind="getProps(component)"
       :thisComponent="component"
       @dragover.prevent
       @drop.prevent="onDrop($event)"
       @OnClick="containedElementClick($event)"
   ></component>
-  <Resize :is-active="isActive">
+  <Resize :is-active="isActive"
+    :this-component="thisPage"
+  >
   </Resize>
 </div>
 </template>
@@ -28,16 +29,16 @@
 <script lang="ts">
 import { defineComponent, type PropType, } from 'vue';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
-import type { Page, PageElement } from './model/pageElement/pageElement';
+import type { Page, PageElement, Style } from './model/pageElement/pageElement';
 import ContainerVue from './container/container.vue';
 import Container from './container/container.vue';
-import type { ValueAndUnit } from '@/classes/units';
 import imageElement from './image/imageElement.vue';
 import buttonElement from './button/button-element.vue';
 import textElement from './textElement/textElement.vue';
 import Resize from '../base/resize/resize.vue';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { stylesToString } from './functions/stylesToString';
+import type { ActiveElements } from './model/imageElement/imageElement';
 
 const PAGE_REF = 'page';
 
@@ -78,7 +79,7 @@ export default defineComponent({
       if (this.thisPage && scale) {
         const scaledDimension = this.pageBuilderService.calcPageSize(scale, this.thisPage.dimension);
         this.pageBuilderService.setScaledDimension(scaledDimension);
-        pageSize = `width:${this.getDimension(scaledDimension.width)}; height:${this.getDimension(scaledDimension.height)};`;
+        pageSize = `${this.getDimension(scaledDimension.width)}${this.getDimension(scaledDimension.height)}`;
       }
       pageSize += this.getStyles;
       return pageSize;
@@ -94,18 +95,18 @@ export default defineComponent({
       return styles;
     },
 
-    pageElements(): PageElement[] {
-      return this.page.elements
+    pageElements(): ActiveElements[] {
+      return this.page.elements;
     }
   },
     
   methods: {
-    getProps(component: PageElement) {
+    getProps(component: PageElement ) {
       return { component: ContainerVue, props: { thisComponent: component } };
     },
 
-    getDimension(dimension: ValueAndUnit): string {
-      return `${dimension.value}${dimension.unit}`;
+    getDimension(dimension: Style): string {
+      return `${dimension.style}:${dimension.value.value}${dimension.value.unit};`;
     },
 
     onDrop(event: DragEvent): void {
@@ -118,7 +119,7 @@ export default defineComponent({
       return dataTransfer ? dataTransfer.getData('text') : '';
     },
 
-    containedElementClick(pageElement: PageElement): void {
+    containedElementClick(pageElement: ActiveElements): void {
       this.pageBuilderService.setActiveElement(pageElement);
     },
 

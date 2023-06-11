@@ -7,10 +7,13 @@ import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
 import { userService } from '@/services/user/userService';
 import { useAuthStore } from '@/stores/auth.store';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import { useActiveElementStore } from '@/stores/activeElement.store';
 
 class EditorSettingsService {
 
-  constructor(private readonly store = useEditorSettingsStore(), 
+  constructor( private readonly settingsStore = useEditorSettingsStore(),
+    private readonly activeElementStore = useActiveElementStore(),
     private readonly imagesStore = useImagesStore(),
     private readonly fileUploadService = FileUploadService(),
     private readonly authStore = useAuthStore(),
@@ -19,67 +22,71 @@ class EditorSettingsService {
   ) {}
 
   getLineStyle(): LineStyle {
-    return this.store.borderLineStyle; 
+    return this.settingsStore.borderLineStyle; 
   }
 
   setLineStyle(lineStyle: LineStyle) {
-    this.store.setBorderLineStyle(lineStyle);
+    this.settingsStore.setBorderLineStyle(lineStyle);
   }
 
   setLineThickness(byAmount: number) {
-    this.store.setLineThickness(byAmount);
+    this.settingsStore.setLineThickness(byAmount);
   }
 
   lineThickness(): number {
-    return this.store.getLineThickness;
+    return this.settingsStore.getLineThickness;
   }
 
   setBorderElement(borderElement: StyleTags | '') {
-    this.store.setBorderElement(borderElement);
+    this.settingsStore.setBorderElement(borderElement);
   }
 
   getBorderElement(): StyleTags | '' {
-    return this.store.borderElement;
+    return this.settingsStore.borderElement;
   }
 
   getUnits(): Units {
-    return this.store.units;
+    return this.settingsStore.units;
   }
 
   setUnits(units: Units) {
-    this.store.setUnits(units);
+    this.settingsStore.setUnits(units);
   }
 
   setColour(colour: string) {
-    this.store.setCurrentColour(colour);
+    this.settingsStore.setCurrentColour(colour);
   }
 
   getColour(): string {
-    return this.store.currentColour;
+    return this.settingsStore.currentColour;
   }
 
   setColourAppliesTo(appliesTo: string) {
-    this.store.setColourAppliesTo(appliesTo)
+    this.settingsStore.setColourAppliesTo(appliesTo)
   }
 
   getColourAppliesTo() {
-    return this.store.colourAppliesTo;
+    return this.settingsStore.colourAppliesTo;
   }
 
-  setActiveElement(element: PageElement) {
-    if(this.store.activeElement === undefined) {
-      this.store.setActiveElement(element);
+  setActiveElement(element: ActiveElements) {
+    if(this.activeElementStore.activeElement === undefined || element === undefined) {
+      this.activeElementStore.setActiveElement(element);
       return;
     } 
-    if(this.store.activeElement.ref === element.ref) {
-      this.store.setActiveElement(undefined);
+    if(this.activeElementStore.activeElement.ref === element.ref) {
+      this.activeElementStore.setActiveElement(undefined);
       return;
     } 
-    this.store.setActiveElement(element);
+    this.activeElementStore.setActiveElement(element);
   }
 
   getActiveElement() {
-    return this.store.activeElement;
+    return this.activeElementStore.activeElement;
+  }
+
+  getActiveElementType() {
+    return this.activeElementStore.getActiveElementType;
   }
 
   async showImageLibrary(show: boolean) {
@@ -98,30 +105,29 @@ class EditorSettingsService {
   }
 
   applyStyle(style: Style) {
-    const styles = this.store.getStyles.filter(currentStyle => currentStyle.style !== style.style);
+    const styles = this.activeElementStore.getStyles.filter((currentStyle: Style) => currentStyle.style !== style.style);
     if(styles) {
       styles?.push(style);
-      this.store.setStyles(styles);
+      this.activeElementStore.setStyles(styles);
     }
   }
 
   applyClass(className: string, classNameStem: string) {
     const CLASS_NAME_SEPARATOR = ' ';
-    if (this.store.activeElement) {
-      let classes = this.store.activeElement.classDefinition.split(CLASS_NAME_SEPARATOR);
-      classes = classes.filter(className => !className.includes(classNameStem));
+    if (this.activeElementStore.activeElement) {
+      let classes = this.activeElementStore.getClasses.split(CLASS_NAME_SEPARATOR);
+      classes = classes.filter((className: string) => !className.includes(classNameStem));
       classes.push(className);
-      this.store.setClasses(classes.join(CLASS_NAME_SEPARATOR));
+      this.activeElementStore.setClasses(classes.join(CLASS_NAME_SEPARATOR))
     }
   }
 
   deleteElement(elementRef: string) {
-    if (this.store.activeElement) {
+    if (this.activeElementStore.activeElement) {
       const pageElements: PageElement[] = <PageElement[]>this.pageStore.pageElements;
       this.findAndDeleteElement(elementRef, pageElements)
     }
   }
-
 
   findAndDeleteElement(elementRef: string, pageElements: PageElement[]) {
     for (let index = 0; index < pageElements.length; index++) {

@@ -9,7 +9,7 @@ export class FontCommand implements Command {
   execute(fontName: string) {
     const style: Style = {
       style: 'font-family',
-      value: fontName,
+      value: { value: fontName },
     }
     this.service.applyStyle(style);
   }

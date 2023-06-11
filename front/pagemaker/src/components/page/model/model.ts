@@ -1,8 +1,8 @@
 type Units = | 'px' | '%' | 'em' | 'rem';
 
 type Unit = {
-  unit: Units,
-  value: number,
+  unit?: Units,
+  value: string,
 };
 
 type Dimension = {

@@ -5,6 +5,6 @@ export type Units =
   | '%';
 
 export interface ValueAndUnit {
-  value: number;
-  unit: Units;
+  value: string;
+  unit?: Units;
 };

@@ -12,31 +12,27 @@ s<template>
   >
     <img
       ref="image-element"
-      class="absolute w-100"
+      class="absolute w-100 h-full"
       :src="getImage()"
       :style="getStyles()"
     />
-    <Resize :is-active="isActive" 
+    <Resize :is-active="isActive"
+      :this-component="thisComponent"
       @resize-started="resizeStarted($event)"
-      @on-resize="onResize($event)"
       @resize-stopped="isSizing=!isSizing"
-      onclick.stop=""
     />
   </div>
 </template>
 
 <script lang="ts">
-import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import { useMouse } from '../classes/mouse/mouse';
-import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';
-import { Resize } from '../../base/resize/onResize';
 import resize from '@/components/base/resize/resize.vue';
 import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { useDrag } from '@/composables/drag/drag';
+import { UseDrag } from '@/composables/drag/drag';
 
 export default  defineComponent({
   name: 'imageComponent',
@@ -47,18 +43,21 @@ export default  defineComponent({
     Resize: resize,
   },
 
+  props: {
+    thisComponent: {
+      type: Object as PropType<ImageElement>,
+        required: true
+    }
+  },
+
   data() {
     return {
-      thisComponent: {} as PageElement,
       mouse: new useMouse(),
       isSizing: false,
       editorSettings: new EditorSettingsService(),
-      elementDrag: useDrag,
+      useDrag: new UseDrag(new useMouse()),
+      thisComponent: this.thisComponent
     }
-  },
-  
-  mounted() {
-    this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
   },
   
   computed: {
@@ -71,15 +70,9 @@ export default  defineComponent({
   methods: {
 
     resizeStarted(event: MouseEvent ) {
-      this.mouse.updatePositionEvent(event);
       this.isSizing = true;
     },
       
-    onResize(aDimension: ClientCoordinates) {
-      if (!this.isSizing) { return };
-      Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
-    },
-
     onImageClick() {
       this.isSizing = false;
       this.$emit('onClick', this.thisComponent);
@@ -87,15 +80,17 @@ export default  defineComponent({
 
     onDragStart(event: MouseEvent) {
       if (this.isSizing){ return };
-      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragStart(event)
+      this.thisComponent.classDefinition = this.useDrag.dragStart(event, this.thisComponent.classDefinition);
+      this.thisComponent.container.isAbsolute = true;
     },
     
     onDrag(event: MouseEvent) {
-      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDrag(event);
+      const location = this.thisComponent.container.location;
+      this.thisComponent.container.location = {...this.useDrag.onDrag(event, location)};
     },
 
     onDragEnd() {
-      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragEnd();
+      this.thisComponent.classDefinition = this.useDrag.onDragEnd(this.thisComponent.classDefinition);
     },
 
     getDimensions(): string {
@@ -108,10 +103,10 @@ export default  defineComponent({
 
     getImage(): string {
       const DEFAULT_IMAGE = 'imageplaceholder-100x83.png';
-      if((this.thisComponent as ImageElement).content === DEFAULT_IMAGE) {
-        return getImageUrl((this.thisComponent as ImageElement).content);
+      if(this.thisComponent.content === DEFAULT_IMAGE) {
+        return getImageUrl(this.thisComponent.content);
       }
-      return (this.thisComponent as ImageElement).content;
+      return this.thisComponent.content;
     },
 
     getId() {
@@ -124,18 +119,18 @@ export default  defineComponent({
 
     getStyles(): string {
       let styles = '';
-      styles = stylesToString(this.thisComponent.styles)
+      styles = stylesToString(this.thisComponent.image.styles)
       styles += this.getDimensions();
       return styles;
     },
     
     getContainerStyles(): string {
       let styles = '';
-      if(this.thisComponent.isAbsolute) {
-        styles = locationToStyle(this.thisComponent.location);
+      if(this.thisComponent.container.isAbsolute) {
+        styles = locationToStyle(this.thisComponent.container.location);
       }
-      if((this.thisComponent as ImageElement).container) {
-        styles += dimensionToStyle((this.thisComponent as ImageElement).container.naturalSize);
+      if(this.thisComponent.container) {
+        styles += dimensionToStyle(this.thisComponent.container.naturalSize);
       }
       return styles;
     }

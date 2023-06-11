@@ -1,11 +1,11 @@
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 import type {  Command } from '../model/command';
 
 class ZindexCommand implements Command {
 
-  constructor(private pageElement: PageElement) {};
+  constructor(private pageElement: ActiveElements) {};
 
-  execute(payload: string): PageElement {
+  execute(payload: string): ActiveElements {
     let twClasses = this.pageElement.classDefinition;
     twClasses = this.removeZindex(twClasses);
     if (payload === 'bring-to-front') {
@@ -17,7 +17,7 @@ class ZindexCommand implements Command {
     return this.pageElement;
   }
 
-  undo(): PageElement {
+  undo(): ActiveElements {
     let twClasses = this.pageElement.classDefinition;
     twClasses = this.removeZindex(twClasses);
     this.pageElement.classDefinition = twClasses;

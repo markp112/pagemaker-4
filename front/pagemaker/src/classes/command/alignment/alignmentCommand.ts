@@ -1,10 +1,10 @@
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import type { Command } from '../model/command';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 export class AlignmentCommand implements Command {
-  constructor(private pageElement: PageElement) {};
+  constructor(private pageElement: ActiveElements) {};
 
-  execute(payload: string): PageElement {
+  execute(payload: string): ActiveElements {
     let twClasses = this.removeFlexRowCol();
     twClasses = `${twClasses} flex ${payload}`;
     this.pageElement.classDefinition = twClasses;

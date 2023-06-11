@@ -6,6 +6,7 @@ import { httpStatusCodes } from '@api/httpStatusCodes';
 import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
 import { buildColourCommandTabGroups } from './colourPalettes';
 import { handleError } from '@errors/handleError';
+import { logger } from '@logger/pino';
 
 export const COMMAND_COLLECTION = 'command-containers';
 export const COMMAND_ELEMENT_COLLECTION = 'CommandElementCollection';
@@ -43,7 +44,8 @@ function commandGroups() {
 
       await Promise.all(commandElements.commandElements.map(async pageElementName => {
         const elementTabs = await getTabList(pageElementName);
-        commandElement[pageElementName] = { tabs: await getContentForTabs(elementTabs.tabs,commands)};
+        logger.info(elementTabs);
+        commandElement[pageElementName] = { tabs: await getContentForTabs(elementTabs.tabs, commands)};
       }));
       return commandElement;
     } catch (err) {

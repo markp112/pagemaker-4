@@ -1,20 +1,20 @@
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import type { Command } from '../model/command';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 const CSS_CLASS_NAME_PART = 'items-';
 
 class ItemsAlignmentCommand implements Command {
   
-  constructor(private pageElement: PageElement) {}
+  constructor(private pageElement: ActiveElements) {}
   
-  execute(tailwindClass: string): PageElement {
+  execute(tailwindClass: string): ActiveElements {
     let twClasses = this.removeItemClasses();
     twClasses = `${twClasses} ${tailwindClass}`;
     this.pageElement.classDefinition = twClasses;
     return this.pageElement;
   }
 
-  undo(): PageElement {
+  undo(): ActiveElements {
     this.pageElement.classDefinition = this.removeItemClasses();
     return this.pageElement;
   }

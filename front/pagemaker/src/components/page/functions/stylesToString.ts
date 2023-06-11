@@ -20,22 +20,22 @@ function stylesToString(styleCollection: Style[]): string {
 }
 
 function locationToStyle(location: Location): string {
-  const left = `left:${location.left.value}${location.left.unit};`;
-  const top = `top:${location.top.value}${location.top.unit};`;
+  const left = `${location.left.style}:${location.left.value.value}${location.left.value.unit};`;
+  const top = `${location.top.style}:${location.top.value.value}${location.top.value.unit};`;
   return `${left}${top}`;
 }
 
 function dimensionToStyle(dimension: Dimension): string {
-  const height = `height:${dimension.height.value}${dimension.height.unit};`
-  const width = `width:${dimension.width.value}${dimension.width.unit};`;
+  const height = `${dimension.height.style}:${dimension.height.value.value}${dimension.height.value.unit};`
+  const width = `${dimension.width.style}:${dimension.width.value.value}${dimension.width.value.unit};`;
   return `${height}${width}`;
 }
 
 
 function getRegularStyles(style: Style) {
-  let styleValue = `${style.style}:${style.value}`;
-  if(style.unit) {
-    styleValue += `${style.unit}`;
+  let styleValue = `${style.style}:${style.value.value}`;
+  if(style.value.unit) {
+    styleValue += `${style.value.unit}`;
   }
   return styleValue;
 }
@@ -46,7 +46,7 @@ function isBorderStyle(styleName: string): boolean {
 }
 
 function getBorderStyle(borderStyle: BorderStyle) {
-  return `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.colour} ${borderStyle.value}${borderStyle.unit}`;
+  return `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.colour} ${borderStyle.value.value}${borderStyle.value.unit}`;
 }
 
 export { stylesToString, locationToStyle, dimensionToStyle };

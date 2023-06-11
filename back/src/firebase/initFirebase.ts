@@ -13,11 +13,11 @@ admin.initializeApp({
   storageBucket: secret.storageBucket,
 });
 
+const firebaseBucket = admin.storage().bucket();
 const app = initializeApp(firebaseConfig);
 const firebaseDb = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage();
 const storageRef = ref;
-const firebaseBucket = admin.storage().bucket();
 
 export { firebaseDb, auth, storage, storageRef, admin, firebaseBucket };

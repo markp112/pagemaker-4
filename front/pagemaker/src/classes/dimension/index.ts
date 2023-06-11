@@ -1,8 +1,8 @@
-import type { ValueAndUnit } from '../units';
+import type { Style } from '@/components/page/model/pageElement/pageElement';
 
 interface Dimension {
-  height: ValueAndUnit,
-  width: ValueAndUnit,
+  height: Style,
+  width: Style,
   padding?: number,
 };
 

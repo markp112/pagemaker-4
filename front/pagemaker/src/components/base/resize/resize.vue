@@ -1,12 +1,10 @@
 <template>
-  <section>
     <span
       ref='resize-div-tr'
       class="handle top-right"
       :class="isSelected()"
       @mousedown.stop.prevent="handleDown($event)"
-      @mouseup="handleMouseUp($event)"
-      @mousemove="handleMouseMove($event)"
+      @mouseup="handleMouseUp()"
     >
     </span>
     <span
@@ -14,8 +12,7 @@
       class="handle bottom-right"
       :class="isSelected()"
       @mousedown.stop.prevent="handleDown($event)"
-      @mouseup="handleMouseUp($event)"
-      @mousemove="handleMouseMove($event)"
+      @mouseup="handleMouseUp()"
     >
     </span>
     <span
@@ -23,8 +20,7 @@
       class="handle top-left"
       :class="isSelected()"
       @mousedown.stop.prevent="handleDown($event)"
-      @mouseup.stop="handleMouseUp($event)"
-      @mousemove.stop="handleMouseMove($event)"
+      @mouseup.stop="handleMouseUp()"
     >
     </span>
     <span
@@ -32,81 +28,48 @@
       class="handle bottom-left"
       :class="isSelected()"
       @mousedown.stop.prevent="handleDown($event)"
-      @mouseup.stop="handleMouseUp($event)"
-      @mousemove.stop="handleMouseMove($event)"
+      @mouseup.stop="handleMouseUp()"
     >
     </span>
-  </section>
 </template>
 
-<script lang="ts">
-import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import { Resizer } from './onResize';
+import { ref } from 'vue';
+import { useMouse } from '@/components/page/classes/mouse/mouse';
 
-export default defineComponent({
-  name: 'resize',
+  const props  = defineProps<{
+    isActive: boolean,
+    thisComponent: ActiveElements,
+  }> ();
 
-  props: {
-    isActive: {
-      type: Boolean,
-      required: true,
-      default: false,
-    }
-  },
+  const emits = defineEmits(['resizeStarted', 'resizeStopped' ]);
+  const isSelected = (): string => props.isActive ? 'active ' : 'in-active ';
+  const useResizer = ref<Resizer>(new Resizer(new useMouse(), props.thisComponent));
 
-  emits: ['resizeStarted', 'resizeStopped', 'onResize'],
-
-  data() {
-    return {
-      isSizing: false,
-      parentPadding: 0,
-    }
-  },
-
-  methods: {
-
-    isSelected(): string {
-      return this.isActive ? 'active ' : 'in-active ';
-    },
+  const handleMouseUp = () => {
+    window.removeEventListener('mouseup', handleMouseUp);
+    window.removeEventListener('mousemove', handleMouseMove);
+    emits('resizeStopped');
+  };
+  
+  const handleDown = (ev: MouseEvent) => {
+    if (!props.isActive) return;
+    resizeStarted(ev);
+  };
     
-    handleMouseUp(event: MouseEvent) {
-      this.isSizing = false;
-      window.removeEventListener('mouseup', this.handleMouseUp);
-      this.$emit('resizeStopped');
-    },
+  const resizeStarted = (ev: MouseEvent) => {
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    useResizer.value.resizeStart(ev);
+    emits('resizeStarted', ev);
+  };
     
-    handleDown(ev: MouseEvent) {
-      if (!this.isActive) return;
-      if (this.isSizing = true) {
-        this.resizeStarted(ev);
-      }
-    },
+  const handleMouseMove = (ev: MouseEvent) => {
+    useResizer.value.onResize(ev);
+  };
     
-    resizeStarted(ev: MouseEvent) {
-      this.isSizing = true;
-      window.addEventListener("mousemove", this.handleMouseMove);
-      window.addEventListener("mouseup", this.handleMouseUp);
-      this.$emit('resizeStarted', ev);
-    },
-    
-    emitResize(clientCoordinates: ClientCoordinates) {
-      this.$emit('onResize', clientCoordinates);
-    },
-    
-    handleMouseMove(ev: MouseEvent) {
-      if (this.isSizing) {
-        const clientCoordinates: ClientCoordinates = {
-          clientX: ev.pageX,
-          clientY: ev.pageY,
-          offsetWidth: (this.$el as HTMLDivElement).offsetWidth,
-          offsetHeight: (this.$el as HTMLDivElement).offsetHeight
-        };
-        this.emitResize(clientCoordinates);
-      }
-    },
-    
-  },
-})
 </script>
   
 <style lang="css">

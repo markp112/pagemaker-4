@@ -1,8 +1,8 @@
-import type { ValueAndUnit } from '../units';
+import type { Style } from '@/components/page/model/pageElement/pageElement';
 
 interface Location {
-  top: ValueAndUnit,
-  left: ValueAndUnit,
+  top: Style,
+  left: Style,
 };
 
 export type { Location };

@@ -1,5 +1,5 @@
 import { constructResponse } from '@common/functions/constructResponse';
-import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { firebaseDb } from '@fbase/initFirebase';
 import { Response } from '@api/types';
 import { Site } from '../model/site';
@@ -20,7 +20,7 @@ function sitesController() {
 
   async function getSites(userId: string): Promise<Response> {
     try {
-      const firebaseResponse = await getDocs(collection(firebaseDb, sitesCollection(userId)));
+      const firebaseResponse = await getDocs(collection(firebaseDb, `${userId}::sites`));
       const sites: Site[] = [];
       firebaseResponse.docs.forEach(doc => {
         const site = doc.data() as unknown as Site;

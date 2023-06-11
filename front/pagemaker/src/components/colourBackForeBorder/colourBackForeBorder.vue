@@ -6,11 +6,11 @@
         value="background-color" 
         :checked="selection" 
         @on-field-change="onSelectionChange($event)"/>
-      <InputRadio label="fore" name="colourSelect" value="color" @on-field-change="onSelectionChange($event)"/>
+      <InputRadio label="fore" name="colourSelect" value="color" @on-field-change="onSelectionChange('color')"/>
       <InputRadio label="border"
         name="colourSelect"
         value="border-color"
-        @on-field-change="onSelectionChange($event)"
+        @on-field-change="onSelectionChange('border-color')"
       />
     </fieldset>
 </template>

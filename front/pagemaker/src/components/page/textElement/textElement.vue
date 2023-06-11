@@ -3,7 +3,9 @@
     :ref="getId()"
     :id="getId()"
     :style="getContainerStyles()"
-    draggable="true"
+    @mousedown.stop="onDragStart($event)"
+    @mousemove="handleMouseMove($event)"
+    @mouseup.stop="onDragEnd()"
     @dragstart.stop="onDragStart($event)"
     @drag.stop="onDrag($event)"
     @dragend.stop="onDragEnd()"
@@ -18,9 +20,9 @@
     >
     {{ getContent() }} 
   </p>
-    <Resize :is-active="isActive" 
-      @resize-started="resizeStarted($event)"
-      @on-resize="onResize($event)"
+    <Resize :is-active="isActive"
+      :this-component="thisComponent"
+      @resize-started="resizeStarted()"
       @resize-stopped="isSizing=false"
       onclick.stop=""
     />
@@ -30,49 +32,53 @@
 <script lang="ts" setup>
 
 import Resize from '@/components/base/resize/resize.vue';
-import { Resize as ResizeCommand} from '../../base/resize/onResize';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import type { PageElement } from '../model/pageElement/pageElement';
 import { useMouse } from '../classes/mouse/mouse';
 import { computed, ref } from '@vue/reactivity';
-import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
-import { useDrag } from '@/composables/drag/drag';
+import { UseDrag } from '@/composables/drag/drag';
 import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
-
+import type { TextElement } from '../model/imageElement/imageElement';
 
 const props = defineProps<{
-  thisComponent: PageElement
+  thisComponent: TextElement,
 }>();
+
 const emits = defineEmits(['onClick']);
 const editorSettingsService = new EditorSettingsService();
-const mouse = new useMouse();
 const isSizing = ref(false);
-const elementDrag = useDrag;
+const isDragging = ref(false);
+const elementDrag = new UseDrag(new useMouse());
 const thisComponent = ref(props.thisComponent);
 
 const isActive = computed(() => editorSettingsService.getActiveElement()?.ref === props.thisComponent.ref);
 
-const resizeStarted = (event: MouseEvent ) => {
-  mouse.updatePositionEvent(event);
+const resizeStarted = () => {
+  isDragging.value = false;
   isSizing.value = true;
 };
   
-const onResize = (aDimension: ClientCoordinates) => {
-  ResizeCommand(thisComponent.value as PageElement, mouse as useMouse).onResize(aDimension);
+const onDragStart = (event: MouseEvent) => {
+  if (isSizing.value) { return };
+  thisComponent.value.classDefinition = elementDrag.dragStart(event, thisComponent.value.classDefinition);
+  thisComponent.value.isAbsolute = true;
+  isDragging.value = true;
 };
 
-const onDragStart = (event: DragEvent) => {
-  event.dataTransfer!.dropEffect = 'move';
-  event.dataTransfer!.effectAllowed = 'move';
-  elementDrag(thisComponent.value as PageElement, mouse as useMouse).onDragStart(event)
+const onDrag = (event: MouseEvent) => {
+  if(isDragging.value) {
+      thisComponent.value.location = elementDrag.onDrag(event, thisComponent.value.location);
+    }
 };
 
-const onDrag = (event: DragEvent) => {
-  elementDrag(thisComponent.value as PageElement, mouse as useMouse).onDrag(event);
+const handleMouseMove = (event: MouseEvent) => {
+  if (isDragging.value) {
+    onDrag(event);
+  }
 };
 
 const onDragEnd = () => {
-  elementDrag(thisComponent.value as PageElement, mouse as useMouse).onDragEnd();
+  isDragging.value = false;
+  thisComponent.value.classDefinition = elementDrag.onDragEnd(thisComponent.value.classDefinition);
 };
 
 const onClick = () => {
@@ -106,7 +112,7 @@ const getClasses = (): string => {
 const getStyles = (): string => {
   let styles = '';
   if (thisComponent.value) {
-    styles = stylesToString(props.thisComponent.styles)
+    styles = stylesToString(thisComponent.value.styles)
     styles += getDimensions();
   }
   return styles;

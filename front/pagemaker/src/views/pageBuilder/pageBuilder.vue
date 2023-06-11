@@ -48,7 +48,7 @@ import toolbarPanelVue from '@/components/core/toolbar/toolbarPanel.vue';
 import type { SliderSettings } from '@/components/canvas/scaler/model';
 import Scaler from '@/components/canvas/scaler/scaler.vue';
 import { usePageStore } from '@/stores/page.store';
-import type { Page, PageElement } from '@/components/page/model/pageElement/pageElement';
+import type { Page } from '@/components/page/model/pageElement/pageElement';
 import PageCanvas from '@/components/canvas/pageCanvas.vue';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
@@ -62,6 +62,7 @@ import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vu
 import icon from '@/components/utility/icon/icon.vue';
 import type { Icon } from '@/components/utility/icon/model/model';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -180,7 +181,7 @@ const trashCan: Icon = {
           commandType: 'direct',
           payload: this.pageStore.page,
         };
-        this.pageBuilderService.setActiveElement(payload.payload as PageElement);
+        this.pageBuilderService.setActiveElement(payload.payload as ActiveElements);
         this.handleButtonClick(payload);
       }
     },

@@ -1,7 +1,7 @@
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
-import { getDoc, doc, setDoc } from '@firebase/firestore';
+import { getDoc, doc, setDoc } from 'firebase/firestore';
 import { firebaseDb } from '@fbase/initFirebase';
 import { sitesController } from '../../controller';
 import { ColourSwatch, ColourSwatches, ColourSwatchesFirebase } from '../../model/colourPalette';

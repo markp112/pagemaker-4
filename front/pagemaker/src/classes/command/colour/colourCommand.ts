@@ -1,11 +1,13 @@
-import type { PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
+import type { Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import type { Command } from '../model/command';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 class ColourCommand implements Command {
-  constructor(private pageElement: PageElement, private service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private pageElement: ActiveElements, private service: EditorSettingsService = new EditorSettingsService()) {};
   
   execute(colour: string) {
+    if(!this.pageElement) return;
     this.service.setColour(colour);
     const applyTo = this.service.getColourAppliesTo();
     this.pageElement.styles = this.removeExistingStyle(applyTo);
@@ -13,6 +15,7 @@ class ColourCommand implements Command {
   }
 
   removeExistingStyle(appliesTo: string) {
+    if (!this.pageElement) return [];
     return this.pageElement.styles.filter(style => style.style !== appliesTo);
   }
 
@@ -20,7 +23,7 @@ class ColourCommand implements Command {
     const currentColour = this.service.getColour();
     const style: Style = {
       style: applyTo as unknown as StyleTags,
-      value: currentColour,
+      value: {value: currentColour },
     };
     return style;
   }

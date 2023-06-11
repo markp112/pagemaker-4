@@ -31,7 +31,13 @@ class ResourceNotFoundError extends DomainError {
 
 class InsufficientPermissions extends DomainError {
   constructor() {
-    super('Insufficent Permissions: there was an issue accessing the requested resource', httpStatusCodes.FORBIDDEN, 'Not Authorised')
+    super('Insufficent Permissions: there was an issue accessing the requested resource', httpStatusCodes.FORBIDDEN, 'Not Authorised');
+  }
+};
+
+class InvalidArgument extends DomainError {
+  constructor() {
+    super('invalid argument passed to method', httpStatusCodes.INTERNAL_SERVER_ERROR, 'Server Error');
   }
 }
 
@@ -41,4 +47,9 @@ class GenericError extends DomainError {
   }
 };
 
-export { DomainError, ResourceNotFoundError, InsufficientPermissions, GenericError };
+export { DomainError,
+  ResourceNotFoundError,
+  InsufficientPermissions,
+  GenericError,
+  InvalidArgument, 
+};

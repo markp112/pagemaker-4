@@ -68,7 +68,6 @@ export default defineComponent({
       if (availableSpace.right <= tooltipWidth) {
         this.tooltipLeft = containerRect.right - containerRect.left - (tooltipWidth / 2) + 'px';
       } else if (containerRect.left <= tooltipWidth) {
-        console.log('here')
         this.tooltipLeft = (containerRect.right + (tooltipWidth)) + 'px';
       } else {
         this.tooltipLeft = '0';

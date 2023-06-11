@@ -1,7 +1,8 @@
 import type { ActionEvent } from '@/classes/actionEvent';
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
-import type { Units } from '@/classes/units';
+import type { Units, ValueAndUnit } from '@/classes/units';
+import type { ActiveElements, ButtonElement, ImageElement, TextElement } from '../imageElement/imageElement';
 
 type CssStyleTypes =
   | 'background-color'
@@ -86,12 +87,13 @@ type StyleTags =
   | 'background-size'
   | 'background-repeat'
   | 'padding'
-  | 'transparency';
+  | 'transparency'
+  | 'top'
+  | 'left';
 
 type Style =  {
   style: StyleTags | CssStyleTypes;
-  value: string;
-  unit?: Units;
+  value: ValueAndUnit;
 };
 
 type LineStyle = 'solid'
@@ -125,15 +127,11 @@ interface PageElement {
   ref: string;
   componentHTMLTag: string;
   isContainer: boolean;
-  styles: Style[];
   parentRef: string;
   classDefinition: string;
   type: ComponentTypesString;
-  location: Location;
   dimension: Dimension;
   actionEvent?: ActionEvent;
-  content: string;
-  isAbsolute: boolean;
 };
 
 interface Page extends PageElement {
@@ -144,11 +142,13 @@ interface Page extends PageElement {
   colour: string,
   created: Date,
   edited: Date,
+  lastPublished: Date,
   icon: string,
-  elements: PageElement[],
+  elements: ActiveElements[],
+  styles: Style[],
 };
 
-type PropsDefinition = { thisComponent: PageElement };
+type PropsDefinition = { thisComponent: PageElement | ImageElement | TextElement | ButtonElement};
 
 
 export type {
