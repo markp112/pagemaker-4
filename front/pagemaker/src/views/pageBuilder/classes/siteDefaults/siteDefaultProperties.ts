@@ -1,34 +1,38 @@
+import type { ValueAndUnit } from '@/classes/units';
+import type { Units } from '@/components/page/model/model';
 import { useSiteStore } from '@/stores/site.store';
 
 class SiteDefaultProperties {
 
   #fontFamily: string;
   #fontSize: string;
+  #fontUnit: Units;
   #backgroundColour: string;
   #textColour: string;
 
   constructor() {
     const store = useSiteStore();
     this.#fontFamily = store.getTypography.fontFamily;
-    this.#fontSize = `${store.getTypography.size}${store.getTypography.unit}`;
+    this.#fontSize = store.getTypography.fontSize.value;
+    this.#fontUnit = store.getTypography.fontSize.unit || 'px' ;
     this.#backgroundColour = store.getSurfaceColours.colours[0].hexColourBackground;
     this.#textColour = store.getSurfaceColours.colours[0].hexColourText;
   }
 
   getFontFamily() {
-    return this.#fontFamily;
+    return { value: this.#fontFamily };
   }
 
-  getFontSize() {
-    return this.#fontSize;
+  getFontSize(): ValueAndUnit {
+    return { value: this.#fontSize, unit: this.#fontUnit };
   }
 
   getBackgroundColour() {
-    return this.#backgroundColour;
+    return { value: this.#backgroundColour };
   }
 
   getTextColour() {
-    return this.#textColour;
+    return {value: this.#textColour };
   }
 
 }

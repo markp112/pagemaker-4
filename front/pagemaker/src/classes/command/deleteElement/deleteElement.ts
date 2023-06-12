@@ -1,9 +1,9 @@
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import type { Command } from '../model/command';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 class DeleteElementCommand implements Command {
-  constructor(private readonly pageElement: PageElement,
+  constructor(private readonly pageElement: ActiveElements,
     private readonly service: EditorSettingsService = new EditorSettingsService()
   ) {};
 

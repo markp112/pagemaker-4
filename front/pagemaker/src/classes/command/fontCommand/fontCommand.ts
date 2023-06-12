@@ -4,12 +4,12 @@ import type { Command } from '../model/command';
 
 export class FontCommand implements Command {
 
-  constructor(private service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly service: EditorSettingsService = new EditorSettingsService()) {};
 
   execute(fontName: string) {
     const style: Style = {
       style: 'font-family',
-      value: fontName,
+      value: { value: fontName },
     }
     this.service.applyStyle(style);
   }

@@ -7,32 +7,31 @@
     class="flex flex-row justify-center items-center relative"
     @click.stop="onButtonClick()"
     @mousedown.stop="onDragStart($event)"
-    @mousemove.stop="onDrag($event)"
+    @mousemove="handleMouseMove($event)"
     @mouseup.stop="onDragEnd()"
     @dragstart="onDragStart($event)"
     @drag="onDrag($event)"
     @dragend="onDragEnd()"
   >
     {{ getData() }}
-    <Resize :is-active="isActive" 
-      @resize-started="resizeStarted($event)"
-      @on-resize="onResize($event)"
-      @resize-stopped="isSizing = !isSizing"
-      onclick.stop=""
+    <Resize 
+      :is-active="isActive" 
+      :this-component="thisComponent"
+      @resize-stopped="isSizing = false"
+      @resize-started="resizeStarted()"
     />
   </div>
 </template>
 
 <script lang="ts">
-import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import resize from '@/components/base/resize/resize.vue';
 import { Resize } from '../../base/resize/onResize';
-import { useDrag } from '@/composables/drag/drag';
+import { UseDrag } from '@/composables/drag/drag';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import { useMouse } from '../classes/mouse/mouse';
-import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';
 import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
+import type { ButtonElement } from '../model/imageElement/imageElement';
 
 export default defineComponent({
   name:'buttonElement',
@@ -43,19 +42,21 @@ export default defineComponent({
     Resize: resize,
   },
 
+  props: {
+    thisComponent: {
+      type: Object as PropType<ButtonElement>,
+        required: true
+    }
+  },
+
   data() {
     return {
       isSizing: false,
       isDragging: false,
-      thisComponent: Object as unknown as PageElement,
+      thisComponent: this.$props.thisComponent,
       editorSettings: new EditorSettingsService(),
-      mouse: new useMouse(),
-      elementDrag: useDrag,
+      elementDrag: new UseDrag(new useMouse()),
     }
-  },
-
-  mounted() {
-    this.thisComponent = (this.$attrs.props as unknown as PropsDefinition).thisComponent;
   },
   
   computed: {
@@ -71,16 +72,11 @@ export default defineComponent({
       return this.thisComponent.ref;
     },
 
-    resizeStarted(event: MouseEvent ) {
-      this.mouse.updatePositionEvent(event);
+    resizeStarted() {
       this.isSizing = true;
+      this.isDragging = false;
     },
       
-    onResize(aDimension: ClientCoordinates) {
-      if (!this.isSizing) { return };
-      Resize(this.thisComponent as PageElement, this.mouse as useMouse).onResize(aDimension);
-    },
-
     getClasses(): string {
       return this.thisComponent.classDefinition;
     },
@@ -97,50 +93,57 @@ export default defineComponent({
       return styles;
     },
 
-  getDimensions(): string {
-    let dimension = '' 
-    if(this.thisComponent.dimension) {
-      dimension = dimensionToStyle(this.thisComponent.dimension);
-    }
-    return dimension;
-  },
+    getDimensions(): string {
+      let dimension = '' 
+      if(this.thisComponent.dimension) {
+        dimension = dimensionToStyle(this.thisComponent.dimension);
+      }
+      return dimension;
+    },
 
-  getData(): string {
-    return this.thisComponent.content;
-  },
+    getData(): string {
+      return this.thisComponent.content;
+    },
 
-  getClass(): string {
-    return this.thisComponent.classDefinition;
-  },
+    getClass(): string {
+      return this.thisComponent.classDefinition;
+    },
 
-  onButtonClick() {
-    if(this.isSizing) {
-      return;
-    }
-    this.$emit('onClick', this.thisComponent);
-  },
+    onButtonClick() {
+      if(this.isSizing) {
+        return;
+      }
+      this.$emit('onClick', this.thisComponent);
+    },
 
-  onDragStart(event: MouseEvent) {
-    if (this.isSizing) { return }
-    this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragStart(event);
-    this.isDragging = true;
-  },
-  
-  onDrag(event: MouseEvent) {
-    if(this.isDragging) {
-      this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDrag(event);
-    }
-  },
+    handleMouseMove(event: MouseEvent) {
+      if (this.isDragging) {
+        this.onDrag(event);
+      }
+    },
 
-  onDragEnd() {
-    this.isDragging = false;
-    this.elementDrag(this.thisComponent as PageElement, this.mouse as useMouse).onDragEnd();
-  },
+    onDragStart(event: MouseEvent) {
+      if (this.isSizing) { return }
+      this.thisComponent.classDefinition = this.elementDrag.dragStart(event, this.thisComponent.classDefinition);
+      this.thisComponent.isAbsolute = true;
+      this.isDragging = true;
+    },
+    
+    onDrag(event: MouseEvent) {
+      if(this.isDragging) {
+        this.thisComponent.location = this.elementDrag.onDrag(event, this.thisComponent.location);
+      }
+    },
+
+    onDragEnd() {
+      this.isDragging = false;
+      this.thisComponent.classDefinition = this.elementDrag.onDragEnd(this.thisComponent.classDefinition);
+    },
 }
 })
 </script>
 
-<style lang="postcss" scoped>
+<style lang="css" scoped>
 .handle {
   position: relative;
   box-sizing: border-box;

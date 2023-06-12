@@ -1,30 +1,67 @@
 import type { PageElement } from '@/components/page/model/pageElement/pageElement';
 import type { useMouse, MousePosition }  from '@/components/page/classes/mouse/mouse';
+import type { Location  } from '@/classes/location';
 
-export function useDrag(thisComponent: PageElement, mouse: useMouse ) {
+export function useDrag(mouse: useMouse) {
 
   const getMousePosition = (event: MouseEvent): MousePosition => ({ x: event.pageX, y: event.pageY });
   
-  const onDragStart = (event: MouseEvent) => {
+  const onDragStart = (event: MouseEvent, classDefinition: string) => {
     mouse.setCurrentPosition(getMousePosition(event));
-    if(!thisComponent.classDefinition.includes('cursor-move')) {
-      thisComponent.classDefinition = `${thisComponent.classDefinition} absolute cursor-move`;
+    if(!classDefinition.includes('cursor-move')) {
+      return `${classDefinition} absolute cursor-move`;
     }
-    thisComponent.isAbsolute = true;
+    return classDefinition;
   }
   
-  const onDrag = (event: MouseEvent) => {
+  const onDrag = (event: MouseEvent, location: Location) => {
     mouse.updatePositionCoordinates(getMousePosition(event));
-    const location = thisComponent.location ;
-    location.left.value = Number(location.left.value) + mouse.deltaX;
-    location.top.value = Number(location.top.value) + mouse.deltaY;
-    thisComponent.location.left = { ...location.left };
-    thisComponent.location.top = { ...location.top };
+    const updatedLocation = { ...location };
+    updatedLocation.left.value.value = (Number(location.left.value.value) + mouse.deltaX).toString();
+    updatedLocation.top.value.value = (Number(location.top.value.value) + mouse.deltaY).toString();
+    return updatedLocation;
   }
 
-  const onDragEnd = () => {
+  const onDragEnd = (classDefinition: string) => {
     const re = /cursor-move/gi;
-    thisComponent.classDefinition = thisComponent.classDefinition.replace(re, '');
+    return classDefinition.replace(re, '');
   }
   return { onDrag, onDragStart, onDragEnd };
 }
+
+class UseDrag {
+
+  constructor(private useMouse: useMouse) {};
+
+  dragStart(event: MouseEvent, classDefinition: string): string {
+    this.useMouse.setCurrentPosition(this.getMousePosition(event));
+    if(!classDefinition.includes('cursor-move')) {
+      const re = /absolute/gi;
+      const removeAbsolute = classDefinition.replace(re, '')
+      return `${removeAbsolute} absolute cursor-move`;
+    }
+    return classDefinition;
+  }
+
+  onDrag(event: MouseEvent, location: Location) {
+    this.useMouse.updatePositionCoordinates(this.getMousePosition(event));
+    const left = { ...location.left };
+    const top = { ...location.top };
+    left.value.value = (Number(location.left.value.value) + this.useMouse.deltaX).toString();
+    top.value.value = (Number(location.top.value.value) + this.useMouse.deltaY).toString();
+    return {
+      left,
+      top,
+    };
+  }
+
+  onDragEnd(classDefinition: string) {
+    const re = /cursor-move/gi;
+    return classDefinition.replace(re, '');
+  }
+
+  private getMousePosition = (event: MouseEvent): MousePosition => ({ x: event.pageX, y: event.pageY });
+
+}
+
+export { UseDrag };

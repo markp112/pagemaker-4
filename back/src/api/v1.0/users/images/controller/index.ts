@@ -1,7 +1,7 @@
 import { constructResponse } from '../../../../../common/functions/constructResponse';
 import { Response } from '@api/types';
-import { FullMetadata, getDownloadURL, getMetadata, listAll } from '@firebase/storage';
-import { storage, storageRef } from '../../../../../firebase/initFirebase';
+import { FullMetadata, getDownloadURL, getMetadata, listAll } from 'firebase/storage';
+import { storage, storageRef } from '@fbase/initFirebase';
 import { logger } from '../../../../../logger';
 import { handleError } from '@errors/handleError';
 

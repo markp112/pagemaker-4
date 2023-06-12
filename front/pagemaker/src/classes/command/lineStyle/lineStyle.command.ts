@@ -3,7 +3,7 @@ import { EditorSettingsService } from '@/services/editorSettings/editor.settings
 import type { Command } from '../model/command';
 
 class LineStyleCommand implements Command {
-  constructor(private service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly service: EditorSettingsService = new EditorSettingsService()) {};
 
   execute(styleRequested: LineStyle) {
     this.service.setLineStyle(styleRequested);

@@ -9,6 +9,7 @@
         :index="index"
         :button-data = "commandButton"
         :active-command-name="activeCommandButton"
+        placeholder = ''
         @onClick="handleButtonClick($event)"
       />
     </keep-alive>

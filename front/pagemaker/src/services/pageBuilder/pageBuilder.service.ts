@@ -9,6 +9,7 @@ import type { CommandProperties } from '@/classes/command/model/command';
 import { CommandProcessor } from '@/classes/command/commandProcessor';
 import type { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '../editorSettings/editor.settings.service';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 function PageBuilderService() {
   const toolbarStore = useToolbarStore();
@@ -35,22 +36,24 @@ function PageBuilderService() {
   }
 
   function calcPageSize(scale: number, dimension: Dimension): Dimension {
-    return {
-      width: { value: dimension.width.value * scale, unit: dimension.width.unit },
-      height: { value: dimension.height.value * scale, unit: dimension.height.unit },
-    };
+    const height = parseInt(dimension.height.value.value);
+    const width = parseInt(dimension.width.value.value);
+    const scaledDeimension = { ...dimension };
+    scaledDeimension.width.value.value = `${width * scale}`;
+    scaledDeimension.height.value.value = `${height * scale}`;
+    return scaledDeimension;
   }
 
   function setScaledDimension(dimension: Dimension): void {
     pageStore.setScaledDimension(dimension);
   }
 
-  function setActiveElement(pageElement: PageElement): void {
+  function setActiveElement(pageElement: ActiveElements): void {
     editorSettingsService.setActiveElement(pageElement);
   }
 
   function processButtonCommand(payload: CommandProperties, commandHistory: CommandHistory<CommandProperties>): void {
-    const pageElement = editorSettingsService.getActiveElement() as PageElement;
+    const pageElement = editorSettingsService.getActiveElement() as ActiveElements;
     if(pageElement) {
       const commandProcessor = new CommandProcessor(pageElement, commandHistory);
       commandProcessor.processCommand(payload);
@@ -58,7 +61,7 @@ function PageBuilderService() {
   }
 
   function clearButtonCommand(payload: CommandProperties, commandHistory: CommandHistory<CommandProperties>) {
-    const pageElement = editorSettingsService.getActiveElement() as PageElement;
+    const pageElement = editorSettingsService.getActiveElement();
     if(pageElement) {
       const commandProcessor = new CommandProcessor(pageElement, commandHistory);
       commandProcessor.processCommand(payload);

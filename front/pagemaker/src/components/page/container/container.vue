@@ -4,10 +4,10 @@
     :ref="getId()"
     :class="getClasses()"
     :style="getStyles()"
-    @dragstart.self.stop="onDragStart($event)"
     @mousedown.stop.self="onDragStart($event)"
     @mouseup.stop.self="onDragEnd()"
-    @mousemove.stop="onDrag($event)"
+    @mousemove="onDrag($event)"
+    @dragstart.self.stop="onDragStart($event)"
     @drag.self.stop="onDrag($event)"
     @dragend.self.stop="onDragEnd"
     @click.stop.self="onClick()"
@@ -15,29 +15,26 @@
     @blur="onBlur()"
   >
     <component v-for="(pageElement, index) in getPageElements()"
-      :is="pageElement.componentHTMLTag"
+      :is="pageElement.type"
       :key="index"
       :index="index"
-      v-bind="getProps(pageElement)"
       :thisComponent="pageElement"
       @onClick="containedElementClick($event)"
       @dragover.prevent
       @drop.stop="onDrop"
     />
-    <Resize :is-active="isActive" 
+    <Resize :is-active="isActive"
+    :this-component="thisComponent" 
       @resize-started="resizeStarted($event)"
-      @on-resize="onResize($event)"
-      @resize-stopped="isSizing=false"
+      @resize-stopped="isSizing = false"
     />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
-import type { PageElement, PropsDefinition } from '../model/pageElement/pageElement';
 import resize from '@/components/base/resize/resize.vue';
 import { useMouse } from '../classes/mouse/mouse';
-import type { ClientCoordinates } from '@/classes/clientCoordinates/clientCoordinates';
 import { Resize } from '../../base/resize/onResize';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import imageElement from '../image/imageElement.vue';
@@ -45,7 +42,8 @@ import buttonElement from '../button/button-element.vue';
 import textElement from '../textElement/textElement.vue';
 import type { PageContainerInterface } from '../model/pageContainer/container';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { useDrag } from '@/composables/drag/drag';
+import { UseDrag } from '@/composables/drag/drag';
+import type { ActiveElements } from '../model/imageElement/imageElement';
 
 export default defineComponent({
   name: 'component-container',
@@ -57,22 +55,25 @@ export default defineComponent({
     textElement,
   },
 
+  props: {
+    thisComponent: {
+      type: Object as PropType<PageContainerInterface>,
+        required: true
+    }
+  },
+
   emits:['onClick'],
 
   data() {
     return {
-      thisComponent: {} as PageContainerInterface,
+      thisComponent: this.$props.thisComponent,
       pageBuilderService: PageBuilderService(),
       mouse: new useMouse(),
       editorSettings: new EditorSettingsService(),
       isDragging: false,
       isSizing: false,
-      elementDrag: useDrag,
+      elementDrag: new UseDrag(new useMouse()),
     }
-  },
-
-  mounted() {
-    this.thisComponent = ((this.$attrs.props as unknown as PropsDefinition).thisComponent) as PageContainerInterface;
   },
 
   computed: {
@@ -95,7 +96,7 @@ export default defineComponent({
     getStyles(): string {
       let styles = '';
       if(this.thisComponent.isAbsolute) {
-        styles =locationToStyle(this.thisComponent.location);
+        styles = locationToStyle(this.thisComponent.location);
       }
       if(this.thisComponent.styles) {
         styles += stylesToString(this.thisComponent.styles)
@@ -112,25 +113,14 @@ export default defineComponent({
       return dimension;
     },
 
-    getPageElements(): PageElement[] {
+    getPageElements(): ActiveElements[] {
       return (this.thisComponent as PageContainerInterface).elements;
-    },
-
-    getProps(component: PageElement) {
-      return {props: {thisComponent: component}};
     },
 
     resizeStarted(event: MouseEvent ) {
       this.isSizing = true;
-      this.mouse.updatePositionEvent(event)
     },
       
-    onResize(aDimension: ClientCoordinates) {
-      if (this.isSizing) {
-        Resize(this.thisComponent as PageContainerInterface, this.mouse as useMouse).onResize(aDimension);
-      }
-    },
-
     onClick() {
       this.isSizing = false;
       this.$emit('onClick', this.thisComponent);
@@ -142,7 +132,7 @@ export default defineComponent({
       this.isSizing = false;
     },
 
-    containedElementClick(pageElement: PageElement): void {
+    containedElementClick(pageElement: ActiveElements): void {
       this.$emit('onClick', pageElement);
     },
 
@@ -154,18 +144,20 @@ export default defineComponent({
 
     onDragStart(event: MouseEvent) {
       this.isDragging = true;
-      this.elementDrag(this.thisComponent as PageContainerInterface, this.mouse as useMouse).onDragStart(event)
+      this.thisComponent.classDefinition = this.elementDrag.dragStart(event, this.thisComponent.classDefinition);
+      this.thisComponent.isAbsolute = true;
     },
       
     onDrag(event: MouseEvent) {
       if(this.isDragging) {
-        this.elementDrag(this.thisComponent as PageContainerInterface as PageElement, this.mouse as useMouse).onDrag(event);
+        const location = this.thisComponent.location;
+        this.thisComponent.location = {...this.elementDrag.onDrag(event, location)};
       }
     },
 
     onDragEnd() {
       this.isDragging = false;
-      this.elementDrag(this.thisComponent as PageContainerInterface as PageElement, this.mouse as useMouse).onDragEnd();
+      this.thisComponent.classDefinition = this.elementDrag.onDragEnd(this.thisComponent.classDefinition);
     },
       
     getComponentName(event: DragEvent): string {

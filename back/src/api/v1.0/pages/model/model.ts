@@ -6,7 +6,7 @@ type Unit = {
   value: string,
 };
 
-type Dimension = {
+interface Dimension {
   height: Style,
   width: Style,
 };

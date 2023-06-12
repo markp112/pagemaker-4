@@ -1,31 +1,32 @@
-import type { BorderStyle, LineStyle, PageElement, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import type { Command } from '../model/command';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { StyleTags, BorderStyle, LineStyle } from '@/components/page/model/pageElement/pageElement';
 
 class BordersCommand implements Command {
-  constructor(private pageElement: PageElement, private service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly ActiveElements: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {};
   
-  execute(styleRequested: StyleTags): PageElement {
+  execute(styleRequested: StyleTags): ActiveElements {
     if(styleRequested === 'border-none') {
       return this.removeBorders();
     }
     if(this.hasStyle(styleRequested)) {
       this.undo(styleRequested);
     }
-    this.pageElement.styles.push(this.getBorderStyle(styleRequested));
+    this.ActiveElements.styles.push(this.getBorderStyle(styleRequested));
     this.setOrClearBorderElement(styleRequested);
-    return this.pageElement;
+    return this.ActiveElements;
   }
 
-  undo(styleRequested: StyleTags): PageElement {
+  undo(styleRequested: StyleTags): ActiveElements {
     this.service.setBorderElement('');
-    const styles = this.pageElement.styles.filter(style => style.style !== styleRequested);
-    this.pageElement.styles = styles; 
-    return this.pageElement
+    const styles = this.ActiveElements.styles.filter(style => style.style !== styleRequested);
+    this.ActiveElements.styles = styles; 
+    return this.ActiveElements
   }
 
   private hasStyle(styleRequested: StyleTags): boolean {
-    return this.pageElement.styles.filter(style => style.style === styleRequested).length > 0
+    return this.ActiveElements.styles.filter(style => style.style === styleRequested).length > 0
   }
 
   private getBorderStyle(styleRequested: StyleTags): BorderStyle {
@@ -36,8 +37,7 @@ class BordersCommand implements Command {
       style: styleRequested,
       colour,
       lineStyle,
-      value: `${thickness}`,
-      unit: 'px',
+      value:{value: `${thickness}`, unit: 'px' },
     };
   }
 
@@ -45,10 +45,10 @@ class BordersCommand implements Command {
     return this.service.getLineStyle();
   }
 
-  private removeBorders(): PageElement {
-    const styles = this.pageElement.styles.filter(style => !style.style.includes('border'));
-    this.pageElement.styles = styles;
-    return this.pageElement;
+  private removeBorders(): ActiveElements {
+    const styles = this.ActiveElements.styles.filter(style => !style.style.includes('border'));
+    this.ActiveElements.styles = styles;
+    return this.ActiveElements;
   }
 
   private setOrClearBorderElement(borderElement: StyleTags): void {

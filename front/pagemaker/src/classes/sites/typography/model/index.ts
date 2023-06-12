@@ -1,9 +1,8 @@
-type HtmlUnits = 'px' | 'em' | 'rem';
+import type { ValueAndUnit } from '@/classes/units';
 
 interface SiteTypography {
   fontFamily: string,
-  size: string,
-  unit: HtmlUnits, 
+  fontSize: ValueAndUnit,
 };
 
-export type { SiteTypography, HtmlUnits };
+export type { SiteTypography };

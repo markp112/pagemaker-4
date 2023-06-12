@@ -1,21 +1,22 @@
 import type { Units } from '@/components/page/model/model';
-import type { PageElement, Style } from '@/components/page/model/pageElement/pageElement';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import type { Command } from '../model/command';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { Style } from '@/components/page/model/pageElement/pageElement';
 
 class BorderRadiusCommand implements Command {
-  constructor(private pageElement: PageElement, private service: EditorSettingsService = new EditorSettingsService()) {}
+  constructor(private readonly pageElement: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {}
 
-  execute(borderRadius: number): PageElement {
+  execute(borderRadius: number): ActiveElements {
     const unit = this.service.getUnits();
     if(this.hasStyle()) {
-      this.pageElement = this.undo();
+      this.undo();
     }
     this.pageElement.styles.push(this.getStyle(unit, borderRadius));
     return this.pageElement;
   }
 
-  undo(): PageElement {
+  undo(): ActiveElements {
     const styles = this.pageElement.styles.filter(style => style.style !== 'border-radius');
     this.pageElement.styles = styles;
     return this.pageElement;
@@ -28,8 +29,7 @@ class BorderRadiusCommand implements Command {
   private getStyle(units: Units, borderRadius: number): Style {
     const style: Style = {
       style: 'border-radius',
-      value: `${borderRadius}`,
-      unit: units,
+      value: { value: `${borderRadius}`, unit: units },
     }
     return style;
   }

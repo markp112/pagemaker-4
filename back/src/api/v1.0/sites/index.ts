@@ -25,8 +25,9 @@ sitesRouter
       const response = await sitesController().getSites(userId);
       res.status(response.status).send(response);
     } catch (error) {
-      const response = error.getResponse();
-      res.status(error._status).send(response);
+      console.log('%c⧭', 'color: #731d6d', error);
+      // const response = error.getResponse();
+      // res.status(error._status).send(response);
     }
   })
 

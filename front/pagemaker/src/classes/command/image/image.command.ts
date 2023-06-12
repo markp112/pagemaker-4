@@ -1,22 +1,21 @@
-import type { ImageElement } from '@/components/page/model/imageElement/imageElement';
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
-import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
+import type { ActiveElements, ImageElement } from '@/components/page/model/imageElement/imageElement';
 import type { Command } from '../model/command';
+const IMAGE_ELEMENT = 'imageElement';
 
 export class ImageCommand implements Command {
-  constructor(private pageElement: PageElement, private service: EditorSettingsService = new EditorSettingsService()) {}
+  constructor(private readonly pageElement: ActiveElements) {}
 
-  execute(imageUrl: string): PageElement {
-    if(this.pageElement.type === 'imageElement') {
-      this.pageElement.content = imageUrl;
-      const img = new Image();
+  execute(imageUrl: string): ActiveElements {
+    if(this.pageElement.type === IMAGE_ELEMENT) {
       const imageElement = this.pageElement as ImageElement;
+      imageElement.content = imageUrl;
+      const img = new Image();
       img.src = imageUrl;
       const imgWidth = img.width;
       const imgHeight = img.height;
       const ratio =  Math.min(imgWidth / imgHeight, imgHeight / imgWidth);
-      imageElement.image.naturalSize.width.value = img.naturalWidth;
-      imageElement.image.naturalSize.height.value = img.naturalHeight;
+      imageElement.image.naturalSize.width.value.value = img.naturalWidth.toString();
+      imageElement.image.naturalSize.height.value.value = img.naturalHeight.toString();
       imageElement.ratio = ratio;
     }
     return this.pageElement;  
@@ -24,7 +23,7 @@ export class ImageCommand implements Command {
 
   undo(imageUrl: string) {
     if(this.pageElement.type === 'imageElement') {
-      this.pageElement.content = '';
+      (this.pageElement as ImageElement).content = '';
     }
     return this.pageElement;  
   }

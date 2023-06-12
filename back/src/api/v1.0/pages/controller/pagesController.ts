@@ -1,5 +1,5 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
-import { collection, getDocs } from '@firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { firebaseDb } from '../../../../firebase/initFirebase';
 import { pagesCollectionBase } from './common';
 import { handleError } from '@errors/handleError';
