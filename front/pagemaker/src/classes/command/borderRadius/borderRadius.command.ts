@@ -5,12 +5,12 @@ import type { ActiveElements } from '@/components/page/model/imageElement/imageE
 import type { Style } from '@/components/page/model/pageElement/pageElement';
 
 class BorderRadiusCommand implements Command {
-  constructor(private pageElement: ActiveElements, private service: EditorSettingsService = new EditorSettingsService()) {}
+  constructor(private readonly pageElement: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {}
 
   execute(borderRadius: number): ActiveElements {
     const unit = this.service.getUnits();
     if(this.hasStyle()) {
-      this.pageElement = this.undo();
+      this.undo();
     }
     this.pageElement.styles.push(this.getStyle(unit, borderRadius));
     return this.pageElement;

@@ -4,7 +4,7 @@ import type { ActiveElements } from '@/components/page/model/imageElement/imageE
 import type { StyleTags, BorderStyle, LineStyle } from '@/components/page/model/pageElement/pageElement';
 
 class BordersCommand implements Command {
-  constructor(private ActiveElements: ActiveElements, private service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly ActiveElements: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {};
   
   execute(styleRequested: StyleTags): ActiveElements {
     if(styleRequested === 'border-none') {

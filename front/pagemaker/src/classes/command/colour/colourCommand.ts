@@ -4,7 +4,7 @@ import type { Command } from '../model/command';
 import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 class ColourCommand implements Command {
-  constructor(private pageElement: ActiveElements, private service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly pageElement: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {};
   
   execute(colour: string) {
     if(!this.pageElement) return;

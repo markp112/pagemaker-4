@@ -48,28 +48,28 @@ import { useMouse } from '@/components/page/classes/mouse/mouse';
   const isSelected = (): string => props.isActive ? 'active ' : 'in-active ';
   const useResizer = ref<Resizer>(new Resizer(new useMouse(), props.thisComponent));
 
+  const handleMouseMove = (ev: MouseEvent) => {
+    useResizer.value.onResize(ev);
+  };
+
   const handleMouseUp = () => {
     window.removeEventListener('mouseup', handleMouseUp);
     window.removeEventListener('mousemove', handleMouseMove);
     emits('resizeStopped');
   };
   
-  const handleDown = (ev: MouseEvent) => {
-    if (!props.isActive) return;
-    resizeStarted(ev);
-  };
-    
   const resizeStarted = (ev: MouseEvent) => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
     useResizer.value.resizeStart(ev);
     emits('resizeStarted', ev);
   };
-    
-  const handleMouseMove = (ev: MouseEvent) => {
-    useResizer.value.onResize(ev);
+
+  const handleDown = (ev: MouseEvent) => {
+    if (!props.isActive) return;
+    resizeStarted(ev);
   };
-    
+
 </script>
   
 <style lang="css">

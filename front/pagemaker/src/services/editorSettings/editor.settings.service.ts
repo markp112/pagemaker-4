@@ -75,7 +75,7 @@ class EditorSettingsService {
       return;
     } 
     if(this.activeElementStore.activeElement.ref === element.ref) {
-      this.activeElementStore.setActiveElement(undefined);
+      this.activeElementStore.setActiveElement();
       return;
     } 
     this.activeElementStore.setActiveElement(element);

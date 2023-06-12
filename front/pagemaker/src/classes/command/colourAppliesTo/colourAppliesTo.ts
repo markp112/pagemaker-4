@@ -6,7 +6,7 @@ export type Applies = 'color' | 'background-color' | 'border';
 
 
 class ApplyColourTo implements Command {
-  constructor(private pageElement: ActiveElements, private service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly pageElement: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {};
 
   execute(applyTo: Applies): void {
     if (!this.pageElement) return;

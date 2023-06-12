@@ -91,15 +91,17 @@ const getDimensions = (): string => {
 };
 
 const getId = () => {
-  if (props.thisComponent) {
-    return props.thisComponent.ref;
+  if (thisComponent.value) {
+    return thisComponent.value.ref;
   }
+  return '';
 };
 
 const getContent = () => {
-  if (props.thisComponent) {
+  if (thisComponent.value) {
     return thisComponent.value.content;
   }
+  return '';
 }
 
 const getClasses = (): string => {

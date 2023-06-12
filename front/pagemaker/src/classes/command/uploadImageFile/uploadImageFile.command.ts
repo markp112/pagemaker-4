@@ -4,7 +4,7 @@ import type { Command } from '../model/command';
 import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 class UploadImageCommand implements Command {
-  constructor(private pageElement: ActiveElements,
+  constructor(private readonly pageElement: ActiveElements,
     private service: EditorSettingsService = new EditorSettingsService()) {}
 
   async execute(imageFile: File): Promise<void> {

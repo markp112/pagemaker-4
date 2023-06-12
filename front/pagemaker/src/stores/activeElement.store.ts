@@ -37,7 +37,7 @@ const useActiveElementStore = defineStore({
   },
 
   actions: {
-    setActiveElement(activeElement: ActiveElements | undefined) {
+    setActiveElement(activeElement?: ActiveElements | undefined) {
       this._activeElement = activeElement;
     },
 

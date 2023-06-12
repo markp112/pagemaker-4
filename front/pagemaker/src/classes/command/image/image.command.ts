@@ -1,10 +1,9 @@
 import type { ActiveElements, ImageElement } from '@/components/page/model/imageElement/imageElement';
-import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import type { Command } from '../model/command';
 const IMAGE_ELEMENT = 'imageElement';
 
 export class ImageCommand implements Command {
-  constructor(private pageElement: ActiveElements, private service: EditorSettingsService = new EditorSettingsService()) {}
+  constructor(private readonly pageElement: ActiveElements) {}
 
   execute(imageUrl: string): ActiveElements {
     if(this.pageElement.type === IMAGE_ELEMENT) {

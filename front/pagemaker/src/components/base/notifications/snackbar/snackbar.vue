@@ -7,7 +7,7 @@
     }"
   >
     <div class="flex flex-row shadow-xl border-gray-500 border rounded-sm">
-      <div class="w-3/12 h-full" :class="getIndicatorColour">
+      <div class="w-3/12 h-12" :class="getIndicatorColour">
       </div>
       <div class="w-9/12 p-2 flex flex-col">
         <div class="self-center font-semibold">
@@ -24,7 +24,6 @@
 <script lang="ts">
 import { useSnackbarStore } from '@/stores/snackbar.store';
 import { defineComponent } from 'vue';
-import type { SnackbarTypes } from './models';
 
 export default defineComponent({
   name:'snackbar',
@@ -35,7 +34,8 @@ export default defineComponent({
   },
 
   computed: {
-    snackbarContent(): SnackbarTypes {
+
+    snackbarContent() {
       return this.store.getSnackbarMessage;
     },
 

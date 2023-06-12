@@ -5,7 +5,7 @@ const CSS_CLASS_NAME_PART = 'items-';
 
 class ItemsAlignmentCommand implements Command {
   
-  constructor(private pageElement: ActiveElements) {}
+  constructor(private readonly pageElement: ActiveElements) {}
   
   execute(tailwindClass: string): ActiveElements {
     let twClasses = this.removeItemClasses();

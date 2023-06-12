@@ -107,11 +107,15 @@ function ComponentFactory() {
     textElement.dimension = {
       width: constructStyle('width', component.dimension.width.value),
       height: constructStyle('height', component.dimension.height.value)
-    }
+    };
     textElement.location = {
       left: constructStyle('left', { value: '0', unit: 'px'}),
       top: constructStyle('top', { value: '0', unit: 'px'}),
-    }
+    };
+    textElement.styles = [
+      createBaseStyles().fontFamily, 
+      createBaseStyles().fontSize
+    ];
     return textElement;
   } 
 

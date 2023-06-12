@@ -2,7 +2,7 @@ import type { Command } from '../model/command';
 import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 
 export class AlignmentCommand implements Command {
-  constructor(private pageElement: ActiveElements) {};
+  constructor(private readonly pageElement: ActiveElements) {};
 
   execute(payload: string): ActiveElements {
     let twClasses = this.removeFlexRowCol();
