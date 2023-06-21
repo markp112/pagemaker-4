@@ -28,12 +28,11 @@ s<template>
 import { defineComponent, type PropType } from 'vue';
 import { useMouse } from '../classes/mouse/mouse';
 import resize from '@/components/base/resize/resize.vue';
+import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { UseDrag } from '@/composables/drag/drag';
-import { stylesToString, dimensionToStyle, locationToStyle } from '@/common/stylesToString';
-
 
 export default  defineComponent({
   name: 'imageComponent',
@@ -57,7 +56,7 @@ export default  defineComponent({
       isSizing: false,
       editorSettings: new EditorSettingsService(),
       useDrag: new UseDrag(new useMouse()),
-      thisComponent: this.$props.thisComponent,
+      thisComponent: this.thisComponent
     }
   },
   

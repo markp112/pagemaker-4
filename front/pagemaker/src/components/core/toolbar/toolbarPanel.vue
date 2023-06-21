@@ -46,7 +46,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    await toolbarService().fetchToolBarItems();
+    await toolbarService().getToolBarItems();
   },
 
   components: {

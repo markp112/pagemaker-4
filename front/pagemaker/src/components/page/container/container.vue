@@ -32,7 +32,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
-import { dimensionToStyle, locationToStyle, stylesToString } from '@/common/stylesToString';
+import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 import resize from '@/components/base/resize/resize.vue';
 import { useMouse } from '../classes/mouse/mouse';
 import { Resize } from '../../base/resize/onResize';
