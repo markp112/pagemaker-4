@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectListIcon } from '@/components/base/editorButtons/model';
+import type { SelectListIcon } from '@/classes/commandButtons/model';
 import { getImageUrl } from '@/common/getIcon';
 import { ref } from 'vue';
   

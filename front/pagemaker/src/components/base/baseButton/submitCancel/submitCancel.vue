@@ -19,29 +19,16 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import BaseButton from '../baseButton.vue';
+<script lang="ts" setup>
+  import BaseButton from '../baseButton.vue';
 
-export default defineComponent({
+  const emits = defineEmits(['submitClick', 'cancelClick']);
 
-  name: "SubmitCancel",
-
-  emits: ['submitClick', 'cancelClick'],
-
-  components: {
-    'base-button': BaseButton,
-  },
-
-  methods: {
-
-    submitClick() {
-      this.$emit('submitClick');
-    },
+  const submitClick = () => {
+    emits('submitClick');
+  };
     
-    cancelClick() {
-      this.$emit('cancelClick');
-    },
-  },
-}
+  const cancelClick = () => {
+      emits('cancelClick');
+  };
 </script>

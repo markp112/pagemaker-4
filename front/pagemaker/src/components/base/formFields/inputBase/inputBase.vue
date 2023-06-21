@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-5 relative w-full">
-    <label for="input-field" class="w-auto p-2 col-span-2">{{ label }}:</label>
+    <label for="input-field" class="w-auto p-2 col-span-2" v-if="label !==''">{{ label }}:</label>
     <input
       :type="inputType"
       id="input-field"

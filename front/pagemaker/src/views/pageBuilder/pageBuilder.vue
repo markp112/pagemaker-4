@@ -83,15 +83,15 @@ const trashCan: Icon = {
     name: 'pageBuilder',
     
     components: {
-    PageCanvas,
-    Toolbar: toolbarPanelVue,
-    Scaler,
-    SettingsPanelVue: settingsPanelVue,
-    TabstripContainer: tabstripContainer,
-    ImageGallery,
-    IconButton: icon,
-    BaseButton: baseButton,
-},
+      PageCanvas,
+      Toolbar: toolbarPanelVue,
+      Scaler,
+      SettingsPanelVue: settingsPanelVue,
+      TabstripContainer: tabstripContainer,
+      ImageGallery,
+      IconButton: icon,
+      BaseButton: baseButton,
+    },
     
     data() {
       return {

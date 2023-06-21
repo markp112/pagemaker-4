@@ -45,16 +45,17 @@ function PageService() {
       colour,
       classDefinition: '',
       componentHTMLTag: 'page',
-      content: '',
-      dimension: { width: { value: 1280, unit: 'px' }, height: { value: 1080, unit: 'px' }},
-      location: { top: { value: 0, unit: 'px' }, left: { value: 0, unit: 'px' }},
-      isAbsolute: false,
+      dimension: { 
+        width: { style: 'width', value: { value: '1280', unit: 'px'} },
+        height: { style: 'height', value: { value: '1080', unit: 'px' }},
+      },
       isContainer: true,
       elements: [],
       parentRef: '',
       ref: 'root',
       styles: [],
       type: 'page',
+      lastPublished: new Date(),
     };
     store.setPage(page);
   }
