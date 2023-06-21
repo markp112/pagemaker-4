@@ -46,9 +46,9 @@
 </template>
 
 <script lang="ts" setup>
+  import type { SelectListIcon } from '@/components/base/editorButtons/model';
   import { ref } from '@vue/reactivity';
   import BaseButton from '@/components/base/baseButton/baseButton.vue';
-import type { SelectListIcon } from '@/classes/commandButtons/model';
 
   const props = defineProps<{ editedItem: SelectListIcon }>();
   const emits = defineEmits(['onClose', 'onSave']);

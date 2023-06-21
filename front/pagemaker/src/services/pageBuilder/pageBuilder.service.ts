@@ -38,10 +38,10 @@ function PageBuilderService() {
   function calcPageSize(scale: number, dimension: Dimension): Dimension {
     const height = parseInt(dimension.height.value.value);
     const width = parseInt(dimension.width.value.value);
-    const scaledDimension = { ...dimension };
-    scaledDimension.width.value.value = `${width * scale}`;
-    scaledDimension.height.value.value = `${height * scale}`;
-    return scaledDimension;
+    const scaledDeimension = { ...dimension };
+    scaledDeimension.width.value.value = `${width * scale}`;
+    scaledDeimension.height.value.value = `${height * scale}`;
+    return scaledDeimension;
   }
 
   function setScaledDimension(dimension: Dimension): void {

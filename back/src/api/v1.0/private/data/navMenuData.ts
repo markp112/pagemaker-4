@@ -36,13 +36,6 @@ export const navMenu: NavMenuItemInterface[] = [
     isVisible: true,
     isLoggedIn: true,
   },
-  { 
-    id: 8, 
-    navText: 'Component Editor',
-    isVisible: true,
-    isLoggedIn: true,
-    navLink: '/component-editor',
-  },
   {
     id: 3,
     navText: 'Image Library',

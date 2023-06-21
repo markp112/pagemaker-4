@@ -37,8 +37,8 @@ import buttonElement from './button/button-element.vue';
 import textElement from './textElement/textElement.vue';
 import Resize from '../base/resize/resize.vue';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
+import { stylesToString } from './functions/stylesToString';
 import type { ActiveElements } from './model/imageElement/imageElement';
-import { stylesToString } from '@/common/stylesToString';
 
 const PAGE_REF = 'page';
 

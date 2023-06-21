@@ -1,18 +1,14 @@
 import { FirebaseError } from '@firebase/util';
-import { DomainError, GenericError, InsufficientPermissions, InvalidArgument, NotFound } from '.';
+import { DomainError, GenericError, InsufficientPermissions, InvalidArgument } from '.';
 import { logger } from '@logger/pino';
-
-const FIREBASE_NOT_FOUND = '5';
 
 const errorMap = {
   'permission-denied': () => new InsufficientPermissions(),
   'invalid-argument': () => new InvalidArgument(), 
-  'generic': (err: Error) => new GenericError(err.message),
-  '5': () => new NotFound(),
+  'generic': (err: Error) => new GenericError(err.message)
 };
 
 function handleError(err: Error | FirebaseError): DomainError {
-  console.log('%c⧭', 'color: #cc0088', err);
   if(isTypeOfFirebaseError(err)) {
     throw handleFireBaseError(err);
   } else {
@@ -22,7 +18,6 @@ function handleError(err: Error | FirebaseError): DomainError {
 }
 
 function handleFireBaseError(err: FirebaseError): DomainError {
-  console.log('%c⧭', 'color: #735656', err);
   throw errorMap[err.code]();
 } 
 

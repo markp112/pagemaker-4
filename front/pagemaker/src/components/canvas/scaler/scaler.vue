@@ -1,4 +1,3 @@
-
 <template>
   <div :style="{'width': slider.width + 'px' }" class="z-50">
     <label for="" class="block">{{ slider.label }}</label>

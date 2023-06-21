@@ -3,12 +3,11 @@ import type { ValueAndUnit } from '@/classes/units';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
 import type { ButtonElement, ImageElement, TextElement } from '@/components/page/model/imageElement/imageElement';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
+import type { PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
 import type { Unit } from '@/components/page/model/model';
-import { constructStyle } from '@/common/stylesToString';
 
 const BASE_UNIT: Unit = { value: '0', unit: 'px' };
 const BASE_DIMENSION: Dimension = { 
@@ -155,6 +154,9 @@ function ComponentFactory() {
     }
   }
 
+  function constructStyle(style: StyleTags, value: ValueAndUnit): Style {
+    return { style, value: { value: value.value, unit: value.unit } };
+  }
 
   return { createComponent };
 }

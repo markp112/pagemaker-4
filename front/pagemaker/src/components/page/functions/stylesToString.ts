@@ -1,7 +1,6 @@
+import type { BorderStyle, Style, } from '../model/pageElement/pageElement';
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
-import type { ValueAndUnit } from '@/classes/units';
-import type { Style, BorderStyle, StyleTags } from '@/components/page/model/pageElement/pageElement';
 
 function stylesToString(styleCollection: Style[]): string {
   let styles = '';
@@ -18,11 +17,6 @@ function stylesToString(styleCollection: Style[]): string {
     styles += ';';
   }
   return styles;
-}
-
-
-function constructStyle(style: StyleTags, value: ValueAndUnit): Style {
-  return { style, value: { value: value.value, unit: value.unit } };
 }
 
 function locationToStyle(location: Location): string {
@@ -55,4 +49,4 @@ function getBorderStyle(borderStyle: BorderStyle) {
   return `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.colour} ${borderStyle.value.value}${borderStyle.value.unit}`;
 }
 
-export { stylesToString, locationToStyle, dimensionToStyle, constructStyle };
+export { stylesToString, locationToStyle, dimensionToStyle };
