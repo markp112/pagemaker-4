@@ -36,7 +36,7 @@ import { EditorSettingsService } from '@/services/editorSettings/editor.settings
 import { useMouse } from '../classes/mouse/mouse';
 import { computed, ref } from '@vue/reactivity';
 import { UseDrag } from '@/composables/drag/drag';
-import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
+import { dimensionToStyle, locationToStyle, stylesToString } from '@/common/stylesToString';
 import type { TextElement } from '../model/imageElement/imageElement';
 
 const props = defineProps<{

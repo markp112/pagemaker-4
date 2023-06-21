@@ -1,16 +1,17 @@
 <template>
   <tooltip :showToolTip="showToolTip" :tooltip="iconImage.tooltip">
-    <div class="w-8 inline-block">
+    <span class="inline-block">
       <img
         :id="iconImage.id"
         :ref="iconImage.id"
         class="hover: cursor-pointer"
+        :class="classes"
         :src="getIcon"
         @click="iconClick"
         @mouseover="displayTooltip(true)"
         @mouseleave="displayTooltip(false)"
       />
-    </div>
+    </span>
 </tooltip>
 </template>
 
@@ -32,6 +33,10 @@ export default defineComponent ({
       type: Object as PropType<Icon>,
       required: true,
     },
+    classes: {
+      type: String,
+      default: '',
+    }
   },
 
   setup() {
@@ -45,7 +50,7 @@ export default defineComponent ({
   data() {
     return {
       showToolTip: false,
-      tooltipPosition:  ' left',
+      tooltipPosition: ' left',
     }
   },
 

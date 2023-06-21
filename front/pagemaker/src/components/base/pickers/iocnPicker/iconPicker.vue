@@ -1,15 +1,15 @@
 <template>
-  <div class="w-24 bg-gray-800 rounded-t-md" v-if="show.valueOf()">
-    <CloseButton
-      @click="closeMe()"
-      class="bg-site-surface text-site-primary mt-2 ml-2"
-    />
-    <ul
-      class="w-24 bg-gray-800 p-2 z-10 flex flex-row flex-wrap justify-start shadow-lg rounded-b-md absolute "
-    >
+  <div class="w-44 bg-gray-800 rounded-t-md" v-if="showMe">
+
+    <ul class="w-44 bg-gray-800 p-2 flex flex-row flex-wrap justify-start shadow-lg rounded-b-md absolute z-20">
+      <CloseButton
+        @click="closeMe()"
+        class="bg-site-surface text-site-primary mt-2 h-10 w-10/12 ml-4"
+      />
       <li v-for="(icon, idx) in icons" :key="idx" class="w-6/12 text-lg text-accent-2 p-2">
-        <IconImage
+        <IconVue
           :iconImage="icon"
+          classes="w-10"
           @iconClick="iconClicked($event)"
         />
       </li>
@@ -17,45 +17,28 @@
     </div>
   </template>
   
-  <script lang="ts">
-  import closeButtonVue from '../../baseButton/closeButton/closeButton.vue';
-  import { defineComponent } from 'vue';
+  <script lang="ts" setup>
+  import CloseButton from '../../baseButton/closeButton/closeButton.vue';
+  import { onMounted, ref } from 'vue';
   import { getImageUrl } from '@/common/getIcon';
-  import iconVue from '@/components/utility/icon/icon.vue';
+  import IconVue from '@/components/utility/icon/icon.vue';
   import type { Icon } from '@/components/utility/icon/model/model';
-  
-  export default defineComponent ({
-    name: 'icon-Picker',
 
-    props: {
-      show: {
-        type: Boolean,
-        default: false,
-      } 
-    },
+  defineProps<{
+      showMe: boolean
+    }>();
     
-    emits: [ 'onCloseClick', 'iconClick' ],
+    const emits = defineEmits(['onCloseClick', 'iconClick']);
 
-    data() {
-      return {
-        icons: [] as Icon[],
-      }
-    },
+    const icons = ref<Icon[]>([]);
 
-    components: {
-      CloseButton: closeButtonVue,
-      IconImage: iconVue,
-    },
+    onMounted(() => {
+      buildIcons();
+    });
   
-    created() {
-      this.buildIcons();
-    },
-  
-    methods: {
-
-      buildIcons() {
+    const buildIcons = () => {
         const classDef = "transform cursor-pointer hover:shadow-xl hover:-translate-x-1 hover:-translate-y-1 hover:text-accent-1";
-        this.icons = [
+        icons.value = [
           {
             icon: `home-32.png`,
             classDef: classDef,
@@ -190,20 +173,18 @@
             tooltip: '',
           },
       ];
-    },
+    };
     
-    getPath(image: string): string {
+    const getPath = (image: string): string => {
       return getImageUrl(image);
-    },
+    };
     
-    iconClicked(icon: string) {
-      this.$emit('iconClick' ,icon);
-    },
+    const iconClicked = (icon: string) => {
+      emits('iconClick', icon);
+    };
     
-    closeMe() {
-      this.$emit('onCloseClick')
-    },
-  },
-})
+    const closeMe = () => {
+      emits('onCloseClick')
+    };
 </script>
   

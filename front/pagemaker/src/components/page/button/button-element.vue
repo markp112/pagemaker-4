@@ -30,8 +30,8 @@ import { UseDrag } from '@/composables/drag/drag';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { defineComponent, type PropType } from 'vue';
 import { useMouse } from '../classes/mouse/mouse';
-import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 import type { ButtonElement } from '../model/imageElement/imageElement';
+import { stylesToString, locationToStyle, dimensionToStyle } from '@/common/stylesToString';
 
 export default defineComponent({
   name:'buttonElement',

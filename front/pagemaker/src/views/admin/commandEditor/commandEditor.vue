@@ -147,10 +147,10 @@ import { useCommandButtonStore } from '@/stores/commandButton.store';
 
   onMounted(async () => {
     await service.fetchAllCommands();
-    const commands = store.getAllCommandButtons;
-    Object.keys(commands).forEach(key => {
+      const commands = store.getAllCommandButtons;
+      Object.keys(commands).forEach(key => {
       commandList.value.push(key)});
-  });
+    });
 
   const getCommands = computed(() => {
     return commandList.value.sort();

@@ -1,22 +1,23 @@
 <template>
-  <div class="text-site-primary w-full">
+  <div class="w-full p-2">
     <div class="flex flex-row justify-between text-sm relative">
       <label for="drop-down" v-if="label" class="w-full block mb-1 font-semibold"> {{ label }}</label>
+    <div class="relative">
       <input
         v-model="selectedItem"
         id="drop-down"
         name="drop-down"
         class="p-2 relative bg-site-surface text-on-surface h-6 border border-gray-400 "
-        @change="onInputChange()"
+        @change="onInputChange($event)"
       />
       <img
         :src="getPath('down-24.png')"
-        class="w-6 h-6 cursor-pointer hover:bg-gray-800 absolute right-0 top-0 border border-gray-400"
+        class="w-6 h-6 cursor-pointer bg-site-primary-light hover:bg-gray-800 absolute right-0 top-0 border border-gray-400 "
         @click="show()"
       />
-    </div>
+    
     <ul
-      class="dropdown-menu-background flex flex-col text-start absolute z-10 w-full shadow-lg h-auto overflow-auto text-sm"
+      class="dropdown-menu-background flex flex-col text-start absolute z-10 shadow-lg overflow-auto text-sm p-2 left-0"
       v-if="toggleSelectOptions"
       @mouseleave="show"
       @blur="show"
@@ -25,58 +26,50 @@
         v-for="item in itemList"
         :key="item.toString()"
         @click="itemClicked(item.toString())"
-        class="dropdown-menu-item block w-full mt-2 px-2"
+        class="dropdown-menu-item block w-auto mt-2 px-2"
         :class="{ 'dropdown-menu-selected': item === selectedItem }"
       >
         {{ item }}
       </li>
     </ul>
   </div>
+  </div>
+</div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 
-import { defineComponent, type PropType } from 'vue';
+import { ref } from 'vue';
 import { getImageUrl } from '@/common/getIcon';
 
-export default defineComponent({
-  name: 'drop-down',
+  defineProps<{ 
+    itemList:string[],
+    label: string,
+    selectedItem: string | undefined,
+  }>();
   
-  props: { 
-    itemList: Array as PropType<string[]>,
-    label: String,
-    selectedItem: String,
-  },
-  
-  emits: ['onSelectChange'],
+  const emits = defineEmits(['onSelectChange']);
 
-  data() {
-    return {
-      toggleSelectOptions: false,
-      currentValue: this.selectedItem,
-    }
-  },
+  const toggleSelectOptions = ref(false);
 
-methods: {
-
-  itemClicked(id: string) {
-    this.toggleSelectOptions = false;
-    this.$emit('onSelectChange', id);
-  },
+  const itemClicked = (id: string) => {
+    toggleSelectOptions.value = false;
+    emits('onSelectChange', id);
+  };
   
-  onInputChange() {
-    this.$emit('onSelectChange', this.currentValue);
-  },
+  const onInputChange = (event: Event) => {
+    const value = (event.currentTarget as HTMLInputElement).value;
+    console.log('%c⧭', 'color: #7f2200', value)
+    emits('onSelectChange', value);
+  };
   
-  show() {
-    this.toggleSelectOptions = !this.toggleSelectOptions;
-  },
+  const show = () => {
+    toggleSelectOptions.value = !toggleSelectOptions.value;
+  };
   
-  getPath(image: string): string {
+  const getPath = (image: string): string => {
     return getImageUrl(image);
-  },
-}
-})
+  };
 </script>
 
 <style lang="css">
@@ -88,10 +81,14 @@ methods: {
   @apply text-sm;
   @apply w-full;
   @apply text-center;
+  @apply p-2;
 }
 
 .drop-down-li:hover {
   @apply bg-gray-600;
+  @apply rounded-lg;
+  @apply rounded;
   @apply text-gray-400;
+  @apply w-9/12;
 }
 </style>

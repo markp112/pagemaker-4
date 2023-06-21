@@ -41,6 +41,12 @@ class InvalidArgument extends DomainError {
   }
 }
 
+class NotFound extends DomainError {
+  constructor() {
+    super('Firebase no matching record found', httpStatusCodes.INTERNAL_SERVER_ERROR, 'Server Error');
+  }
+}
+
 class GenericError extends DomainError {
   constructor(error: string) {
     super(error, httpStatusCodes.INTERNAL_SERVER_ERROR, 'Generic');
@@ -52,4 +58,5 @@ export { DomainError,
   InsufficientPermissions,
   GenericError,
   InvalidArgument, 
+  NotFound,
 };
