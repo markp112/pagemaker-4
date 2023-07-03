@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { Hosting, HostingParams } from '../../model';
 import { FirebaseHostingResponse } from '../dao/dao';
 import { getAccessToken } from '../authToken/getToken'
@@ -27,15 +27,12 @@ class FirebaseHost implements Hosting {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-      },
-      
-      );
+      });
       return result.data as FirebaseHostingResponse;
-
     } catch (err) {
       handleError(err);
     }
-    };
+  };
 };
 
 export { FirebaseHost };

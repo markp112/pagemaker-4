@@ -17,14 +17,8 @@ type FirebaseHostingDao = {
 
 type FirebaseHostingResponse = {
   name: string;
-  status: string;
-  config: {
-    headers: {
-      glob: string;
-      headers: {
-        'Cache-Control': string;
-      };
-    }[]
-  }
-}
+  defaultUrl: string;
+  type: string;
+};
+
 export type { FirebaseHostingDao, FirebaseHeader, FirebaseHostingResponse };

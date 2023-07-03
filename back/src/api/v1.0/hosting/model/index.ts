@@ -1,7 +1,9 @@
-export interface HostingParams {
+interface HostingParams {
   siteId: string;
-}
+};
 
-export interface Hosting {
+interface Hosting {
   createSite: (params: HostingParams) => void;
 };
+
+export type { HostingParams, Hosting };

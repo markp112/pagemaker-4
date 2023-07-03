@@ -1,10 +1,9 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
-import { signInWithEmailAndPassword, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth as firebaseAuth } from '../../../../firebase/initFirebase';
 import type { Response } from 'api/types';
 import { ResourceNotFoundError } from '../../../../common/errors';
 import { handleError } from '@errors/handleError';
-// import { OAuth2Client } from 'google-auth-library';
 
 export type Credentials = {
   email: string;
@@ -37,14 +36,6 @@ function auth() {
 			}
 		}
 	}
-
-	// async function loginInWithGoogle(): Promise<Response> {
-	// 	try {
-	// 		const provider = new GoogleAuthProvider();
-
-	// 		const firebaseCredentials = await 
-	// 	}
-	// }
 
 	return { login };
 }

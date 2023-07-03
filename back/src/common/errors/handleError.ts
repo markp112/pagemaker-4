@@ -1,7 +1,7 @@
 import { FirebaseError } from '@firebase/util';
 import { BadRequest, DomainError, GenericError, InsufficientPermissions, InvalidArgument, SiteExists } from '.';
 import { logger } from '@logger/pino';
-import { Axios, AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
 const errorMap = {
   'permission-denied': () => new InsufficientPermissions(),
