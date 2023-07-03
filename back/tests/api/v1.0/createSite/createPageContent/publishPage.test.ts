@@ -2,6 +2,7 @@ import { type Folder, pagePublisher} from '../../../../../src/api/v1.0/buildPage
 import fs from 'fs/promises';
 import path from 'path';
 const BASE_FOLDER = './publishedFiles/';
+
   describe('writeLocalFile', () => {
 
     it('should write the page content to local storage based on the details passed', async () => {
@@ -31,7 +32,7 @@ const BASE_FOLDER = './publishedFiles/';
         };
         await pagePublisher().writeLocalFile(folder, fileContent);
         await pagePublisher().uploadFileToFirebase(folder);
-      })
-    })
+      });
+    });
 
-  })
+  });

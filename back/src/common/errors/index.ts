@@ -47,9 +47,23 @@ class GenericError extends DomainError {
   }
 };
 
+class BadRequest extends DomainError {
+  constructor(error: string) {
+    super(error, httpStatusCodes.INTERNAL_SERVER_ERROR, 'The request was not recognised');
+  }
+};
+
+class SiteExists extends DomainError {
+  constructor() {
+    super('A site with name is already existing', httpStatusCodes.INTERNAL_SERVER_ERROR, 'Duplicate Site');
+  }
+};
+
 export { DomainError,
   ResourceNotFoundError,
   InsufficientPermissions,
   GenericError,
-  InvalidArgument, 
+  InvalidArgument,
+  BadRequest,
+  SiteExists,
 };
