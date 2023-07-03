@@ -10,7 +10,7 @@ export type Credentials = {
   password: string;
 };
 
-type User = {
+export type User = {
   email: string,
   uid: string,
   displayName: string,
