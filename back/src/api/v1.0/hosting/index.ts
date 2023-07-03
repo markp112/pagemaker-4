@@ -18,3 +18,5 @@ hostingRouter.post(`${ROUTE_PATH}/:userId/:siteId/`, async (req, res) => {
       res.status(error._status).send(response);
   }
 })
+
+export { hostingRouter };

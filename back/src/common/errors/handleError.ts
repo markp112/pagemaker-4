@@ -24,7 +24,6 @@ function handleError(err: Error | FirebaseError | AxiosError): DomainError {
 }
 
 function handleFireBaseError(err: FirebaseError): DomainError {
-  console.log('%c⧭', 'color: #607339', err), 'error';
   logger.error(err.code);
   throw errorMap[err.code]();
 }
