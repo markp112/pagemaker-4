@@ -12,7 +12,7 @@ class FirebaseHost implements Hosting {
   async createSite(params: HostingParams): Promise<FirebaseHostingResponse> {
     this.configureUrl(config.hostingUrl);
     this.siteId = params.siteId;
-    return this.firebaseCreateSite();
+    return await this.firebaseCreateSite();
   };
 
   private configureUrl(url: string) {

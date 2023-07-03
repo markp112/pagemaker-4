@@ -1,11 +1,12 @@
 import key from '../../../../../secrets/serviceAccountKey.json';
-const {google} = require('googleapis');
+import { google } from 'googleapis';
+
 const SCOPES = ["https://www.googleapis.com/auth/firebase.hosting",
 'https://www.googleapis.com/auth/cloud-platform'];
 
 function getAccessToken() {
   return new Promise(function(resolve, reject) {
-    var jwtClient = new google.auth.JWT(
+    const jwtClient = new google.auth.JWT(
       key.client_email,
       null,
       key.private_key,
