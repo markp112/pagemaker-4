@@ -60,7 +60,7 @@ const getUserAndSiteName = (siteName: string) => {
   return  {
     userId: siteAndUser.userId,
     siteId: siteAndUser.siteId,
-    siteName: siteName,
+    siteName,
   };
 }
 

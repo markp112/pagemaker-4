@@ -28,6 +28,9 @@
 
 <script lang="ts">
 
+const PAGE_LIST_ROUTE = '/pagelist';
+const SITE_EDITOR_ROUTE = '/site-editor'; 
+
 import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { Site } from '@/classes/sites/site';
 import { siteService } from '@/services/site/site.service';
@@ -75,7 +78,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         this.store.setCurrentSite(siteId);
         this.siteStore.setSite(this.store.currentSite); 
         const siteAndUser: SiteAndUser = {
-          siteId: siteId,
+          siteId,
           userId: this.userId,
         };
         await Promise.all([
@@ -87,7 +90,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
       },
       
       siteClicked(siteId: string) {
-        this.getSiteData(siteId, `/pagelist` );
+        this.getSiteData(siteId, PAGE_LIST_ROUTE);
       },
 
       async siteDeleteClicked(siteId: string) {
@@ -100,7 +103,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
       },
 
       async siteEditClick(siteId: string) {
-        await this.getSiteData(siteId, `/site-editor`);
+        await this.getSiteData(siteId, SITE_EDITOR_ROUTE);
         this.$router.push({ name: 'site-editor', params: { title: 'edit site' }})
       }
 

@@ -1,5 +1,5 @@
 function memoize(target: Function, context) {
-  let cache = new Map();
+  const cache = new Map();
   if (context.kind === 'method') {
 
     // rome-ignore lint/suspicious/noExplicitAny: <explanation>

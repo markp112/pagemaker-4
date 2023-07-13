@@ -77,7 +77,7 @@ async function performPost<T, U>(path: string, payload: T, config: AxiosRequestC
     const errContent = err.response as AxiosResponse;
     const errMsg = errContent.data as { data: {name: string, _status: number }};
     displayMessage(errMsg.data.name, 'error', 'Failed');
-    throw errMsg;
+    throw new Error(errMsg.data.name);
   }
 }
 async function performMultipartPost<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
