@@ -7,6 +7,7 @@ import pageEditor from '@/views/pageList/page-editor/page-editor.vue';
 import commandEditor from '@/views/admin/commandEditor/commandEditor.vue';
 import commandStructure from '@/views/admin/commandEditor/commandStructure/commandStructure.vue';
 import PlainLayout from '@/layouts/plain.vue';
+import site from '@/views/site/site.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,7 +41,16 @@ const router = createRouter({
       name: 'site-editor',
       component: SiteEditor, 
       meta: {
-        breadcrumb: [{ name: 'sites', link: 'sites' }, {name: 'site-editor'}],
+        breadcrumb: [{ name: 'sites', link: 'sites' }, { name: 'site-editor'}],
+        layout: PlainLayout,
+      }
+    },
+    {
+      path: '/site',
+      name: 'site',
+      component: site, 
+      meta: {
+        breadcrumb: [{ name: 'sites', link: 'sites' }, { name: 'site'}],
         layout: PlainLayout,
       }
     },

@@ -1,5 +1,5 @@
 import { getSiteAndUser, type SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
-import type { Site, SiteData } from '@/classes/sites/site';
+import type { Site, SiteData, UserAndSiteName } from '@/classes/sites/site';
 import { siteDefaultColours } from '@/classes/sites/siteColours/colour';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
@@ -11,9 +11,11 @@ import { axiosClient, type ResponseError } from '../httpService';
 
 function siteService() {
   const BASE_ROUTE = '/sites/';
+  const HOSTING_ROUTE = '/hosting/';
   const IS_NEW_SITE = '-1';
   const store = useSiteStore();
   const getRoute = (siteAndUser: SiteAndUser) => `${BASE_ROUTE}${siteAndUser.userId}/${siteAndUser.siteId}`;
+  const getHostingRoute = (userAndSiteName: UserAndSiteName) => `${HOSTING_ROUTE}${userAndSiteName.userId}/${userAndSiteName.siteName}`;
 
 
   async function getSiteMaterialColours(siteAndUser: SiteAndUser):Promise<void> {
@@ -28,7 +30,7 @@ function siteService() {
     catch (err) {
       console.log('%c⧭', 'color: #cc0036', err);
     }
-  }
+  };
 
   async function saveMaterialColours(siteAndUser: SiteAndUser, materialColours: MaterialColours | undefined):Promise<void> {
     try {
@@ -120,7 +122,7 @@ function siteService() {
     
   }
 
-  async function saveNewSite(siteData:SiteData): Promise<void> {
+  async function saveNewSite(siteData: SiteData): Promise<void> {
     try {
       const siteAndUser: SiteAndUser = {
         siteId: siteData.site.siteId,
@@ -178,8 +180,29 @@ function siteService() {
     store.setTypography(defaultTypography);
   }
 
+  async function fetchSite(siteAndUser: SiteAndUser): Promise<Site> {
+    const site = await axiosClient().get<Site>(`${getRoute(siteAndUser)}`);
+    store.setSite(site);
+    return site;
+  }
+
+  async function createHostingSite(userAndSiteName: UserAndSiteName): Promise<Site> {
+    const result = await axiosClient().post<UserAndSiteName, Site>(getHostingRoute(userAndSiteName), userAndSiteName);
+    if (isSite(result)) {
+      return result as Site;
+    }
+    const err = result as {data: string, err: string, statusCode: number}
+    displayMessage(err.data, 'error', 'Error');
+    return store.site;
+  }
+
+  function isSite(siteOrError: Site | { data: string, err: string, statusCode: number }): siteOrError is Site {
+    return 'siteId' in siteOrError;
+  } 
+
 
   return { getSiteMaterialColours,
+    fetchSite,
     saveSite,
     deleteSite,
     getSiteColourPalette,
@@ -187,6 +210,7 @@ function siteService() {
     getDefaultSwatches,
     getDefaultMaterialColours,
     getDefaultTypography,
+    createHostingSite,
   }
 }
 

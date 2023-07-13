@@ -55,11 +55,12 @@ class BadRequest extends DomainError {
 
 class SiteExists extends DomainError {
   constructor() {
-    super('A site with name is already existing', httpStatusCodes.INTERNAL_SERVER_ERROR, 'Duplicate Site');
+    super('A site with name is already existing', httpStatusCodes.CONFLICT, 'A site with this name already exists names must be globally unique');
   }
 };
 
-export { DomainError,
+export { 
+  DomainError,
   ResourceNotFoundError,
   InsufficientPermissions,
   GenericError,

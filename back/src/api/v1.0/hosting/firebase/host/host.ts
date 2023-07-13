@@ -3,15 +3,14 @@ import { Hosting, HostingParams } from '../../model';
 import { FirebaseHostingResponse } from '../dao/dao';
 import { getAccessToken } from '../authToken/getToken'
 import config from '../../../../../secrets/firebase-config.json'; 
-import { handleError } from '@errors/handleError';
 
 class FirebaseHost implements Hosting {
   private url: string;
-  private siteId: string;
+  private siteName: string;
 
   async createSite(params: HostingParams): Promise<FirebaseHostingResponse> {
     this.configureUrl(config.hostingUrl);
-    this.siteId = params.siteId;
+    this.siteName = params.siteName;
     return await this.firebaseCreateSite();
   };
 
@@ -20,19 +19,15 @@ class FirebaseHost implements Hosting {
   }
 
   private async firebaseCreateSite(): Promise<FirebaseHostingResponse> {
-    try {
-      const token = await getAccessToken();
-      const result = await axios.post(`${this.url}?siteId=${this.siteId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      });
-      return result.data as FirebaseHostingResponse;
-    } catch (err) {
-      handleError(err);
-    }
-  };
+    const token = await getAccessToken();
+    const result = await axios.post(`${this.url}?siteId=${this.siteName}`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+    });
+    return result.data as FirebaseHostingResponse;
+};
 };
 
 export { FirebaseHost };

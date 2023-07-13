@@ -48,6 +48,10 @@ const useSiteStore = defineStore({
       this._site = site;
     },
 
+    setSiteId(siteId: string) {
+      this._site.siteId = siteId;
+    },
+
     setMaterialColours(colourPalette: MaterialColours) {
       this._materialColours = colourPalette;
     },

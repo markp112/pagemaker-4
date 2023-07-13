@@ -1,24 +1,20 @@
 <template>
-  <div
-    class="snackbar-wrapper z-50 w-80 snackbar-show bg-site-surface p-0"
+  <span
+    class="snackbar-wrapper z-50 w-80 snackbar-show bg-site-surface h-36 grid grid-cols-8 grid-rows-4 gap-1 shadow-xl border-gray-500 border rounded-md"
     :class="{
       'snackbar-show': showSnackbar,
       'snackbar-hide': !showSnackbar
-    }"
+    ,getIndicatorColour}"
   >
-    <div class="flex flex-row shadow-xl border-gray-500 border rounded-sm">
-      <div class="w-3/12 h-12" :class="getIndicatorColour">
-      </div>
-      <div class="w-9/12 p-2 flex flex-col">
-        <div class="self-center font-semibold">
-          {{ snackbarContent.title }}
-        </div>
-        <div class="self-start">
-          {{ snackbarContent.message }}
-        </div>
-      </div>
-    </div>
-  </div>
+      <span class="col-start-1 row-start-1 row-span-4 h-full m-0 p-0" :class="getIndicatorColour">
+      </span>
+      <span class="col-start-4 row-start-1 col-span-4 font-semibold">
+        {{ snackbarContent.title }}
+      </span>
+      <span class="row-start-2 col-start-2 col-span-6">
+        {{ snackbarContent.message }}
+      </span>
+    </span>
 </template>
 
 <script lang="ts">

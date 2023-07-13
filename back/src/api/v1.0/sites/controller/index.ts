@@ -39,7 +39,7 @@ function sitesController() {
       const statusCode = isPost ? 201 : httpStatusCodes.OK
       return constructResponse<Site>(site, statusCode);
     }  catch (err) {
-        handleError(err);
+        return handleError(err);
     }
   }
 

@@ -8,6 +8,8 @@ import { MaterialColours } from './model/materialColours';
 import { SiteTypography } from './model/typography';
 import { siteDefaultsRouter } from './siteDefaults'
 import { DomainError } from '@errors/index';
+import { constructResponse } from '@common/functions/constructResponse';
+import { httpStatusCodes } from '@api/httpStatusCodes';
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
@@ -26,8 +28,24 @@ sitesRouter
       res.status(response.status).send(response);
     } catch (error) {
       console.log('%c⧭', 'color: #731d6d', error);
-      // const response = error.getResponse();
-      // res.status(error._status).send(response);
+      const response = error.getResponse();
+      res.status(error._status).send(response);
+    }
+  })
+
+    
+  .get(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
+    log.info('getSite - called');
+    const userId = req.params.userId;
+    const siteId = req.params.siteId;
+    try {
+      const site = await sitesController().getSite(userId, siteId);
+      const response = constructResponse(site, httpStatusCodes.OK);
+      res.status(response.status).send(response);
+    } catch (error) {
+      console.log('%c⧭', 'color: #731d6d', error);
+      const response = error.getResponse();
+      res.status(error._status).send(response);
     }
   })
 

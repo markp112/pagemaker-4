@@ -47,6 +47,7 @@ export default defineComponent({
       this.formErrors = [];
       try {
         const loggedIn = await auth().login(credential);
+        console.log('%c⧭', 'color: #cc7033', loggedIn)
         if (loggedIn) {
           this.store.fetchMenuItems(loggedIn);
           this.$router.push('/sites');

@@ -17,6 +17,7 @@
           @site-clicked="siteClicked($event)"
           @site-edit-clicked="siteEditClick($event)"
           @site-delete-clicked="siteDeleteClicked($event)"
+          @site-publish-click="sitePublishClick($event)"
         />
       </div>
       <div v-else>
@@ -26,6 +27,9 @@
 </template>
 
 <script lang="ts">
+
+const PAGE_LIST_ROUTE = '/pagelist';
+const SITE_EDITOR_ROUTE = '/site-editor'; 
 
 import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import type { Site } from '@/classes/sites/site';
@@ -38,7 +42,6 @@ import { defineComponent } from 'vue';
 import siteCardContainerVue from './components/sideCardContainer/siteCard.container.vue';
 import FirstSite from './components/firstSite/firstSite.vue';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
-
 
   export default defineComponent({
     name: 'sites',
@@ -54,7 +57,6 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         store: useSitesStore(),
         siteStore: useSiteStore(),
         userStore: useAuthStore(),
-
         userId: '',
         hasSites: true,
       }
@@ -76,7 +78,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         this.store.setCurrentSite(siteId);
         this.siteStore.setSite(this.store.currentSite); 
         const siteAndUser: SiteAndUser = {
-          siteId: siteId,
+          siteId,
           userId: this.userId,
         };
         await Promise.all([
@@ -88,15 +90,20 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
       },
       
       siteClicked(siteId: string) {
-        this.getSiteData(siteId, `/pagelist` );
+        this.getSiteData(siteId, PAGE_LIST_ROUTE);
       },
 
       async siteDeleteClicked(siteId: string) {
         await siteService().deleteSite(siteId);
       },
 
+      sitePublishClick(siteId: string) {
+        this.siteStore.setSiteId(siteId);
+        this.$router.push({ name: 'site',  params: { siteId }})
+      },
+
       async siteEditClick(siteId: string) {
-        await this.getSiteData(siteId, `/site-editor`);
+        await this.getSiteData(siteId, SITE_EDITOR_ROUTE);
         this.$router.push({ name: 'site-editor', params: { title: 'edit site' }})
       }
 

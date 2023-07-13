@@ -1,7 +1,5 @@
 import { FirebaseHostingResponse } from '@api/v1.0/hosting/firebase/dao/dao';
 
-
-
 interface Site {
   siteId: string;
   name: string;

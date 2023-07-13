@@ -13,6 +13,7 @@
     "paths": {
       "@api/*": ["api/*"],
       "@database/*": ["database/*"],
+      "@decorators/*": ["decorators/*"],
       "@errors/*": ["common/errors/*"],
       "@common/*": ["common/*"],
       "@logger/*": ["logger/*"],

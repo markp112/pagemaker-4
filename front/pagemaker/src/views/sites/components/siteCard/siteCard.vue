@@ -15,6 +15,15 @@
         />
         <ToolTip tooltip="Delete Site" :showToolTip="showDeleteTooltip" />
       </span>
+      <span class="row-start-2 col-start-2 relative">
+        <img :src="getIcon('world-32.png')"
+          class="icon"
+          @click="publishSiteClick()"
+          @mouseenter.stop="showPublishTooltip = !showPublishTooltip"
+          @mouseleave="showPublishTooltip = !showPublishTooltip"
+        />
+        <ToolTip tooltip="Publish Site" :showToolTip="showPublishTooltip" />
+      </span>
         <img :src="getIcon('Go-Circle-blue.png')"
         alt=""
         class="cursor-pointer w-32 h-auto row-start-1 col-start-1 col-span-3"
@@ -27,9 +36,9 @@
           @click="editSiteClick()"
           @mouseenter.stop="showEditTooltip = !showEditTooltip"
           @mouseleave="showEditTooltip = !showEditTooltip"
-          />
-          <ToolTip tooltip="Edit Site" :showToolTip="showEditTooltip" />
-        </span>
+        />
+        <ToolTip tooltip="Edit Site" :showToolTip="showEditTooltip" />
+      </span>
     </div>
     <div class="absolute top-40 bg-site-surface w-64 h-48 p-2 transition-propery:height ease-in-out duration-150" v-if="showDeleteWarning">
       <h3 class="text-center text-site-warning font-bold text-xl mb-2 leading-6">Warning</h3>
@@ -65,7 +74,7 @@ import baseButtonVue from '@/components/base/baseButton/baseButton.vue';
 
 export default defineComponent ({
   name: 'siteCard',
-  emits: ['siteClicked', 'editClicked', 'deleteClicked'],
+  emits: ['siteClicked', 'editClicked', 'deleteClicked', 'publishClicked'],
 
   props: {
     site: {
@@ -84,6 +93,7 @@ export default defineComponent ({
       showEditTooltip: false,
       showDeleteTooltip: false,
       showDeleteWarning: false,
+      showPublishTooltip: false,
     }
   },
 
@@ -91,6 +101,10 @@ export default defineComponent ({
     
     editSiteClick() {
       this.$emit('editClicked', this.$props.site.siteId);
+    },
+
+    publishSiteClick() {
+      this.$emit('publishClicked', this.$props.site.siteId);
     },
 
     deleteSite() {
@@ -110,10 +124,7 @@ export default defineComponent ({
 
 <style lang="css">
   .icon {
-    @apply cursor-pointer h-8 shadow-sm  hover:bg-site-primary transition-all ease-in-out duration-100 relative;
+    @apply cursor-pointer h-8 shadow-sm  hover:bg-site-primary hover:rounded-full transition-all ease-in-out duration-100 relative;
   }
 
-  .warning-animation {
-  
-  }
 </style>
