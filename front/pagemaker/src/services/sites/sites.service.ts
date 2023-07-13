@@ -15,7 +15,7 @@ function sitesService() {
     try {
       store.clear();
       const sites = await axiosClient().get<Site[]>(`${BASE_ROUTE}/${userId}`);
-      if (sites.length > 0) {
+      if (sites?.length > 0) {
         store.setSites(sites);
       } 
     } catch (error) {

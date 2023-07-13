@@ -6,6 +6,7 @@
           @site-clicked="siteClicked($event)"
           @edit-clicked="siteEditClick($event)"
           @delete-clicked="siteDeleteClick($event)"
+          @publish-clicked="sitePublishClick($event)"
         />
       </li>
     </ul>
@@ -20,7 +21,7 @@ import siteCardVue from '../siteCard/siteCard.vue';
   export default defineComponent({
     name: "siteCardContainer",
 
-    emits:['siteClicked', 'siteEditClicked', 'siteDeleteClicked'],
+    emits:['siteClicked', 'siteEditClicked', 'siteDeleteClicked', 'sitePublishClick'],
 
     components: {
       SiteCard: siteCardVue,
@@ -43,7 +44,11 @@ import siteCardVue from '../siteCard/siteCard.vue';
       },
 
       siteDeleteClick(siteId: string) {
-        this.$emit('siteDeleteClicked', siteId)
+        this.$emit('siteDeleteClicked', siteId);
+      },
+
+      sitePublishClick(siteId: string) {
+        this.$emit('sitePublishClick', siteId);
       }
     }
   

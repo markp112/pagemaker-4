@@ -17,6 +17,7 @@
           @site-clicked="siteClicked($event)"
           @site-edit-clicked="siteEditClick($event)"
           @site-delete-clicked="siteDeleteClicked($event)"
+          @site-publish-click="sitePublishClick($event)"
         />
       </div>
       <div v-else>
@@ -39,7 +40,6 @@ import siteCardContainerVue from './components/sideCardContainer/siteCard.contai
 import FirstSite from './components/firstSite/firstSite.vue';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
 
-
   export default defineComponent({
     name: 'sites',
 
@@ -54,7 +54,6 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
         store: useSitesStore(),
         siteStore: useSiteStore(),
         userStore: useAuthStore(),
-
         userId: '',
         hasSites: true,
       }
@@ -93,6 +92,11 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
 
       async siteDeleteClicked(siteId: string) {
         await siteService().deleteSite(siteId);
+      },
+
+      sitePublishClick(siteId: string) {
+        this.siteStore.setSiteId(siteId);
+        this.$router.push({ name: 'site',  params: { siteId }})
       },
 
       async siteEditClick(siteId: string) {

@@ -1,7 +1,9 @@
 import { FirebaseError } from '@firebase/util';
-import { BadRequest, DomainError, GenericError, InsufficientPermissions, InvalidArgument, SiteExists } from '.';
+import { BadRequest, GenericError, InsufficientPermissions, InvalidArgument, SiteExists } from '.';
+import { Response } from '@api/types';
 import { logger } from '@logger/pino';
 import { AxiosError } from 'axios';
+import { constructResponse } from '@common/functions/constructResponse';
 
 const errorMap = {
   'permission-denied': () => new InsufficientPermissions(),
@@ -11,26 +13,27 @@ const errorMap = {
   'Request failed with status code 409': () => new SiteExists(),
 };
 
-function handleError(err: Error | FirebaseError | AxiosError): DomainError {
+function handleError(err: Error | FirebaseError | AxiosError): Response {
+  logger.error(err);
   if (isTypeOfAxiosError(err)) {
-    throw handleAxiosError(err);
+    return handleAxiosError(err);
   }
   if(isTypeOfFirebaseError(err)) {
-    throw handleFireBaseError(err);
+    return handleFireBaseError(err);
   } else {
-    logger.error(err);
-    throw errorMap.generic(err); 
+    const error = errorMap.generic(err);
+    return constructResponse<Error>(error, error._status); 
   }
 }
 
-function handleFireBaseError(err: FirebaseError): DomainError {
-  logger.error(err.code);
-  throw errorMap[err.code]();
+function handleFireBaseError(err: FirebaseError): Response {
+  const error = errorMap[err.code]();
+  return constructResponse<Error>(error, error._status);
 }
 
-function handleAxiosError(err: AxiosError): DomainError {
-  console.log(err);
-  throw errorMap[err.message]();
+function handleAxiosError(err: AxiosError): Response {
+  const error = errorMap[err.message]();
+  return constructResponse<Error>(error, error._status);
 }
 
 function isTypeOfFirebaseError(error: FirebaseError | Error): error is FirebaseError {

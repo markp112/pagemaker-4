@@ -1,6 +1,9 @@
 import { displayMessage } from '@/common/displayMessage';
 import { useAuthStore } from '@/stores/auth.store';
+import type { AxiosResponse } from 'axios';
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
+
+const RESPONSE_ERROR = 400;
 
 export type HttpResponse<T> = {
   status: number,
@@ -68,20 +71,13 @@ async function performPost<T, U>(path: string, payload: T, config: AxiosRequestC
         'Authorization': `Bearer ${getToken()}`,
     };
     const response = await backEndClient.post(route, payload, config);
-    return new Promise((resolve, reject) => {
-      if (response.status >= 400) {
-        displayMessage(response.data.data.err, 'error', 'Failed');
-        reject(response.data.data)
-      } 
-      resolve(response.data.data);
-    })
+    return response.data.data;
   } catch (error) {
     const err = error as AxiosError;
-    const errContent = err.response?.data;
-    const errMsg = errContent as Response;
-    console.log('%c⧭', 'color: #997326', errMsg);
-    console.log('%c⧭', 'color: #731d6d', err.response?.data);
-    throw new Error(errMsg.err?.msg as string);
+    const errContent = err.response as AxiosResponse;
+    const errMsg = errContent.data as { data: {name: string, _status: number }};
+    displayMessage(errMsg.data.name, 'error', 'Failed');
+    throw errMsg;
   }
 }
 async function performMultipartPost<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
@@ -93,7 +89,7 @@ async function performMultipartPost<T, U>(path: string, payload: T, config: Axio
     };
     const response = await backEndClientMultiPart.post(route, payload, config);
     return new Promise((resolve, reject) => {
-      if (response.status >= 400) {
+      if (response.status >= RESPONSE_ERROR) {
         displayMessage(response.data.data.err, 'error', 'Failed');
         reject(response.data.err);
       } 
