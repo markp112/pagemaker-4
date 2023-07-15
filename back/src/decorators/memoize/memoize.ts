@@ -1,7 +1,8 @@
-function memoize(target: Function, context) {
-  const cache = new Map();
-  if (context.kind === 'method') {
+const cache = new Map();
 
+function memoize(target: Function, context) {
+  console.log('%c%s', 'color: #aa00ff', 'memoize');
+  if (context.kind === 'method') {
     // rome-ignore lint/suspicious/noExplicitAny: <explanation>
     return function(...args: any[]) {
       const argsKey = args.join(",");
@@ -17,7 +18,6 @@ function memoize(target: Function, context) {
       return result;
     }
   }
-
 }
 
-export { memoize };
+export { memoize, cache };
