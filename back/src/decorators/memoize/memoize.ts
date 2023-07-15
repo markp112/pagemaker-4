@@ -1,7 +1,6 @@
 const cache = new Map();
 
 function memoize(target: Function, context) {
-  console.log('%c%s', 'color: #aa00ff', 'memoize');
   if (context.kind === 'method') {
     // rome-ignore lint/suspicious/noExplicitAny: <explanation>
     return function(...args: any[]) {
