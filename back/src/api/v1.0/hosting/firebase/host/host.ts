@@ -2,7 +2,10 @@ import axios from 'axios';
 import { Hosting, HostingParams } from '../../model';
 import { FirebaseHostingResponse } from '../dao/dao';
 import { getAccessToken } from '../authToken/getToken'
-import config from '../../../../../secrets/firebase-config.json'; 
+import config from '../../../../../secrets/firebase-config.json';
+
+export const PAGEMAKER_BASE_URL = 'projects/page-maker-69fb1/sites';
+
 
 class FirebaseHost implements Hosting {
   private url: string;
@@ -15,7 +18,7 @@ class FirebaseHost implements Hosting {
   };
 
   private configureUrl(url: string) {
-    this.url = this.url = `${url}projects/page-maker-69fb1/sites`;
+    this.url = `${url}${PAGEMAKER_BASE_URL}`;
   }
 
   private async firebaseCreateSite(): Promise<FirebaseHostingResponse> {
