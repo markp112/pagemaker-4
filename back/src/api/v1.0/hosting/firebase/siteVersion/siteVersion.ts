@@ -7,7 +7,7 @@ import axios from 'axios';
 type VersionCreateResponse = {
   name: string;
   status: string;
-  config: {};
+  config: object;
   version?: string;
 };
 
