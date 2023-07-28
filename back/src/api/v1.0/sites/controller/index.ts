@@ -8,6 +8,7 @@ import { httpStatusCodes } from '@api/httpStatusCodes';
 import { FirebaseMaterialColours, MaterialColours } from '../model/materialColours';
 import { SiteTypography } from '../model/typography';
 import { handleError } from '@errors/handleError';
+import { SiteAndUser } from '@common/models/siteAndUser';
 
 const MATERIAL_COLOURS = 'materialcolours';
 const SITE_PALETTE_COLLECTION = 'siteColourPalette';
@@ -165,6 +166,10 @@ function sitesController() {
     return doc(firebaseDb, collection, collectionName);
   }
 
+  async function publishSite(siteAndUser: SiteAndUser): Promise<Response> {
+
+  }
+
   return { 
     getSites,
     getSiteMaterialColours,
@@ -176,6 +181,7 @@ function sitesController() {
     deleteSite,
     getTypography,
     saveTypography,
+    publishSite,
   };
 }
 

@@ -15,6 +15,8 @@ module.exports = {
 		"@common/(.*)": ["<rootDir>/src/common/$1"],
 		"@logger/(.*)": ["<rootDir>/src/logger/$1"],
 		"@fbase/(.*)": ["<rootDir>/src/firebase/$1"],
+		"@core/(.*)": ["<rootDir>/src/core/$1"],
+		"@secrets/(.*)": ["<rootDir>/src/secrets/$1"],
 	},
 	setupFilesAfterEnv: ["./jest.setup.js"],
 };

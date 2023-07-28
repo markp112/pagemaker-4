@@ -10,6 +10,7 @@ import { siteDefaultsRouter } from './siteDefaults'
 import { DomainError } from '@errors/index';
 import { constructResponse } from '@common/functions/constructResponse';
 import { httpStatusCodes } from '@api/httpStatusCodes';
+import { SiteAndUser } from '@common/models/siteAndUser';
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
@@ -169,6 +170,21 @@ sitesRouter
       const response = error.getResponse();
       res.status(error._status).send(response);
     }
-  });
+  })
+
+  .post(sitePathBase('publish'), async (req, res) => {
+    const siteAndUser: SiteAndUser = {
+      siteId: req.params.siteId,
+      userId: req.params.userId,
+    };
+    try {
+      const response = await sitesController().publishSite(siteAndUser);
+      res.status(response.status).send(response);
+    } catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response);
+    }
+
+  })
 
 export { sitesRouter };

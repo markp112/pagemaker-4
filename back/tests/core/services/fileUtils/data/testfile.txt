@@ -1,0 +1,2 @@
+this is a file for testing fileutil functions
+with two lines of text.

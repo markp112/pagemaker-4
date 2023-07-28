@@ -1,6 +1,7 @@
 import { httpStatusCodes } from '../../api/httpStatusCodes/index';
 import type { Response } from '../../api/types';
 import { logger } from '../../logger';
+import { pageMakerErrorCodes } from './pagemakerErrors';
 
 class DomainError extends Error {
   _status: number;
@@ -59,6 +60,14 @@ class SiteExists extends DomainError {
   }
 };
 
+class FolderDoesNotExist extends DomainError {
+  constructor(filename: string) {
+    const error = pageMakerErrorCodes.FOLDER_DOES_NOT_EXIST;
+    error.msg = `${error.msg} at ${filename}`;
+    super(error.title, error.code, error.msg);
+  }
+}
+
 export { 
   DomainError,
   ResourceNotFoundError,
@@ -67,4 +76,5 @@ export {
   InvalidArgument,
   BadRequest,
   SiteExists,
+  FolderDoesNotExist,
 };

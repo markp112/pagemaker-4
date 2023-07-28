@@ -8,6 +8,7 @@ describe('createVersion', () => {
       siteName: 'pm-testsite'
     }
     const version = await firebaseHost.createVersion(hostingParams);
+    console.log('%c⧭', 'color: #807160', version);
     expect(version.status).toBe('CREATED');
     expect(version.version).toBeDefined();  
   });
