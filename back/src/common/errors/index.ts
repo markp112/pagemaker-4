@@ -68,6 +68,14 @@ class FolderDoesNotExist extends DomainError {
   }
 }
 
+class RequiredParamIsMissingError extends DomainError {
+  constructor(paramaterName: string) {
+    const error = pageMakerErrorCodes.MISSING_REQUIRED_PARAMETER;
+    error.msg = `${error.msg.replace('<PARAMETER_NAME',paramaterName)}`;
+    super(error.title, error.code, error.msg);
+  }
+}
+
 export { 
   DomainError,
   ResourceNotFoundError,
@@ -77,4 +85,5 @@ export {
   BadRequest,
   SiteExists,
   FolderDoesNotExist,
+  RequiredParamIsMissingError,
 };

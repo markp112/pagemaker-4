@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { FIREBASE_URLS } from '../urls/urls';
-import { getAccessToken } from '../../../../api/v1.0/hosting/firebase/authToken/getToken';
+import { getAccessToken } from '../authToken/getToken';
 import { handleError } from '@errors/handleError';
 
 type PopulateFileDetail = {

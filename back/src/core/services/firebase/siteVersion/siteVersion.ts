@@ -1,6 +1,7 @@
-import { HostingParams } from '../../model';
-import { PAGEMAKER_BASE_URL } from '../host/host';
-import config from '../../../../../secrets/firebase-config.json';
+import { HostingParams } from '../model';
+// import { PAGEMAKER_BASE_URL } from '../host/host';
+import { FIREBASE_URLS } from '../urls/urls';
+import config from '../../../../secrets/firebase-config.json';
 import { getAccessToken } from '../authToken/getToken';
 import axios from 'axios';
 
@@ -26,7 +27,7 @@ class FirebaseSiteVersion {
   }
 
   private configureUrl(url: string) {
-    this.url = `${url}${PAGEMAKER_BASE_URL}/${this.siteName}${VERSIONS_API}`;
+    this.url = `${url}${FIREBASE_URLS.pageMakerBaseUrl}/${this.siteName}${VERSIONS_API}`;
   }
 
   private async firebaseCreateVersion(): Promise<VersionCreateResponse> {

@@ -1,4 +1,4 @@
-import { htmlGenerator } from '../../../../../src/api/v1.0/buildPage/htmlTemplate/htmlTemplate';
+import { htmlGenerator } from '../../../../../src/core/services/siteBuilder/htmlTemplate/htmlTemplate';
 
 describe('createHtmlStructure', () => {
   describe('createOpeningTags', () => {

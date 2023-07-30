@@ -9,6 +9,7 @@ import { FirebaseMaterialColours, MaterialColours } from '../model/materialColou
 import { SiteTypography } from '../model/typography';
 import { handleError } from '@errors/handleError';
 import { SiteAndUser } from '@common/models/siteAndUser';
+import { fetchSite } from '@core/services/sites/site.service';
 
 const MATERIAL_COLOURS = 'materialcolours';
 const SITE_PALETTE_COLLECTION = 'siteColourPalette';
@@ -60,10 +61,11 @@ function sitesController() {
   }
 
   async function getSite(userId: string, siteId: string): Promise<Site> {
-    const collection = sitesCollection(userId);
-    const docRef = doc(firebaseDb, collection, siteId);
-    const firebaseResponse = await getDoc(docRef);
-    return firebaseResponse.data() as Site;
+    const siteAndUser: SiteAndUser = {
+      userId,
+      siteId,
+    };
+    return await fetchSite(siteAndUser);
   }
 
   async function deleteMaterialColours(userId: string, siteId: string): Promise<void> {
@@ -166,7 +168,9 @@ function sitesController() {
     return doc(firebaseDb, collection, collectionName);
   }
 
-  async function publishSite(siteAndUser: SiteAndUser): Promise<Response> {
+  async function publishSite(siteAndUser: SiteAndUser): Promise<void> {
+    
+
 
   }
 

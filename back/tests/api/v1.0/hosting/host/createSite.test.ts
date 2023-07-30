@@ -1,5 +1,5 @@
-import { FirebaseHost } from '../../../../../src/api/v1.0/hosting/firebase/host/host';
-import { HostingParams } from '../../../../../src/api/v1.0/hosting/model';
+import { FirebaseHost } from '../../../../../src/core/services/firebase/host/host';
+import { HostingParams } from '../../../../../src/core/services/firebase/model';
 
 describe('hosting', () => {
   describe('createSite',() => {

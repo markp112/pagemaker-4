@@ -1,4 +1,4 @@
-import { HtmlElementBuilder } from '../../../../../src/api/v1.0/buildPage/createPageContent/htmlBuilder';
+import { HtmlElementBuilder } from '../../../../../src/core/services/siteBuilder/createPageContent/htmlBuilder';
 import { Style } from '../../../../../src/api/v1.0/pages/model/model';
 
 describe('htmlBuilder', () => {

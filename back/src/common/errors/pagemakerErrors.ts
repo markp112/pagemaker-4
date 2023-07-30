@@ -4,4 +4,9 @@ export const pageMakerErrorCodes = {
     code: 1001,
     title: 'Directory not found error'
   },
+  MISSING_REQUIRED_PARAMETER: {
+    msg: 'Required parameter <PARAMETER_NAME> is missing',
+    code: 1002,
+    title: 'Missing Parammeter',
+  }
 };

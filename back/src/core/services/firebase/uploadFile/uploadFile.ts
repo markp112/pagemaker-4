@@ -2,7 +2,7 @@ import * as fsPromises from 'fs/promises';
 
 import { PopulateFileDetail } from '../populateFiles/populateFiles'
 import path from 'path';
-import { getAccessToken } from '../../../../api/v1.0/hosting/firebase/authToken/getToken';
+import { getAccessToken } from '../authToken/getToken';
 import axios from 'axios';
 
 type FileUploadResource = PopulateFileDetail & {

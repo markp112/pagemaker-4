@@ -1,8 +1,7 @@
 
 import { getStream } from 'firebase/storage';
 import fs from 'fs';
-import { storageRef, storage, auth } from '@fbase/initFirebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { storageRef, storage } from '@fbase/initFirebase';
 import path from 'path'
 import { FolderDoesNotExist } from '@errors/index';
 export interface DownloadfileResource {

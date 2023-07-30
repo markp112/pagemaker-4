@@ -1,9 +1,9 @@
 import { HostingParams, UserAndSiteName } from '../model';
-import { FirebaseHost } from '../firebase/host/host';
+import { FirebaseHost } from '@core/services/firebase/host/host';
 import { sitesController } from '@api/v1.0/sites/controller';
 import { Response } from '@api/types';
 import { handleError } from '@errors/handleError';
-import { FirebaseHostingResponse } from '../firebase/dao/dao';
+import { FirebaseHostingResponse } from '@core/services/firebase/dao/dao';
 
 function hostingController() {
 

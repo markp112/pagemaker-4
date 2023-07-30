@@ -1,4 +1,4 @@
-import { type Folder, pagePublisher} from '../../../../../src/api/v1.0/buildPage/createPageContent/publishPage/publishPage';
+import { type Folder, pagePublisher} from '../../../../../src/core/services/siteBuilder/createPageContent/publishPage/publishPage';
 import fs from 'fs/promises';
 import path from 'path';
 const BASE_FOLDER = './publishedFiles/';

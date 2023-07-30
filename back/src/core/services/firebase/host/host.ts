@@ -1,11 +1,8 @@
 import axios from 'axios';
-import { Hosting, HostingParams } from '../../model';
+import { Hosting, HostingParams } from '../model';
 import { FirebaseHostingResponse } from '../dao/dao';
 import { getAccessToken } from '../authToken/getToken'
-import { FIREBASE_URLS } from '@core/services/firebase/urls/urls';
-
-export const PAGEMAKER_BASE_URL = 'projects/page-maker-69fb1/sites';
-
+import { FIREBASE_URLS } from '../urls/urls';
 
 class FirebaseHost implements Hosting {
   private url: string;
@@ -30,7 +27,7 @@ class FirebaseHost implements Hosting {
       },
     });
     return result.data as FirebaseHostingResponse;
-};
+  };
 };
 
 export { FirebaseHost };

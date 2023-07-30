@@ -1,4 +1,4 @@
-import { ImageBuilder } from '../../../../../src/api/v1.0/buildPage/createPageContent/imageBuilder';
+import { ImageBuilder } from '../../../../../src/core/services/siteBuilder/createPageContent/imageBuilder';
 import { IMAGE_BASE, IMAGE_BASE_HTML, IMAGE_CLOSING_TAG, MOCK_IMAGE } from './mocks/mockImage';
 
 describe('ImageBuilder', () => {
