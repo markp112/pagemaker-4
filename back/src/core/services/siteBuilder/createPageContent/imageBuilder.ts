@@ -1,7 +1,6 @@
-import { ImageElement } from '@api/v1.0/pages/model/model';
+import { ImageElement, Location } from '@core/services/pages/model/';
 import { HtmlElementBuilder } from './htmlBuilder';
 import { ElementBuilder } from './model';
-import { Location } from '@api/v1.0/pages/model/model';
 
 
 class ImageBuilder implements ElementBuilder {

@@ -10,8 +10,8 @@ type FileUploadResource = PopulateFileDetail & {
 }
 
 
-async function uploadFiles(fileToUpload: FileUploadResource): Promise<number> {
-  const fileAndPath = path.resolve(`${fileToUpload.folder}${fileToUpload.fileName}`);
+async function uploadFileToFirebase(fileToUpload: FileUploadResource): Promise<number> {
+  const fileAndPath = path.resolve(`${fileToUpload.fileName}`);
   const fileContent = await fsPromises.readFile(fileAndPath);
   const contentLength = fileContent.length;
   const token = getAccessToken();
@@ -29,5 +29,5 @@ async function uploadFiles(fileToUpload: FileUploadResource): Promise<number> {
   }
 }
 
-export { uploadFiles };
+export { uploadFileToFirebase };
 export type { FileUploadResource };

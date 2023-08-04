@@ -7,11 +7,6 @@ import { promisify } from 'util';
 import { FolderDoesNotExist } from '@errors/index';
 import { handleError } from '@errors/handleError';
 
-type FilePathAndName =  {
-  filename: string,
-  path: string
-};
-
 const readFileAsync = promisify(fs.readFile);
 
 async function mkdir(dirToMake: string) {
@@ -29,28 +24,23 @@ async function isFolderExisting(folder: string): Promise<boolean> {
   }
 }
 
-async function zipFile(zipResource: FilePathAndName): Promise<FilePathAndName> {
+async function zipFile(file: string): Promise<string> {
   const pipe = promisify(pipeline);
   const gzip = createGzip();
-  const pathAndFile = path.resolve(`${zipResource.path}/${zipResource.filename}`);
-  if (!isFolderExisting(pathAndFile)) {
-    throw new FolderDoesNotExist(pathAndFile);
+  if (!isFolderExisting(file)) {
+    throw new FolderDoesNotExist(file);
   }
-  const sourceStream = fs.createReadStream(pathAndFile);
-  const zipFilename = `${path.parse(zipResource.filename).name}.zip`;
-  const destFileAndPath = `${zipResource.path}/${zipFilename}`;
+  const sourceStream = fs.createReadStream(file);
+  const zipFilename = `${path.parse(file).name}.zip`;
+  const destFileAndPath = `${path.parse(file).dir}/${zipFilename}`;
   const destStream = fs.createWriteStream(destFileAndPath);
   await pipe(sourceStream, gzip, destStream);
-  return {
-    path: zipResource.path,
-    filename: zipFilename,
-  };
+  return destFileAndPath;
 }
 
-async function calculateFileSHA(filePath: FilePathAndName) {
-  const pathAndFile = path.resolve(`${filePath.path}/${filePath.filename}`);
+async function calculateFileSHA(filePath: string) {
   try {
-    const data = await readFileAsync(pathAndFile);
+    const data = await readFileAsync(filePath);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const shaHash = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
@@ -60,11 +50,15 @@ async function calculateFileSHA(filePath: FilePathAndName) {
   }
 }
 
+async function readFile(filePath: string): Promise<Buffer> {
+  const fileAndPath = path.resolve(`${filePath}`);
+  return await fsPromises.readFile(fileAndPath);
+}
+
 export {
 mkdir,
+readFile,
 isFolderExisting,
 zipFile, 
 calculateFileSHA,
 };
-
-export type { FilePathAndName };

@@ -1,5 +1,4 @@
 import { HostingParams } from '../model';
-// import { PAGEMAKER_BASE_URL } from '../host/host';
 import { FIREBASE_URLS } from '../urls/urls';
 import config from '../../../../secrets/firebase-config.json';
 import { getAccessToken } from '../authToken/getToken';

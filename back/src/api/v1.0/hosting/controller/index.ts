@@ -1,4 +1,4 @@
-import { HostingParams, UserAndSiteName } from '../model';
+import { HostingParams, UserAndSiteName } from '@core/services/firebase/model';
 import { FirebaseHost } from '@core/services/firebase/host/host';
 import { sitesController } from '@api/v1.0/sites/controller';
 import { Response } from '@api/types';

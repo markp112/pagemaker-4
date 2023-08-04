@@ -1,4 +1,4 @@
-import { ButtonElement } from '@api/v1.0/pages/model/model';
+import { ButtonElement } from '@core/services/pages/model/';
 import { ElementBuilder } from './model';
 import { HtmlElementBuilder } from './htmlBuilder';
 

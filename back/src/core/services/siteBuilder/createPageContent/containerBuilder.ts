@@ -1,4 +1,4 @@
-import { ButtonElement, ImageElement, PageContainerInterface } from '@api/v1.0/pages/model/model';
+import { ButtonElement, ImageElement, PageContainerInterface } from '@core/services/pages/model/';
 import { ElementBuilder } from './model';
 import { HtmlElementBuilder } from './htmlBuilder';
 import { ButtonBuilder } from './buttonBuilder';

@@ -1,4 +1,4 @@
-import { Page, PageElementData } from '@api/v1.0/pages/model/model';
+import { Page, PageElementData  } from '@core/services/pages/model';
 import { HtmlElementBuilder } from './htmlBuilder';
 import { elementBuilders } from './containerBuilder';
 

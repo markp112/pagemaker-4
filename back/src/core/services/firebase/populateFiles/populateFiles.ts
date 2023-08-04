@@ -2,10 +2,10 @@ import axios from 'axios';
 import { FIREBASE_URLS } from '../urls/urls';
 import { getAccessToken } from '../authToken/getToken';
 import { handleError } from '@errors/handleError';
+import { getSiteAndVersionUrl } from '../common';
 
 type PopulateFileDetail = {
   fileName: string,
-  folder: string,
   sha256: string,
 };
 
@@ -26,8 +26,7 @@ async function populateFiles(siteFiles: SiteFiles): Promise<PopulateFilesRespons
   };
   const token = await getAccessToken();
   siteFiles.filesToPopulate.forEach(file => contentToPost.files[`/${file.fileName}`] = file.sha256);
-  const populateSiteStub = `${FIREBASE_URLS.populateSiteFiles.replace('<SITE_ID>', siteFiles.siteId).replace('<VERSION_ID>', siteFiles.versionId)}`;
-  const url = `${FIREBASE_URLS.firebaseBaseUrl}${populateSiteStub}:populateFiles`;
+  const url = `${getSiteAndVersionUrl(siteFiles.siteId, siteFiles.versionId)}:populateFiles`;
   try {
     const data = await axios.post(url, contentToPost, {
       headers: {

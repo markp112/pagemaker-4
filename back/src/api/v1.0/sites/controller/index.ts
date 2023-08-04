@@ -9,7 +9,7 @@ import { FirebaseMaterialColours, MaterialColours } from '../model/materialColou
 import { SiteTypography } from '../model/typography';
 import { handleError } from '@errors/handleError';
 import { SiteAndUser } from '@common/models/siteAndUser';
-import { fetchSite } from '@core/services/sites/site.service';
+import { fetchSite, saveSiteToDatabase, publishSiteToFirebase } from '@core/services/sites/site.service';
 
 const MATERIAL_COLOURS = 'materialcolours';
 const SITE_PALETTE_COLLECTION = 'siteColourPalette';
@@ -36,8 +36,7 @@ function sitesController() {
 
   async function saveSite(site: Site, isPost: boolean): Promise<Response> {
     try {
-      const userId = site.userId;
-      await setDoc(doc(firebaseDb, sitesCollection(userId), site.siteId), site);
+      await saveSiteToDatabase(site);
       const statusCode = isPost ? 201 : httpStatusCodes.OK
       return constructResponse<Site>(site, statusCode);
     }  catch (err) {
@@ -168,10 +167,9 @@ function sitesController() {
     return doc(firebaseDb, collection, collectionName);
   }
 
-  async function publishSite(siteAndUser: SiteAndUser): Promise<void> {
-    
-
-
+  async function publishSite(siteAndUser: SiteAndUser): Promise<Response> {
+    const site = await publishSiteToFirebase(siteAndUser);    
+    return constructResponse<Site>(site, httpStatusCodes.OK);
   }
 
   return { 

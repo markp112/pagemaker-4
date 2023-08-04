@@ -1,7 +1,7 @@
 import { constructResponse } from '../../../../common/functions/constructResponse';
 import { fetchPages } from '@core/services/pages/pages';
 import { handleError } from '@errors/handleError';
-import { Page } from '../model/model';
+import { Page } from '@core/services/pages/model';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 
 function pagesController() {

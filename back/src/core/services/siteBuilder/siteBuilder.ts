@@ -17,6 +17,7 @@ class SiteBuilder {
       };
       createdPages.push(await pagePublisher().writeLocalFile(FolderAndPage, pageHtml));
     })
+    return createdPages;
   }
 };
 

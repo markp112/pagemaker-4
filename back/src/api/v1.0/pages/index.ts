@@ -2,7 +2,7 @@ import { logger } from '@logger/index';
 import express from 'express';
 import { pagesController } from './controller/pagesController';
 import { pageController } from './controller/pageController';
-import { Page } from './model/model'
+import { Page } from '@core/services/pages/model';
 import { Guid } from '@common/classes/guid';
 
 const pagesRouter = express.Router();

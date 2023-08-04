@@ -1,4 +1,4 @@
-import { Style } from '@api/v1.0/pages/model/model';
+import { Style } from '@core/services/pages/model';
 
 const SPACE = ' ';
 

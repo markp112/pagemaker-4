@@ -1,4 +1,4 @@
-import { Page } from '@api/v1.0/pages/model/model';
+import { Page } from '@core/services/pages/model';
 import { htmlGenerator } from '../htmlTemplate/htmlTemplate';
 import { createPageContent } from './createPageContent';
 

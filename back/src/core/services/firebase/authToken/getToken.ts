@@ -1,4 +1,4 @@
-import key from '../../../../../secrets/serviceAccountKey.json';
+import key from '../../../../secrets/serviceAccountKey.json';
 import { google } from 'googleapis';
 
 const SCOPES = ["https://www.googleapis.com/auth/firebase.hosting",
