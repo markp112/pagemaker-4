@@ -1,8 +1,8 @@
-import { VersionEntity, PopulateFilesEntity, PopulateResponseEntity, FinaliseResponseEntity, ReleaseResponseEntity } from '../../../entities/hosting/hosting.entity'; 
+import { VersionEntity, PopulateFileEntity, PopulateResponseEntity, FinaliseResponseEntity, ReleaseResponseEntity } from '../../../entities/hosting/hosting.entity'; 
 
 interface FirebaseHosting {
   getNewSiteVersion(url: string): Promise<VersionEntity>;
-  populatePages(url: string, contentToPost: PopulateFilesEntity): Promise<PopulateResponseEntity>;
+  populatePages(url: string, contentToPost: PopulateFileEntity): Promise<PopulateResponseEntity>;
   uploadFiles(url: string, fileContent: Buffer): Promise<number>;
   finalise(siteId: string, versionId: string): Promise<FinaliseResponseEntity>;
   releaseSite(siteId: string, versionId: string): Promise<ReleaseResponseEntity>;

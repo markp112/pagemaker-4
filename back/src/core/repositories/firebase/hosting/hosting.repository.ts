@@ -3,7 +3,6 @@ import { VersionEntity, PopulateFileEntity, FinaliseResponseEntity, PopulateResp
 import { FirebaseHosting } from './model';
 import { HeadersAxios } from './model';
 import { handleError } from '@errors/handleError';
-import { url } from 'inspector';
 
 class FirebaseHostRepository implements FirebaseHosting {
   constructor(private token: string) {};
@@ -23,7 +22,7 @@ class FirebaseHostRepository implements FirebaseHosting {
     return result.data as unknown as VersionEntity;
   }
 
-  async populatePages(url: string, contentToPost: PopulateFileEntity ): Promise<PopulateResponseEntity> {
+  async populatePages(url: string, contentToPost: PopulateFileEntity): Promise<PopulateResponseEntity> {
     try {
       const headers = this.getHeader();
       headers.headers['Content-Type'] = 'application/json';
@@ -64,6 +63,7 @@ class FirebaseHostRepository implements FirebaseHosting {
       handleError(err);
     }
   }
+
   async releaseSite(url: string): Promise<ReleaseResponseEntity> {
     try {
       const headers = this.getHeader();

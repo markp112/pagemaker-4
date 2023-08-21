@@ -4,14 +4,17 @@ import { required } from '@common/functions/required/required';
 import { FilenameAndShaEntity, FinaliseResponseEntity, PopulateFileEntity, PopulateResponseEntity, ReleaseResponseEntity, UploadEntity, VersionEntity } from '@core/entities/hosting/hosting.entity';
 import { HashedZippedEntities } from '@core/entities/files/files.entities';
 import path from 'path';
-import { readFile } from '../fileUtils/fileUtils';
 import { SiteEntity } from '@core/entities/site/site.entity';
 import { handleError } from '@errors/handleError';
+import type { FileSystemInterface } from '../fileUtils/fileUtils';
 
 const VERSIONS_API = '/versions';
 
 class FirebaseHostingService {
-  constructor(private firebaseRepository: FirebaseHostRepository) {};
+  constructor(
+    private firebaseRepository: FirebaseHostRepository,
+    private fileService: FileSystemInterface
+    ) {};
 
   async publishSiteEntity(site: SiteEntity, hashedFiles: HashedZippedEntities[]): Promise<SiteEntity> {
     const siteId = site.hostingDetails?.name;
@@ -61,7 +64,7 @@ class FirebaseHostingService {
     const filesToPopulate = this.convertFilesToUploadFormat(hashedFiles, populatedFiles);
     try {
       filesToPopulate.forEach(async file => {
-        const fileContent = await readFile(file.fileName);
+        const fileContent = await this.fileService.readFile(file.fileName);
         await this.firebaseRepository.uploadFiles(file.uploadUrl, fileContent);
       });
       return 200;

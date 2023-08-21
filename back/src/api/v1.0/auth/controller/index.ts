@@ -36,7 +36,6 @@ function auth() {
 			}
 		}
 	}
-
 	return { login };
 }
 

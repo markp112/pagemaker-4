@@ -1,5 +1,5 @@
 import { constructResponse } from '@common/functions/constructResponse';
-import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { FieldPath, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { firebaseDb } from '@fbase/initFirebase';
 import { Response } from '@api/types';
 import { Site } from '../model/site';
@@ -9,7 +9,14 @@ import { FirebaseMaterialColours, MaterialColours } from '../model/materialColou
 import { SiteTypography } from '../model/typography';
 import { handleError } from '@errors/handleError';
 import { SiteAndUser } from '@common/models/siteAndUser';
-import { fetchSite, saveSiteToDatabase, publishSiteToFirebase } from '@core/services/sites/site.service';
+import { SiteService } from '@core/services/sites/site.service';
+import { FirebaseRepository } from '@core/repositories/firebase/database/database.repository';
+import { FirebaseHostRepository } from '@core/repositories/firebase/hosting/hosting.repository'
+import { FileService } from '@core/services/fileUtils/fileUtils';
+import { getAccessToken } from '@core/services/firebase/authToken/getToken';
+import { PagesService } from '@core/services/pages/pages.service';
+import { FirebaseHostingService } from '@core/services/firebase/firebase.service';
+import { SiteEntity } from '@core/entities/site/site.entity';
 
 const MATERIAL_COLOURS = 'materialcolours';
 const SITE_PALETTE_COLLECTION = 'siteColourPalette';
@@ -19,24 +26,25 @@ function sitesController() {
 
   const sitesCollection = (userId: string) => `${userId}::sites`;
   const siteCollectionBase = (userId: string, siteId: string) => `${userId}${siteId}::settings`;
+  const databaseRepository = new FirebaseRepository();
+  const siteService = new SiteService(databaseRepository);
 
   async function getSites(userId: string): Promise<Response> {
     try {
-      const firebaseResponse = await getDocs(collection(firebaseDb, `${userId}::sites`));
-      const sites: Site[] = [];
-      firebaseResponse.docs.forEach(doc => {
-        const site = doc.data() as unknown as Site;
-        sites.push(site);
-      });
-      return constructResponse<Site[]>(sites, httpStatusCodes.OK);
+      const siteAndUser: SiteAndUser = {
+        userId,
+        siteId: '',
+      };
+      const sites = await siteService.fetchSites(siteAndUser)
+      return constructResponse<SiteEntity[]>(sites, httpStatusCodes.OK);
     } catch (err) {
       handleError(err);
     }
   }
 
-  async function saveSite(site: Site, isPost: boolean): Promise<Response> {
+  async function saveSite(site: SiteEntity, isPost: boolean): Promise<Response> {
     try {
-      await saveSiteToDatabase(site);
+      await siteService.saveSiteToDatabase(site);
       const statusCode = isPost ? 201 : httpStatusCodes.OK
       return constructResponse<Site>(site, statusCode);
     }  catch (err) {
@@ -59,12 +67,12 @@ function sitesController() {
     }
   }
 
-  async function getSite(userId: string, siteId: string): Promise<Site> {
+  async function getSite(userId: string, siteId: string): Promise<SiteEntity> {
     const siteAndUser: SiteAndUser = {
       userId,
       siteId,
     };
-    return await fetchSite(siteAndUser);
+    return await siteService.fetchSite(siteAndUser);
   }
 
   async function deleteMaterialColours(userId: string, siteId: string): Promise<void> {
@@ -168,7 +176,12 @@ function sitesController() {
   }
 
   async function publishSite(siteAndUser: SiteAndUser): Promise<Response> {
-    const site = await publishSiteToFirebase(siteAndUser);    
+    const fileService = new FileService();
+    const token = await getAccessToken();
+    const firebaseHostingRepository = new FirebaseHostRepository(token);
+    const firebaseHostingService = new FirebaseHostingService(firebaseHostingRepository, fileService);
+    const pageService = new PagesService(databaseRepository);
+    const site = await siteService.publishSite(pageService, fileService, firebaseHostingService, siteAndUser);
     return constructResponse<Site>(site, httpStatusCodes.OK);
   }
 

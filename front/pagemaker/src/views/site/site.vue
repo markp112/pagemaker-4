@@ -22,7 +22,7 @@
             >
             <span class="mt-4 text-lg font-bold">Create Hosting Site</span>
           </button>
-          <SiteInput :isShowMe="isShowSiteName" @onOkClick="createSite($event)" @onCancel="isShowSiteName=false"/>
+          <SiteInput :isShowMe="isShowSiteName" @onOkClick="createSite($event)" @onCancel="isShowSiteName=false" class="z-50"/>
         </div>
         <div class="col-start-8 row-start-2 relative">
           <button class=" big-button "
@@ -40,14 +40,14 @@
 <script setup lang="ts">
 
 import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
-import { NEW_SITE, type Site } from '@/classes/sites/site';
+import { NEW_SITE,  type SiteEntity } from '@/classes/sites/site';
 import { displayMessage } from '@/common/displayMessage';
 import { siteService } from '@/services/site/site.service';
 import { onMounted, ref } from 'vue';
 import { getImageUrl } from '@/common/getIcon';
 import SiteInput from './siteInput/siteInput.vue';
 
-const site = ref<Site>(NEW_SITE);
+const site = ref<SiteEntity>(NEW_SITE);
 const isShowSiteName = ref(false);
 
 onMounted( async () => {

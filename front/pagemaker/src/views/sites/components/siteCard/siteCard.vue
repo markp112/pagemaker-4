@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import type { Site } from '@/classes/sites/site';
+import type { SiteEntity } from '@/classes/sites/site';
 import { getImageUrl } from '@/common/getIcon';
 import { defineComponent, type PropType } from 'vue';
 import toolTipVue from '@/components/utility/notifications/tooltip/toolTip.vue';
@@ -78,7 +78,7 @@ export default defineComponent ({
 
   props: {
     site: {
-      type: Object as PropType <Site>,
+      type: Object as PropType <SiteEntity>,
       required: true,
     }
   },

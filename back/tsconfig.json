@@ -19,7 +19,8 @@
       "@logger/*": ["logger/*"],
       "@fbase/*": ["firebase/*"],
       "@core/*": ["core/*"],
-      "@secrets/*": ["secrets/*"]
+      "@secrets/*": ["secrets/*"],
+      "@services/*": ["core/services/*"]
     }
   },
   "include": ["src/**/*"],

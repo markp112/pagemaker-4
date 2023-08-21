@@ -4,7 +4,7 @@ import { google } from 'googleapis';
 const SCOPES = ["https://www.googleapis.com/auth/firebase.hosting",
 'https://www.googleapis.com/auth/cloud-platform'];
 
-function getAccessToken() {
+function getAccessToken(): Promise<string> {
   return new Promise(function(resolve, reject) {
     const jwtClient = new google.auth.JWT(
       key.client_email,

@@ -1,4 +1,4 @@
-import { NEW_SITE, type Site } from '@/classes/sites/site';
+import { NEW_SITE, type SiteEntity } from '@/classes/sites/site';
 import { useSitesStore } from '@/stores/sites.store';
 import { axiosClient } from '../httpService';
 import { siteService } from '@/services/site/site.service';
@@ -14,7 +14,7 @@ function sitesService() {
   async function getSites(userId: string) {
     try {
       store.clear();
-      const sites = await axiosClient().get<Site[]>(`${BASE_ROUTE}/${userId}`);
+      const sites = await axiosClient().get<SiteEntity[]>(`${BASE_ROUTE}/${userId}`);
       if (sites?.length > 0) {
         store.setSites(sites);
       } 
@@ -30,7 +30,7 @@ function sitesService() {
       siteService().getDefaultMaterialColours(),
       siteService().getDefaultTypography(),
     ]);
-    const site: Site = { ...NEW_SITE };
+    const site: SiteEntity = { ...NEW_SITE };
     site.userId = authStore.user.uid;
     siteStore.setSite(site);
   }

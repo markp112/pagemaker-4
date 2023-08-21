@@ -9,56 +9,75 @@ import { handleError } from '@errors/handleError';
 
 const readFileAsync = promisify(fs.readFile);
 
-async function mkdir(dirToMake: string) {
-  const folderLocation = path.resolve(dirToMake);
-  await fsPromises.mkdir(folderLocation, { recursive: true });
-}
+interface FileSystemInterface {
+  mkdir(dirToMake: string): Promise<void>;
+  isFolderExisting(folder: string): Promise<boolean>;
+  zipFile(file: string): Promise<string>;
+  zipFiles(files: string[]): Promise<string[]>;
+  readFile(filePath: string): Promise<Buffer>;
+  calculateFileSHA(filePath: string): Promise<string>;
+};
 
-async function isFolderExisting(folder: string): Promise<boolean> {
-  try {
-    await fsPromises.access(folder);
-    return true;
+class FileService implements FileSystemInterface {
+  async mkdir(dirToMake: string) {
+    const folderLocation = path.resolve(dirToMake);
+    await fsPromises.mkdir(folderLocation, { recursive: true });
   }
-  catch (err) {
-    return false;
-  }
-}
 
-async function zipFile(file: string): Promise<string> {
-  const pipe = promisify(pipeline);
-  const gzip = createGzip();
-  if (!isFolderExisting(file)) {
-    throw new FolderDoesNotExist(file);
+  async isFolderExisting(folder: string): Promise<boolean> {
+    try {
+      await fsPromises.access(folder);
+      return true;
+    }
+    catch (err) {
+      return false;
+    }
   }
-  const sourceStream = fs.createReadStream(file);
-  const zipFilename = `${path.parse(file).name}.zip`;
-  const destFileAndPath = `${path.parse(file).dir}/${zipFilename}`;
-  const destStream = fs.createWriteStream(destFileAndPath);
-  await pipe(sourceStream, gzip, destStream);
-  return destFileAndPath;
-}
-
-async function calculateFileSHA(filePath: string) {
-  try {
-    const data = await readFileAsync(filePath);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const shaHash = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-    return shaHash;
-  } catch (error) {
-    handleError(error);
+  
+  async zipFile(file: string): Promise<string> {
+    const pipe = promisify(pipeline);
+    const gzip = createGzip();
+    if (!this.isFolderExisting(file)) {
+      throw new FolderDoesNotExist(file);
+    }
+    const sourceStream = fs.createReadStream(file);
+    const zipFilename = `${path.parse(file).name}.zip`;
+    const destFileAndPath = `${path.parse(file).dir}/${zipFilename}`;
+    const destStream = fs.createWriteStream(destFileAndPath);
+    await pipe(sourceStream, gzip, destStream);
+    return destFileAndPath;
   }
-}
 
-async function readFile(filePath: string): Promise<Buffer> {
+  async zipFiles(files: string[]): Promise<string[]> {
+    const zipFiles: string[] = [];
+    files.forEach(async file => {
+      zipFiles.push(await this.zipFile(file));
+    })
+    return zipFiles;
+  }
+
+  
+  async readFile(filePath: string): Promise<Buffer> {
   const fileAndPath = path.resolve(`${filePath}`);
   return await fsPromises.readFile(fileAndPath);
+  }
+  
+  async calculateFileSHA(filePath: string): Promise<string> {
+    try {
+      const data = await readFileAsync(filePath);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
-export {
-mkdir,
-readFile,
-isFolderExisting,
-zipFile, 
-calculateFileSHA,
-};
+
+
+
+
+export { FileService };
+
+export type { FileSystemInterface };

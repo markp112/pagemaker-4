@@ -1,4 +1,4 @@
-import type { Site } from '@/classes/sites/site';
+import type { SiteEntity } from '@/classes/sites/site';
 import { defineStore } from 'pinia';
 
 export const useSitesStore = defineStore({
@@ -6,7 +6,7 @@ export const useSitesStore = defineStore({
 
   state: () => {
     return {
-      _sites: [] as Site[],
+      _sites: [] as SiteEntity[],
       _siteId: '',
     }
   },
@@ -23,7 +23,7 @@ export const useSitesStore = defineStore({
 
   actions: {
 
-    setSites(sites: Site[]) {
+    setSites(sites: SiteEntity[]) {
       this._sites = sites;
     },
 
