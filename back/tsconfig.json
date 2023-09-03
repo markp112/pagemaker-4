@@ -17,7 +17,10 @@
       "@errors/*": ["common/errors/*"],
       "@common/*": ["common/*"],
       "@logger/*": ["logger/*"],
-      "@fbase/*": ["firebase/*"]
+      "@fbase/*": ["firebase/*"],
+      "@core/*": ["core/*"],
+      "@secrets/*": ["secrets/*"],
+      "@services/*": ["core/services/*"]
     }
   },
   "include": ["src/**/*"],

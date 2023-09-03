@@ -1,4 +1,4 @@
-import type { Site } from '@/classes/sites/site';
+import type { SiteEntity } from '@/classes/sites/site';
 import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColour, MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
 import type { SiteTypography } from '@/classes/sites/typography/model';
@@ -9,7 +9,7 @@ const useSiteStore = defineStore({
 
   state: () => {
     return {
-      _site: {} as Site,
+      _site: {} as SiteEntity,
       _materialColours: {} as MaterialColours,
       _typography: {} as SiteTypography,
       _colourSwatches: {} as ColourSwatches,
@@ -44,7 +44,7 @@ const useSiteStore = defineStore({
 
   actions: {
 
-    setSite(site: Site) {
+    setSite(site: SiteEntity) {
       this._site = site;
     },
 

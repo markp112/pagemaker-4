@@ -70,7 +70,7 @@
             type="text"
             name="host-repo"
             id="host-repo"
-            v-model="site.hostRepo"
+            v-model="site.hostingDetails.defaultUrl"
             placeholder="url for website"
           />
         </div>
@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts">
-import type { Site, SiteData } from '@/classes/sites/site';
+import type { SiteEntity, SiteData } from '@/classes/sites/site';
 import { useSiteStore } from '@/stores/site.store';
 import { defineComponent } from 'vue';
 import baseButtonVue from '@/components/base/baseButton/baseButton.vue';
@@ -164,7 +164,7 @@ export default defineComponent({
       userId: useAuthStore().user.uid,
       store: useSiteStore(),
       siteService: siteService(),
-      site: Object as unknown as Site,
+      site: Object as unknown as SiteEntity,
       sidePanelWidth: 'w-3/12',
       colourSwatches: Object as unknown as ColourSwatches,
       typography: Object as unknown as SiteTypography,

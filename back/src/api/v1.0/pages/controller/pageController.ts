@@ -4,7 +4,7 @@ import { constructResponse } from '@common/functions/constructResponse';
 import { handleError } from '@errors/handleError';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { firebaseDb } from '@fbase/initFirebase';
-import {  Page, } from '../model/model';
+import { Page } from '@core/services/pages/model';;
 
 function pageController() {
 

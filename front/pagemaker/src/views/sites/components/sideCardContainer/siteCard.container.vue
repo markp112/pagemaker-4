@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import type { Site } from '@/classes/sites/site';
+import type { SiteEntity } from '@/classes/sites/site';
 import { defineComponent, type PropType } from 'vue';
 import siteCardVue from '../siteCard/siteCard.vue';
 
@@ -29,7 +29,7 @@ import siteCardVue from '../siteCard/siteCard.vue';
 
     props: {
       sites: {
-        type: Object as PropType<Site[]>,
+        type: Object as PropType<SiteEntity[]>,
         default: [],
       },
     },

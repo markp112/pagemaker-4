@@ -61,6 +61,7 @@
     >
       <ImageGallery
         :class="getGalleryPosition"
+        class="z-30"
         :userId="userId"
         :image-details="images"
         @closeClicked="showImagePicker=false"

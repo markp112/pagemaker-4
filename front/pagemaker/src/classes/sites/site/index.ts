@@ -2,19 +2,27 @@ import type { ColourSwatches } from '../siteColours/colour/colourPalette';
 import type { MaterialColours } from '../siteColours/models/colours.model';
 import type { SiteTypography } from '../typography/model';
 
-interface SiteHosting {
-  name: string;
-  defaultUrl: string;
-  type: string;
-};
-
 interface UserAndSiteName {
   userId: string;
   siteId: string;
   siteName: string;
-};
+}
 
-interface Site {
+interface HostingDetails {
+  name: string;
+  defaultUrl: string;
+  type: string;
+}
+
+interface PublishedDetails {
+  createTime: string;
+  createUser: string;
+  status: string;
+  finalisedTime: string;
+  finalisedUser: string;
+}
+
+interface SiteEntity {
   siteId: string;
   userId: string;
   name: string;
@@ -22,18 +30,18 @@ interface Site {
   description: string;
   url: string;
   image: string;
-  published: Date | undefined;
-  hostRepo: string;
+  published
   hostingCreated?: number;
   lastPublished?: number;
-  hostingDetails?: SiteHosting;
-};
+  hostingDetails?: HostingDetails;
+  publishedDetails?: PublishedDetails;
+}
 const UNDEFINED_ID = '-1';
-const NEW_SITE: Site = {
+
+const NEW_SITE: SiteEntity = {
   siteId: UNDEFINED_ID,
   created: new Date(),
   description: '',
-  hostRepo: '',
   image: '',
   name: '',
   published: undefined,
@@ -42,13 +50,13 @@ const NEW_SITE: Site = {
 };
 
 interface SiteData {
-  site: Site,
+  site: SiteEntity,
   materialColours?: MaterialColours,
   colourSwatches?: ColourSwatches,
   typography?: SiteTypography,
   imageFile?: File,
   isSiteSaved: boolean,
-};
+}
 
-export type { Site, SiteData, UserAndSiteName };
+export type { SiteData, UserAndSiteName, SiteEntity };
 export { NEW_SITE };

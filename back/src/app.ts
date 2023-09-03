@@ -9,8 +9,10 @@ import { router } from './api';
 import pinoHttp from 'pino-http';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { genReqId } from '@logger/pino';
+import  dotEnv from 'dotenv';
 
-const PORT = 3000;
+dotEnv.config();
+const port = process.env.PORT ?? 3000;
 const app = express();
 
 app.use(function(req, res, next) {
@@ -54,7 +56,6 @@ app.use((req, res) => {
 	});
 });
 
-
-app.listen(PORT, () => {
-	return console.log(`Express is listening at http://localhost:${PORT}`);
+app.listen(port, () => {
+	return console.log(`Express is listening at http://localhost:${port}`);
 });

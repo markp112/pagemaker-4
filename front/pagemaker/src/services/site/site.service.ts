@@ -1,5 +1,5 @@
 import { getSiteAndUser, type SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
-import type { Site, SiteData, UserAndSiteName } from '@/classes/sites/site';
+import type { SiteData, SiteEntity, UserAndSiteName } from '@/classes/sites/site';
 import { siteDefaultColours } from '@/classes/sites/siteColours/colour';
 import type { ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import type { MaterialColours } from '@/classes/sites/siteColours/models/colours.model';
@@ -17,7 +17,6 @@ function siteService() {
   const getRoute = (siteAndUser: SiteAndUser) => `${BASE_ROUTE}${siteAndUser.userId}/${siteAndUser.siteId}`;
   const getHostingRoute = (userAndSiteName: UserAndSiteName) => `${HOSTING_ROUTE}${userAndSiteName.userId}/${userAndSiteName.siteName}`;
 
-
   async function getSiteMaterialColours(siteAndUser: SiteAndUser):Promise<void> {
     try {
       const materialColours = await axiosClient().get<MaterialColours>(`${getRoute(siteAndUser)}/materialcolours`);
@@ -30,7 +29,7 @@ function siteService() {
     catch (err) {
       console.log('%c⧭', 'color: #cc0036', err);
     }
-  };
+  }
 
   async function saveMaterialColours(siteAndUser: SiteAndUser, materialColours: MaterialColours | undefined):Promise<void> {
     try {
@@ -41,7 +40,7 @@ function siteService() {
       const err = error as ResponseError;
       displayMessage(err.msg, 'error', 'Material Colours');
     }
-  };
+  }
 
   async function getSiteTypography(siteAndUser: SiteAndUser):Promise<void> {
     try {
@@ -119,7 +118,6 @@ function siteService() {
 
   async function uploadImageToStorage(imageFile: File, userId: string): Promise<string> {
     return await FileUploadService().uploadFile(imageFile, userId);
-    
   }
 
   async function saveNewSite(siteData: SiteData): Promise<void> {
@@ -128,7 +126,7 @@ function siteService() {
         siteId: siteData.site.siteId,
         userId: siteData.site.userId,
       };
-      const updatedSite = await axiosClient().post<Site, Site>(getRoute(siteAndUser), siteData.site);
+      const updatedSite = await axiosClient().post<SiteEntity, SiteEntity>(getRoute(siteAndUser), siteData.site);
       siteAndUser.siteId = updatedSite.siteId;
       store.setSite(updatedSite);
       await Promise.all([
@@ -150,7 +148,7 @@ function siteService() {
         userId: siteData.site.userId,
       };
       if (!siteData.isSiteSaved) {
-        await axiosClient().put<Site, Site>(getRoute(siteAndUser), siteData.site);
+        await axiosClient().put<SiteEntity, SiteEntity>(getRoute(siteAndUser), siteData.site);
         siteData.isSiteSaved = true;
       }
       await Promise.all([
@@ -180,23 +178,23 @@ function siteService() {
     store.setTypography(defaultTypography);
   }
 
-  async function fetchSite(siteAndUser: SiteAndUser): Promise<Site> {
-    const site = await axiosClient().get<Site>(`${getRoute(siteAndUser)}`);
+  async function fetchSite(siteAndUser: SiteAndUser): Promise<SiteEntity> {
+    const site = await axiosClient().get<SiteEntity>(`${getRoute(siteAndUser)}`);
     store.setSite(site);
     return site;
   }
 
-  async function createHostingSite(userAndSiteName: UserAndSiteName): Promise<Site> {
-    const result = await axiosClient().post<UserAndSiteName, Site>(getHostingRoute(userAndSiteName), userAndSiteName);
+  async function createHostingSite(userAndSiteName: UserAndSiteName): Promise<SiteEntity> {
+    const result = await axiosClient().post<UserAndSiteName, SiteEntity>(getHostingRoute(userAndSiteName), userAndSiteName);
     if (isSite(result)) {
-      return result as Site;
+      return result as SiteEntity;
     }
     const err = result as {data: string, err: string, statusCode: number}
     displayMessage(err.data, 'error', 'Error');
     return store.site;
   }
 
-  function isSite(siteOrError: Site | { data: string, err: string, statusCode: number }): siteOrError is Site {
+  function isSite(siteOrError: SiteEntity | { data: string, err: string, statusCode: number }): siteOrError is SiteEntity {
     return 'siteId' in siteOrError;
   } 
 

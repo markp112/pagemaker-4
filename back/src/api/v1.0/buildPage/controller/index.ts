@@ -1,7 +1,7 @@
 import { pageController } from '@api/v1.0/pages/controller/pageController';
-import { Page } from '@api/v1.0/pages/model/model';
-import { constructPage } from '../createPageContent/constructPage';
-import { pagePublisher, type Folder } from '../createPageContent/publishPage/publishPage';
+import { Page } from '@servicecs/pages/model';
+import { constructPage } from '@servicecs/siteBuilder/createPageContent/constructPage';
+import { pagePublisher, type Folder } from '@servicecs/siteBuilder/createPageContent/publishPage/publishPage';
 import { constructResponse } from '@common/functions/constructResponse';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';

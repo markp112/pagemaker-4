@@ -1,6 +1,5 @@
 import { logger } from 'logger';
 import express from 'express';
-import { Site } from './model/site';
 import { Guid } from '@common/classes/guid';
 import { ColourSwatches } from './model/colourPalette';
 import { sitesController } from './controller';
@@ -10,6 +9,8 @@ import { siteDefaultsRouter } from './siteDefaults'
 import { DomainError } from '@errors/index';
 import { constructResponse } from '@common/functions/constructResponse';
 import { httpStatusCodes } from '@api/httpStatusCodes';
+import { SiteAndUser } from '@common/models/siteAndUser';
+import { SiteEntity } from '@core/entities/site/site.entity';
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
@@ -43,7 +44,6 @@ sitesRouter
       const response = constructResponse(site, httpStatusCodes.OK);
       res.status(response.status).send(response);
     } catch (error) {
-      console.log('%c⧭', 'color: #731d6d', error);
       const response = error.getResponse();
       res.status(error._status).send(response);
     }
@@ -133,7 +133,7 @@ sitesRouter
 
   .post(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
     log.info(`${ROUTE_PATH}/:userId/:siteId`);
-    const site: Site = req.body;
+    const site: SiteEntity = req.body;
     site.siteId = Guid.newGuid();
     try {
       const response = await sitesController().saveSite(site, true);
@@ -169,6 +169,21 @@ sitesRouter
       const response = error.getResponse();
       res.status(error._status).send(response);
     }
-  });
+  })
+
+  .post(sitePathBase('publish'), async (req, res) => {
+    const siteAndUser: SiteAndUser = {
+      siteId: req.params.siteId,
+      userId: req.params.userId,
+    };
+    try {
+      const response = await sitesController().publishSite(siteAndUser);
+      res.status(response.status).send(response);
+    } catch (error) {
+      const response = error.getResponse();
+      res.status(error._status).send(response);
+    }
+
+  })
 
 export { sitesRouter };

@@ -32,7 +32,7 @@ const PAGE_LIST_ROUTE = '/pagelist';
 const SITE_EDITOR_ROUTE = '/site-editor'; 
 
 import type { SiteAndUser } from '@/classes/siteAndUser/siteAndUser';
-import type { Site } from '@/classes/sites/site';
+import type { SiteEntity } from '@/classes/sites/site';
 import { siteService } from '@/services/site/site.service';
 import { sitesService } from '@/services/sites/sites.service';
 import { useAuthStore } from '@/stores/auth.store';
@@ -110,7 +110,7 @@ import baseButton from '@/components/base/baseButton/baseButton.vue';
     },
 
     computed: {
-      sites(): Site[] {
+      sites(): SiteEntity[] {
         return this.store.sites;
       },
     },

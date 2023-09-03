@@ -1,6 +1,6 @@
 import express from 'express';
 import { hostingController } from './controller';
-import { UserAndSiteName } from './model';
+import { UserAndSiteName } from '@core/services/firebase/model';
 import { logger } from '@logger/pino';
 
 const hostingRouter = express.Router();
