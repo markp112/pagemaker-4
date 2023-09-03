@@ -54,10 +54,10 @@ interface FilenameAndShaEntity {
   sha256: string,
 };
 
+type FileAndSha = { [key: string]: string };
+
 interface PopulateFileEntity {
-  siteId: string,
-  versionId: string,
-  filesToPopulate: FilenameAndShaEntity[],
+  files: FileAndSha
 }
 
 interface PopulateFilesResponseEntity {
@@ -71,6 +71,7 @@ interface UploadEntity extends FilenameAndShaEntity {
 
 export {
   VersionEntity,
+  FileAndSha,
   PopulateResponseEntity,
   FinaliseResponseEntity,
   ReleaseResponseEntity,

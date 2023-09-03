@@ -10,8 +10,11 @@ import pinoHttp from 'pino-http';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { genReqId } from '@logger/pino';
 import  dotEnv from 'dotenv';
+import path from 'path';
 
-dotEnv.config();
+
+const pathToEnv = path.resolve('.env');
+dotEnv.config({path: pathToEnv });
 const port = process.env.PORT ?? 3000;
 const app = express();
 

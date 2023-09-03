@@ -1,5 +1,5 @@
 import { constructResponse } from '@common/functions/constructResponse';
-import { FieldPath, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import {  deleteDoc, doc, getDoc,  setDoc } from 'firebase/firestore';
 import { firebaseDb } from '@fbase/initFirebase';
 import { Response } from '@api/types';
 import { Site } from '../model/site';
@@ -17,6 +17,7 @@ import { getAccessToken } from '@core/services/firebase/authToken/getToken';
 import { PagesService } from '@core/services/pages/pages.service';
 import { FirebaseHostingService } from '@core/services/firebase/firebase.service';
 import { SiteEntity } from '@core/entities/site/site.entity';
+import { logger } from '@logger/pino';
 
 const MATERIAL_COLOURS = 'materialcolours';
 const SITE_PALETTE_COLLECTION = 'siteColourPalette';
@@ -177,8 +178,11 @@ function sitesController() {
 
   async function publishSite(siteAndUser: SiteAndUser): Promise<Response> {
     const fileService = new FileService();
+    logger.info('fileService created');
     const token = await getAccessToken();
+    logger.info(`token = ${token}`);
     const firebaseHostingRepository = new FirebaseHostRepository(token);
+    logger.info('firebaseHostingRepository')
     const firebaseHostingService = new FirebaseHostingService(firebaseHostingRepository, fileService);
     const pageService = new PagesService(databaseRepository);
     const site = await siteService.publishSite(pageService, fileService, firebaseHostingService, siteAndUser);

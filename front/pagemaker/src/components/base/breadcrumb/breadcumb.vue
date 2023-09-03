@@ -5,6 +5,7 @@
         :key="breadcrumb.name"
         @click="routeTo(breadcrumb.name)"
         :class="{ linked: !!breadcrumb.link }"
+        class="p-1"
       >
         {{ breadcrumb.name }}
         <span v-if="!!breadcrumb.link">/</span>
@@ -33,8 +34,9 @@ export default defineComponent({
 
   methods: {
     routeTo(breadcrumb: string) {
-      const link =
-      this.breadcrumbs.filter(bc => bc.name === breadcrumb)[0].link;
+      console.log('%c⧭', 'color: #00e600', breadcrumb)
+      const link = this.breadcrumbs.filter(bc => bc.name === breadcrumb)[0].link;
+      console.log('%c⧭', 'color: #00a3cc', link)
       if (link != undefined) {
         this.$router.push(`${link}`);
       }

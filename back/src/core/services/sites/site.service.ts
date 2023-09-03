@@ -1,12 +1,17 @@
 import { SiteAndUser } from '@common/models/siteAndUser';
 import { PagesInterface } from '../pages/pages.service';
-import type { FileSystemInterface } from '@core/services/fileUtils/fileUtils';
-import { SiteBuilder } from '../siteBuilder/siteBuilder';
+import type { FileService, FileSystemInterface } from '@core/services/fileUtils/fileUtils';
+import { SiteBuilderService } from '@core/services/siteBuilder/siteBuilder.service';
 import type { DatabaseInterface } from '@core/repositories/firebase/database/database.repository';
 import { FirebaseHostingService } from '../firebase/firebase.service';
 import { SiteEntity } from '@core/entities/site/site.entity';
 import { HashedZippedEntities } from '@core/entities/files/files.entities';
 import { handleError } from '@errors/handleError';
+import { logger } from '@logger/pino';
+import { PageBuilder } from '../siteBuilder/createPageContent/constructPage';
+import { pagePublisher } from '../siteBuilder/createPageContent/publishPage/publishPage';
+import { FolderAndPage } from '../siteBuilder/createPageContent/publishPage/model';
+import { file } from 'googleapis/build/src/apis/file';
 
 
 interface SiteInterface {
@@ -14,14 +19,13 @@ interface SiteInterface {
   fetchSites(siteAndUser: SiteAndUser): Promise<SiteEntity[]>;
 };
 
-const BASE_FOLDER = process.env.BASE_PUBLISHED_FILES_FOLDER;
+const BASE_FOLDER = () => process.env.BASE_PUBLISHED_FILES_FOLDER;
 
 class SiteService implements SiteInterface {
 
   private sitesCollection = (userId: string) => `${userId}::sites`;
 
-  constructor(private databaseRepository: DatabaseInterface,
-    ) {}
+  constructor(private databaseRepository: DatabaseInterface) {}
 
   async fetchSite(siteAndUser: SiteAndUser): Promise<SiteEntity> {
     const collection = this.sitesCollection(siteAndUser.userId);
@@ -45,146 +49,76 @@ class SiteService implements SiteInterface {
       }
     }
 
-
   async publishSite(
       pageService: PagesInterface, 
       fileService: FileSystemInterface,
       hostingService: FirebaseHostingService,
       siteAndUser: SiteAndUser
     ): Promise<SiteEntity> {
-    const publishFolder = this.getPublishFolder(siteAndUser);
-    const site = await this.fetchSite(siteAndUser);
-    const sitePages = await pageService.fetchPages(siteAndUser.siteId);
-    const siteBuilder = new SiteBuilder(sitePages, publishFolder);
-    const htmlFilePages = await siteBuilder.createSitePages();
-    const zippedFiles = await fileService.zipFiles(htmlFilePages);
-    const filesWithHash = await this.createFileHashes(zippedFiles, fileService);
-    return await hostingService.publishSiteEntity(site, filesWithHash);
+      logger.info('site.service.publish - called');
+    try {
+      const publishFolder = this.getPublishFolder(siteAndUser);
+      const site = await this.fetchSite(siteAndUser);
+      const sitePages = await pageService.fetchPages(siteAndUser.siteId);
+      const siteBuilder = new SiteBuilderService(sitePages, publishFolder);
+      const pageBuilder = new PageBuilder();
+      let webSiteContent = siteBuilder.createSitePages(pageBuilder);
+      webSiteContent = await this.createSystemPath(webSiteContent, fileService);
+      await this.writeWebSiteContent(webSiteContent);
+      webSiteContent = await this.createZippedFiles(webSiteContent, fileService);
+      logger.info(`zipped files -> ${JSON.stringify(webSiteContent)}`);
+      webSiteContent = await this.createFileHashes(webSiteContent, fileService);
+      return await hostingService.publishSiteEntity(site, webSiteContent);
+    } catch (error) {
+      logger.error(`Error: --> ${JSON.stringify(error)}`)
+      handleError(error);
+    }
   }
 
   private getPublishFolder(siteAndUser: SiteAndUser): string {
-    return `${BASE_FOLDER}${siteAndUser.userId}/sites/${siteAndUser.siteId}`;
+    return `${BASE_FOLDER()}${siteAndUser.userId}/sites/${siteAndUser.siteId}`;
   }
 
-  private async createFileHashes(zippedFiles: string[], fileService: FileSystemInterface): Promise<HashedZippedEntities[]> {
+  private async createSystemPath(webSiteContent: FolderAndPage[], fileService: FileSystemInterface): Promise<FolderAndPage[]> {
+    if (webSiteContent.length === 0) {
+      return Promise.resolve(webSiteContent);
+    }
     return await Promise.all(
-      zippedFiles.map(async (zipFile) => {
-        const sha256 = await fileService.calculateFileSHA(zipFile);
-        return {
-          file: zipFile,
-          sha256,
-        };
+      webSiteContent.map(async content => {
+        const filePath = fileService.resolvePath(content.pathToFile);
+        if (! await fileService.isFolderExisting(filePath)) {
+          await fileService.mkdir(filePath);
+        }
+        content.resolvedPathToFile = filePath;
+        return content;
+      })
+    );
+  }
+
+  private async createFileHashes(webSiteContent: FolderAndPage[], fileService: FileSystemInterface): Promise<FolderAndPage[]> {
+    return await Promise.all(
+      webSiteContent.map(async (content) => {
+        const fileToCalc = fileService.joinPath(content.resolvedPathToFile, `${content.filename}.zip`);
+        content.sha256  = await fileService.calculateFileSHA(fileToCalc);
+        return content;
       })
     )
   }
+
+  private async writeWebSiteContent(htmlFilePages: FolderAndPage[]): Promise<void> {
+    await Promise.all(htmlFilePages.map(async file =>  await pagePublisher().writeLocalFile(file)));
+  }
+
+  private async createZippedFiles(webSiteContent: FolderAndPage[], fileService: FileSystemInterface): Promise<FolderAndPage[]> {
+    return await Promise.all(webSiteContent.map(async content => {
+      const filePath = fileService.resolvePath(content.pathToFile);
+      const fileToWrite = fileService.joinPath(filePath, `${content.filename}.${content.type}`);
+      await fileService.zipFile(fileToWrite);
+      content.isZipped = true;
+      return content;
+    }));
+  }
 }
-
-
-// type ZipFileWithHash = {
-//   file: string;
-//   sha256: string;
-// };
-
-// const sitesCollection = (userId: string) => `${userId}::sites`;
-
-// // async function fetchSite(siteAndUser: SiteAndUser): Promise<Site> {
-// //   const collection = sitesCollection(siteAndUser.userId);
-// //   const docRef = doc(firebaseDb, collection, siteAndUser.siteId);
-// //   const firebaseResponse = await getDoc(docRef);
-// //   return firebaseResponse.data() as Site;
-// // }
-
-// async function createZipFiles(files: string[]): Promise<string[]> {
-//   const zipFiles: string[] = [];
-//   files.forEach(async file => {
-//     zipFiles.push(await fileUtils.zipFile(file));
-//   })
-//   return zipFiles;
-// }
-
-// async function createFileHashes(zippedFiles: string[]): Promise<ZipFileWithHash[]> {
-//   const zipsWithHash: ZipFileWithHash[] = [];
-//   zippedFiles.forEach(async zipFile => {
-//     const zipWithHash: ZipFileWithHash = {
-//       file: zipFile,
-//       sha256: await  fileUtils.calculateFileSHA(zipFile),
-//     };
-//     zipsWithHash.push(zipWithHash);
-//   })
-//   return zipsWithHash;
-// }
-
-// async function getSiteVersion(siteName: string): Promise<VersionCreateResponse> {
-//   required('siteName', siteName);
-//   const hostingParams: HostingParams = {
-//     siteName,
-//   };
-//   const firebaseSiteVersion = new FirebaseSiteVersion();
-//   return await firebaseSiteVersion.createVersion(hostingParams);
-// }
-
-// async function saveSiteToDatabase(site: Site): Promise<Site> {
-//   try {
-//     const userId = site.userId;
-//     await setDoc(doc(firebaseDb, sitesCollection(userId), site.siteId), site);
-//     return site;
-//   }  catch (err) {
-//       handleError(err);
-//   }
-// }
-
-// async function populateTheFiles(siteVersion: VersionCreateResponse, zipFilesWithHash: ZipFileWithHash[]): Promise<PopulateFilesResponse> {
-//   const filesToPopulate: SiteFiles = {
-//     siteId: siteVersion.name,
-//     versionId: siteVersion.version,
-//     filesToPopulate: getFileDetails(zipFilesWithHash),
-//   }
-//   return await populateFiles(filesToPopulate);
-// }
-
-// function getFileDetails(zipFiles: ZipFileWithHash[]): PopulateFileDetail[] {
-//   return zipFiles.map(file => {
-//     return {
-//         fileName: path.parse(file.file).name,
-//         sha256: file.sha256,
-//     };
-//   });
-// }
-
-// async function uploadFilesToFirebase(zipFiles: ZipFileWithHash[], populatedFiles: PopulateFilesResponse): Promise<void> {
-//   populatedFiles.uploadRequiredHashes.forEach(async fileHash => {
-//     const fileToUpload = zipFiles.find(file => file.sha256 === fileHash);
-//     if (fileToUpload) {
-//       const fileUploadResource: FileUploadResource = {
-//         fileName: fileToUpload.file,
-//         uploadUrl: populatedFiles.uploadUrl,
-//         sha256: fileToUpload.sha256
-//       };
-//       await uploadFileToFirebase(fileUploadResource);
-//     }
-//   })
-// }
-
-// async function publishSiteToFirebase(siteAndUser: SiteAndUser): Promise<Site> {
-//     const publishFolder = `${BASE_FOLDER}${siteAndUser.userId}/sites/${siteAndUser.siteId}`;
-//     if (! await fileUtils.isFolderExisting(publishFolder)) {
-//       await fileUtils.mkdir(publishFolder);
-//     }
-//     const site = await fetchSite(siteAndUser);
-//     const sitePages = await fetchPages(siteAndUser.siteId);
-//     const siteBuilder = new SiteBuilder(sitePages, publishFolder);
-//     const htmlFilePages = await siteBuilder.createSitePages();
-//     const zippedFiles = await createZipFiles(htmlFilePages);
-//     const filesWithHash = await createFileHashes(zippedFiles);
-//     const siteVersion = await getSiteVersion(site.hostingDetails?.name);
-//     const populatedFiles = await populateTheFiles(siteVersion, filesWithHash);
-//     await uploadFilesToFirebase(filesWithHash, populatedFiles);
-//     const finalised = await finalise(site.hostingDetails.name, siteVersion.version);
-//     const released = await releaseSite(site.hostingDetails.name, siteVersion.version);
-//     site.lastPublished = new Date(released.releaseTime).getUTCDate();
-//     const updatedSite = await saveSiteToDatabase(site);
-//     return updatedSite;
-// }
 
 export {
   SiteService,

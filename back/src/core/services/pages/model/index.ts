@@ -130,33 +130,33 @@ interface PageElementData {
     actionType: string,
     actionEvent: string,
   };
-};
+}
 
 interface Page extends PageElementData {
-  pageId: string,
-  siteId: string,
-  name: string,
-  created: Date,
-  edited: Date,
-  lastPublished: Date,
-  icon: string,
-  elements: PageElementData[],
-  styles: Style[],
-};
+  pageId: string;
+  siteId: string;
+  name: string;
+  created: Date;
+  edited: Date;
+  lastPublished: Date;
+  icon: string;
+  elements: PageElementData[];
+  styles: Style[];
+}
 
 interface ContainerProps  {
   location: Location;
   naturalSize: Dimension;
   styles: Style[];
   isAbsolute: boolean;
-};
+}
 
 interface ImageProps extends ContainerProps {
   scaledSize: Dimension;
   location: Location,
   styles: Style[];
   isAbsolute: boolean;
-};
+}
 
 interface ImageElement extends PageElementData {
   ratio: number;
@@ -164,9 +164,16 @@ interface ImageElement extends PageElementData {
   container: ContainerProps;
   image: ImageProps;
   content: string;
-};
+}
 
 interface ButtonElement extends PageElementData {
+  content: string;
+  location: Location;
+  isAbsolute: boolean;
+  styles: Style[];
+}
+
+interface TextElement extends PageElementData {
   content: string;
   location: Location;
   isAbsolute: boolean;
@@ -181,7 +188,7 @@ interface PageContainerInterface extends PageElementData {
   location: Location,
   styles: Style[];
   isAbsolute: boolean;
-};
+}
 
 export { Units,
   Unit,
@@ -191,6 +198,7 @@ export { Units,
   PageElementData,
   ImageElement,
   ButtonElement,
+  TextElement,
   PageContainerInterface,
   Style
 };

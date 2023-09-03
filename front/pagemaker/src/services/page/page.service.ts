@@ -45,16 +45,15 @@ function PageService() {
       colour,
       classDefinition: '',
       componentHTMLTag: 'page',
-      content: '',
-      dimension: { width: { value: 1280, unit: 'px' }, height: { value: 1080, unit: 'px' }},
-      location: { top: { value: 0, unit: 'px' }, left: { value: 0, unit: 'px' }},
-      isAbsolute: false,
+      dimension: { width: { style: 'width', value:{ value: '1280', unit: 'px'}}, 
+        height: { style: 'height', value: { value: '1080', unit: 'px' }}},
       isContainer: true,
       elements: [],
       parentRef: '',
       ref: 'root',
       styles: [],
       type: 'page',
+      lastPublished: new Date('Jan 01 1970')
     };
     store.setPage(page);
   }
@@ -62,8 +61,9 @@ function PageService() {
 async function createPage(page: Page) {
   try {
     if (page.pageId === NEW_PAGE) {
-      page = await createPageContent(page);
+      const createdPage = await createPageContent(page);
       displayMessage('Page Created', 'success', 'Saved');
+      return createdPage;
     }
   } catch (error) {
     displayMessage((error as Error).message, 'error', 'Error');
@@ -72,7 +72,8 @@ async function createPage(page: Page) {
 
 async function upadatePage(page: Page) {
   try {
-    await axiosClient().put<Page, Page>(`${getRoute(page.siteId, PAGE)}/${page.pageId}`, page)
+    await axiosClient().put<Page, Page>(`${getRoute(page.siteId, PAGE)}/${page.pageId}`, page);
+    displayMessage('Page Updated', 'success', 'Saved');
   } catch (err) {
     displayMessage((err as Error).message, 'error', 'Error');
   }

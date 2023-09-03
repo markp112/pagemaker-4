@@ -24,7 +24,7 @@ import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import { userService } from '@/services/user/userService';
 import type { ImageCardProps } from '@/components/base/pickers/imageGallery/types';
 import { useImagesStore } from '@/stores/images.store';
-import type { EditorButtonBase, EditorButtonContent } from '../../model';
+import type { EditorButtonBase, EditorButtonContent } from '@/classes/commandButtons/model';
 import { imageCommandCollection  } from '../../model/borderButtonData';
 import iconImageButton from '../../components/iconImageButton/iconImageButton.vue';
 import imageGallery from '@/components/base/pickers/imageGallery/imageGallery.vue';

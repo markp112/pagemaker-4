@@ -1,8 +1,7 @@
 import { ImageBuilder } from '../../../../../src/core/services/siteBuilder/createPageContent/imageBuilder';
-import { IMAGE_BASE, IMAGE_BASE_HTML, IMAGE_CLOSING_TAG, MOCK_IMAGE } from './mocks/mockImage';
+import { IMAGE_BASE, IMAGE_BASE_HTML, IMAGE_CLOSING_TAG, MOCK_IMAGE } from '../mocks/mockImage';
 
 describe('ImageBuilder', () => {
-
   it('should given an imageElement construct an html image tag', () => {
     const imageBuilder = new ImageBuilder(MOCK_IMAGE);
     const imgTag = imageBuilder.build();

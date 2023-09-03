@@ -143,6 +143,8 @@ import type { UploadImage } from '@/components/base/pickers/uploadImage/model';
 import { swatchesService } from '@/services/swatches/swatches.service';
 import TabstripContainerEditor from '@/components/core/settingsPanel/tabStripContainerEditor/tabStripContainerEditor.vue'
 
+const NEW_SITE = -1;
+
 export default defineComponent({
   name: 'SiteEditor',
 
@@ -190,7 +192,7 @@ export default defineComponent({
 
   computed: {
     isNewSite(): boolean {
-      return this.site.siteId === '-1';
+      return this.site.siteId === NEW_SITE;
     },
 
     getSitePalette(): ColourSwatches {

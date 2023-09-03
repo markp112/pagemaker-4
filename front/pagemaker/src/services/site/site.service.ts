@@ -161,7 +161,7 @@ function siteService() {
       const message = (error as ResponseError).msg;
       displayMessage(`Failed to create new site - ${message}`, 'error', 'Failed');
     }
-  };
+  }
 
   async function getDefaultSwatches(): Promise<void> {
     const defaultColourPalettes = await axiosClient().get<ColourSwatches>(`${BASE_ROUTE}defaults/default-palette`);
@@ -194,6 +194,17 @@ function siteService() {
     return store.site;
   }
 
+  async function publishSite() {
+    const siteAndUser = getSiteAndUser();
+    try {
+      const result = await axiosClient().post<SiteAndUser, SiteEntity>(`${getRoute(siteAndUser)}/publish`, siteAndUser);
+      displayMessage('Site Published', 'success', 'Published');
+    } catch (err) {
+      displayMessage(err.msg, 'error', 'Failed');
+    }
+    
+  }
+
   function isSite(siteOrError: SiteEntity | { data: string, err: string, statusCode: number }): siteOrError is SiteEntity {
     return 'siteId' in siteOrError;
   } 
@@ -209,6 +220,7 @@ function siteService() {
     getDefaultMaterialColours,
     getDefaultTypography,
     createHostingSite,
+    publishSite,
   }
 }
 

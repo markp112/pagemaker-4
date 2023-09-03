@@ -3,12 +3,12 @@ type FontTypes = 'serif' | 'sans-serif' | 'display' | 'handwriting' | 'monospace
 interface FontItemInterface {
   fontName: string;
   fontType: FontTypes;
-};
+}
 
 interface GoogleFontInterface {
   kind: string;
   items: GoogleFontItemInterface[];
-};
+}
 
 interface GoogleFontItemInterface {
   kind: string;
@@ -19,7 +19,7 @@ interface GoogleFontItemInterface {
   version: string;
   lastModified:string;
   files: FilesInterface;
-};
+}
 
 interface FilesInterface {
   regular?: string;
@@ -40,7 +40,7 @@ interface FilesInterface {
   "800italic"?: string;
   "900"?: string;
   "900italic"?: string;
-};
+}
 
 export type {
   FilesInterface,
@@ -48,4 +48,4 @@ export type {
   GoogleFontInterface,
   GoogleFontItemInterface,
   FontTypes,
-};
+}

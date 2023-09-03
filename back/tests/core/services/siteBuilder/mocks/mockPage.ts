@@ -1,4 +1,4 @@
-import { Page } from '../../../../../../src/api/v1.0/pages/model/model';
+import { Page } from '../../../../../src/core/services/pages/model/index';
 
 const MOCK_PAGE: Page = {
   name: 'page',

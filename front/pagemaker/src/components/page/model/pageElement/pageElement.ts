@@ -1,7 +1,6 @@
 import type { ActionEvent } from '@/classes/actionEvent';
 import type { Dimension } from '@/classes/dimension';
-import type { Location } from '@/classes/location';
-import type { Units, ValueAndUnit } from '@/classes/units';
+import type { ValueAndUnit } from '@/classes/units';
 import type { ActiveElements, ButtonElement, ImageElement, TextElement } from '../imageElement/imageElement';
 
 type CssStyleTypes =
@@ -132,7 +131,7 @@ interface PageElement {
   type: ComponentTypesString;
   dimension: Dimension;
   actionEvent?: ActionEvent;
-};
+}
 
 interface Page extends PageElement {
   pageId: string,
@@ -146,7 +145,7 @@ interface Page extends PageElement {
   icon: string,
   elements: ActiveElements[],
   styles: Style[],
-};
+}
 
 type PropsDefinition = { thisComponent: PageElement | ImageElement | TextElement | ButtonElement};
 

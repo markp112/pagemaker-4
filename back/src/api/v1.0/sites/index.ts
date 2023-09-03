@@ -28,12 +28,13 @@ sitesRouter
       const response = await sitesController().getSites(userId);
       res.status(response.status).send(response);
     } catch (error) {
-      console.log('%c⧭', 'color: #731d6d', error);
-      const response = error.getResponse();
-      res.status(error._status).send(response);
+      if (error.getResponse) {
+        const response = error.getResponse();
+        res.status(error._status).send(response);
+      }
+      res.status(httpStatusCodes.INTERNAL_SERVER_ERROR).send(error);
     }
   })
-
     
   .get(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
     log.info('getSite - called');
@@ -172,6 +173,7 @@ sitesRouter
   })
 
   .post(sitePathBase('publish'), async (req, res) => {
+    req.log.info('Post: Publish called');
     const siteAndUser: SiteAndUser = {
       siteId: req.params.siteId,
       userId: req.params.userId,
@@ -180,6 +182,7 @@ sitesRouter
       const response = await sitesController().publishSite(siteAndUser);
       res.status(response.status).send(response);
     } catch (error) {
+      req.log.error(error)
       const response = error.getResponse();
       res.status(error._status).send(response);
     }

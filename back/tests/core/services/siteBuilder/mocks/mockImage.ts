@@ -1,4 +1,4 @@
-import { ImageElement } from '../../../../../../src/api/v1.0/pages/model/model';
+import { ImageElement } from '../../../../../src/core/services/pages/model';
 
 const MOCK_IMAGE: ImageElement = {
   name: 'image',

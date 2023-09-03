@@ -6,6 +6,7 @@ import { pipeline } from 'node:stream';
 import { promisify } from 'util';
 import { FolderDoesNotExist } from '@errors/index';
 import { handleError } from '@errors/handleError';
+import { logger } from '@logger/pino';
 
 const readFileAsync = promisify(fs.readFile);
 
@@ -16,11 +17,17 @@ interface FileSystemInterface {
   zipFiles(files: string[]): Promise<string[]>;
   readFile(filePath: string): Promise<Buffer>;
   calculateFileSHA(filePath: string): Promise<string>;
-};
+  getFileName(fileAndPath: string): string;
+  getFileNameWithExtension(fileAndPath: string): string;
+  resolvePath(pathToResolve: string): string;
+  joinPath(pathToJoinTo: string, pathToJoinFrom: string);
+  readStream(filePath: string): fs.ReadStream;
+}
 
 class FileService implements FileSystemInterface {
   async mkdir(dirToMake: string) {
     const folderLocation = path.resolve(dirToMake);
+    logger.info(folderLocation);
     await fsPromises.mkdir(folderLocation, { recursive: true });
   }
 
@@ -49,17 +56,43 @@ class FileService implements FileSystemInterface {
   }
 
   async zipFiles(files: string[]): Promise<string[]> {
-    const zipFiles: string[] = [];
-    files.forEach(async file => {
-      zipFiles.push(await this.zipFile(file));
-    })
-    return zipFiles;
+    logger.info(`files = ${files}`)
+    return await Promise.all(files.map(async file => await this.zipFile(file)));
   }
 
-  
   async readFile(filePath: string): Promise<Buffer> {
   const fileAndPath = path.resolve(`${filePath}`);
   return await fsPromises.readFile(fileAndPath);
+
+}
+  readStream(filePath: string): fs.ReadStream {
+    const fileAndPath = path.resolve(`${filePath}`);
+    return fs.createReadStream(fileAndPath);
+  }
+
+  async writeFile(fileAndPath: string, content: string): Promise<void> {
+    try {
+      await fsPromises.writeFile(fileAndPath, content);
+    } catch(err) {
+      logger.error(`${JSON.stringify(err)}`);
+      throw err;
+    }
+  }
+
+  resolvePath(pathToResolve: string): string {
+    return path.resolve(pathToResolve);
+  }
+
+  getFileName(pathAndFile: string): string {
+    return path.parse(pathAndFile).name;
+  }
+
+  getFileNameWithExtension(pathAndFile: string): string {
+    return path.parse(pathAndFile).base;
+  }
+
+  joinPath(pathToJoinTo: string, pathToJoinFrom: string): string {
+    return path.join(pathToJoinTo, pathToJoinFrom);
   }
   
   async calculateFileSHA(filePath: string): Promise<string> {
