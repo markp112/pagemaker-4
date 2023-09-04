@@ -65,6 +65,7 @@ async function createPage(page: Page): Promise<Page> {
       displayMessage('Page Created', 'success', 'Saved');
       return newPage;
     }
+    return page;
   } catch (error) {
     displayMessage((error as Error).message, 'error', 'Error');
     return page;
