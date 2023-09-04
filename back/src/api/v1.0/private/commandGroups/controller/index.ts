@@ -44,7 +44,6 @@ function commandGroups() {
 
       await Promise.all(commandElements.commandElements.map(async pageElementName => {
         const elementTabs = await getTabList(pageElementName);
-        logger.info(elementTabs);
         commandElement[pageElementName] = { tabs: await getContentForTabs(elementTabs.tabs, commands)};
       }));
       return commandElement;
