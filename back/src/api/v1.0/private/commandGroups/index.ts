@@ -1,5 +1,5 @@
 import express from 'express';
-import { logger } from '../../../../logger';
+import { logger } from '@logger/index';
 import { commandGroups } from './controller';
 import { Commands } from './controller/comands';
 import { sitesController } from '../../sites/controller';

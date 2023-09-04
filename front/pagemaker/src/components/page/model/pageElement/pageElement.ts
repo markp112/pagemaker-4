@@ -132,7 +132,7 @@ interface PageElement {
   type: ComponentTypesString;
   dimension: Dimension;
   actionEvent?: ActionEvent;
-};
+}
 
 interface Page extends PageElement {
   pageId: string,
@@ -146,7 +146,7 @@ interface Page extends PageElement {
   icon: string,
   elements: ActiveElements[],
   styles: Style[],
-};
+}
 
 type PropsDefinition = { thisComponent: PageElement | ImageElement | TextElement | ButtonElement};
 

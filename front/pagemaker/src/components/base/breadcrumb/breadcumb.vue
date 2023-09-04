@@ -1,10 +1,11 @@
 <template>
-  <div class="w-full h-4 ml-2 mt-2">
+  <div class="w-full h-4 ml-2 mt-2 mb-1">
     <ul class="flex flex-row justify-start flex-nowrap font-smaller text-site-secondary-light">
       <li v-for="breadcrumb in breadcrumbs"
         :key="breadcrumb.name"
         @click="routeTo(breadcrumb.name)"
         :class="{ linked: !!breadcrumb.link }"
+        class="p-1"
       >
         {{ breadcrumb.name }}
         <span v-if="!!breadcrumb.link">/</span>
@@ -33,9 +34,8 @@ export default defineComponent({
 
   methods: {
     routeTo(breadcrumb: string) {
-      const link =
-      this.breadcrumbs.filter(bc => bc.name === breadcrumb)[0].link;
-      if (link != undefined) {
+      const link = this.breadcrumbs.filter(bc => bc.name === breadcrumb)[0].link;
+      if (link !== undefined) {
         this.$router.push(`${link}`);
       }
     },
