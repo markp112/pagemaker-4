@@ -45,25 +45,25 @@ function PageService() {
       colour,
       classDefinition: '',
       componentHTMLTag: 'page',
-      content: '',
-      dimension: { width: { value: 1280, unit: 'px' }, height: { value: 1080, unit: 'px' }},
-      location: { top: { value: 0, unit: 'px' }, left: { value: 0, unit: 'px' }},
-      isAbsolute: false,
+      dimension: { width: {style: 'width', value: { value: '1280', unit: 'px'}}, 
+        height: { style: 'height', value:{ value: '1080', unit: 'px'} }},
       isContainer: true,
       elements: [],
       parentRef: '',
       ref: 'root',
       styles: [],
       type: 'page',
+      lastPublished:new Date('01 Jan 1970'),
     };
     store.setPage(page);
   }
 
-async function createPage(page: Page) {
+async function createPage(page: Page): Promise<Page> {
   try {
     if (page.pageId === NEW_PAGE) {
-      page = await createPageContent(page);
+      const newPage = await createPageContent(page);
       displayMessage('Page Created', 'success', 'Saved');
+      return newPage;
     }
   } catch (error) {
     displayMessage((error as Error).message, 'error', 'Error');
