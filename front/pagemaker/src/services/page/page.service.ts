@@ -67,6 +67,7 @@ async function createPage(page: Page): Promise<Page> {
     }
   } catch (error) {
     displayMessage((error as Error).message, 'error', 'Error');
+    return page;
   }
 }
 

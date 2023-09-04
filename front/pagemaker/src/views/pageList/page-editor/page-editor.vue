@@ -149,7 +149,7 @@ export default defineComponent ({
   created() {
     this.pageTitle = this.$route.params.title as string;
     this.page = this.store.page;
-    this.dateCreated = this.page.created,
+    this.dateCreated = this.page.created;
     this.formErrors = [];
   },
 
