@@ -10,7 +10,6 @@ const ROUTE_PATH = '/auth';
 
 authRouter.post(`${ROUTE_PATH}/login`, async (req, res) => {
   try {
-    logger.info({ method:  'auth/login' });
     const credentials: Credentials = req.body;
     const response = await auth().login(credentials);
     res.status(response.status).send(response);

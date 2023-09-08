@@ -2,7 +2,6 @@ import { FirebaseHostRepository } from '@core/repositories/firebase/hosting/host
 import { FIREBASE_URLS } from './urls/urls';
 import { required } from '@common/functions/required/required';
 import { FileAndSha, FilenameAndShaEntity, FinaliseResponseEntity, PopulateFileEntity, PopulateResponseEntity, ReleaseResponseEntity, UploadEntity, VersionEntity } from '@core/entities/hosting/hosting.entity';
-import { HashedZippedEntities } from '@core/entities/files/files.entities';
 import { SiteEntity } from '@core/entities/site/site.entity';
 import { handleError } from '@errors/handleError';
 import type { FileSystemInterface } from '../fileUtils/fileUtils';
@@ -66,27 +65,24 @@ class FirebaseHostingService {
   private getFileAndSha(files: FilenameAndShaEntity[]): FileAndSha {
     const fileNamesAndSha: FileAndSha = {};
     files.forEach(file => {
-      logger.info(`${JSON.stringify(file)}`)
       fileNamesAndSha[`/${file.fileName}`] = file.sha256;
     });
     return fileNamesAndSha;
   }
 
   private async uploadFilesToFirebase(hashedFiles: FolderAndPage[], populatedFiles: PopulateResponseEntity): Promise<number> {
-    logger.info(` ${JSON.stringify(hashedFiles)} --> ${JSON.stringify(populatedFiles)}`)
     if (populatedFiles.uploadRequiredHashes && populatedFiles.uploadRequiredHashes.length > 0) {
-      const filesToPopulate = this.convertFilesToUploadFormat(hashedFiles, populatedFiles);
+      const filesToPopulate = this.createFirebaseJsonFormat(hashedFiles, populatedFiles);
       try {
         for (let file of filesToPopulate) {
           const fileToUpload = hashedFiles.find(hashedFile => hashedFile.sha256 === file.sha256);
           if (fileToUpload) {
-            const fileToRead = this.fileService.joinPath(fileToUpload.resolvedPathToFile, `${fileToUpload}.zip`);
-            logger.info(`file being uploaded = ${fileToRead}`);
+            const fileToRead = this.fileService.joinPath(fileToUpload.resolvedPathToFile, `${fileToUpload.filename}.zip`);
             const fileContent = await this.fileService.readFile(fileToRead);
-            const result = await this.firebaseRepository.uploadFiles(file.uploadUrl, fileContent);
-            logger.info(`uploaded files no error -> ${result}`);
+            await this.firebaseRepository.uploadFiles(file.uploadUrl, fileContent);
           }
         };
+        return httpStatusCodes.OK;
       }
       catch (err) {
         logger.error(err);
@@ -96,7 +92,7 @@ class FirebaseHostingService {
     return httpStatusCodes.OK;
   }
 
-  private convertFilesToUploadFormat(hashedFiles: FolderAndPage[], populatedFiles: PopulateResponseEntity): UploadEntity[] {
+  private createFirebaseJsonFormat(hashedFiles: FolderAndPage[], populatedFiles: PopulateResponseEntity): UploadEntity[] {
     return hashedFiles.map(file => {
       return {
         fileName: `${file.filename}.${file.type}`,

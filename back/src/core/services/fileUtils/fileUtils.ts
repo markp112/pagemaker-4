@@ -6,7 +6,6 @@ import { pipeline } from 'node:stream';
 import { promisify } from 'util';
 import { FolderDoesNotExist } from '@errors/index';
 import { handleError } from '@errors/handleError';
-import { logger } from '@logger/pino';
 
 const readFileAsync = promisify(fs.readFile);
 
@@ -27,7 +26,6 @@ interface FileSystemInterface {
 class FileService implements FileSystemInterface {
   async mkdir(dirToMake: string) {
     const folderLocation = path.resolve(dirToMake);
-    logger.info(folderLocation);
     await fsPromises.mkdir(folderLocation, { recursive: true });
   }
 
@@ -56,7 +54,6 @@ class FileService implements FileSystemInterface {
   }
 
   async zipFiles(files: string[]): Promise<string[]> {
-    logger.info(`files = ${files}`)
     return await Promise.all(files.map(async file => await this.zipFile(file)));
   }
 
@@ -71,12 +68,7 @@ class FileService implements FileSystemInterface {
   }
 
   async writeFile(fileAndPath: string, content: string): Promise<void> {
-    try {
-      await fsPromises.writeFile(fileAndPath, content);
-    } catch(err) {
-      logger.error(`${JSON.stringify(err)}`);
-      throw err;
-    }
+    await fsPromises.writeFile(fileAndPath, content);
   }
 
   resolvePath(pathToResolve: string): string {

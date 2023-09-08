@@ -55,7 +55,6 @@ class SiteService implements SiteInterface {
       hostingService: FirebaseHostingService,
       siteAndUser: SiteAndUser
     ): Promise<SiteEntity> {
-      logger.info('site.service.publish - called');
     try {
       const publishFolder = this.getPublishFolder(siteAndUser);
       const site = await this.fetchSite(siteAndUser);
@@ -66,7 +65,6 @@ class SiteService implements SiteInterface {
       webSiteContent = await this.createSystemPath(webSiteContent, fileService);
       await this.writeWebSiteContent(webSiteContent);
       webSiteContent = await this.createZippedFiles(webSiteContent, fileService);
-      logger.info(`zipped files -> ${JSON.stringify(webSiteContent)}`);
       webSiteContent = await this.createFileHashes(webSiteContent, fileService);
       return await hostingService.publishSiteEntity(site, webSiteContent);
     } catch (error) {

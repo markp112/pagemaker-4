@@ -3,8 +3,6 @@ import { VersionEntity, PopulateFileEntity, FinaliseResponseEntity, PopulateResp
 import { FirebaseHosting } from './model';
 import { HeadersAxios } from './model';
 import { handleError } from '@errors/handleError';
-import { logger } from '@logger/pino';
-import { ReadStream } from 'fs';
 
 class FirebaseHostRepository implements FirebaseHosting {
   constructor(private token: string) {};
@@ -35,7 +33,6 @@ class FirebaseHostRepository implements FirebaseHosting {
       const data = await axios.post(url, contentToPost, {
         headers: headers.headers,
       });
-      logger.info(`reposonse from pop files = ${data.data}`);
       return data.data as PopulateResponseEntity;
     } catch (error) {
         handleError(error);
@@ -53,7 +50,6 @@ class FirebaseHostRepository implements FirebaseHosting {
       });
       return result.status;
     } catch (error) {
-      logger.error(`upload Files -> ${error}`);
       handleError(error);    
     }
   }
@@ -66,7 +62,6 @@ class FirebaseHostRepository implements FirebaseHosting {
       const result = await axios.patch(url, status, {
         headers: headers.headers,
       });
-      logger.info(`finalise reponse = ${JSON.stringify(result.data)}`)
       return result.data as FinaliseResponseEntity;
     } catch (err) {
       handleError(err);

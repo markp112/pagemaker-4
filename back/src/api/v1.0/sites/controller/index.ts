@@ -178,11 +178,8 @@ function sitesController() {
 
   async function publishSite(siteAndUser: SiteAndUser): Promise<Response> {
     const fileService = new FileService();
-    logger.info('fileService created');
     const token = await getAccessToken();
-    logger.info(`token = ${token}`);
     const firebaseHostingRepository = new FirebaseHostRepository(token);
-    logger.info('firebaseHostingRepository')
     const firebaseHostingService = new FirebaseHostingService(firebaseHostingRepository, fileService);
     const pageService = new PagesService(databaseRepository);
     const site = await siteService.publishSite(pageService, fileService, firebaseHostingService, siteAndUser);

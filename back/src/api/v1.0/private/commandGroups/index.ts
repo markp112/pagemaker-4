@@ -12,7 +12,6 @@ const IGNORE_USER_SITE_ID = '-1';
 
 commandGroupRouter
   .get(`${ROUTE_PATH}/hierarchy/:siteId/:userId`, async (req, res) => {
-    logger.info('commandGroup.get callled');
     try {
       let response;
       let colourPalettes: ColourSwatches;
@@ -32,7 +31,6 @@ commandGroupRouter
 })
 
   .get(`${ROUTE_PATH}/commands`, async (req, res) => {
-    logger.info('admin/commands called');
     try {
       const response = await Commands().get();
       res.status(response.status).send(response);
@@ -50,7 +48,6 @@ commandGroupRouter
 
 .post(`${ROUTE_PATH}/page-element`, async (req, res) => {
   try {
-    logger.info(`${ROUTE_PATH}/page-element - called`);
     const SINGLE_KEY = 0;
     const pageElement = req.body;
     const key = Object.keys(pageElement)[SINGLE_KEY];
@@ -65,7 +62,6 @@ commandGroupRouter
   })
 
   .put(`${ROUTE_PATH}/page-element/tabs`, async (req, res) => {
-    logger.info(`${ROUTE_PATH}/page-element/tabs - called`);
     try {
       const SINGLE_KEY = 0;
       const pageElement = req.body;
@@ -80,7 +76,6 @@ commandGroupRouter
   })
 
   .post(`${ROUTE_PATH}/page-element/tab-group`, async (req, res) => {
-    logger.info(`${ROUTE_PATH}/page-element/tabGroups - called`);
     try {
       const tabGroup = req.body;
       const response = await Commands().addTabGroup(tabGroup);

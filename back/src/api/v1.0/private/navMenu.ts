@@ -12,7 +12,6 @@ const loggedInMenu = navMenu.filter(menuItem => menuItem.isLoggedIn === true);
 const loggedOutMenu = navMenu.filter(menuItem => menuItem.isLoggedIn === false);
 
 navMenuRouter.get(`${ROUTE_PATH}/:isLoggedIn`, (req,res) => {
-  logger.info('navMenuRoute called with:', req.params);
   const isLoggedIn:boolean = req.params.isLoggedIn as unknown as boolean;
   let whichMenu;
   if (isLoggedIn) {

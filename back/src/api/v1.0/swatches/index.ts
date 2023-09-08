@@ -8,7 +8,6 @@ const ROUTE_PATH = '/swatches';
 
 swatchesRouter
   .post(`${ROUTE_PATH}/saturation/increase/`, (req, res) => {
-    logger.info('saturation increase called');
     const swatches = req.body as ColourSwatch[];
     try {
       const response = swatchesController().increaseSaturation(swatches);
@@ -20,7 +19,6 @@ swatchesRouter
   })
 
   .post(`${ROUTE_PATH}/saturation/decrease/`, (req, res) => {
-    logger.info('saturation increase called');
     const swatches = req.body as ColourSwatch[];
     try {
       const response = swatchesController().descreaseSaturation(swatches);
@@ -32,8 +30,8 @@ swatchesRouter
   })
 
   .post(`${ROUTE_PATH}/create/swatches`, (req, res) => {
-    const colourSwatches = req.body as ColourSwatches
-    logger.info('createswatches called with swatches', colourSwatches);
+    const colourSwatches = req.body as ColourSwatches;
+    req.log.info(req.path);
     try {
       const response = swatchesController().buildNewSwatchesFromColour(colourSwatches);
       res.status(response.status).send(response);
