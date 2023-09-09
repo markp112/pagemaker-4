@@ -24,7 +24,6 @@ function auth() {
   async function login(credential: Credentials): Promise<boolean> {
     try {
       const response = await axiosClient().post(`${baseRoute}login`, credential);
-      console.log('%c⧭', 'color: #86bf60', response);
       if (response) {
         const user: User = response as User;
         user.expiry = new Date().toLocaleDateString();

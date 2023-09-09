@@ -21,7 +21,6 @@ describe('SiteBuilderService', () => {
       const siteBuilder = new SiteBuilderService(pages, publishFolder);
       const pageBuilder = new PageBuilder();
       const createdPages = await siteBuilder.createSitePages(pageBuilder);
-      console.log('%c⧭', 'color: #1d3f73', createdPages);
       expect(createdPages.length).toBe(1);
       
     })

@@ -36,12 +36,14 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use((req, res, next) => {
 	const id = genReqId(req, res);
 	logger.setBindings( { pid: id });
-	logger.info({ url: req.url }); 
+	logger.info({ url: req.url });
+	logger.info({ method: req.method });
+	logger.info( { params: req.params })
 	next();
 });
 app.use(pinoHttp({
 	logger,
-	level: 'info',
+	level: 'silent',
 }));
 
 app.use(authMiddleware);

@@ -30,7 +30,6 @@ describe('hosting.repository', () => {
       const url = `${FIREBASE_URLS.firebaseBaseUrlSites}f8c721f8-7b32-1929-8b50-20b952e11640/versions/7ffb292f8c2903fa?update_mask=status`;
       const status = { status: 'FInALIZED' };
       const result = await firebaseHost.finalise(url, status);
-      console.log(result);
 
     })
   })
