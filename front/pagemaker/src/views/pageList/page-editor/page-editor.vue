@@ -63,16 +63,16 @@
       </div>
       <div class="field-wrapper">
         <NumberInput label="Screen Width (px)"
-          :value="parseInt(page.dimension.width.value.value)"
+          :value="parseInt(parseInt(page.dimension.width.value.value).value)"
           place-holder="Enter max width for page width"
-          @on-field-change="($event) => page.dimension.width.value.value = $event"
+          @on-field-change="($event) => page.dimension.width.value.value.value = `${$event}`"
         /> 
       </div>
       <div class="field-wrapper">
         <NumberInput label="Screen Height (px)"
-        :value="parseInt(page.dimension.height.value.value)"
+        :value="parseInt(parseInt(page.dimension.height.value.value).value)"
         place-holder="Enter max height for page height"
-        @on-field-change="($event) => page.dimension.height.value.value = $event"
+        @on-field-change="($event) => page.dimension.height.value.value.value = `${$event}`"
         />
       </div> 
       <div class="field-wrapper">
@@ -192,7 +192,8 @@ export default defineComponent ({
     },
     
     async saveClick() {
-      this.page = await this.pageService.createPage(this.page);
+      const createdPage = await this.pageService.createPage(this.page);
+      this.page.pageId = createdPage.pageId;
     },
 },
   

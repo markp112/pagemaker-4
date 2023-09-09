@@ -76,6 +76,7 @@ const createSite = async (siteName: string) => {
 
 const publishSite = () => {
   console.log('pending implementation');
+  siteService().publishSite();
 }
 
 

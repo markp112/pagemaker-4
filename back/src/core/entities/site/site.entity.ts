@@ -2,6 +2,7 @@ interface HostingDetails {
   name: string;
   defaultUrl: string;
   type: string;
+  version: string;
 };
 
 interface PublishedDetails {
@@ -36,5 +37,4 @@ export type { SiteEntity,
   SiteSettings,
   HostingDetails, 
   PublishedDetails,
-
 };

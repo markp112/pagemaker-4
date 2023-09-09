@@ -1,10 +1,11 @@
-import { PageContainerInterface } from '../../../../../../src/api/v1.0/pages/model/model';
+import { ButtonElement } from '../../../../../src/core/services/pages/model/';
 
-const MOCK_JUMBO: PageContainerInterface = {
-  name: 'splash',
-  ref: 'Splash:0',
-  componentHTMLTag: 'div',
-  isContainer: true,
+const MOCK_BUTTON: ButtonElement = {
+  name: 'button',
+  ref: 'button:0',
+  content: 'Press Me',
+  componentHTMLTag: 'span',
+  isContainer: false,
   styles: [
     {
       style: 'background-color',
@@ -37,9 +38,7 @@ const MOCK_JUMBO: PageContainerInterface = {
     height: { style: 'height', value: { value: '343.06', unit: 'px' }},
   },
   isAbsolute: false,
-  type: 'jumbo',
-  containerOrientation: 'row',
-  elements: [],
+  type: 'buttonElement',
 };
 
-export { MOCK_JUMBO };
+export { MOCK_BUTTON };

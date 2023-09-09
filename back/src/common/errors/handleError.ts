@@ -1,5 +1,5 @@
 import { FirebaseError } from '@firebase/util';
-import { BadRequest, GenericError, InsufficientPermissions, InvalidArgument, SiteExists } from '.';
+import { BadRequest, GenericError, InsufficientPermissions, InvalidArgument, ResourceNotFoundError, SiteExists } from '.';
 import { Response } from '@api/types';
 import { logger } from '@logger/pino';
 import { AxiosError } from 'axios';
@@ -11,6 +11,8 @@ const errorMap = {
   'generic': (err: Error) => new GenericError(err.message),
   'ERR_BAD_REQUEST': (err: Error) => new BadRequest(err.message),
   'Request failed with status code 409': () => new SiteExists(),
+  'Request failed with status code 404': (err: Error) => new ResourceNotFoundError(err.message),
+  'Request failed with status code 400': (err: Error) => new BadRequest(err.message),
 };
 
 function handleError(err: Error | FirebaseError | AxiosError): Response {

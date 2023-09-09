@@ -1,5 +1,4 @@
 import express from 'express';
-import { logger } from '../../../../logger';
 import { fontsController } from './controller';
 
 const fontsRouter = express.Router();
@@ -7,7 +6,6 @@ const ROUTE_PATH = '/fonts';
 
 fontsRouter
   .get(`${ROUTE_PATH}`, async (req, res) => {
-    logger.info('fonts router.get called');
     try {
       const response = await fontsController().getGoogleFonts();
       res.status(response.status).send(response);

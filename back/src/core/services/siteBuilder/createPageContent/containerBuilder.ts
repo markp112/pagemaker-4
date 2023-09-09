@@ -1,13 +1,15 @@
-import { ButtonElement, ImageElement, PageContainerInterface } from '@core/services/pages/model/';
+import { ButtonElement, ImageElement, PageContainerInterface, TextElement } from '@core/services/pages/model/';
 import { ElementBuilder } from './model';
 import { HtmlElementBuilder } from './htmlBuilder';
 import { ButtonBuilder } from './buttonBuilder';
 import { ImageBuilder } from './imageBuilder';
+import { TextBuilder } from './textBuilder';
 
 const elementBuilders = {
   imageElement: (element: ImageElement) => new ImageBuilder(element),
   jumbo: (element: PageContainerInterface) => new ContainerBuilder(element),
   buttonElement: (element: ButtonElement) => new ButtonBuilder(element),
+  textElement: (element: TextElement) => new TextBuilder(element),
 };
 
 export { elementBuilders };

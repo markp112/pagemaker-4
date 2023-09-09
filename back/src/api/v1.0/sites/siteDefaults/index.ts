@@ -1,5 +1,4 @@
 import express from 'express';
-import { logger } from '../../../../logger';
 import { SiteDefaultsController } from './controller';
 
 const siteDefaultsRouter = express.Router();
@@ -20,7 +19,6 @@ siteDefaultsRouter
   })
   
   .get(getRoute('default-typography'), async(req, res) => {
-    logger.info('sites/defaults/typeography called');
     const response = await SiteDefaultsController().getDefaultTypography();
     res.status(response.status).send(response);
   })

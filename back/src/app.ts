@@ -10,8 +10,11 @@ import pinoHttp from 'pino-http';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { genReqId } from '@logger/pino';
 import  dotEnv from 'dotenv';
+import path from 'path';
 
-dotEnv.config();
+
+const pathToEnv = path.resolve('.env');
+dotEnv.config({path: pathToEnv });
 const port = process.env.PORT ?? 3000;
 const app = express();
 
@@ -33,7 +36,9 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use((req, res, next) => {
 	const id = genReqId(req, res);
 	logger.setBindings( { pid: id });
-	logger.info({ url: req.url }); 
+	logger.info({ url: req.url });
+	logger.info({ method: req.method });
+	logger.info( { params: req.params })
 	next();
 });
 app.use(pinoHttp({

@@ -141,8 +141,9 @@ export default defineComponent({
   methods: {
 
     async showImageGallery() {
-      await userService().retrieveImages(this.$props.userId);
+      await userService().retrieveImages();
       this.images = this.imageStore.imageDisplayList;
+      useImagesStore().setShowGallery();
       this.showImagePicker = true;
     },
     
@@ -179,8 +180,8 @@ export default defineComponent({
       const image = new Image();
       image.maintainRatio = this.maintainRatio;
       image.content = this.url;
-      image.naturalSize.width.value = img.naturalWidth;
-      image.naturalSize.height.value = img.naturalHeight;
+      image.naturalSize.width.value.value = img.naturalWidth.toString();
+      image.naturalSize.height.value.value = img.naturalHeight.toString();
     },
     
     galleryImageSelected(url: string) {

@@ -14,7 +14,7 @@ type User = {
   email: string
 };
 
-interface FinaliseResponseEntity  {
+interface FinaliseResponseEntity {
   name: string;
   status: string;
   config: {
@@ -54,10 +54,10 @@ interface FilenameAndShaEntity {
   sha256: string,
 };
 
+type FileAndSha = { [key: string]: string };
+
 interface PopulateFileEntity {
-  siteId: string,
-  versionId: string,
-  filesToPopulate: FilenameAndShaEntity[],
+  files: FileAndSha
 }
 
 interface PopulateFilesResponseEntity {
@@ -68,9 +68,9 @@ interface UploadEntity extends FilenameAndShaEntity {
   uploadUrl: string;
 }
 
-
 export {
   VersionEntity,
+  FileAndSha,
   PopulateResponseEntity,
   FinaliseResponseEntity,
   ReleaseResponseEntity,
@@ -78,5 +78,4 @@ export {
   FilenameAndShaEntity,
   PopulateFilesResponseEntity,
   UploadEntity,
-
 };

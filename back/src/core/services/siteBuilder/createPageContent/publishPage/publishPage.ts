@@ -1,24 +1,15 @@
 import { handleError } from '@errors/handleError';
-import fs from 'fs/promises';
-import path from 'path';
-
-interface FolderAndPage {
-  pageName: string,
-  folder: string,
-};
-
-const BASE_FOLDER = './publishedFiles/';
+import { FileService } from '@core/services/fileUtils/fileUtils';
+import type { FolderAndPage } from './model/index';
 
 function pagePublisher() {
   
-  const FILE_EXTENSION = '.html';
+  const fileService = new FileService();
 
-  async function writeLocalFile(folder: FolderAndPage, pageHtml: string): Promise<string> {
+  async function writeLocalFile(folder: FolderAndPage): Promise<void> {
     try {
-      const filePath = path.resolve(`${BASE_FOLDER}${folder.folder}`);
-      const fileToWrite = path.join(filePath, `${folder.pageName}${FILE_EXTENSION}`); 
-      await fs.writeFile(fileToWrite, pageHtml);
-      return fileToWrite;
+      const fileToWrite = fileService.joinPath(folder.resolvedPathToFile, `${folder.filename}.${folder.type}`);
+      await fileService.writeFile(fileToWrite, folder.fileContent);
     } catch (err) {
       handleError(err);
     }
@@ -28,4 +19,3 @@ function pagePublisher() {
 
 export { pagePublisher };
 
-export type { FolderAndPage };

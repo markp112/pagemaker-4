@@ -8,12 +8,12 @@ interface ContainerProps  {
   naturalSize: Dimension;
   styles: Style[];
   isAbsolute: boolean;
-};
+}
 
 interface ImageProps extends ContainerProps {
   scaledSize: Dimension;
   location: Location;
-};
+}
 
 interface ImageElement extends PageElement {
   ratio: number;
@@ -22,14 +22,14 @@ interface ImageElement extends PageElement {
   image: ImageProps;
   content: string,
   styles: Style[],
-};
+}
 
 interface ButtonElement extends PageElement {
   content: string;
   location: Location;
   isAbsolute: boolean;
   styles: Style[];
-};
+}
 
 interface TextElement extends PageElement {
   content: string;

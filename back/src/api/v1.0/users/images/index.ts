@@ -1,4 +1,3 @@
-import { logger } from '../../../../logger';
 import express from 'express';
 import { userImages, UsersBucket } from './controller';
 
@@ -8,7 +7,6 @@ const ROUTE_PATH = '/images';
 imagesRouter
 
   .get(`/:userId${ROUTE_PATH}/imagelist/bucket/:userBucket`, async (req, res) => {
-    logger.info(`users/:userId/${ROUTE_PATH}imagelist/:userBucket`);
     const userId = req.params.userId;
     const userBucket: UsersBucket = {
       bucket: req.params.userBucket,
@@ -22,7 +20,6 @@ imagesRouter
     }
   })
   .post(`/:userId${ROUTE_PATH}/metadata/bucket/:userBucket`, async(req, res) => {
-    logger.info(`users/:userId/${ROUTE_PATH}/metadata/bucket/:userBucket`);
     const userId = req.params.userId;
     const bucket = req.params.userBucket;
     const files = req.body as string[];

@@ -1,5 +1,5 @@
-import { MOCK_BUTTON } from './mocks/buttonMock';
-import { ButtonBuilder } from '../../../../../src/api/v1.0/buildPage/createPageContent/buttonBuilder';
+import { MOCK_BUTTON } from '../mocks/buttonMock';
+import { ButtonBuilder } from '../../../../../src/core/services/SiteBuilder/createPageContent/buttonBuilder';
 
 const STYLE = 'style="';
 const WIDTH = `width:${MOCK_BUTTON.dimension.width.value.value}${MOCK_BUTTON.dimension.width.value.unit};`;
@@ -9,6 +9,7 @@ const FONT_FAMILY = 'font-family:Abyssinica SIL;'
 const FONT_SIZE = 'font-size:16px;'
 const BASE_HTML = `<${MOCK_BUTTON.componentHTMLTag} ${STYLE}${WIDTH}${HEIGHT}${BACKGROUND_COLOUR}${FONT_FAMILY}${FONT_SIZE}`;
 const CLOSING_TAG = `</${MOCK_BUTTON.componentHTMLTag}>`;
+
 describe('buttonBuilder', () => {
   it('should generate an html element with the content as the label', () => {
     const buttonBuilder = new ButtonBuilder(MOCK_BUTTON);

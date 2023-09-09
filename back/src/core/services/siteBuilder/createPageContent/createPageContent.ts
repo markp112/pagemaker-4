@@ -3,13 +3,15 @@ import { HtmlElementBuilder } from './htmlBuilder';
 import { elementBuilders } from './containerBuilder';
 
 function createPageContent(page: Page): string {
-  const htmlPage = createPageHtml(page);
-  return htmlPage;
+  return createPageHtml(page);
 }
 
 function createPageHtml(page: Page): string {
   const htmlBuilder = new HtmlElementBuilder();
-  const pageContent: string = page.elements.map(element => { return createHtmlElement(element)}).join('');
+  if (page.elements.length === 0) return '';
+  const pageContent: string = page.elements.map(element => { 
+    return createHtmlElement(element);
+  }).join('');
   return htmlBuilder.createTag('div')
     .withStyle([page.dimension.width, page.dimension.height])
     .withStyle(page.styles)
@@ -17,8 +19,10 @@ function createPageHtml(page: Page): string {
     .build();
 }
 
-function createHtmlElement(element: PageElementData): string {
-  return elementBuilders[element.type](element).build();
+function createHtmlElement(element: PageElementData | string): string {
+  if (typeof element === 'string') return element;
+  const builder = elementBuilders[element.type](element);
+  return builder.build();
 }
 
 export { createPageContent };

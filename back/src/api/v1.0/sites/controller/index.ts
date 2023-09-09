@@ -1,5 +1,5 @@
 import { constructResponse } from '@common/functions/constructResponse';
-import { FieldPath, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import {  deleteDoc, doc, getDoc,  setDoc } from 'firebase/firestore';
 import { firebaseDb } from '@fbase/initFirebase';
 import { Response } from '@api/types';
 import { Site } from '../model/site';
@@ -44,6 +44,7 @@ function sitesController() {
 
   async function saveSite(site: SiteEntity, isPost: boolean): Promise<Response> {
     try {
+      await siteService.saveSiteToDatabase(site);
       await siteService.saveSiteToDatabase(site);
       const statusCode = isPost ? 201 : httpStatusCodes.OK
       return constructResponse<Site>(site, statusCode);

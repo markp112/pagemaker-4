@@ -45,15 +45,15 @@ function PageService() {
       colour,
       classDefinition: '',
       componentHTMLTag: 'page',
-      dimension: { width: {style: 'width', value: { value: '1280', unit: 'px'}}, 
-        height: { style: 'height', value:{ value: '1080', unit: 'px'} }},
+      dimension: { width: { style: 'width', value:{ value: '1280', unit: 'px'}}, 
+        height: { style: 'height', value: { value: '1080', unit: 'px' }}},
       isContainer: true,
       elements: [],
       parentRef: '',
       ref: 'root',
       styles: [],
       type: 'page',
-      lastPublished:new Date('01 Jan 1970'),
+      lastPublished: new Date('Jan 01 1970')
     };
     store.setPage(page);
   }
@@ -61,9 +61,9 @@ function PageService() {
 async function createPage(page: Page): Promise<Page> {
   try {
     if (page.pageId === NEW_PAGE) {
-      const newPage = await createPageContent(page);
+      const createdPage = await createPageContent(page);
       displayMessage('Page Created', 'success', 'Saved');
-      return newPage;
+      return createdPage;
     }
     return page;
   } catch (error) {
@@ -74,7 +74,8 @@ async function createPage(page: Page): Promise<Page> {
 
 async function upadatePage(page: Page) {
   try {
-    await axiosClient().put<Page, Page>(`${getRoute(page.siteId, PAGE)}/${page.pageId}`, page)
+    await axiosClient().put<Page, Page>(`${getRoute(page.siteId, PAGE)}/${page.pageId}`, page);
+    displayMessage('Page Updated', 'success', 'Saved');
   } catch (err) {
     displayMessage((err as Error).message, 'error', 'Error');
   }

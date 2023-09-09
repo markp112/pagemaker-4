@@ -1,5 +1,6 @@
 import type { CommandName, CommandTypes } from '@/classes/command/model/command';
 import type { TabPanel } from '@/components/core/settingsPanel/tabStrip/tabStripContainer/model';
+
 type EditorButtonTypes = 'list'
   | 'iconList' 
   | 'plusMinus'
@@ -18,7 +19,7 @@ interface EditorButtonBase {
   buttonType: EditorButtonTypes;
   commandName: CommandName;
   commandType: CommandTypes;
-};
+}
 
 interface EditorButtonContent extends EditorButtonBase {
   content: string | File;
@@ -32,11 +33,11 @@ interface SelectListIcon {
 
 interface EditorButtonSelectList extends EditorButtonBase {
   listValues: SelectListIcon[];
-};
+}
 
 interface EditorButtonNumericSelectList extends EditorButtonBase {
   listValues: string[];
-};
+}
 
 type CommandButtonTypes = EditorButtonBase | EditorButtonContent | EditorButtonNumericSelectList | EditorButtonSelectList; 
 
@@ -48,7 +49,7 @@ interface TabGroup {
   displayName: string,
   key: string,
   tabContent: TabPanel[],
-};
+}
 
 interface CommandTabs {
   tabs: TabGroup[];
