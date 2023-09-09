@@ -77,7 +77,7 @@ class Resizer {
 
   constructor(private readonly useMouse: useMouse,
     private readonly thisComponent: ActiveElements
-  ) {};
+  ) {}
 
   resizeStart(event: MouseEvent) {
     this.useMouse.setCurrentPosition(this.getMousePosition(event));
@@ -136,8 +136,10 @@ class Resizer {
     this.thisComponent.dimension.height = { ...boxDimensions.height };
     this.thisComponent.dimension.width = { ...boxDimensions.width };
     if (this.thisComponent.type === 'imageElement') {
-      (this.thisComponent as ImageElement).container.naturalSize.height = boxDimensions.height;
-      (this.thisComponent as ImageElement).container.naturalSize.width = boxDimensions.width
+      (<ImageElement>this.thisComponent).container.naturalSize.height = boxDimensions.height;
+      (<ImageElement>this.thisComponent).container.naturalSize.width = boxDimensions.width;
+      (<ImageElement>this.thisComponent).image.scaledSize.height = boxDimensions.height;
+      (<ImageElement>this.thisComponent).image.scaledSize.width = boxDimensions.width;
     }
   }
 
