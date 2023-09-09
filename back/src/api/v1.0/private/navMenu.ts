@@ -1,6 +1,5 @@
 import { constructResponse } from '../../../common/functions/constructResponse';
 import express from 'express';
-import { logger } from '../../../logger';
 import { navMenu } from './data/navMenuData';
 import { NavMenuItemInterface } from './data/navMenuModel';
 import { httpStatusCodes } from '@api/httpStatusCodes';

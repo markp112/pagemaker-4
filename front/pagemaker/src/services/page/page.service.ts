@@ -58,15 +58,17 @@ function PageService() {
     store.setPage(page);
   }
 
-async function createPage(page: Page) {
+async function createPage(page: Page): Promise<Page> {
   try {
     if (page.pageId === NEW_PAGE) {
       const createdPage = await createPageContent(page);
       displayMessage('Page Created', 'success', 'Saved');
       return createdPage;
     }
+    return page;
   } catch (error) {
     displayMessage((error as Error).message, 'error', 'Error');
+    return page;
   }
 }
 

@@ -14,7 +14,7 @@ type User = {
   email: string
 };
 
-interface FinaliseResponseEntity  {
+interface FinaliseResponseEntity {
   name: string;
   status: string;
   config: {
@@ -68,7 +68,6 @@ interface UploadEntity extends FilenameAndShaEntity {
   uploadUrl: string;
 }
 
-
 export {
   VersionEntity,
   FileAndSha,
@@ -79,5 +78,4 @@ export {
   FilenameAndShaEntity,
   PopulateFilesResponseEntity,
   UploadEntity,
-
 };

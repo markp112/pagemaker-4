@@ -1,4 +1,3 @@
-import { logger } from '../../../logger';
 import express from 'express';
 import { swatchesController } from './controller';
 import { ColourSwatch, ColourSwatches } from '../sites/model/colourPalette';

@@ -7,7 +7,7 @@ export interface ImageInterface {
   ratio: number;
   maintainRatio: boolean;
   parentDimensions: Dimension;
-};
+}
 
 
 class Image implements ImageInterface {
@@ -19,15 +19,15 @@ class Image implements ImageInterface {
   private _parentDimensions: Dimension;
 
   constructor() {
-    const HEIGHT: ValueAndUnit = { value: 300, unit: 'px'};
-    const WIDTH: ValueAndUnit = { value: 200, unit: 'px'};
-    this._naturalSize = { height: {...HEIGHT },  width: { ...WIDTH }};
-    this._scaledSize = { height: {...HEIGHT },  width: { ...WIDTH }};
+    const HEIGHT: ValueAndUnit = { value: '300', unit: 'px'};
+    const WIDTH: ValueAndUnit = { value: '200', unit: 'px'};
+    this._naturalSize = { height: { style: 'height', value: { ...HEIGHT }},  width: { style: 'width', value: { ...WIDTH }}};
+    this._scaledSize = { height: { style: 'height', value: { ...HEIGHT }},  width: {style: 'width', value: { ...WIDTH }}};
     this._content =
       "https://firebasestorage.googleapis.com/v0/b/page-maker-69fb1.appspot.com/o/assets%2Fimages%2Fimageplaceholder.png?alt=media&token=149d3e60-0fc4-49de-9e23-5fea91458240";
-    this._ratio = this.naturalSize.width.value / this.naturalSize.height.value;
+    this._ratio = this.calcRatio(this.naturalSize.width.value.value, this.naturalSize.height.value.value);
     this._maintainRatio = true;
-    this._parentDimensions = { height: {...HEIGHT },  width: { ...WIDTH }};
+    this._parentDimensions = { height: { style: 'height', value: { ...HEIGHT }},  width: {style: 'width', value: { ...WIDTH }}};
   }
 
   get content(): string {
@@ -45,7 +45,7 @@ class Image implements ImageInterface {
   set naturalSize(size: Dimension) {
     this._naturalSize = size;
     this._scaledSize = size; /** @description when image size changes the scaled size should be reset */
-    this._ratio = this._naturalSize.width.value / this._naturalSize.height.value;
+    this._ratio = this.calcRatio(this._naturalSize.width.value.value, this._naturalSize.height.value.value)
   }
 
   get scaledSize() {
@@ -71,6 +71,12 @@ class Image implements ImageInterface {
   set parentDimensions(dimensions: Dimension) {
     this._parentDimensions = dimensions;
   }
-};
+
+  private calcRatio(width: string, height: string): number {
+    const widthAsInt = parseInt(width);
+    const heightAsInt = parseInt(height);
+    return widthAsInt / heightAsInt;
+  }
+}
 
 export { Image };

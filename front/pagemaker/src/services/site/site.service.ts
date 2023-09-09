@@ -17,7 +17,7 @@ function siteService() {
   const getRoute = (siteAndUser: SiteAndUser) => `${BASE_ROUTE}${siteAndUser.userId}/${siteAndUser.siteId}`;
   const getHostingRoute = (userAndSiteName: UserAndSiteName) => `${HOSTING_ROUTE}${userAndSiteName.userId}/${userAndSiteName.siteName}`;
 
-  async function getSiteMaterialColours(siteAndUser: SiteAndUser):Promise<void> {
+  async function getSiteMaterialColours(siteAndUser: SiteAndUser): Promise<void> {
     try {
       const materialColours = await axiosClient().get<MaterialColours>(`${getRoute(siteAndUser)}/materialcolours`);
       if (materialColours) {
@@ -149,6 +149,7 @@ function siteService() {
       };
       if (!siteData.isSiteSaved) {
         await axiosClient().put<SiteEntity, SiteEntity>(getRoute(siteAndUser), siteData.site);
+        await axiosClient().put<SiteEntity, SiteEntity>(getRoute(siteAndUser), siteData.site);
         siteData.isSiteSaved = true;
       }
       await Promise.all([
@@ -177,7 +178,6 @@ function siteService() {
     const defaultTypography = await axiosClient().get<SiteTypography>(`${BASE_ROUTE}defaults/default-typography`);
     store.setTypography(defaultTypography);
   }
-
   async function fetchSite(siteAndUser: SiteAndUser): Promise<SiteEntity> {
     const site = await axiosClient().get<SiteEntity>(`${getRoute(siteAndUser)}`);
     store.setSite(site);
@@ -208,7 +208,7 @@ function siteService() {
   function isSite(siteOrError: SiteEntity | { data: string, err: string, statusCode: number }): siteOrError is SiteEntity {
     return 'siteId' in siteOrError;
   } 
-
+  
 
   return { getSiteMaterialColours,
     fetchSite,

@@ -1,5 +1,4 @@
 import express from 'express';
-import { logger } from 'logger';
 import { auth, type Credentials } from './controller';
 import { GenericError, ResourceNotFoundError } from '@common/errors';
 import { handleError } from '@errors/handleError';

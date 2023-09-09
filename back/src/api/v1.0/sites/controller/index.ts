@@ -17,7 +17,6 @@ import { getAccessToken } from '@core/services/firebase/authToken/getToken';
 import { PagesService } from '@core/services/pages/pages.service';
 import { FirebaseHostingService } from '@core/services/firebase/firebase.service';
 import { SiteEntity } from '@core/entities/site/site.entity';
-import { logger } from '@logger/pino';
 
 const MATERIAL_COLOURS = 'materialcolours';
 const SITE_PALETTE_COLLECTION = 'siteColourPalette';
@@ -45,6 +44,7 @@ function sitesController() {
 
   async function saveSite(site: SiteEntity, isPost: boolean): Promise<Response> {
     try {
+      await siteService.saveSiteToDatabase(site);
       await siteService.saveSiteToDatabase(site);
       const statusCode = isPost ? 201 : httpStatusCodes.OK
       return constructResponse<Site>(site, statusCode);

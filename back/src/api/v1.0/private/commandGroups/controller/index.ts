@@ -6,7 +6,6 @@ import { httpStatusCodes } from '@api/httpStatusCodes';
 import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
 import { buildColourCommandTabGroups } from './colourPalettes';
 import { handleError } from '@errors/handleError';
-import { logger } from '@logger/pino';
 
 export const COMMAND_COLLECTION = 'command-containers';
 export const COMMAND_ELEMENT_COLLECTION = 'CommandElementCollection';

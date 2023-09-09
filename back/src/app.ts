@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 });
 app.use(pinoHttp({
 	logger,
-	level: 'silent',
+	level: 'info',
 }));
 
 app.use(authMiddleware);

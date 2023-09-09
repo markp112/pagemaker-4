@@ -69,8 +69,8 @@ const router = createRouter({
       component: pageEditor,
       meta: {
         breadcrumb:  [{ name: 'sites', link: '/sites' }, 
-          {name: 'pages', link: '/pagelist'},
-          {name: 'page-editor'}
+          { name: 'pages', link: '/pagelist' },
+          { name: 'page-editor' }
         ],
         layout: PlainLayout,
       }

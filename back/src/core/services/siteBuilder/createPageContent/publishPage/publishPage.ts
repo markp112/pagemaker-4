@@ -14,8 +14,8 @@ function pagePublisher() {
       handleError(err);
     }
   }
-
   return { writeLocalFile };
 }
 
 export { pagePublisher };
+
