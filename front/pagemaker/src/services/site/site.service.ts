@@ -199,6 +199,7 @@ function siteService() {
     try {
       const result = await axiosClient().post<SiteAndUser, SiteEntity>(`${getRoute(siteAndUser)}/publish`, siteAndUser);
       displayMessage('Site Published', 'success', 'Published');
+      return result;
     } catch (err) {
       displayMessage(err.msg, 'error', 'Failed');
     }

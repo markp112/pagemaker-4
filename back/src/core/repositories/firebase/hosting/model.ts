@@ -1,4 +1,3 @@
-import { ReadStream } from 'fs';
 import { VersionEntity, PopulateFileEntity, PopulateResponseEntity, FinaliseResponseEntity, ReleaseResponseEntity } from '../../../entities/hosting/hosting.entity'; 
 
 interface FirebaseHosting {

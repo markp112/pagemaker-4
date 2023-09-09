@@ -74,7 +74,7 @@ class FirebaseHostingService {
     if (populatedFiles.uploadRequiredHashes && populatedFiles.uploadRequiredHashes.length > 0) {
       const filesToPopulate = this.createFirebaseJsonFormat(hashedFiles, populatedFiles);
       try {
-        for (let file of filesToPopulate) {
+        for (const file of filesToPopulate) {
           const fileToUpload = hashedFiles.find(hashedFile => hashedFile.sha256 === file.sha256);
           if (fileToUpload) {
             const fileToRead = this.fileService.joinPath(fileToUpload.resolvedPathToFile, `${fileToUpload.filename}.zip`);
