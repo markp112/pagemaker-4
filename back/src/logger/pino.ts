@@ -20,7 +20,10 @@ const logger = pino({
         reqId: bindings.pid,
         node_version: process.version,
         hostName: bindings.hostname,
-        level: bindings.label
+        level: bindings.label,
+        method: bindings.method,
+        params: bindings.params,
+        url: bindings.url,
       };
     },
       level: (label) => {

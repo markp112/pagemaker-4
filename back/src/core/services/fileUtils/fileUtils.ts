@@ -21,6 +21,7 @@ interface FileSystemInterface {
   resolvePath(pathToResolve: string): string;
   joinPath(pathToJoinTo: string, pathToJoinFrom: string);
   readStream(filePath: string): fs.ReadStream;
+  deleteFilesInFolder(folderPath: string): Promise<void>;
 }
 
 class FileService implements FileSystemInterface {
@@ -58,10 +59,10 @@ class FileService implements FileSystemInterface {
   }
 
   async readFile(filePath: string): Promise<Buffer> {
-  const fileAndPath = path.resolve(`${filePath}`);
-  return await fsPromises.readFile(fileAndPath);
+    const fileAndPath = path.resolve(`${filePath}`);
+    return await fsPromises.readFile(fileAndPath);
+  }
 
-}
   readStream(filePath: string): fs.ReadStream {
     const fileAndPath = path.resolve(`${filePath}`);
     return fs.createReadStream(fileAndPath);
@@ -85,6 +86,18 @@ class FileService implements FileSystemInterface {
 
   joinPath(pathToJoinTo: string, pathToJoinFrom: string): string {
     return path.join(pathToJoinTo, pathToJoinFrom);
+  }
+
+  async deleteFilesInFolder(folderPath: string) {
+    try {
+      const files = await fsPromises.readdir(folderPath);
+      for (const file of files) {
+        const filePath = path.join(folderPath, file);
+        await fsPromises.unlink(filePath);
+      }
+    } catch (error) {
+      throw error
+    }
   }
   
   async calculateFileSHA(filePath: string): Promise<string> {

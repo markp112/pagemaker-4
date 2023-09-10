@@ -17,6 +17,7 @@ import { getAccessToken } from '@core/services/firebase/authToken/getToken';
 import { PagesService } from '@core/services/pages/pages.service';
 import { FirebaseHostingService } from '@core/services/firebase/firebase.service';
 import { SiteEntity } from '@core/entities/site/site.entity';
+import { FolderAndPage } from '@core/services/siteBuilder/createPageContent/publishPage/model';
 
 const MATERIAL_COLOURS = 'materialcolours';
 const SITE_PALETTE_COLLECTION = 'siteColourPalette';
@@ -53,13 +54,13 @@ function sitesController() {
     }
   }
 
-  async function deleteSite(userId: string, siteId: string): Promise<Response> {
+  async function deleteSite(siteAndUser: SiteAndUser): Promise<Response> {
     try {
-      const docRef = doc(firebaseDb, sitesCollection(userId), siteId);
+      const docRef = doc(firebaseDb, sitesCollection(siteAndUser.userId), siteAndUser.siteId);
       await Promise.all([
-        deleteMaterialColours(userId, siteId),
-        deleteSiteColourPalette(userId, siteId),
-        deleteTypography(userId, siteId),
+        deleteMaterialColours(siteAndUser.userId, siteAndUser.siteId),
+        deleteSiteColourPalette(siteAndUser.userId, siteAndUser.siteId),
+        deleteTypography(siteAndUser),
         deleteDoc(docRef)
       ]);
       return constructResponse(null, httpStatusCodes.OK)
@@ -68,11 +69,7 @@ function sitesController() {
     }
   }
 
-  async function getSite(userId: string, siteId: string): Promise<SiteEntity> {
-    const siteAndUser: SiteAndUser = {
-      userId,
-      siteId,
-    };
+  async function getSite(siteAndUser: SiteAndUser): Promise<SiteEntity> {
     return await siteService.fetchSite(siteAndUser);
   }
 
@@ -81,9 +78,9 @@ function sitesController() {
     await deleteDoc(materialColourRef);
   }
 
-  async function getSiteMaterialColours(userId: string, siteId: string) {
+  async function getSiteMaterialColours(siteAndUser: SiteAndUser) {
     try {
-      const firebaseResponse = await firebaseGetCollection(MATERIAL_COLOURS, userId, siteId);
+      const firebaseResponse = await firebaseGetCollection(MATERIAL_COLOURS, siteAndUser.userId, siteAndUser.siteId);
       if (firebaseResponse.exists()) {
         const materialColours = firebaseResponse.data().materialColours as unknown as MaterialColours;
         return constructResponse<MaterialColours>(materialColours, httpStatusCodes.OK);
@@ -93,9 +90,9 @@ function sitesController() {
       }
   }
 
-  async function saveMaterialColours(userId: string, siteId: string, materialcolours: MaterialColours) {
+  async function saveMaterialColours(siteAndUser: SiteAndUser, materialcolours: MaterialColours) {
     try {
-      const coloursCollection = siteCollectionBase(userId, siteId);
+      const coloursCollection = siteCollectionBase(siteAndUser.userId, siteAndUser.siteId);
       const docRef = doc(firebaseDb, coloursCollection, MATERIAL_COLOURS);
       const colourPalette: FirebaseMaterialColours  = { materialColours: materialcolours };
       await setDoc(docRef, colourPalette);
@@ -105,10 +102,10 @@ function sitesController() {
     }
   }
 
-  async function getSiteColourPalette(userId: string, siteId: string) {
+  async function getSiteColourPalette(siteAndUser: SiteAndUser) {
     try {
 
-      const firebaseResponse = await firebaseGetCollection(SITE_PALETTE_COLLECTION, userId, siteId);
+      const firebaseResponse = await firebaseGetCollection(SITE_PALETTE_COLLECTION, siteAndUser.userId, siteAndUser.siteId);
       if (firebaseResponse) {
         const colourSwatches = firebaseResponse.data() as unknown as ColourSwatches;
         return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK);
@@ -118,9 +115,9 @@ function sitesController() {
     }
   }
 
-  async function saveColourPalette(userId: string, siteId: string, colourSwatches: ColourSwatches) {
+  async function saveColourPalette(siteAndUser: SiteAndUser, colourSwatches: ColourSwatches) {
     try {
-      const paletteCollection = siteCollectionBase(userId, siteId);;
+      const paletteCollection = siteCollectionBase(siteAndUser.userId, siteAndUser.siteId);;
       const docRef = doc(firebaseDb, paletteCollection, SITE_PALETTE_COLLECTION);
       await setDoc(docRef, colourSwatches);
       return constructResponse<ColourSwatches>(colourSwatches, httpStatusCodes.OK)
@@ -135,9 +132,9 @@ function sitesController() {
     await deleteDoc(sitePaletteRef);
   }
 
-  async function getTypography(userId: string, siteId: string) {
+  async function getTypography(siteAndUser: SiteAndUser) {
       try {
-      const firebaseResponse = await firebaseGetCollection(TYPOGRAPHY, userId, siteId);
+      const firebaseResponse = await firebaseGetCollection(TYPOGRAPHY, siteAndUser.userId, siteAndUser.siteId);
       if (firebaseResponse.exists()) {
         const typography = firebaseResponse.data() as unknown as SiteTypography;
         return constructResponse<SiteTypography>(typography, httpStatusCodes.OK);
@@ -147,9 +144,9 @@ function sitesController() {
     }
   }
 
-  async function saveTypography(userId: string, siteId: string, typography: SiteTypography) {
+  async function saveTypography(siteAndUser: SiteAndUser, typography: SiteTypography) {
     try {
-      const docRef = getDocRef(TYPOGRAPHY, userId, siteId);
+      const docRef = getDocRef(TYPOGRAPHY, siteAndUser.userId, siteAndUser.siteId);
       await setDoc(docRef, typography);
       return constructResponse<SiteTypography>(typography, httpStatusCodes.OK)
     } catch (err) {
@@ -157,8 +154,8 @@ function sitesController() {
     }
   }
 
-  async function deleteTypography(userId: string, siteId: string): Promise<void> {
-    const typography =  getDocRef(TYPOGRAPHY, userId, siteId);
+  async function deleteTypography(siteAndUser: SiteAndUser): Promise<void> {
+    const typography =  getDocRef(TYPOGRAPHY, siteAndUser.userId, siteAndUser.siteId);
     await deleteDoc(typography);
   }
 
@@ -186,6 +183,13 @@ function sitesController() {
     return constructResponse<Site>(site, httpStatusCodes.OK);
   }
 
+  async function createPreview(siteAndUser: SiteAndUser): Promise<Response> {
+    const fileService = new FileService();
+    const pageService = new PagesService(databaseRepository);
+    const sitePages = await siteService.previewSite( siteAndUser, pageService, fileService);
+    return constructResponse<FolderAndPage[]>(sitePages, httpStatusCodes.OK);
+  }
+
   return { 
     getSites,
     getSiteMaterialColours,
@@ -198,6 +202,7 @@ function sitesController() {
     getTypography,
     saveTypography,
     publishSite,
+    createPreview,
   };
 }
 

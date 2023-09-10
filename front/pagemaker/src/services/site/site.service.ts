@@ -9,6 +9,7 @@ import { useSiteStore } from '@/stores/site.store';
 import { FileUploadService } from '../fileUpload/fileUpload.service';
 import { axiosClient, type ResponseError } from '../httpService';
 import { AxiosRequestConfig } from 'axios';
+import { FolderAndPage } from '@/classes/sites/site/folderAndPage';
 
 const TIMEOUT = 100000;
 
@@ -213,6 +214,22 @@ function siteService() {
     
   }
 
+  async function previewSite(): Promise<FolderAndPage[]> {
+    const siteAndUser = getSiteAndUser();
+    try {
+      const axiosConfig: AxiosRequestConfig = {
+        timeout: TIMEOUT,
+        timeoutErrorMessage: 'preview site timed out!'
+      };
+      const result = await axiosClient().post<SiteAndUser, FolderAndPage[]>(`${getRoute(siteAndUser)}/preview/create`, siteAndUser, axiosConfig);
+      displayMessage('Site Preview Completed', 'success', 'Published');
+      return result;
+    } catch (err) {
+      displayMessage(err.msg, 'error', 'Failed');
+    }
+    
+  }
+
   function isSite(siteOrError: SiteEntity | { data: string, err: string, statusCode: number }): siteOrError is SiteEntity {
     return 'siteId' in siteOrError;
   } 
@@ -229,6 +246,7 @@ function siteService() {
     getDefaultTypography,
     createHostingSite,
     publishSite,
+    previewSite,
   }
 }
 

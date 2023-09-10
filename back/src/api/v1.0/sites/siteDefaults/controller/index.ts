@@ -37,8 +37,12 @@ function SiteDefaultsController() {
     }
 
     async function createMaterialColours(): Promise<Response> {
-      const data = await sitesController().getSiteMaterialColours('hDkHXv0i06dVCPmIfRKefti9t4p1', '7de7de6c-3a9d-8464-8493-91ffdaf21fdd');
-      const  materialColours = data.data as MaterialColours;
+      const siteAndUser = {
+        userId: 'hDkHXv0i06dVCPmIfRKefti9t4p1',
+        siteId: '7de7de6c-3a9d-8464-8493-91ffdaf21fdd',
+      };
+      const data = await sitesController().getSiteMaterialColours(siteAndUser);
+      const materialColours = data.data as MaterialColours;
       const coloursCollection = 'site-defaults';
       const docRef = doc(firebaseDb, coloursCollection, 'material-colours');
       const colourPalette: FirebaseMaterialColours  = { materialColours };

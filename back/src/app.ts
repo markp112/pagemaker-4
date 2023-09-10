@@ -35,10 +35,8 @@ const swaggerDoc = YAML.load('./src/api/swagger/_build/swagger.yaml');
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use((req, res, next) => {
 	const id = genReqId(req, res);
-	logger.setBindings( { pid: id });
-	logger.info({ url: req.url });
-	logger.info({ method: req.method });
-	logger.info( { params: req.params })
+	logger.setBindings( { pid: id, url: req.url, method: req.method, params: req.params });
+	logger.info('Route Called');
 	next();
 });
 app.use(pinoHttp({
@@ -54,7 +52,7 @@ app.use(cors());
 app.use('/api', router);
 
 app.use((req, res) => {
-	logger.error(res.statusMessage);
+	logger.error({error: JSON.stringify(res)});
 	return res.status(404).json({
 		message: 'Route not found',
 		status: httpStatusCodes.RESOURCE_NOT_FOUND,
