@@ -31,7 +31,6 @@ function dimensionToStyle(dimension: Dimension): string {
   return `${height}${width}`;
 }
 
-
 function getRegularStyles(style: Style) {
   let styleValue = `${style.style}:${style.value.value}`;
   if(style.value.unit) {
@@ -49,4 +48,10 @@ function getBorderStyle(borderStyle: BorderStyle) {
   return `${borderStyle.style}:${borderStyle.lineStyle} ${borderStyle.colour} ${borderStyle.value.value}${borderStyle.value.unit}`;
 }
 
-export { stylesToString, locationToStyle, dimensionToStyle };
+function addStyle(existingStyles: Style[], styleToAdd: Style): Style[] {
+  const newStyles = existingStyles.filter(style => style.style !== styleToAdd.style);
+  newStyles.push(styleToAdd);
+  return newStyles;
+}
+
+export { stylesToString, locationToStyle, dimensionToStyle, addStyle };

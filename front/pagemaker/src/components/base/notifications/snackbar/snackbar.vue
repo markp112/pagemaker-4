@@ -1,17 +1,17 @@
 <template>
   <span
-    class="snackbar-wrapper z-50 w-80 snackbar-show bg-site-surface h-36 grid grid-cols-8 grid-rows-4 gap-1 shadow-xl border-gray-500 border rounded-md"
+    class="snackbar-wrapper z-50 w-80 snackbar-show bg-site-surface h-24 grid grid-cols-8 grid-rows-4 gap-1 shadow-xl border-gray-500 border rounded-md"
     :class="{
       'snackbar-show': showSnackbar,
       'snackbar-hide': !showSnackbar
     ,getIndicatorColour}"
   >
-      <span class="col-start-1 row-start-1 row-span-4 h-full m-0 p-0" :class="getIndicatorColour">
+      <span class="col-start-1 col-span-2 row-start-1 row-span-4 h-full m-0 p-0" :class="getIndicatorColour">
       </span>
-      <span class="col-start-4 row-start-1 col-span-4 font-semibold">
+      <span class="col-start-5 row-start-1 col-span-4 font-semibold">
         {{ snackbarContent.title }}
       </span>
-      <span class="row-start-2 col-start-2 col-span-6">
+      <span class="row-start-2 col-start-3 col-span-4">
         {{ snackbarContent.message }}
       </span>
     </span>
@@ -91,7 +91,7 @@ export default defineComponent({
     opacity: 0;
   }
   to {
-    bottom: 10px;
+    bottom: 10%;
     opacity: 1;
   }
 }
@@ -102,29 +102,29 @@ export default defineComponent({
     opacity: 0;
   }
   to {
-    bottom: 10px;
+    bottom: 10%;
     opacity: 1;
   }
 }
 
 @-webkit-keyframes fadeout {
   from {
-    bottom: 10px;
+    bottom: 10%;
     opacity: 1;
   }
   to {
-    bottom: 0;
+    bottom: 0%;
     opacity: 0;
   }
 }
 
 @keyframes fadeout {
   from {
-    bottom: 10px;
+    bottom: 10%;
     opacity: 1;
   }
   to {
-    bottom: 0;
+    bottom: 0%;
     opacity: 0;
   }
 }

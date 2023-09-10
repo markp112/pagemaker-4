@@ -18,7 +18,7 @@ s<template>
     />
     <Resize :is-active="isActive"
       :this-component="thisComponent"
-      @resize-started="resizeStarted($event)"
+      @resize-started="resizeStarted()"
       @resize-stopped="isSizing=!isSizing"
     />
   </div>
@@ -28,11 +28,12 @@ s<template>
 import { defineComponent, type PropType } from 'vue';
 import { useMouse } from '../classes/mouse/mouse';
 import resize from '@/components/base/resize/resize.vue';
-import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
+import { dimensionToStyle, locationToStyle, stylesToString, addStyle } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { UseDrag } from '@/composables/drag/drag';
+import { Style } from '../model/pageElement/pageElement';
 
 export default  defineComponent({
   name: 'imageComponent',
@@ -69,7 +70,7 @@ export default  defineComponent({
 
   methods: {
 
-    resizeStarted(event: MouseEvent ) {
+    resizeStarted() {
       this.isSizing = true;
     },
       
@@ -90,11 +91,17 @@ export default  defineComponent({
     },
 
     onDragEnd() {
+      const positionAbsolute: Style = {
+        style: 'position',
+        value: { value: 'absolute' }
+      };
+      const styles = (<ImageElement>this.thisComponent).container.styles;
+      (<ImageElement>this.thisComponent).container.styles = addStyle(styles, positionAbsolute);
       this.thisComponent.classDefinition = this.useDrag.onDragEnd(this.thisComponent.classDefinition);
     },
 
     getDimensions(): string {
-      let dimension = '' 
+      let dimension = '';
       if(this.thisComponent.dimension) {
         dimension = dimensionToStyle(this.thisComponent.dimension);
       }

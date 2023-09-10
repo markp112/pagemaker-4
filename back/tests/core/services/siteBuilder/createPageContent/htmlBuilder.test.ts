@@ -31,8 +31,9 @@ describe('htmlBuilder', () => {
     const tag = htmlBuilder.createTag('div')
       .withStyle([COLOR])
       .withStyle([{style: 'font-size', value: { value: '12', unit: 'px'}}])
+      .withStyle([{style: 'position', value: { value: 'absolute' }}])
       .build();
-    expect(tag).toBe(`<div style="color:${VALUE};font-size:12px;"></div>`);
+    expect(tag).toBe(`<div style="color:${VALUE};font-size:12px;position:absolute;"></div>`);
   });
 
   it('should add a property to a tag if present', () => {

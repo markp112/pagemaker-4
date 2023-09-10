@@ -99,7 +99,8 @@ type StyleTags =
   | 'background-size'
   | 'background-repeat'
   | 'padding'
-  | 'transparency';
+  | 'transparency'
+  | 'position';
 
 type Style =  {
   style: StyleTags | CssStyleTypes;

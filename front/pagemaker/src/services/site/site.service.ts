@@ -8,6 +8,9 @@ import { displayMessage } from '@/common/displayMessage';
 import { useSiteStore } from '@/stores/site.store';
 import { FileUploadService } from '../fileUpload/fileUpload.service';
 import { axiosClient, type ResponseError } from '../httpService';
+import { AxiosRequestConfig } from 'axios';
+
+const TIMEOUT = 100000;
 
 function siteService() {
   const BASE_ROUTE = '/sites/';
@@ -197,7 +200,11 @@ function siteService() {
   async function publishSite() {
     const siteAndUser = getSiteAndUser();
     try {
-      const result = await axiosClient().post<SiteAndUser, SiteEntity>(`${getRoute(siteAndUser)}/publish`, siteAndUser);
+      const axiosConfig: AxiosRequestConfig = {
+        timeout: TIMEOUT,
+        timeoutErrorMessage: 'publish site timed out!'
+      };
+      const result = await axiosClient().post<SiteAndUser, SiteEntity>(`${getRoute(siteAndUser)}/publish`, siteAndUser, axiosConfig);
       displayMessage('Site Published', 'success', 'Published');
       return result;
     } catch (err) {
