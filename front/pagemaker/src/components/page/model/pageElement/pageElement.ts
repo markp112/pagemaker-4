@@ -88,7 +88,8 @@ type StyleTags =
   | 'padding'
   | 'transparency'
   | 'top'
-  | 'left';
+  | 'left'
+  | 'position';
 
 type Style =  {
   style: StyleTags | CssStyleTypes;
