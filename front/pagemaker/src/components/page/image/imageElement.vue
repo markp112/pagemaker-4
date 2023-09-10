@@ -96,12 +96,12 @@ export default  defineComponent({
         value: { value: 'absolute' }
       };
       const styles = (<ImageElement>this.thisComponent).container.styles;
-        (<ImageElement>this.thisComponent).container.styles = addStyle(styles, positionAbsolute);
+      (<ImageElement>this.thisComponent).container.styles = addStyle(styles, positionAbsolute);
       this.thisComponent.classDefinition = this.useDrag.onDragEnd(this.thisComponent.classDefinition);
     },
 
     getDimensions(): string {
-      let dimension = '' 
+      let dimension = '';
       if(this.thisComponent.dimension) {
         dimension = dimensionToStyle(this.thisComponent.dimension);
       }
