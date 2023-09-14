@@ -33,6 +33,7 @@ app.use((req, res, next) => {
 
 const swaggerDoc = YAML.load('./src/api/swagger/_build/swagger.yaml');
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
+app.use(express.static('public'));
 app.use((req, res, next) => {
 	const id = genReqId(req, res);
 	logger.setBindings( { pid: id, url: req.url, method: req.method, params: req.params });
@@ -52,7 +53,7 @@ app.use(cors());
 app.use('/api', router);
 
 app.use((req, res) => {
-	logger.error({error: JSON.stringify(res)});
+	logger.error({ error: res.statusMessage });
 	return res.status(404).json({
 		message: 'Route not found',
 		status: httpStatusCodes.RESOURCE_NOT_FOUND,

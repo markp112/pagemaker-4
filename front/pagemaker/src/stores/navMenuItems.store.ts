@@ -10,6 +10,7 @@ export const useNavMenuItemStore = defineStore({
   state: () => {
     return {
       _navMenuItems: [] as menuItems,
+      _isHideMenubar: false,
     }
   },
 
@@ -17,6 +18,10 @@ export const useNavMenuItemStore = defineStore({
     getMenuItems: (state) => {
       return state._navMenuItems;
     },
+
+    getIsHideMenubar: (state) => {
+      return state._isHideMenubar;
+    }
   },
   
   actions: {
@@ -32,6 +37,11 @@ export const useNavMenuItemStore = defineStore({
         console.log(err);
         throw(err);
       }
-    }
+    },
+
+    setIsHideMenubar(hide: boolean) {
+      this._isHideMenubar = hide;
+    },
+
   }
 });

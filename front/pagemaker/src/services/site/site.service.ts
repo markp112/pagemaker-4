@@ -8,7 +8,7 @@ import { displayMessage } from '@/common/displayMessage';
 import { useSiteStore } from '@/stores/site.store';
 import { FileUploadService } from '../fileUpload/fileUpload.service';
 import { axiosClient, type ResponseError } from '../httpService';
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { FolderAndPage } from '@/classes/sites/site/folderAndPage';
 
 const TIMEOUT = 100000;
@@ -20,6 +20,7 @@ function siteService() {
   const store = useSiteStore();
   const getRoute = (siteAndUser: SiteAndUser) => `${BASE_ROUTE}${siteAndUser.userId}/${siteAndUser.siteId}`;
   const getHostingRoute = (userAndSiteName: UserAndSiteName) => `${HOSTING_ROUTE}${userAndSiteName.userId}/${userAndSiteName.siteName}`;
+  const getSiteAndUserFromSite = (siteData: SiteData): SiteAndUser => {  return { userId: siteData.site.userId, siteId: siteData.site.siteId }};
 
   async function getSiteMaterialColours(siteAndUser: SiteAndUser): Promise<void> {
     try {
@@ -126,10 +127,7 @@ function siteService() {
 
   async function saveNewSite(siteData: SiteData): Promise<void> {
     try {
-      const siteAndUser: SiteAndUser = {
-        siteId: siteData.site.siteId,
-        userId: siteData.site.userId,
-      };
+      const siteAndUser = getSiteAndUserFromSite(siteData);
       const updatedSite = await axiosClient().post<SiteEntity, SiteEntity>(getRoute(siteAndUser), siteData.site);
       siteAndUser.siteId = updatedSite.siteId;
       store.setSite(updatedSite);
@@ -147,10 +145,7 @@ function siteService() {
 
   async function saveExistingSite(siteData: SiteData): Promise<void> {
     try {
-      const siteAndUser: SiteAndUser = {
-        siteId: siteData.site.siteId,
-        userId: siteData.site.userId,
-      };
+      const siteAndUser = getSiteAndUserFromSite(siteData);
       if (!siteData.isSiteSaved) {
         await axiosClient().put<SiteEntity, SiteEntity>(getRoute(siteAndUser), siteData.site);
         await axiosClient().put<SiteEntity, SiteEntity>(getRoute(siteAndUser), siteData.site);
@@ -227,7 +222,20 @@ function siteService() {
     } catch (err) {
       displayMessage(err.msg, 'error', 'Failed');
     }
-    
+  }
+
+  async function previewPage(filename: string): Promise<void> {
+    const siteAndUser = getSiteAndUser();
+    try {
+      const axiosConfig: AxiosRequestConfig = {
+          responseType: 'text',
+      };
+      const content = await axiosClient().get<string>(`${getRoute(siteAndUser)}/preview-page/${filename}`, axiosConfig);
+      window.open(content, '_blank');
+      console.log('%c⧭', 'color: #e50000', content);
+    } catch (err) {
+      displayMessage(err.msg, 'error', 'Preview Failed');
+    }
   }
 
   function isSite(siteOrError: SiteEntity | { data: string, err: string, statusCode: number }): siteOrError is SiteEntity {
@@ -247,6 +255,7 @@ function siteService() {
     createHostingSite,
     publishSite,
     previewSite,
+    previewPage,
   }
 }
 

@@ -1,7 +1,7 @@
 
 <template>
   <main class="w-screen flex flex-col bg-site-background text-site-primary-dark">
-    <Navbar :nav-menu-items="getMenuItems()"
+    <Navbar :nav-menu-items="getMenuItems()" v-if="showMenuBar"
       @nav-menu-clicked="navMenuClicked"
     />
     <div class="w-98 ml-4">
@@ -70,10 +70,14 @@ export default defineComponent({
     //     }
     //   }
     // }
+  
     await this.store.fetchMenuItems(true);
   },
 
   computed: {
+    showMenuBar() {
+      return this.store.getIsHideMenubar;
+    }
   },
   
   methods: {

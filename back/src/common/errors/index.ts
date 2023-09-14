@@ -68,6 +68,14 @@ class FolderDoesNotExist extends DomainError {
   }
 }
 
+class FileNotFoundError extends DomainError {
+  constructor(filename: string) {
+    const error = pageMakerErrorCodes.FILE_NOT_FOUND_ERROR;
+    error.msg = `${error.msg} at ${filename}`;
+    super(error.title, error.code, error.msg);
+  }
+}
+
 class RequiredParamIsMissingError extends DomainError {
   constructor(paramaterName: string) {
     const error = pageMakerErrorCodes.MISSING_REQUIRED_PARAMETER;
@@ -85,5 +93,6 @@ export {
   BadRequest,
   SiteExists,
   FolderDoesNotExist,
+  FileNotFoundError,
   RequiredParamIsMissingError,
 };

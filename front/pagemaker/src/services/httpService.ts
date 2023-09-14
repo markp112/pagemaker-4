@@ -44,16 +44,18 @@ function getRoute(path: string): string {
   return `${import.meta.env.VITE_BACKEND_API}${import.meta.env.VITE_API}${import.meta.env.VITE_API_VERSION}${path}`;
 }
 
-async function performGet<T>(path: string): Promise<T> {
+async function performGet<T>(path: string, config: AxiosRequestConfig): Promise<T> {
   const route = getRoute(path);
   try {
-    const response = await backEndClient.get(route, {
-      headers: {
-        'Authorization': `Bearer ${getToken()}`,
-      }
-    });
+    const configOptions = config;
+    configOptions.headers = {...config?.headers, 'Authorization': `Bearer ${getToken()}`};
+    console.log('%c⧭', 'color: #733d00', configOptions);
+    const response = await backEndClient.get(route, configOptions);
     if (response.status !== 200) {
       displayMessage(response.data.data.err, 'error', 'Failed');
+    }
+    if (configOptions.responseType === 'text') {
+      return <T>response.data;
     }
     return <T>response.data.data;
   } catch (err) {
@@ -138,8 +140,8 @@ async function performDelete(path: string, config: AxiosRequestConfig = {}): Pro
 
 function  axiosClient() {
 
-  async function get<T>(path: string): Promise<T> {
-    return performGet<T>(path);
+  async function get<T>(path: string, config: AxiosRequestConfig = {}): Promise<T> {
+    return performGet<T>(path, config);
   }
 
   async function post<T, U>(path: string, payload: T, config: AxiosRequestConfig = {}): Promise<U> {
