@@ -7,11 +7,18 @@
     <h2 class="col-span-2 font-semibold text-2xl">
       {{ pageTitle }} Page
     </h2>
-    <BaseButton button-type="primary" 
+    <BaseButton buttonType="primary" 
       size="large"
-      @on-click="savePage"
+      @onClick="savePage"
     >
       Save
+    </BaseButton>
+    <BaseButton buttonType="primary" 
+      size="large"
+      @on-click="previewPage"
+      icon-name="preview-32.png"
+    >
+      Preview
     </BaseButton>
   </div>
   <div class="top-32 fixed z-50">
@@ -183,6 +190,10 @@ const trashCan: Icon = {
         };
         this.pageBuilderService.setActiveElement(payload.payload as ActiveElements);
         this.handleButtonClick(payload);
+      },
+
+      previewPage() {
+        
       }
     },
 

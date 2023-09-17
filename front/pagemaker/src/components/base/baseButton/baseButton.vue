@@ -1,120 +1,96 @@
 <template>
-  <span :class="getClasses" @click.stop="buttonClick($event)" class="bg-site ">
-    <slot />
+    <span :class="getClasses()" @click.stop="buttonClick($event)" class="bg-site ">
+      <slot />
+      <IconImage v-if="iconName" :icon-image="getIcon()"/>
   </span>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+<script lang="ts" setup>
+import { onMounted } from 'vue';
+import { Icon } from '@/components/utility/icon/model/model';
+import IconImage from '@/components/utility/icon/icon.vue';
 
 export type ButtonTypes = 'primary' | 'secondary' | 'default';
 export type Variants = 'solid' | 'outline' | 'text';
 export type ButtonSize = 'small' | 'medium' | 'large';
 export type ButtonShape = 'rectangular' | 'circle';
 
-export default defineComponent({
-  name: 'BaseButton',
+const sizeMap = {
+  small_rectangular: 'h-6 w-auto px-2 text-xs',
+  small_circle: 'h-8 w-8 text-xs',
+  medium_rectangular: 'h-8 w-auto px-4 text-sm',
+  medium_circle: 'w-12 h-12 text-sm',
+  large_rectangular: 'h-10 w-auto px-6 text-md',
+  large_circle: 'h-16 w-16 text-md',
+};
 
-  emits: ['onClick'],
 
-  props: {
-    buttonType: {
-      type: String as PropType<ButtonTypes>,
-      default: (): ButtonTypes => {
-        return 'default';
-      },
-    },
-    disabled: { default: false },
-    variant: {
-      type: String,
-      default:(): Variants => {
-        return 'solid';
-      },
-    },
-    size: {
-      type: String as PropType<ButtonSize>,
-      default: (): ButtonSize => {
-        return 'medium';
-      }
-    },
-    buttonShape: {
-      type: String as PropType<ButtonShape>,
-      default: (): ButtonShape => {
-        return 'rectangular';
-      },
-    },
-  },
+  const emits = defineEmits(['onClick']);
 
-  data() {
-    return {
-      colour: '',
-    }
-  },
+  const props = defineProps <{
+    buttonType: ButtonTypes,
+    disabled?: boolean,
+    variant?: Variants,
+    size?: ButtonSize,
+    buttonShape?: ButtonShape,
+    iconName?: string,
+  }> ()
+  
+  onMounted(() => {
+    getStyling();
+  })
 
-  computed: {
-
-    getSize(): string {
-      if (this.size === 'small' && this.buttonShape === 'rectangular') {
-        return 'h-6 w-auto px-2 text-xs';
-      }
-      if (this.size === 'small' && this.buttonShape === 'circle') {
-        return 'h-8 w-8 text-xs';
-      }
-      if (this.size === 'medium' && this.buttonShape === 'rectangular') {
-        return 'h-8 w-auto px-4 text-sm';
-      }
-      if (this.size === 'medium' && this.buttonShape === 'circle') {
-        return 'w-12 h-12 text-sm';
-      }
-      if (this.size === 'large' && this.buttonShape === 'rectangular') {
-        return 'h-10 w-auto px-6 text-md';
-      }
-      if (this.size === 'large' && this.buttonShape === 'circle') {
-        return 'h-16 w-16 text-md';
-      }
-      return 'h-10 w-24';
-    },
-
-    getStyling(): string {
-      const baseStyling = `${this.getSize} flex items-center justify-center p-2 border border-gray-400`;
-      const active = `cursor-pointer hover:bg-site-primary-dark text-site-surface hover:text-gray-200 transition ease-in-out delay-150`;
-      const activeOutline = `cursor-pointer hover:bg-border-${this.buttonType} hover:text-site-surface hover:bg-site-primary-dark`;
-      const activeText = `cursor-pointer hover:text-site-primary-dark text-site-${this.buttonType}`;
-      const inActiveText = `cursor-pointer hover:text-accent-1 text-gray-400`;
-      const style = this.getStyle();
-
-      if (this.disabled && this.variant !== 'text') {
-        return `bg-gray-200 text-dark ${baseStyling} ${style}`;
-      }
-      if (this.variant === 'solid') {
-        return `bg-site-primary-light text-site-surface ${baseStyling} ${active} shadow-md ${style}`;
-      }
-      if (this.variant === 'outline') {
-        return `border border-site-${this.buttonType}-light ${baseStyling} ${activeOutline} shadow-md ${style}`;
-      }
-      if (this.variant === 'text') {
-        return `text-md font-bold ${baseStyling} ${
-          this.disabled ? inActiveText : activeText
-        } ${style}`;
-      }
-      return ``;
-    },
-    
-    getClasses(): string {
-      return this.getStyling;
-    }
-  },
-
-  methods: {
-    buttonClick(event: MouseEvent): void {
-      this.$emit('onClick');
-    },
-    
-    getStyle(): string {
-      return this.buttonShape === 'circle'? `rounded-full` : 'rounded-md';
-    },
-
+  const getSize = (): string => {
+    const key = `${props.size}_${props.buttonShape ?? 'rectangular'}`;
+    return sizeMap[key];
   }
-})
+
+  const getStyling = (): string => {
+    const baseStyling = `${getSize()} flex items-center justify-center p-2 border border-gray-400`;
+    const active = `cursor-pointer hover:bg-site-primary-dark text-site-surface hover:text-gray-200 transition ease-in-out delay-150`;
+    const activeOutline = `cursor-pointer hover:bg-border-${props.buttonType} hover:text-site-surface hover:bg-site-primary-dark`;
+    const activeText = `cursor-pointer hover:text-site-primary-dark text-site-${props.buttonType}`;
+    const inActiveText = `cursor-pointer hover:text-accent-1 text-gray-400`;
+    const style = getStyle();
+
+    if (props.disabled && props.variant !== 'text') {
+      return `bg-gray-200 text-dark ${baseStyling} ${style}`;
+    }
+    if (props.variant === 'solid' || props.variant===undefined) {
+      return `bg-site-primary-light text-site-surface ${baseStyling} ${active} shadow-md ${style}`;
+    }
+    if (props.variant === 'outline') {
+      return `border border-site-${props.buttonType}-light ${baseStyling} ${activeOutline} shadow-md ${style}`;
+    }
+    if (props.variant === 'text') {
+      return `text-md font-bold ${baseStyling} ${
+        props.disabled ? inActiveText : activeText
+      } ${style}`;
+    }
+    return ``;
+  };
+    
+    const getClasses = (): string => {
+      return getStyling();
+    }
+
+    const buttonClick = (event: MouseEvent): void => {
+      emits('onClick');
+    }
+    
+    const getStyle = (): string => {
+      return props.buttonShape === 'circle'? `rounded-full` : 'rounded-md';
+    }
+
+    const getIcon = (): Icon => {
+      return {
+        classDef: '',
+        icon: props.iconName,
+        id: '',
+        tooltip: '',
+      }
+    } 
+
+
 </script>
   

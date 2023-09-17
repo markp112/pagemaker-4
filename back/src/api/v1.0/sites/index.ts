@@ -11,16 +11,11 @@ import { httpStatusCodes } from '@api/httpStatusCodes';
 import { SiteAndUser } from '@common/models/siteAndUser';
 import { SiteEntity } from '@core/entities/site/site.entity';
 import { logger } from '@logger/pino';
+import { fetchSiteAndUser } from '@common/functions/userAndSiteId';
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
 const sitePathBase = (collectionName: string) => `${ROUTE_PATH}/:userId/:siteId/${collectionName}`;
-const fetchSiteAndUser = (req): SiteAndUser => {
-  return {
-    siteId: req.params.siteId,
-    userId: req.params.userId
-  }
-};
 sitesRouter.use(ROUTE_PATH, siteDefaultsRouter);
 
 sitesRouter
