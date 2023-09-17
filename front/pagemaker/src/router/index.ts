@@ -8,6 +8,7 @@ import commandEditor from '@/views/admin/commandEditor/commandEditor.vue';
 import commandStructure from '@/views/admin/commandEditor/commandStructure/commandStructure.vue';
 import PlainLayout from '@/layouts/plain.vue';
 import site from '@/views/site/site.vue';
+import renderHtml from '@/components/page/renderHtml/renderHtml.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +52,16 @@ const router = createRouter({
       component: site, 
       meta: {
         breadcrumb: [{ name: 'sites', link: '/sites' }, { name: 'site'}],
+        layout: PlainLayout,
+      }
+    },
+    {
+      path: '/renderPage/:serverContent',
+      name: 'renderPage',
+      props: true,
+      component: renderHtml,
+      meta: {
+        breadcrumb: [{ name: 'site', link: '/site' }],
         layout: PlainLayout,
       }
     },

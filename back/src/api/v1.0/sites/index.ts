@@ -10,11 +10,17 @@ import { constructResponse } from '@common/functions/constructResponse';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { SiteAndUser } from '@common/models/siteAndUser';
 import { SiteEntity } from '@core/entities/site/site.entity';
+import { logger } from '@logger/pino';
 
 const sitesRouter = express.Router();
 const ROUTE_PATH = '/sites';
 const sitePathBase = (collectionName: string) => `${ROUTE_PATH}/:userId/:siteId/${collectionName}`;
-
+const fetchSiteAndUser = (req): SiteAndUser => {
+  return {
+    siteId: req.params.siteId,
+    userId: req.params.userId
+  }
+};
 sitesRouter.use(ROUTE_PATH, siteDefaultsRouter);
 
 sitesRouter
@@ -34,10 +40,9 @@ sitesRouter
   })
     
   .get(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
-    const userId = req.params.userId;
-    const siteId = req.params.siteId;
+    const siteAndUser = fetchSiteAndUser(req);
     try {
-      const site = await sitesController().getSite(userId, siteId);
+      const site = await sitesController().getSite(siteAndUser);
       const response = constructResponse(site, httpStatusCodes.OK);
       res.status(response.status).send(response);
     } catch (error) {
@@ -47,10 +52,9 @@ sitesRouter
   })
 
   .get(sitePathBase('materialcolours'), async (req, res) => {
-    const userId = req.params.userId;
-    const siteId = req.params.siteId;
+    const siteAndUser = fetchSiteAndUser(req);
     try {
-      const response = await sitesController().getSiteMaterialColours(userId, siteId);
+      const response = await sitesController().getSiteMaterialColours(siteAndUser);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -61,9 +65,8 @@ sitesRouter
   .post(sitePathBase('materialcolours'), async (req, res) => {
     try {
       const materialcolours = req.body as MaterialColours;
-      const userId = req.params.userId;
-      const siteId = req.params.siteId;
-      const response = await sitesController().saveMaterialColours(userId, siteId, materialcolours);
+      const siteAndUser = fetchSiteAndUser(req);
+      const response = await sitesController().saveMaterialColours(siteAndUser, materialcolours);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -73,10 +76,9 @@ sitesRouter
   })
 
   .get(sitePathBase('colourpalette'), async (req, res) => {
-    const userId = req.params.userId;
-    const siteId = req.params.siteId;
+    const siteAndUser = fetchSiteAndUser(req);
     try {
-      const response = await sitesController().getSiteColourPalette(userId, siteId);
+      const response = await sitesController().getSiteColourPalette(siteAndUser);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -86,10 +88,9 @@ sitesRouter
 
   .post(sitePathBase('colourpalette'), async (req, res) => {
     try {
-      const userId = req.params.userId;
-      const siteId = req.params.siteId;
+      const siteAndUser = fetchSiteAndUser(req);
       const colourPalette: ColourSwatches = req.body;
-      const response = await sitesController().saveColourPalette(userId, siteId, colourPalette);
+      const response = await sitesController().saveColourPalette(siteAndUser, colourPalette);
       res.status(response.status).send(response);
     }
     catch (error) {
@@ -99,10 +100,9 @@ sitesRouter
   })
 
   .get(sitePathBase('typography'), async (req, res) => {
-    const userId = req.params.userId;
-    const siteId = req.params.siteId;
+    const siteAndUser = fetchSiteAndUser(req);
     try {
-      const response = await sitesController().getTypography(userId, siteId);
+      const response = await sitesController().getTypography(siteAndUser);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -112,10 +112,9 @@ sitesRouter
 
   .post(sitePathBase('typography'), async (req, res) => {
     try {
-      const userId = req.params.userId;
-      const siteId = req.params.siteId;
+      const siteAndUser = fetchSiteAndUser(req);
       const typography: SiteTypography = req.body;
-      const response = await sitesController().saveTypography(userId, siteId, typography);
+      const response = await sitesController().saveTypography(siteAndUser, typography);
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -149,9 +148,8 @@ sitesRouter
 
   .delete(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
     try {
-      const userId = req.params.userId;
-      const siteId = req.params.siteId;
-      const response = await sitesController().deleteSite(userId, siteId);
+      const siteAndUser = fetchSiteAndUser(req);
+      const response = await sitesController().deleteSite(siteAndUser);
       res.status(response.status).send();
     } catch (err) {
       const error = err as DomainError;
@@ -161,10 +159,7 @@ sitesRouter
   })
 
   .post(sitePathBase('publish'), async (req, res) => {
-    const siteAndUser: SiteAndUser = {
-      siteId: req.params.siteId,
-      userId: req.params.userId,
-    };
+    const siteAndUser = fetchSiteAndUser(req);
     try {
       const response = await sitesController().publishSite(siteAndUser);
       res.status(response.status).send(response);
@@ -173,7 +168,21 @@ sitesRouter
       const response = error.getResponse();
       res.status(error._status).send(response);
     }
+  })
 
+  
+  .post(sitePathBase('preview/create'), async (req, res) => {
+    const siteAndUser = fetchSiteAndUser(req);
+    logger.info(`${siteAndUser}`)
+    try {
+      const response = await sitesController().createPreview(siteAndUser);
+      res.status(response.status).send(response);
+    } catch (error) {
+      console.log('%c⧭', 'color: #cc0088', error);
+      req.log.error(error)
+      const response = error.getResponse();
+      res.status(error._status).send(response);
+    }
   })
 
 export { sitesRouter };

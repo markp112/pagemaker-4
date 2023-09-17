@@ -13,14 +13,17 @@ const genReqId = (req?: Request, res?: Response) => {
 };
 
 const logger = pino({
-  level: process.env.PINO_LOG_LEVEL || 'info',
+  level: process.env.PINO_LOG_LEVEL ?? 'info',
   formatters: {
     bindings: (bindings) => {
       return {
         reqId: bindings.pid,
         node_version: process.version,
         hostName: bindings.hostname,
-        level: bindings.label
+        level: bindings.label,
+        method: bindings.method,
+        params: bindings.params,
+        url: bindings.url,
       };
     },
       level: (label) => {

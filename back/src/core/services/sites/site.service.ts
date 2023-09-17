@@ -54,14 +54,8 @@ class SiteService implements SiteInterface {
       siteAndUser: SiteAndUser
     ): Promise<SiteEntity> {
     try {
-      const publishFolder = this.getPublishFolder(siteAndUser);
       const site = await this.fetchSite(siteAndUser);
-      const sitePages = await pageService.fetchPages(siteAndUser.siteId);
-      const siteBuilder = new SiteBuilderService(sitePages, publishFolder);
-      const pageBuilder = new PageBuilder();
-      let webSiteContent = siteBuilder.createSitePages(pageBuilder);
-      webSiteContent = await this.createSystemPath(webSiteContent, fileService);
-      await this.writeWebSiteContent(webSiteContent);
+      let webSiteContent = await this.createWebPages(siteAndUser, pageService, fileService);
       webSiteContent = await this.createZippedFiles(webSiteContent, fileService);
       webSiteContent = await this.createFileHashes(webSiteContent, fileService);
       return await hostingService.publishSiteEntity(site, webSiteContent);
@@ -69,6 +63,28 @@ class SiteService implements SiteInterface {
       logger.error(`Error: --> ${JSON.stringify(error)}`)
       handleError(error);
     }
+  }
+
+  async previewSite(siteAndUser: SiteAndUser,  pageService: PagesInterface, 
+      fileService: FileSystemInterface,): Promise<FolderAndPage[]> {
+    try { 
+      return await this.createWebPages(siteAndUser, pageService, fileService);
+    } catch (error) {
+      logger.error(`Error: --> ${JSON.stringify(error)}`)
+      handleError(error);
+    }
+  }
+
+  async createWebPages(siteAndUser: SiteAndUser, pageService: PagesInterface, fileService: FileSystemInterface): Promise<FolderAndPage[]> {
+    const publishFolder = this.getPublishFolder(siteAndUser);
+    await fileService.deleteFilesInFolder(publishFolder);
+    const sitePages = await pageService.fetchPages(siteAndUser.siteId);
+    const siteBuilder = new SiteBuilderService(sitePages, publishFolder);
+    const pageBuilder = new PageBuilder();
+    let webSiteContent = siteBuilder.createSitePages(pageBuilder);
+    webSiteContent = await this.createSystemPath(webSiteContent, fileService);
+    await this.writeWebSiteContent(webSiteContent);
+    return webSiteContent;
   }
 
   private getPublishFolder(siteAndUser: SiteAndUser): string {

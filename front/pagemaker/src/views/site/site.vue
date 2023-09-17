@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-12 mt-8 bg-gray-50">
-    <div class=" h-full col-start-1 col-span-4 row-start-1">
+  <div class="grid grid-cols-12 grid-rows-2 mt-8 bg-gray-50">
+    <div class="col-start-1 col-span-4 row-start-1">
       <h2 class="page-heading mt-4 ml-32">{{ site.name }}</h2>
       <div class="ml-32 mt-8 p-4 rounded-lg grid grid-cols-1 gap-2 grid-rows-8 h-86 text-lg text-site-primary border border-gray-300 bg-white relative">
         <img :src="getImageUrl('responsive-48.png')" class="absolute top-4 right-4"/>
@@ -16,14 +16,21 @@
     </div>
     <div class="col-start-5 row-start-1 col-span-6">
       <div class="grid grid-cols-12 grid-rows-4 gap-1">
-        <div class="col-start-4 row-start-2 relative">
-            <button class=" big-button "
-              @click="isShowSiteName=true"
-            >
-            <span class="mt-4 text-lg font-bold">Create Hosting Site</span>
-          </button>
-          <SiteInput :isShowMe="isShowSiteName" @onOkClick="createSite($event)" @onCancel="isShowSiteName=false" class="z-50"/>
-        </div>
+        <div class="col-start-2 row-start-2 relative">
+          <button class="big-button"
+            @click="previewSite()"
+          >
+          <span class="mt-4 text-lg font-bold">Preview Site</span>
+        </button>
+      </div>
+      <div class="col-start-5 row-start-2 relative">
+        <button class="big-button"
+          @click="isShowSiteName=true"
+        >
+          <span class="mt-4 text-lg font-bold">Create Hosting Site</span>
+        </button>
+        <SiteInput :isShowMe="isShowSiteName" @onOkClick="createSite($event)" @onCancel="isShowSiteName=false" class="z-50"/>
+      </div>
         <div class="col-start-8 row-start-2 relative">
           <button class=" big-button "
             @click="publishSite()"
@@ -32,8 +39,18 @@
         </button>
       </div>
     </div>
-  </div>
-
+    </div>
+    <div class="grid col-start-4 row-start-2">
+      <div class="flex flex-col">
+        <h3 class="mb-2 font-semibold">Pages for preview</h3>
+        <ul class="grid row-start-2">
+          <li v-for="page in previewedPages" class="p-1 flex flex-row rounded-md hover:bg-site-primary-dark hover:text-site-background" :key="page.pageName">
+            <span  class="justify-start w-6/12">{{ page.pageName }}</span>
+            <Iconimage :iconImage="iconPreview" @iconClick="previewPage(page)" class="justify-end items-start"></Iconimage>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,17 +60,37 @@ import { getSiteAndUser } from '@/classes/siteAndUser/siteAndUser';
 import { NEW_SITE,  type SiteEntity } from '@/classes/sites/site';
 import { displayMessage } from '@/common/displayMessage';
 import { siteService } from '@/services/site/site.service';
-import { onMounted, ref } from 'vue';
+import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
+import { onMounted, onUpdated, ref } from 'vue';
 import { getImageUrl } from '@/common/getIcon';
 import SiteInput from './siteInput/siteInput.vue';
+import { FolderAndPage } from '@/classes/sites/site/folderAndPage';
+import Iconimage from '@/components/utility/icon/icon.vue';
+import { Icon } from '@/components/utility/icon/model/model';
+import router from '@/router';
+
+const HIDE_MENU_BAR = true;
 
 const site = ref<SiteEntity>(NEW_SITE);
 const isShowSiteName = ref(false);
+const previewedPages = ref<FolderAndPage[]>();
+const navStore = useNavMenuItemStore();
+
+const iconPreview: Icon = {
+  icon: "preview-32.png",
+  id: '1',
+  tooltip: 'Preivew page',
+  classDef: ''
+}
 
 onMounted( async () => {
   const siteAndUser = getSiteAndUser();
   site.value = await siteService().fetchSite(siteAndUser);
-});
+})
+
+onUpdated(() => {
+  
+})
 
 const getUserAndSiteName = (siteName: string) => {
   const siteAndUser = getSiteAndUser();
@@ -74,8 +111,19 @@ const createSite = async (siteName: string) => {
   displayMessage('Site host created', 'success', 'Created');    
 };
 
-const publishSite = () => {
-  siteService().publishSite();
+const publishSite = async () => {
+  await siteService().publishSite();
+}
+
+const previewSite = async () => {
+  const pages = await siteService().previewSite();
+  previewedPages.value = pages;
+}
+
+const previewPage = (pageToRender: FolderAndPage) => {
+  const contentToRender = pageToRender.fileContent;
+  navStore.setIsHideMenubar(HIDE_MENU_BAR);
+  router.push({ name: 'renderPage', params: { serverContent: contentToRender }});
 }
 
 

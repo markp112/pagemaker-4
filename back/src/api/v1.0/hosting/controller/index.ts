@@ -4,6 +4,7 @@ import { sitesController } from '@api/v1.0/sites/controller';
 import { Response } from '@api/types';
 import { handleError } from '@errors/handleError';
 import { FirebaseHostingResponse } from '@core/services/firebase/dao/dao';
+import { SiteAndUser } from '@common/models/siteAndUser';
 
 function hostingController() {
 
@@ -21,7 +22,10 @@ function hostingController() {
   }
   
   async function updateSite(createdSite: FirebaseHostingResponse, params: UserAndSiteName): Promise<Response> {
-    const site = await sitesController().getSite(params.userId, params.siteId);
+    const siteAndUser: SiteAndUser = {
+      ...params
+    };
+    const site = await sitesController().getSite(siteAndUser);
     site.hostingDetails = createdSite;
     site.hostingCreated = Date.now();
     return await sitesController().saveSite(site, false);

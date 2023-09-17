@@ -1,7 +1,7 @@
 
 <template>
   <main class="w-screen flex flex-col bg-site-background text-site-primary-dark">
-    <Navbar :nav-menu-items="getMenuItems()"
+    <Navbar :nav-menu-items="getMenuItems()" v-if="isMenubarVisible"
       @nav-menu-clicked="navMenuClicked"
     />
     <div class="w-98 ml-4">
@@ -49,6 +49,7 @@ export default defineComponent({
       authService: auth(),
       toolbarWidth: 'w-2/12',
       toolbarHidden: false,
+      isMenubarVisible: true,
     }
   },
 
@@ -70,10 +71,18 @@ export default defineComponent({
     //     }
     //   }
     // }
+  
     await this.store.fetchMenuItems(true);
   },
 
+  beforeUpdate() {
+    this.isMenubarVisible = !this.store.getIsHideMenubar;
+  },
+
   computed: {
+    showMenuBar() {
+      this.isMenubarVisible = !this.store.getIsHideMenubar;
+    }
   },
   
   methods: {

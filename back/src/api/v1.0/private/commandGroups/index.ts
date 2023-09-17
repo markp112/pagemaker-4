@@ -4,6 +4,7 @@ import { Commands } from './controller/comands';
 import { sitesController } from '../../sites/controller';
 import { httpStatusCodes } from '@api/httpStatusCodes';
 import { ColourSwatches } from '@api/v1.0/sites/model/colourPalette';
+import { SiteAndUser } from '@common/models/siteAndUser';
 
 const commandGroupRouter = express.Router();
 const ROUTE_PATH = '/editor/command-buttons';
@@ -15,8 +16,12 @@ commandGroupRouter
       let response;
       let colourPalettes: ColourSwatches;
       const { siteId, userId } = { ...req.params };
+      const siteAndUser: SiteAndUser = {
+        siteId,
+        userId,
+      };
       if(userId !== IGNORE_USER_SITE_ID && siteId !== IGNORE_USER_SITE_ID) {
-        response = await sitesController().getSiteColourPalette(userId, siteId);
+        response = await sitesController().getSiteColourPalette(siteAndUser);
         if (response.status === httpStatusCodes.OK) {
           colourPalettes = response.data as unknown as ColourSwatches;
         }

@@ -1,5 +1,5 @@
 import { FirebaseError } from '@firebase/util';
-import { BadRequest, GenericError, InsufficientPermissions, InvalidArgument, ResourceNotFoundError, SiteExists } from '.';
+import { BadRequest, GenericError, InsufficientPermissions, InvalidArgument, ResourceNotFoundError, SiteExists, FileNotFoundError } from '.';
 import { Response } from '@api/types';
 import { logger } from '@logger/pino';
 import { AxiosError } from 'axios';
@@ -9,6 +9,7 @@ const errorMap = {
   'permission-denied': () => new InsufficientPermissions(),
   'invalid-argument': () => new InvalidArgument(), 
   'generic': (err: Error) => new GenericError(err.message),
+  'file not found': (err: Error) => new FileNotFoundError(err.message),
   'ERR_BAD_REQUEST': (err: Error) => new BadRequest(err.message),
   'Request failed with status code 409': () => new SiteExists(),
   'Request failed with status code 404': (err: Error) => new ResourceNotFoundError(err.message),

@@ -8,5 +8,10 @@ export const pageMakerErrorCodes = {
     msg: 'Required parameter <PARAMETER_NAME> is missing',
     code: 1002,
     title: 'Missing Parammeter',
+  },
+  FILE_NOT_FOUND_ERROR: {
+    msg: 'file does not exist',
+    code: 1003,
+    title: 'File does not exist error'
   }
 };

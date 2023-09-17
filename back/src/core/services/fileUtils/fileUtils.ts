@@ -6,21 +6,25 @@ import { pipeline } from 'node:stream';
 import { promisify } from 'util';
 import { FolderDoesNotExist } from '@errors/index';
 import { handleError } from '@errors/handleError';
+import { logger } from '@logger/pino';
 
 const readFileAsync = promisify(fs.readFile);
+type Folder = string;
 
 interface FileSystemInterface {
-  mkdir(dirToMake: string): Promise<void>;
-  isFolderExisting(folder: string): Promise<boolean>;
-  zipFile(file: string): Promise<string>;
-  zipFiles(files: string[]): Promise<string[]>;
-  readFile(filePath: string): Promise<Buffer>;
-  calculateFileSHA(filePath: string): Promise<string>;
+  copyFileToNewFolder(sourceFile: string, destinationFolder: Folder): Promise<void>;
+  deleteFilesInFolder(folderPath: Folder): Promise<void>;
+  calculateFileSHA(filePath: Folder): Promise<string>;
   getFileName(fileAndPath: string): string;
   getFileNameWithExtension(fileAndPath: string): string;
-  resolvePath(pathToResolve: string): string;
-  joinPath(pathToJoinTo: string, pathToJoinFrom: string);
+  isFolderExisting(folder: Folder): Promise<boolean>;
+  joinPath(pathToJoinTo: Folder, pathToJoinFrom: Folder): string;
+  mkdir(dirToMake: Folder): Promise<void>;
+  readFile(filePath: string): Promise<Buffer>;
   readStream(filePath: string): fs.ReadStream;
+  resolvePath(pathToResolve: string): string;
+  zipFile(file: string): Promise<string>;
+  zipFiles(files: string[]): Promise<string[]>;
 }
 
 class FileService implements FileSystemInterface {
@@ -29,7 +33,7 @@ class FileService implements FileSystemInterface {
     await fsPromises.mkdir(folderLocation, { recursive: true });
   }
 
-  async isFolderExisting(folder: string): Promise<boolean> {
+  async isFolderExisting(folder: Folder): Promise<boolean> {
     try {
       await fsPromises.access(folder);
       return true;
@@ -58,10 +62,10 @@ class FileService implements FileSystemInterface {
   }
 
   async readFile(filePath: string): Promise<Buffer> {
-  const fileAndPath = path.resolve(`${filePath}`);
-  return await fsPromises.readFile(fileAndPath);
+    const fileAndPath = path.resolve(`${filePath}`);
+    return await fsPromises.readFile(fileAndPath);
+  }
 
-}
   readStream(filePath: string): fs.ReadStream {
     const fileAndPath = path.resolve(`${filePath}`);
     return fs.createReadStream(fileAndPath);
@@ -71,7 +75,7 @@ class FileService implements FileSystemInterface {
     await fsPromises.writeFile(fileAndPath, content);
   }
 
-  resolvePath(pathToResolve: string): string {
+  resolvePath(pathToResolve: Folder): string {
     return path.resolve(pathToResolve);
   }
 
@@ -86,6 +90,14 @@ class FileService implements FileSystemInterface {
   joinPath(pathToJoinTo: string, pathToJoinFrom: string): string {
     return path.join(pathToJoinTo, pathToJoinFrom);
   }
+
+  async deleteFilesInFolder(folderPath: string) {
+    const files = await fsPromises.readdir(folderPath);
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      await fsPromises.unlink(filePath);
+    }
+  }
   
   async calculateFileSHA(filePath: string): Promise<string> {
     try {
@@ -96,6 +108,18 @@ class FileService implements FileSystemInterface {
     } catch (error) {
       handleError(error);
     }
+  }
+
+  async copyFileToNewFolder(sourceFile: string, destinationFolder: string): Promise<void> {
+      const file = path.parse(sourceFile).base;
+      const destFileAndPath = path.join(destinationFolder, file);
+      const isExisting = fsPromises.access(sourceFile);
+      logger.info(isExisting)
+      if (isExisting) {
+        await fsPromises.copyFile(sourceFile, destFileAndPath);
+      } else {
+        throw new Error('File not found');
+      }
   }
 }
 
