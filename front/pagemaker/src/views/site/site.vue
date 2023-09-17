@@ -69,6 +69,8 @@ import Iconimage from '@/components/utility/icon/icon.vue';
 import { Icon } from '@/components/utility/icon/model/model';
 import router from '@/router';
 
+const HIDE_MENU_BAR = true;
+
 const site = ref<SiteEntity>(NEW_SITE);
 const isShowSiteName = ref(false);
 const previewedPages = ref<FolderAndPage[]>();
@@ -116,7 +118,7 @@ const previewSite = async () => {
 
 const previewPage =async (pageToRender: FolderAndPage) => {
   const contentToRender = pageToRender.fileContent;
-  navStore.setIsHideMenubar(true);
+  navStore.setIsHideMenubar(HIDE_MENU_BAR);
   router.push({ name: 'renderPage', params: { serverContent: contentToRender }});
 
 }

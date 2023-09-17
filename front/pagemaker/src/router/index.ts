@@ -61,6 +61,7 @@ const router = createRouter({
       props: true,
       component: renderHtml,
       meta: {
+        breadcrumb: [{ name: 'site', link: '/site' }],
         layout: PlainLayout,
       }
     },
