@@ -6,7 +6,6 @@ import { pipeline } from 'node:stream';
 import { promisify } from 'util';
 import { FolderDoesNotExist } from '@errors/index';
 import { handleError } from '@errors/handleError';
-import { pageMakerErrorCodes } from '@errors/pagemakerErrors';
 import { logger } from '@logger/pino';
 
 const readFileAsync = promisify(fs.readFile);
@@ -93,14 +92,10 @@ class FileService implements FileSystemInterface {
   }
 
   async deleteFilesInFolder(folderPath: string) {
-    try {
-      const files = await fsPromises.readdir(folderPath);
-      for (const file of files) {
-        const filePath = path.join(folderPath, file);
-        await fsPromises.unlink(filePath);
-      }
-    } catch (error) {
-      throw error
+    const files = await fsPromises.readdir(folderPath);
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      await fsPromises.unlink(filePath);
     }
   }
   

@@ -8,7 +8,7 @@ import { displayMessage } from '@/common/displayMessage';
 import { useSiteStore } from '@/stores/site.store';
 import { FileUploadService } from '../fileUpload/fileUpload.service';
 import { axiosClient, type ResponseError } from '../httpService';
-import axios, { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import { FolderAndPage } from '@/classes/sites/site/folderAndPage';
 
 const TIMEOUT = 100000;

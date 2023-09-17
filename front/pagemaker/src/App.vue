@@ -81,7 +81,6 @@ export default defineComponent({
 
   computed: {
     showMenuBar() {
-      console.log('%c⧭', 'color: #00bf00', this.store.getIsHideMenubar)
       this.isMenubarVisible = !this.store.getIsHideMenubar;
     }
   },

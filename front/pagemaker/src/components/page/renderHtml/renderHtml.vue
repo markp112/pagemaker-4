@@ -16,7 +16,6 @@ const navStore = useNavMenuItemStore();
 
 onUnmounted(() => {
   navStore.setIsHideMenubar(HIDE_MENU_BAR);
-  console.log('%c⧭', 'color: #00bf00', navStore.getIsHideMenubar)
 })
 
 </script>

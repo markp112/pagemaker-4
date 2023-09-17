@@ -44,7 +44,7 @@
       <div class="flex flex-col">
         <h3 class="mb-2 font-semibold">Pages for preview</h3>
         <ul class="grid row-start-2">
-          <li v-for="page in previewedPages" class="p-1 flex flex-row rounded-md hover:bg-site-primary-dark hover:text-site-background">
+          <li v-for="page in previewedPages" class="p-1 flex flex-row rounded-md hover:bg-site-primary-dark hover:text-site-background" :key="page.pageName">
             <span  class="justify-start w-6/12">{{ page.pageName }}</span>
             <Iconimage :iconImage="iconPreview" @iconClick="previewPage(page)" class="justify-end items-start"></Iconimage>
           </li>
@@ -61,7 +61,7 @@ import { NEW_SITE,  type SiteEntity } from '@/classes/sites/site';
 import { displayMessage } from '@/common/displayMessage';
 import { siteService } from '@/services/site/site.service';
 import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUpdated, ref } from 'vue';
 import { getImageUrl } from '@/common/getIcon';
 import SiteInput from './siteInput/siteInput.vue';
 import { FolderAndPage } from '@/classes/sites/site/folderAndPage';
@@ -86,7 +86,11 @@ const iconPreview: Icon = {
 onMounted( async () => {
   const siteAndUser = getSiteAndUser();
   site.value = await siteService().fetchSite(siteAndUser);
-});
+})
+
+onUpdated(() => {
+  
+})
 
 const getUserAndSiteName = (siteName: string) => {
   const siteAndUser = getSiteAndUser();
@@ -116,11 +120,10 @@ const previewSite = async () => {
   previewedPages.value = pages;
 }
 
-const previewPage =async (pageToRender: FolderAndPage) => {
+const previewPage = (pageToRender: FolderAndPage) => {
   const contentToRender = pageToRender.fileContent;
   navStore.setIsHideMenubar(HIDE_MENU_BAR);
   router.push({ name: 'renderPage', params: { serverContent: contentToRender }});
-
 }
 
 

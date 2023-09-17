@@ -10,7 +10,6 @@ import { logger } from '@logger/pino';
 import { PageBuilder } from '../siteBuilder/createPageContent/constructPage';
 import { pagePublisher } from '../siteBuilder/createPageContent/publishPage/publishPage';
 import { FolderAndPage } from '../siteBuilder/createPageContent/publishPage/model';
-import { Site } from '@api/v1.0/sites/model/site';
 
 
 interface SiteInterface {
