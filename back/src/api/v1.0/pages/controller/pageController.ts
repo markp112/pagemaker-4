@@ -2,9 +2,8 @@ import { httpStatusCodes } from '@api/httpStatusCodes';
 import { Response } from '@api/types';
 import { constructResponse } from '@common/functions/constructResponse';
 import { handleError } from '@errors/handleError';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { firebaseDb } from '@fbase/initFirebase';
-import { Page } from '@core/services/pages/model';import { SiteAndPage } from '@common/models/siteAndUser';
+import { Page } from '@core/services/pages/model';
+import { SiteAndPage } from '@common/models/siteAndUser';
 import { PageService } from '@core/services/page/page.service';
 import { FirebaseRepository } from '@core/repositories/firebase/database/database.repository';
 

@@ -3,7 +3,6 @@ import { pagesController } from './controller/pagesController';
 import { pageController } from './controller/pageController';
 import { Guid } from '@common/classes/guid';
 import { fetchSiteAndPage, fetchSiteAndUser } from '@common/functions/userAndSiteId';
-import { logger } from '@logger/pino';
 import { Page } from '@core/services/pages/model';
 
 const pagesRouter = express.Router();

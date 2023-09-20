@@ -8,7 +8,6 @@ import { siteDefaultsRouter } from './siteDefaults'
 import { DomainError } from '@errors/index';
 import { constructResponse } from '@common/functions/constructResponse';
 import { httpStatusCodes } from '@api/httpStatusCodes';
-import { SiteAndUser } from '@common/models/siteAndUser';
 import { SiteEntity } from '@core/entities/site/site.entity';
 import { logger } from '@logger/pino';
 import { fetchSiteAndUser } from '@common/functions/userAndSiteId';
