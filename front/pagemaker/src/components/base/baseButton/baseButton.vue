@@ -46,7 +46,7 @@ const sizeMap = {
   }
   
   const getStyle = (): string => {
-    return props.buttonShape === 'circle'? `rounded-full` : 'rounded-md';
+    return props.buttonShape === 'circle' ? 'rounded-full' : 'rounded-md';
   }
 
   const getStyling = (): string => {
@@ -54,7 +54,7 @@ const sizeMap = {
     const active = 'cursor-pointer hover:bg-site-primary-dark text-site-surface hover:text-gray-200 transition ease-in-out delay-150';
     const activeOutline = `cursor-pointer hover:bg-border-${props.buttonType} hover:text-site-surface hover:bg-site-primary-dark`;
     const activeText = `cursor-pointer hover:text-site-primary-dark text-site-${props.buttonType}`;
-    const inActiveText = `cursor-pointer hover:text-accent-1 text-gray-400`;
+    const inActiveText = 'cursor-pointer hover:text-accent-1 text-gray-400';
     const style = getStyle();
     
     if (props.disabled && props.variant !== 'text') {
@@ -71,7 +71,7 @@ const sizeMap = {
         props.disabled ? inActiveText : activeText
       } ${style}`;
     }
-    return ``;
+    return '';
   };
   
   onMounted(() => {

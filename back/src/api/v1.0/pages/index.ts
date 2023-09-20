@@ -57,7 +57,7 @@ pagesRouter
       }
   })
 
-  .post(`${ROUTE_PATH}/page/preview`, async (req, res) => {
+  .post(`${ROUTE_PATH}/page/preview`, (req, res) => {
     const pageToPreview = req.body as Page;
     try {
       const response = pageController().previewPage(pageToPreview);
