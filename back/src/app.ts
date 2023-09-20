@@ -53,7 +53,7 @@ app.use(cors());
 app.use('/api', router);
 
 app.use((req, res) => {
-	logger.error({ error: res.statusMessage });
+	logger.error({ errorCode: httpStatusCodes.RESOURCE_NOT_FOUND, msg: 'Route not found error' });
 	return res.status(404).json({
 		message: 'Route not found',
 		status: httpStatusCodes.RESOURCE_NOT_FOUND,

@@ -7,11 +7,18 @@
     <h2 class="col-span-2 font-semibold text-2xl">
       {{ pageTitle }} Page
     </h2>
-    <BaseButton button-type="primary" 
+    <BaseButton buttonType="primary" 
       size="large"
-      @on-click="savePage"
+      @onClick="savePage"
     >
       Save
+    </BaseButton>
+    <BaseButton buttonType="primary" 
+      size="large"
+      @on-click="previewPage"
+      icon-name="preview-32.png"
+    >
+      Preview
     </BaseButton>
   </div>
   <div class="top-32 fixed z-50">
@@ -63,6 +70,7 @@ import icon from '@/components/utility/icon/icon.vue';
 import type { Icon } from '@/components/utility/icon/model/model';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
 import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import { PageService } from '@/services/page/page.service';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -98,6 +106,7 @@ const trashCan: Icon = {
         store: useNavMenuItemStore(),
         pageStore: usePageStore(),
         pageBuilderService: PageBuilderService(),
+        pageService: PageService(),
         pageTitle: '',
         menuItems: [] as NavMenuItem[],
         toolbarHidden: false,
@@ -183,6 +192,11 @@ const trashCan: Icon = {
         };
         this.pageBuilderService.setActiveElement(payload.payload as ActiveElements);
         this.handleButtonClick(payload);
+      },
+
+      async previewPage() {
+        const pageAsHtml = await this.pageService.previewPage();
+        this.$router.push({ name: 'renderPage', params: { serverContent: pageAsHtml }});
       }
     },
 

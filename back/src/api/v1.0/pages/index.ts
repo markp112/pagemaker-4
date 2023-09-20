@@ -1,8 +1,9 @@
 import express from 'express';
 import { pagesController } from './controller/pagesController';
 import { pageController } from './controller/pageController';
-import { Page } from '@core/services/pages/model';
 import { Guid } from '@common/classes/guid';
+import { fetchSiteAndPage, fetchSiteAndUser } from '@common/functions/userAndSiteId';
+import { Page } from '@core/services/pages/model';
 
 const pagesRouter = express.Router();
 const ROUTE_PATH = '/pages';
@@ -10,9 +11,9 @@ const ROUTE_PATH = '/pages';
 pagesRouter
 
   .get(`${ROUTE_PATH}/:userId/:siteId`, async (req, res) => {
-    const siteId = req.params.siteId;
+    const siteAndUser = fetchSiteAndUser(req);
     try {
-      const response = await pagesController().getPages(siteId);
+      const response = await pagesController().getPages(siteAndUser.siteId);
       res.status(response.status).send(response);
     } catch (error) {
         const response = error.getResponse();
@@ -23,10 +24,9 @@ pagesRouter
   .post(`${ROUTE_PATH}/:siteId/page/:pageId`, async (req, res) => {
     const pageContent = req.body as Page;
     try {
-      const siteId = req.params.siteId;
-      const pageId = req.params.pageId === '-1' ? Guid.newGuid() : req.params.pageId;
-      pageContent.pageId = pageId;
-      const response = await pageController().savePageContent(pageContent, siteId, pageId );
+      const siteAndPage = fetchSiteAndPage(req);
+      pageContent.pageId = siteAndPage.pageId === '-1' ? Guid.newGuid() : siteAndPage.pageId;
+      const response = await pageController().savePageContent(pageContent, siteAndPage );
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -37,9 +37,8 @@ pagesRouter
   .put(`${ROUTE_PATH}/:siteId/page/:pageId`, async (req, res) => {
     const pageContent = req.body as Page;
     try {
-      const siteId = req.params.siteId;
-      const pageId = req.params.pageId;
-      const response = await pageController().updatePageContent(pageContent, siteId, pageId );
+      const siteAndPage = fetchSiteAndPage(req);
+      const response = await pageController().updatePageContent(pageContent, siteAndPage );
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -47,13 +46,24 @@ pagesRouter
     }   
   })
 
-  .get(`${ROUTE_PATH}/:siteId/page/:pageId`,async (req, res) => {
-    const siteId = req.params.siteId;
-    const pageId = req.params.pageId;
+  .get(`${ROUTE_PATH}/:siteId/page/:pageId`, async (req, res) => {
+    const siteAndPage = fetchSiteAndPage(req);
     try {
-      const response = await pageController().getPageContent(siteId, pageId);
+      const response = await pageController().getPageContent(siteAndPage);
       res.status(response.status).send(response);
       } catch (error) {
+        const response = error.getResponse();
+        res.status(error._status).send(response);
+      }
+  })
+
+  .post(`${ROUTE_PATH}/page/preview`, (req, res) => {
+    const pageToPreview = req.body as Page;
+    try {
+      const response = pageController().previewPage(pageToPreview);
+      res.status(response.status).send(response);
+      } catch (error) {
+        console.log(error)
         const response = error.getResponse();
         res.status(error._status).send(response);
       }

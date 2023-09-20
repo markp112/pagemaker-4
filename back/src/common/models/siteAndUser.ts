@@ -3,4 +3,9 @@ interface SiteAndUser {
   siteId: string;
 };
 
-export type { SiteAndUser };
+interface SiteAndPage {
+  siteId: string;
+  pageId: string;
+}
+
+export type { SiteAndUser, SiteAndPage };
