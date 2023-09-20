@@ -114,7 +114,12 @@ async function createPageContent(page: Page) {
     return isUniquePageName(name);
   }
 
-  return { createNewPage, createPage, validatePageName, getPageContent, setPageContent, upadatePage };
+  async function previewPage(): Promise<string> {
+    const pageToPreview = store.page;
+    return await axiosClient().post<Page, string>('/pages/page/preview', pageToPreview);
+  }
+
+  return { createNewPage, createPage, validatePageName, getPageContent, setPageContent, upadatePage, previewPage };
 }
 
 export { PageService };

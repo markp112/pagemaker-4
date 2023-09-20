@@ -1,9 +1,10 @@
 import express from 'express';
 import { pagesController } from './controller/pagesController';
 import { pageController } from './controller/pageController';
-import { Page } from '@core/services/pages/model';
 import { Guid } from '@common/classes/guid';
 import { fetchSiteAndPage, fetchSiteAndUser } from '@common/functions/userAndSiteId';
+import { logger } from '@logger/pino';
+import { Page } from '@core/services/pages/model';
 
 const pagesRouter = express.Router();
 const ROUTE_PATH = '/pages';
@@ -37,9 +38,8 @@ pagesRouter
   .put(`${ROUTE_PATH}/:siteId/page/:pageId`, async (req, res) => {
     const pageContent = req.body as Page;
     try {
-      const siteId = req.params.siteId;
-      const pageId = req.params.pageId;
-      const response = await pageController().updatePageContent(pageContent, siteId, pageId );
+      const siteAndPage = fetchSiteAndPage(req);
+      const response = await pageController().updatePageContent(pageContent, siteAndPage );
       res.status(response.status).send(response);
     } catch (error) {
       const response = error.getResponse();
@@ -58,15 +58,16 @@ pagesRouter
       }
   })
 
-  .get(`${ROUTE_PATH}/:siteId/page/:pageId/preview`, async (req, res) => {
-    const siteAndPage = fetchSiteAndPage(req);
-    // try {
-    //   // const response = await pageController().getPageContent(siteId, pageId);
-    //   // res.status(response.status).send(response);
-    //   } catch (error) {
-    //     const response = error.getResponse();
-    //     res.status(error._status).send(response);
-    //   }
+  .post(`${ROUTE_PATH}/page/preview`, async (req, res) => {
+    const pageToPreview = req.body as Page;
+    try {
+      const response = pageController().previewPage(pageToPreview);
+      res.status(response.status).send(response);
+      } catch (error) {
+        console.log(error)
+        const response = error.getResponse();
+        res.status(error._status).send(response);
+      }
   })
 
 export { pagesRouter };

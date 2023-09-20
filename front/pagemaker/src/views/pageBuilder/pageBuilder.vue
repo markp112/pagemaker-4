@@ -70,6 +70,7 @@ import icon from '@/components/utility/icon/icon.vue';
 import type { Icon } from '@/components/utility/icon/model/model';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
 import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import { PageService } from '@/services/page/page.service';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -105,6 +106,7 @@ const trashCan: Icon = {
         store: useNavMenuItemStore(),
         pageStore: usePageStore(),
         pageBuilderService: PageBuilderService(),
+        pageService: PageService(),
         pageTitle: '',
         menuItems: [] as NavMenuItem[],
         toolbarHidden: false,
@@ -192,8 +194,9 @@ const trashCan: Icon = {
         this.handleButtonClick(payload);
       },
 
-      previewPage() {
-        
+      async previewPage() {
+        const pageAsHtml = await this.pageService.previewPage();
+        this.$router.push({ name: 'renderPage', params: { serverContent: pageAsHtml }});
       }
     },
 

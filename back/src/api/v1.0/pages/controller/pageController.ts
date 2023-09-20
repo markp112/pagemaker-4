@@ -12,13 +12,12 @@ function pageController() {
   
   const databaseRepository = new FirebaseRepository();
 
-  async function updatePageContent(pageContent: Page, siteId: string, pageId: string): Promise<Response> {
+  async function updatePageContent(pageContent: Page,siteAndPage: SiteAndPage): Promise<Response> {
     try {
-      const collection =  `${siteId}::pages`;
-      const docRef = doc(firebaseDb, collection, pageId);
-      await setDoc(docRef, pageContent);
-      return constructResponse<Page>(pageContent, httpStatusCodes.OK);
-    } catch (err) {
+      const pageService = new PageService(databaseRepository);
+      const savedPage = await pageService.savePagepageContent(pageContent, siteAndPage);
+      return constructResponse<Page>(savedPage, httpStatusCodes.CREATED);
+    }  catch (err) {
       handleError(err);
     }
   }
@@ -26,8 +25,8 @@ function pageController() {
   async function savePageContent(pageContent: Page, siteAndPage: SiteAndPage): Promise<Response> {
     try {
       const pageService = new PageService(databaseRepository);
-      const updatedPage = await pageService.savePagepageContent(pageContent, siteAndPage);
-      return constructResponse<Page>(updatedPage, httpStatusCodes.CREATED);
+      const savedPage = await pageService.savePagepageContent(pageContent, siteAndPage);
+      return constructResponse<Page>(savedPage, httpStatusCodes.CREATED);
     }  catch (err) {
       handleError(err);
     }
@@ -43,7 +42,13 @@ function pageController() {
     }
   }
 
-  return { savePageContent, getPageContent, updatePageContent };
+  function previewPage(pageToPreview: Page): Response {
+    const pageService = new PageService(databaseRepository);
+    const htmlPage = pageService.previewPage(pageToPreview)
+    return constructResponse<string>(htmlPage, httpStatusCodes.OK);
+  }
+
+  return { savePageContent, getPageContent, updatePageContent, previewPage };
 }
 
 export { pageController };
