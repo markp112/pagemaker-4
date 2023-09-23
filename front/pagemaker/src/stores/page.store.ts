@@ -12,6 +12,7 @@ const usePageStore = defineStore({
       _page: {} as Page,
       _pageElement: {} as PageElement,
       _scaledDimension: {} as Dimension,
+      _pageAsHtml: '' as string,
     }
   },
 
@@ -30,6 +31,10 @@ const usePageStore = defineStore({
 
     pageElement: (state) => {
       return state._pageElement;
+    },
+
+    pageAsHtml: (state) => {
+      return state._pageAsHtml;
     }
 
   },
@@ -51,6 +56,10 @@ const usePageStore = defineStore({
 
     setScaledDimension(dimension: Dimension) {
       this._scaledDimension = dimension;
+    },
+
+    setPageAsHtml(htmlContent: string) {
+      this._pageAsHtml = htmlContent;
     },
 
     findParentElement(parentRef: string): PageElement[] {

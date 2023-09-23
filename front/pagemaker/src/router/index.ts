@@ -17,11 +17,6 @@ const router = createRouter({
       path: '/pagebuilder/:pageName',
       name: 'pagebuilder',
       component:() => import('../views/pageBuilder/pageBuilder.vue'),
-      meta: {
-        breadcrumb: [{ name: 'sites', link: '/sites' }, 
-        { name: 'pages', link: '/pagelist'},
-        { name: 'page-builder'}],
-      }
     },
     {
       path: '/login',
@@ -33,7 +28,6 @@ const router = createRouter({
       name: 'sites',
       component: sitesVue,
       meta: {
-        breadcrumb: [{ name: 'sites' }],
         layout: PlainLayout,
       }
     },
@@ -42,7 +36,6 @@ const router = createRouter({
       name: 'site-editor',
       component: SiteEditor, 
       meta: {
-        breadcrumb: [{ name: 'sites', link: '/sites' }, { name: 'site-editor'}],
         layout: PlainLayout,
       }
     },
@@ -51,17 +44,14 @@ const router = createRouter({
       name: 'site',
       component: site, 
       meta: {
-        breadcrumb: [{ name: 'sites', link: '/sites' }, { name: 'site'}],
         layout: PlainLayout,
       }
     },
     {
-      path: '/renderPage/:serverContent',
+      path: '/renderPage',
       name: 'renderPage',
-      props: true,
       component: renderHtml,
       meta: {
-        breadcrumb: [{ name: 'site', link: '/site' }],
         layout: PlainLayout,
       }
     },
@@ -70,7 +60,6 @@ const router = createRouter({
       name: 'pageList',
       component: pageListVue,
       meta: {
-        breadcrumb: [{ name: 'sites', link: '/sites' }],
         layout: PlainLayout,
       }
     },
@@ -79,10 +68,6 @@ const router = createRouter({
       name: 'page-editor',
       component: pageEditor,
       meta: {
-        breadcrumb:  [{ name: 'sites', link: '/sites' }, 
-          { name: 'pages', link: '/pagelist' },
-          { name: 'page-editor' }
-        ],
         layout: PlainLayout,
       }
     },
