@@ -195,8 +195,8 @@ const trashCan: Icon = {
       },
 
       async previewPage() {
-        const pageAsHtml = await this.pageService.previewPage();
-        this.$router.push({ name: 'renderPage', params: { serverContent: pageAsHtml }});
+        await this.pageService.previewPage();
+        this.$router.push({ name: 'renderPage', params: { previousPage: this.$router.path }});
       }
     },
 

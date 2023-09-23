@@ -14,44 +14,47 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import type { BreadcrumbLink } from './model';
+import { RouteLocationNormalized, RouteRecordName, useRouter } from 'vue-router';
 
-export default defineComponent({
-  name: 'breadcrumb',
+  const breadcrumbs = ref<BreadcrumbLink[]>([]);
+  const route = useRouter();
 
-  data() {
-    return {
-      breadcrumbs: [] as BreadcrumbLink[],
+  const isLoginPage = (page: RouteRecordName) => page === 'login';
+  const isRouteExisting = (page: RouteRecordName) => { return breadcrumbs.value.findIndex(breadcrumb => breadcrumb.name === page)};
+
+  const addPageToBreadcrumb = (page: RouteLocationNormalized) => {
+    if (breadcrumbs.value.filter(breadcrumb => breadcrumb.name === page.name).length === 0) {
+      breadcrumbs.value.push({ name: page.name as string, link: page.path})
     }
-  },
+  };
 
-  created() {
-    this.breadcrumbs = this.$route.meta.breadcrumb as BreadcrumbLink[];
-    this.$watch(() => this.$route.fullPath, this.updateList,{ immediate: true, deep: true });
-  },
-
-  methods: {
-    routeTo(breadcrumb: string) {
-      const link = this.breadcrumbs.filter(bc => bc.name === breadcrumb)[0].link;
-      if (link !== undefined) {
-        this.$router.push(`${link}`);
-      }
-    },
-    
-    updateList() {
-      if (this.$route !== undefined) {
-        this.breadcrumbs = [];
-        this.breadcrumbs = this.$route.meta.breadcrumb as BreadcrumbLink[];
-      }
-    },
-    
-    getbreadCrumbList(): BreadcrumbLink[] {
-      return this.breadcrumbs;
+  const removeChildRoutesAfterTo = (page: RouteRecordName) => {
+    const indexOfTo = isRouteExisting(page);
+    if(indexOfTo !== -1 && indexOfTo < breadcrumbs.value.length - 1) {
+      breadcrumbs.value= breadcrumbs.value.slice(0, indexOfTo + 1);
     }
-  },
-  })
+  };
+
+  route.afterEach((to) => {
+      if (isLoginPage(to.name)) {
+        breadcrumbs.value = [];
+        return;
+      }
+      addPageToBreadcrumb(to);
+      removeChildRoutesAfterTo(to.name)
+    }
+  )
+
+  const routeTo = (breadcrumb: RouteRecordName) => {
+    const link = breadcrumbs.value.filter(bc => bc.name === breadcrumb)[0].link;
+    if (link !== undefined) {
+      route.push(`${link}`);
+    }
+  };
+    
 </script>
 
 <style lang="postcss">
