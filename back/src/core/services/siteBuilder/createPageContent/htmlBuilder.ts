@@ -2,6 +2,10 @@ import { Style } from '@core/services/pages/model';
 
 const SPACE = ' ';
 
+const classToStyle = {
+  'relative': {style: 'position', value: { value: 'relative' }},
+} 
+
 class HtmlElementBuilder {
   
   private closeTag = '>';
@@ -40,6 +44,11 @@ class HtmlElementBuilder {
 
   public withClasses(classes: string) {
     this.classes = classes;
+    const convertedStyles: Style[] = classes.split(' ').map(className => {
+      const style: Style = classToStyle[className];
+      return style;
+    }).filter(style => style !== undefined);
+    this.styles.push(...convertedStyles.map(style => `${style.style}:${style.value.value}${style.value.unit ?? ''};`));
     return this;
   }
 
