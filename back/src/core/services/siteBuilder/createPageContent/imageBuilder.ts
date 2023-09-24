@@ -27,10 +27,11 @@ class ImageBuilder implements ElementBuilder {
   private buildImageContainer(imageHtml: string) {
     const htmlElementBuilder = new HtmlElementBuilder();
     const container = this.imageElement.container;
-    htmlElementBuilder.createTag('span')
+    htmlElementBuilder.createTag('div')
       .withStyle([container.naturalSize.width])
       .withStyle([container.naturalSize.height])
       .withStyle(this.imageElement.container.styles)
+      .withClasses('relative')
       .withNestedContent(imageHtml);
     if (this.imageElement.container.isAbsolute) {
       this.addLocation(this.imageElement.container.location, htmlElementBuilder)

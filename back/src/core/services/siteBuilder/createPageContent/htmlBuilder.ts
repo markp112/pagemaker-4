@@ -2,6 +2,10 @@ import { Style } from '@core/services/pages/model';
 
 const SPACE = ' ';
 
+const classToStyle = {
+  'relative': {style: 'position', value: { value: 'relative' }},
+} 
+
 class HtmlElementBuilder {
   
   private closeTag = '>';
@@ -23,8 +27,12 @@ class HtmlElementBuilder {
     return this;
   }
 
+  private stylesToString (styles: Style[]): string[] {
+    return styles.map(style => `${style.style}:${style.value.value}${style.value.unit ?? ''};`)
+  }
+
   public withStyle(styles: Style[]) {
-    this.styles.push(...styles.map(style => `${style.style}:${style.value.value}${style.value.unit ?? ''};`))
+    this.styles.push(...this.stylesToString(styles))
     return this;
   }
 
@@ -40,6 +48,12 @@ class HtmlElementBuilder {
 
   public withClasses(classes: string) {
     this.classes = classes;
+    const convertedStyles: Style[] = classes.split(' ')
+      .map(className => {
+        return classToStyle[className];
+      })
+      .filter(style => style !== undefined);
+    this.styles.push(...this.stylesToString(convertedStyles));
     return this;
   }
 
