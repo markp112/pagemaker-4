@@ -2,7 +2,7 @@ interface RGB {
   r: number,
   g: number,
   b: number,
-};
+}
 
 const splitRgb = (rgbColour: string) => rgbColour.split('(')[1].split(')')[0].split(',');
 
@@ -10,8 +10,8 @@ function rgbToHex(rgbColour: string): string {
   const splitColours = splitRgb(rgbColour);
   if(splitColours.length > 3) splitColours.pop();
   const coloursAsHex = splitColours.map((colour) => {     
-    colour = parseInt(colour).toString(16);
-    return (colour.length === 1) ? `0${colour}` : colour;
+    const colourAsString = parseInt(colour).toString(16);
+    return (colourAsString.length === 1) ? `0${colourAsString}` : colourAsString;
   });
   return `#${coloursAsHex.join('')}`;
 }

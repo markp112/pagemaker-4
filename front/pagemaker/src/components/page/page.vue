@@ -70,6 +70,10 @@ export default defineComponent({
     }
   },
 
+  mounted() {
+      this.pageBuilderService.initPage();
+  },
+
   computed: {
 
     getScaledPageSize(): string {
