@@ -13,8 +13,6 @@ class ComponentCounter {
     return this.counter;
   }
   public setCounter(counter: number) {
-    console.log('%c⧭', 'color: #735656', counter);
-    console.log('%c⧭', 'color: #cc0088', 'setCounter');
     this.counter = counter;
   }
 

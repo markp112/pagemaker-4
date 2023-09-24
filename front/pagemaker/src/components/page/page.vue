@@ -55,9 +55,9 @@ export default defineComponent({
 
   components: {
     container: Container,
-    imageElement: imageElement,
-    buttonElement: buttonElement,
-    textElement: textElement,
+    imageElement,
+    buttonElement,
+    textElement,
     Resize,
 },
 
