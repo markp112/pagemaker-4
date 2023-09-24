@@ -27,8 +27,12 @@ class HtmlElementBuilder {
     return this;
   }
 
+  private stylesToString (styles: Style[]): string[] {
+    return styles.map(style => `${style.style}:${style.value.value}${style.value.unit ?? ''};`)
+  }
+
   public withStyle(styles: Style[]) {
-    this.styles.push(...styles.map(style => `${style.style}:${style.value.value}${style.value.unit ?? ''};`))
+    this.styles.push(...this.stylesToString(styles))
     return this;
   }
 
@@ -44,11 +48,12 @@ class HtmlElementBuilder {
 
   public withClasses(classes: string) {
     this.classes = classes;
-    const convertedStyles: Style[] = classes.split(' ').map(className => {
-      const style: Style = classToStyle[className];
-      return style;
-    }).filter(style => style !== undefined);
-    this.styles.push(...convertedStyles.map(style => `${style.style}:${style.value.value}${style.value.unit ?? ''};`));
+    const convertedStyles: Style[] = classes.split(' ')
+      .map(className => {
+        return classToStyle[className];
+      })
+      .filter(style => style !== undefined);
+    this.styles.push(...this.stylesToString(convertedStyles));
     return this;
   }
 
