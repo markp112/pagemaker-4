@@ -12,12 +12,16 @@ class ComponentCounter {
   public getCounter(): number {
     return this.counter;
   }
+  public setCounter(counter: number) {
+    this.counter = counter;
+  }
+
 
   public getNextCounter(): number {
     const currentCounter: number = this.counter;
     this.counter++;
     return currentCounter;
   }
-};
+}
 
 export { ComponentCounter };

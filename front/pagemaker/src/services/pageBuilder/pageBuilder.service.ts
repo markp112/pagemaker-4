@@ -16,6 +16,12 @@ function PageBuilderService() {
   const pageStore = usePageStore();
   const editorSettingsService = new EditorSettingsService();
 
+  function initPage() {
+    const componentCount = pageStore.page.elements.length;
+    const componentCounter = ComponentCounter.getInstance();
+    componentCounter.setCounter(componentCount);
+  }
+
   function createNewComponent(componentName: string, parentRef: string) {
     const component = getToolbarComponent(componentName);
     if (component) {
@@ -68,7 +74,9 @@ function PageBuilderService() {
     }
   }
 
-  return { createNewComponent, 
+  return { 
+      initPage,
+      createNewComponent, 
       calcPageSize,
       setScaledDimension,
       processButtonCommand,

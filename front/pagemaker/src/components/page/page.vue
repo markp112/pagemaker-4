@@ -55,9 +55,9 @@ export default defineComponent({
 
   components: {
     container: Container,
-    imageElement: imageElement,
-    buttonElement: buttonElement,
-    textElement: textElement,
+    imageElement,
+    buttonElement,
+    textElement,
     Resize,
 },
 
@@ -68,6 +68,10 @@ export default defineComponent({
       editorSettings: new EditorSettingsService(),
       thisPage: this.$props.page,
     }
+  },
+
+  mounted() {
+      this.pageBuilderService.initPage();
   },
 
   computed: {
