@@ -20,6 +20,7 @@ function createPageHtml(page: Page): string {
 }
 
 function createHtmlElement(element: PageElementData | string): string {
+  console.log('%c⧭', 'color: #408059', element);
   if (typeof element === 'string') return element;
   const builder = elementBuilders[element.type](element);
   return builder.build();
