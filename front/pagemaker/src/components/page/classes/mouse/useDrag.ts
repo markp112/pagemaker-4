@@ -1,4 +1,4 @@
-import type { ActiveElements, ButtonElement, ImageElement, TextElement } from '@/components/page/model/imageElement/imageElement';
+import type { ButtonElement, ImageElement, TextElement } from '@/components/page/model/imageElement/imageElement';
 import { reactive } from 'vue';
 import { useMouseDelta } from './useMouseDelta';
 import { Location } from '@/classes/location';

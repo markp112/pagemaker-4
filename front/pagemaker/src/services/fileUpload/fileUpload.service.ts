@@ -12,7 +12,6 @@ function FileUploadService() {
       formData.append('filename', file.name);
       return await axiosClient().postMultiPart<FormData, string>(`${getRoute(userId)}`, formData);
     } catch (error) {
-      console.log('%c⧭', 'color: #cc0036', error);
       return '';
     }
   }
