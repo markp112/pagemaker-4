@@ -8,6 +8,7 @@ import { TextBuilder } from './textBuilder';
 const elementBuilders = {
   imageElement: (element: ImageElement) => new ImageBuilder(element),
   jumbo: (element: PageContainerInterface) => new ContainerBuilder(element),
+  container: (element: PageContainerInterface) => new ContainerBuilder(element),
   buttonElement: (element: ButtonElement) => new ButtonBuilder(element),
   textElement: (element: TextElement) => new TextBuilder(element),
 };
