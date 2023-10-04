@@ -1,4 +1,4 @@
-s<template>
+<template>
   <div class="relative select-none overflow-hidden"
     :ref="getId()"
     :id="getId()"
@@ -6,9 +6,7 @@ s<template>
     :style="getContainerStyles()" 
     @click.stop="onImageClick()"
     @dragstart.stop="onDragStart($event)"
-    @drag.stop="onDrag($event)"
-    @dragend.stop="onDragEnd()"
-    @drop.stop
+    @mouseup.stop="onDragEnd()"
   >
     <img
       ref="image-element"
@@ -17,132 +15,96 @@ s<template>
       :style="getStyles()"
     />
     <Resize :is-active="isActive"
-      :this-component="thisComponent"
+      :this-component="props.thisComponent"
       @resize-started="resizeStarted()"
       @resize-stopped="isSizing=!isSizing"
     />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { useMouse } from '../classes/mouse/mouse';
-import resize from '@/components/base/resize/resize.vue';
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
+import { useDrag } from '../classes/mouse/useDrag';
+import Resize from '@/components/base/resize/resize.vue';
 import { dimensionToStyle, locationToStyle, stylesToString, addStyle } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { UseDrag } from '@/composables/drag/drag';
 import { Style } from '../model/pageElement/pageElement';
 
-export default  defineComponent({
-  name: 'imageComponent',
+  const emits = defineEmits(['onClick']);
 
-  emits: ['onClick'],
+  const props = defineProps<{
+    thisComponent: ImageElement,
+  }> ()
 
-  components: {
-    Resize: resize,
-  },
-
-  props: {
-    thisComponent: {
-      type: Object as PropType<ImageElement>,
-        required: true
-    }
-  },
-
-  data() {
-    return {
-      mouse: new useMouse(),
-      isSizing: false,
-      editorSettings: new EditorSettingsService(),
-      useDrag: new UseDrag(new useMouse()),
-      thisComponent: this.thisComponent
-    }
-  },
-  
-  computed: {
-
-    isActive() {
-      return this.editorSettings.getActiveElement()?.ref === this.thisComponent.ref;
-    },
-  },
-
-  methods: {
-
-    resizeStarted() {
-      this.isSizing = true;
-    },
-      
-    onImageClick() {
-      this.isSizing = false;
-      this.$emit('onClick', this.thisComponent);
-    },
-
-    onDragStart(event: MouseEvent) {
-      if (this.isSizing){ return };
-      this.thisComponent.classDefinition = this.useDrag.dragStart(event, this.thisComponent.classDefinition);
-      this.thisComponent.container.isAbsolute = true;
-    },
+  const thisComponent = ref<ImageElement>(props.thisComponent)
+  const isSizing = ref(false);
+  const editorSettings = new EditorSettingsService();
+  const isDragging = ref(false);
+  const drag = useDrag();
+  const isActive = computed(() => editorSettings.getActiveElement()?.ref === thisComponent.value.ref);
     
-    onDrag(event: MouseEvent) {
-      const location = this.thisComponent.container.location;
-      this.thisComponent.container.location = {...this.useDrag.onDrag(event, location)};
-    },
+  const resizeStarted = () => {
+    isSizing.value = true;
+  };
+      
+  const onImageClick = () => {
+    emits('onClick', thisComponent.value);
+  };
 
-    onDragEnd() {
+  const onDragStart = (event: MouseEvent) => {
+    if (isSizing.value){ return };
+    drag.onEnableMove(thisComponent.value, event);
+    thisComponent.value.container.isAbsolute = true;
+  };
+
+    const onDragEnd = () => {
+      drag.onDisableMove();
+      isDragging.value = false;
       const positionAbsolute: Style = {
         style: 'position',
         value: { value: 'absolute' }
       };
-      const styles = (<ImageElement>this.thisComponent).container.styles;
-      (<ImageElement>this.thisComponent).container.styles = addStyle(styles, positionAbsolute);
-      this.thisComponent.classDefinition = this.useDrag.onDragEnd(this.thisComponent.classDefinition);
-    },
+      const styles = (<ImageElement>thisComponent.value).container.styles;
+      (<ImageElement>thisComponent.value).container.styles = addStyle(styles, positionAbsolute);
+    };
 
-    getDimensions(): string {
+    const getDimensions = (): string => {
       let dimension = '';
-      if(this.thisComponent.dimension) {
-        dimension = dimensionToStyle(this.thisComponent.dimension);
+      if(thisComponent.value.dimension) {
+        dimension = dimensionToStyle(thisComponent.value.dimension);
       }
       return dimension;
-    },
+    };
 
-    getImage(): string {
+    const getImage = (): string => {
       const DEFAULT_IMAGE = 'imageplaceholder-100x83.png';
-      if(this.thisComponent.content === DEFAULT_IMAGE) {
-        return getImageUrl(this.thisComponent.content);
+      if(thisComponent.value.content === DEFAULT_IMAGE) {
+        return getImageUrl(thisComponent.value.content);
       }
-      return this.thisComponent.content;
-    },
+      return thisComponent.value.content;
+    };
 
-    getId() {
-      return this.thisComponent.ref;
-    },
+    const getId = () => {
+      return thisComponent.value.ref;
+    };
 
-    getClasses(): string {
-      return this.thisComponent.classDefinition;
-    },
-
-    getStyles(): string {
+    const getStyles = (): string => {
       let styles = '';
-      styles = stylesToString(this.thisComponent.image.styles)
-      styles += this.getDimensions();
+      styles = stylesToString(thisComponent.value.image.styles)
+      styles += getDimensions();
       return styles;
-    },
+    };
     
-    getContainerStyles(): string {
+    const getContainerStyles = (): string => {
       let styles = '';
-      if(this.thisComponent.container.isAbsolute) {
-        styles = locationToStyle(this.thisComponent.container.location);
+      if(thisComponent.value.container.isAbsolute) {
+        styles = locationToStyle(thisComponent.value.container.location);
       }
-      if(this.thisComponent.container) {
-        styles += dimensionToStyle(this.thisComponent.container.naturalSize);
+      if(thisComponent.value.container) {
+        styles += dimensionToStyle(thisComponent.value.container.naturalSize);
       }
       return styles;
-    }
-
-  },
-
-})
+    };
 </script>

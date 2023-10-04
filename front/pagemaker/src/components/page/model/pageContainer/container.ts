@@ -10,6 +10,6 @@ interface PageContainerInterface extends PageElement {
   location: Location,
   styles: Style[];
   isAbsolute: boolean;
-};
+}
 
-export type { PageContainerInterface }
+export type { PageContainerInterface };

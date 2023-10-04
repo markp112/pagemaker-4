@@ -6,16 +6,14 @@
     :style="getStyles()"
     @mousedown.stop.self="onDragStart($event)"
     @mouseup.stop.self="onDragEnd()"
-    @mousemove="onDrag($event)"
     @dragstart.self.stop="onDragStart($event)"
-    @drag.self.stop="onDrag($event)"
     @dragend.self.stop="onDragEnd"
     @click.stop.self="onClick()"
     @drop.prevent="onDrop($event)"
     @blur="onBlur()"
   >
     <component v-for="(pageElement, index) in getPageElements()"
-      :is="pageElement.type"
+      :is="getComponent(pageElement.type)"
       :key="index"
       :index="index"
       :thisComponent="pageElement"
@@ -30,141 +28,114 @@
     />
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
 import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
-import resize from '@/components/base/resize/resize.vue';
-import { useMouse } from '../classes/mouse/mouse';
-import { Resize } from '../../base/resize/onResize';
+import Resize from '@/components/base/resize/resize.vue';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import imageElement from '../image/imageElement.vue';
 import buttonElement from '../button/button-element.vue';
 import textElement from '../textElement/textElement.vue';
 import type { PageContainerInterface } from '../model/pageContainer/container';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { UseDrag } from '@/composables/drag/drag';
 import type { ActiveElements } from '../model/imageElement/imageElement';
+import { useDrag } from '../classes/mouse/useDrag';
+import { ComponentTypesString } from '../model/pageElement/pageElement';
 
-export default defineComponent({
-  name: 'component-container',
+const componentMap = {
+  'imageElement': imageElement,
+  'buttonElement': buttonElement,
+  'textElement': textElement,
+};
 
-  components: {
-    Resize: resize,
-    imageElement: imageElement,
-    buttonElement: buttonElement,
-    textElement,
-  },
+const props = defineProps<{thisComponent: PageContainerInterface}>();
 
-  props: {
-    thisComponent: {
-      type: Object as PropType<PageContainerInterface>,
-        required: true
-    }
-  },
+const emits =  defineEmits(['onClick']);
 
-  emits:['onClick'],
+const pageBuilderService = PageBuilderService();
+const thisComponent = ref(props.thisComponent);
+const drag = useDrag();
+const editorSettings = new EditorSettingsService();
+const isDragging = ref(false);
+const isSizing = ref(false);
 
-  data() {
-    return {
-      thisComponent: this.$props.thisComponent,
-      pageBuilderService: PageBuilderService(),
-      mouse: new useMouse(),
-      editorSettings: new EditorSettingsService(),
-      isDragging: false,
-      isSizing: false,
-      elementDrag: new UseDrag(new useMouse()),
-    }
-  },
+const isActive = computed(() => 
+    editorSettings.getActiveElement()?.ref === thisComponent.value.ref
+);
 
-  computed: {
+const getComponent = (type: ComponentTypesString) => {
+ return componentMap[type];
+} 
 
-    isActive() {
-      return this.editorSettings.getActiveElement()?.ref === this.thisComponent.ref;
-    },
-  },
+const getId = () => {
+  return thisComponent.value.ref;
+};
 
-  methods: {
+const getClasses = (): string => {
+  return thisComponent.value.classDefinition;
+};
 
-    getId() {
-      return this.thisComponent.ref;
-    },
+const getStyles = (): string => {
+  let styles = '';
+  if(thisComponent.value.isAbsolute) {
+    styles = locationToStyle(thisComponent.value.location);
+  }
+  if(thisComponent.value.styles) {
+    styles += stylesToString(thisComponent.value.styles)
+  } 
+  styles += getDimensions();
+  return styles;
+};
 
-    getClasses(): string {
-      return this.thisComponent.classDefinition;
-    },
-
-    getStyles(): string {
-      let styles = '';
-      if(this.thisComponent.isAbsolute) {
-        styles = locationToStyle(this.thisComponent.location);
-      }
-      if(this.thisComponent.styles) {
-        styles += stylesToString(this.thisComponent.styles)
-      } 
-      styles += this.getDimensions();
-      return styles;
-    },
-
-    getDimensions(): string {
+    const getDimensions = (): string => {
       let dimension = '' 
-      if(this.thisComponent.dimension) {
-        dimension = dimensionToStyle(this.thisComponent.dimension);
+      if(thisComponent.value.dimension) {
+        dimension = dimensionToStyle(thisComponent.value.dimension);
       }
       return dimension;
-    },
+    };
 
-    getPageElements(): ActiveElements[] {
-      return (this.thisComponent as PageContainerInterface).elements;
-    },
+    const getPageElements = (): ActiveElements[] => {
+      return (thisComponent.value as PageContainerInterface).elements;
+    };
 
-    resizeStarted(event: MouseEvent ) {
-      this.isSizing = true;
-    },
+    const resizeStarted = (event: MouseEvent ) => {
+      isSizing.value = true;
+    };
       
-    onClick() {
-      this.isSizing = false;
-      this.$emit('onClick', this.thisComponent);
-    },
+    const onClick = () => {
+      isSizing.value = false;
+      emits('onClick', thisComponent.value);
+    };
 
-    onBlur() {
-      this.isActive = false;
-      this.isDragging = false;
-      this.isSizing = false;
-    },
+    const onBlur = () => {
+      isDragging.value = false;
+      isSizing.value = false;
+    };
 
-    containedElementClick(pageElement: ActiveElements): void {
-      this.$emit('onClick', pageElement);
-    },
+    const containedElementClick = (pageElement: ActiveElements): void => {
+      emits('onClick', pageElement);
+    };
 
-    onDrop(event: DragEvent): void {
+    const onDrop = (event: DragEvent): void => {
       event.stopImmediatePropagation();
-      const componentName = this.getComponentName(event);
-      this.pageBuilderService.createNewComponent(componentName, this.thisComponent.ref);
-    },
+      const componentName = getComponentName(event);
+      pageBuilderService.createNewComponent(componentName, thisComponent.value.ref);
+    };
 
-    onDragStart(event: MouseEvent) {
-      this.isDragging = true;
-      this.thisComponent.classDefinition = this.elementDrag.dragStart(event, this.thisComponent.classDefinition);
-      this.thisComponent.isAbsolute = true;
-    },
+    const onDragStart = (event: MouseEvent) => {
+      isDragging.value = true;
+      drag.onEnableMove(thisComponent.value, event);
+      thisComponent.value.isAbsolute = true;
+    };
       
-    onDrag(event: MouseEvent) {
-      if(this.isDragging) {
-        const location = this.thisComponent.location;
-        this.thisComponent.location = {...this.elementDrag.onDrag(event, location)};
-      }
-    },
-
-    onDragEnd() {
-      this.isDragging = false;
-      this.thisComponent.classDefinition = this.elementDrag.onDragEnd(this.thisComponent.classDefinition);
-    },
+    const onDragEnd = () => {
+      isDragging.value = false;
+      drag.onDisableMove();
+    };
       
-    getComponentName(event: DragEvent): string {
+    const getComponentName = (event: DragEvent): string => {
       const dataTransfer = event.dataTransfer;
       return dataTransfer ? dataTransfer.getData('text') : '';
-    }
-  }
-
-})
+    };
 </script>

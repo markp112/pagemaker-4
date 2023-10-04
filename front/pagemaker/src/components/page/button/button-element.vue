@@ -5,142 +5,106 @@
     :class="getClasses()"
     :id="getId()"
     class="flex flex-row justify-center items-center relative"
+    @mousedown="onDragStart($event)"
+    @mouseup="onDragEnd()"
     @click.stop="onButtonClick()"
-    @mousedown.stop="onDragStart($event)"
-    @mousemove="handleMouseMove($event)"
+    @dragstart.stop="onDragStart($event)"
     @mouseup.stop="onDragEnd()"
-    @dragstart="onDragStart($event)"
-    @drag="onDrag($event)"
-    @dragend="onDragEnd()"
   >
-    {{ getData() }}
+    <span>{{ getData() }} </span>
     <Resize 
       :is-active="isActive" 
       :this-component="thisComponent"
-      @resize-stopped="isSizing = false"
       @resize-started="resizeStarted()"
-    />
-  </div>
+      @resize-stopped="isSizing =!isSizing"
+      />
+    </div>
 </template>
 
-<script lang="ts">
-import resize from '@/components/base/resize/resize.vue';
-import { Resize } from '../../base/resize/onResize';
-import { UseDrag } from '@/composables/drag/drag';
+<script lang="ts" setup>
+import Resize from '@/components/base/resize/resize.vue';
+import { useDrag } from '../classes/mouse/useDrag';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { defineComponent, type PropType } from 'vue';
-import { useMouse } from '../classes/mouse/mouse';
+import { ref, computed } from 'vue';
 import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 import type { ButtonElement } from '../model/imageElement/imageElement';
 
-export default defineComponent({
-  name:'buttonElement',
 
-  emits: ['onClick'],
+  const emits = defineEmits(['onClick']);
 
-  components: {
-    Resize: resize,
-  },
+  const props = defineProps<{
+    thisComponent: ButtonElement,
+  }>();
 
-  props: {
-    thisComponent: {
-      type: Object as PropType<ButtonElement>,
-        required: true
-    }
-  },
+  const isSizing = ref(false);
+  const isDragging = ref(false);
+  const thisComponent = ref<ButtonElement>(props.thisComponent);
+  const editorSettings = new EditorSettingsService();
+  const drag = useDrag();
 
-  data() {
-    return {
-      isSizing: false,
-      isDragging: false,
-      thisComponent: this.$props.thisComponent,
-      editorSettings: new EditorSettingsService(),
-      elementDrag: new UseDrag(new useMouse()),
-    }
-  },
-  
-  computed: {
+  const isActive = computed(() => 
+      editorSettings.getActiveElement()?.ref === thisComponent.value.ref
+  );
 
-    isActive() {
-      return this.editorSettings.getActiveElement()?.ref === this.thisComponent.ref;
-    },
-  },
 
-  methods: {
+    const getId = () => {
+      return thisComponent.value.ref;
+    };
 
-    getId() {
-      return this.thisComponent.ref;
-    },
-
-    resizeStarted() {
-      this.isSizing = true;
-      this.isDragging = false;
-    },
+    const resizeStarted = () => {
+      isSizing.value = true;
+      isDragging.value = false;
+    };
       
-    getClasses(): string {
-      return this.thisComponent.classDefinition;
-    },
+    const getClasses = (): string => {
+      return thisComponent.value.classDefinition;
+    };
 
-    getStyles(): string {
+    const getStyles = (): string => {
       let styles = '';
-      if(this.thisComponent.isAbsolute) {
-        styles = locationToStyle(this.thisComponent.location);
+      if(thisComponent.value.isAbsolute) {
+        styles = locationToStyle(thisComponent.value.location);
       }
-      if(this.thisComponent.styles) {
-        styles += stylesToString(this.thisComponent.styles)
+      if(thisComponent.value.styles) {
+        styles += stylesToString(thisComponent.value.styles)
       } 
-      styles += this.getDimensions();
+      styles += getDimensions();
       return styles;
-    },
+    };
 
-    getDimensions(): string {
+    const getDimensions = (): string => {
       let dimension = '' 
-      if(this.thisComponent.dimension) {
-        dimension = dimensionToStyle(this.thisComponent.dimension);
+      if(thisComponent.value.dimension) {
+        dimension = dimensionToStyle(thisComponent.value.dimension);
       }
       return dimension;
-    },
+    };
 
-    getData(): string {
-      return this.thisComponent.content;
-    },
+    const getData = (): string => {
+      return thisComponent.value.content;
+    };
 
-    getClass(): string {
-      return this.thisComponent.classDefinition;
-    },
-
-    onButtonClick() {
-      if(this.isSizing) {
+    const onButtonClick = () => {
+      if(isSizing.value) {
         return;
       }
-      this.$emit('onClick', this.thisComponent);
-    },
+      emits('onClick', thisComponent.value);
+    };
 
-    handleMouseMove(event: MouseEvent) {
-      if (this.isDragging) {
-        this.onDrag(event);
-      }
-    },
 
-    onDragStart(event: MouseEvent) {
-      if (this.isSizing) { return }
-      this.thisComponent.classDefinition = this.elementDrag.dragStart(event, this.thisComponent.classDefinition);
-      this.thisComponent.isAbsolute = true;
-      this.isDragging = true;
-    },
+    const onDragStart = (event: MouseEvent) => {
+      console.log('%c⧭', 'color: #00bf00', 'onDragStart')
+      if (isSizing.value) { return }
+      drag.onEnableMove(thisComponent.value, event);
+      thisComponent.value.isAbsolute = true;
+      isDragging.value = true;
+    };
     
-    onDrag(event: MouseEvent) {
-      if(this.isDragging) {
-        this.thisComponent.location = this.elementDrag.onDrag(event, this.thisComponent.location);
-      }
-    },
 
-    onDragEnd() {
-      this.isDragging = false;
-      this.thisComponent.classDefinition = this.elementDrag.onDragEnd(this.thisComponent.classDefinition);
-    },
-}
-})
+    const onDragEnd = () => {
+      drag.onDisableMove();
+      isDragging.value = false;
+    };
 </script>
 
 <style lang="css" scoped>
