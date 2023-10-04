@@ -1,4 +1,4 @@
-interface MousePosition { x: number, y: number };
+interface MousePosition { x: number, y: number }
 
 class UseMouse {
 
