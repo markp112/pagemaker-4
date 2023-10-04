@@ -39,7 +39,6 @@ class ContainerBuilder implements ElementBuilder {
 
     private getNestedContent(): string {
       return this.container.elements.map(element => {
-        console.log('%c⧭', 'color: #ffcc00', element);
         return elementBuilders[element.type](element).build() 
       }).join('');
     }
