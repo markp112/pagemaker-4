@@ -34,7 +34,7 @@ type CommandParameter = StyleTags | CssStyleNames | number | string | boolean | 
 interface Command {
   execute(styleToApply: CommandParameter ): void;
   undo(styleToRemove?: CommandParameter): void;
-};
+}
 
 type CommandTypes = 'direct' | 'indirect';
 
@@ -42,6 +42,6 @@ interface CommandProperties {
   commandType: CommandTypes; 
   commandName: CommandName;
   payload: CommandParameter;
-};
+}
 
 export type { Command, CommandProperties, CommandName, CommandTypes };

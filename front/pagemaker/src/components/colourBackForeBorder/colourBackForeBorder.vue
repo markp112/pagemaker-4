@@ -1,5 +1,5 @@
 <template>
-    <span>Apply colour to:</span>
+    <span class="px-1 pt-1">Apply colour to:</span>
     <fieldset class="flex flex-row justify-between flex-nowrap">
       <InputRadio label="back" 
         name="colourSelect" 
