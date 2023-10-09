@@ -1,7 +1,7 @@
 import type { ActionEvent } from '@/classes/actionEvent';
 import type { Dimension } from '@/classes/dimension';
 import type { ValueAndUnit } from '@/classes/units';
-import type { ActiveElements, ButtonElement, ImageElement, TextElement } from '../imageElement/imageElement';
+import type { ActiveElements } from '../imageElement/imageElement';
 
 type CssStyleTypes =
   | 'background-color'
@@ -148,9 +148,6 @@ interface Page extends PageElement {
   styles: Style[],
 }
 
-type PropsDefinition = { thisComponent: PageElement | ImageElement | TextElement | ButtonElement};
-
-
 export type {
   PageElement,
   StyleTags, 
@@ -159,6 +156,5 @@ export type {
   BorderStyle, 
   CssStyleTypes,
   LineStyle,
-  PropsDefinition, 
   Page,
 };

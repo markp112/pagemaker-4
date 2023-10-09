@@ -232,7 +232,6 @@ function siteService() {
       };
       const content = await axiosClient().get<string>(`${getRoute(siteAndUser)}/preview-page/${filename}`, axiosConfig);
       window.open(content, '_blank');
-      console.log('%c⧭', 'color: #e50000', content);
     } catch (err) {
       displayMessage(err.msg, 'error', 'Preview Failed');
     }
