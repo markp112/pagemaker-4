@@ -10,27 +10,25 @@
   >
     <component v-for="(component, index) in pageElements"
       track-by="$index"
-      :is="component.type"
+      :is="getComponent(component.type)"
       :key="index"
       :index="index"
       :thisComponent="component"
       @dragover.prevent
       @drop.prevent="onDrop($event)"
       @OnClick="containedElementClick($event)"
-  ></component>
-  <Resize :is-active="isActive"
-    :this-component="thisPage"
-  >
-  </Resize>
-</div>
+    />
+    <Resize :is-active="isActive"
+      :this-component="thisPage"
+    />
+  </div>
 </template>
 
 
-<script lang="ts">
-import { defineComponent, type PropType, } from 'vue';
+<script lang="ts" setup>
+import { onMounted, ref,  computed, } from 'vue';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
-import type { Page, PageElement, Style } from './model/pageElement/pageElement';
-import ContainerVue from './container/container.vue';
+import type { ComponentTypesString, Page, Style } from './model/pageElement/pageElement';
 import Container from './container/container.vue';
 import imageElement from './image/imageElement.vue';
 import buttonElement from './button/button-element.vue';
@@ -40,101 +38,77 @@ import { EditorSettingsService } from '@/services/editorSettings/editor.settings
 import { stylesToString } from './functions/stylesToString';
 import type { ActiveElements } from './model/imageElement/imageElement';
 
+const componentMap = {
+  'imageElement': imageElement,
+  'buttonElement': buttonElement,
+  'textElement': textElement,
+  'container': Container,
+};
 const PAGE_REF = 'page';
+const props = defineProps<{
+    page: Page,
+    scale: number,
+}>();
 
-export default defineComponent({
-  name: PAGE_REF,
+const pageBuilderService = PageBuilderService();
+const editorSettings = new EditorSettingsService();
+const thisPage = ref<Page>(props.page);
 
-  props: {
-    page: {
-      type: Object as PropType<Page>,
-      required: true,
-    },
-    scale: Number,
-  },
+onMounted(() => {
+  pageBuilderService.initPage();
+});
 
-  components: {
-    container: Container,
-    imageElement,
-    buttonElement,
-    textElement,
-    Resize,
-},
+const getComponent = (type: ComponentTypesString) => {
+  return componentMap[type];
+};
 
-  data() {
-    return {
-      pageBuilderService: PageBuilderService(),
-      container:  defineComponent(() => import('./container/container.vue')),
-      editorSettings: new EditorSettingsService(),
-      thisPage: this.$props.page,
+  const getScaledPageSize = computed((): string => {
+    if(!thisPage.value) return '';
+    let pageSize = '';
+    const scale = props.scale;
+    if (thisPage.value && scale) {
+      const scaledDimension = pageBuilderService.calcPageSize(props.scale, thisPage.value.dimension);
+      pageBuilderService.setScaledDimension(scaledDimension);
+      pageSize = `${getDimension(scaledDimension.width)}${getDimension(scaledDimension.height)}`;
     }
-  },
+    pageSize += getStyles;
+    return pageSize;
+  });
 
-  mounted() {
-      this.pageBuilderService.initPage();
-  },
+  const isActive = computed(() => {
+    return editorSettings.getActiveElement()?.ref === PAGE_REF;
+  });
 
-  computed: {
+  const getStyles = (): string => {
+    let styles = '';
+    styles = stylesToString(thisPage.value.styles)
+    return styles;
+  };
 
-    getScaledPageSize(): string {
-      if(!this.thisPage) return '';
-      let pageSize = '';
-      const scale = this.$props.scale;
-      if (this.thisPage && scale) {
-        const scaledDimension = this.pageBuilderService.calcPageSize(scale, this.thisPage.dimension);
-        this.pageBuilderService.setScaledDimension(scaledDimension);
-        pageSize = `${this.getDimension(scaledDimension.width)}${this.getDimension(scaledDimension.height)}`;
-      }
-      pageSize += this.getStyles;
-      return pageSize;
-    },
+  const pageElements = computed((): ActiveElements[] => {
+    return thisPage.value.elements;
+  });
+  
+  const getDimension = (dimension: Style): string => {
+    return `${dimension.style}:${dimension.value.value}${dimension.value.unit};`;
+  };
 
-    isActive() {
-      return this.editorSettings.getActiveElement()?.ref === PAGE_REF;
-    },
+  const onDrop = (event: DragEvent): void => {
+    const componentName = getComponentName(event);
+    pageBuilderService.createNewComponent(componentName, PAGE_REF);
+  };
+  
+  const getComponentName = (event: DragEvent): string => {
+    const dataTransfer = event.dataTransfer;
+    return dataTransfer ? dataTransfer.getData('text') : '';
+  };
 
-    getStyles(): string {
-      let styles = '';
-      styles = stylesToString(this.thisPage.styles)
-      return styles;
-    },
+  const containedElementClick = (pageElement: ActiveElements): void => {
+    pageBuilderService.setActiveElement(pageElement);
+  };
 
-    pageElements(): ActiveElements[] {
-      return this.page.elements;
-    }
-  },
-    
-  methods: {
-    getProps(component: PageElement ) {
-      return { component: ContainerVue, props: { thisComponent: component } };
-    },
+  const setActiveElementToPage = () => {
+    editorSettings.setActiveElement(thisPage.value);
+  };
 
-    getDimension(dimension: Style): string {
-      return `${dimension.style}:${dimension.value.value}${dimension.value.unit};`;
-    },
-
-    onDrop(event: DragEvent): void {
-      const componentName = this.getComponentName(event);
-      this.pageBuilderService.createNewComponent(componentName, PAGE_REF);
-    },
-    
-    getComponentName(event: DragEvent): string {
-      const dataTransfer = event.dataTransfer;
-      return dataTransfer ? dataTransfer.getData('text') : '';
-    },
-
-    containedElementClick(pageElement: ActiveElements): void {
-      this.pageBuilderService.setActiveElement(pageElement);
-    },
-
-    getClasses() {
-      return this.thisPage.classDefinition;
-    },
-
-    setActiveElementToPage() {
-      this.editorSettings.setActiveElement(this.thisPage);
-    }
-
-  },
-})
 </script>

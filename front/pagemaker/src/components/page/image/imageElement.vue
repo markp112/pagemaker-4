@@ -6,7 +6,8 @@
     :style="getContainerStyles()" 
     @click.stop="onImageClick()"
     @dragstart.stop="onDragStart($event)"
-    @mouseup.stop="onDragEnd()"
+    @mouseup.stop="onDragEnd($event)"
+    @mousedown="onDragStart($event)"
   >
     <img
       ref="image-element"
@@ -36,7 +37,7 @@ import { Style } from '../model/pageElement/pageElement';
 
   const props = defineProps<{
     thisComponent: ImageElement,
-  }> ()
+  }>();
 
   const thisComponent = ref<ImageElement>(props.thisComponent)
   const isSizing = ref(false);
@@ -54,12 +55,14 @@ import { Style } from '../model/pageElement/pageElement';
   };
 
   const onDragStart = (event: MouseEvent) => {
+    event.stopImmediatePropagation();
     if (isSizing.value){ return };
     drag.onEnableMove(thisComponent.value, event);
     thisComponent.value.container.isAbsolute = true;
   };
 
-    const onDragEnd = () => {
+    const onDragEnd = (event: MouseEvent) => {
+      event.stopImmediatePropagation();
       drag.onDisableMove();
       isDragging.value = false;
       const positionAbsolute: Style = {

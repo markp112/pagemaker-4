@@ -6,7 +6,6 @@
     :id="getId()"
     class="flex flex-row justify-center items-center relative"
     @mousedown="onDragStart($event)"
-    @mouseup="onDragEnd()"
     @click.stop="onButtonClick()"
     @dragstart.stop="onDragStart($event)"
     @mouseup.stop="onDragEnd()"
@@ -93,7 +92,6 @@ import type { ButtonElement } from '../model/imageElement/imageElement';
 
 
     const onDragStart = (event: MouseEvent) => {
-      console.log('%c⧭', 'color: #00bf00', 'onDragStart')
       if (isSizing.value) { return }
       drag.onEnableMove(thisComponent.value, event);
       thisComponent.value.isAbsolute = true;

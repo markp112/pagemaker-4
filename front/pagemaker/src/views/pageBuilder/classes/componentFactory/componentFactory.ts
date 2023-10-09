@@ -1,7 +1,7 @@
 import type { ActionEvent } from '@/classes/actionEvent';
 import type { ValueAndUnit } from '@/classes/units';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
-import type { ButtonElement, ImageElement, TextElement } from '@/components/page/model/imageElement/imageElement';
+import type { ActiveElements, ButtonElement, ImageElement, TextElement } from '@/components/page/model/imageElement/imageElement';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
 import type { PageElement, Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { SiteDefaultProperties } from '../siteDefaults/siteDefaultProperties';
@@ -40,23 +40,29 @@ function ComponentFactory() {
   }
 
   function createContainer(component: ToolbarComponentItem, parentReference: string): PageContainerInterface {
-    const container = createBaseElement(component, parentReference) as PageContainerInterface;
+    const container = createBaseElement<PageContainerInterface>(component, parentReference);
     container.isContainer = true;
     container.componentHTMLTag = 'div';
     container.elements = [];
     container.styles = [createBaseStyles().backgroundColour];
     container.isAbsolute = false;
-    container.location = { ...BASE_LOCATION };
+    container.location = {
+      left: constructStyle('left', { value: '0', unit: 'px'}),
+      top: constructStyle('top', { value: '0', unit: 'px'}),
+    };
     return container;
   }
 
   function createImage(component: ToolbarComponentItem, parentReference: string): ImageElement {
-    const imageElement = createBaseElement(component, parentReference) as ImageElement;
+    const imageElement = createBaseElement<ImageElement>(component, parentReference);
     imageElement.content = 'imageplaceholder-100x83.png';
     imageElement.componentHTMLTag = 'img';
     imageElement.container = {
       naturalSize: { ...BASE_DIMENSION },
-      location: { ...BASE_LOCATION },
+      location: { 
+        left: constructStyle('left', { value: '0', unit: 'px'}),
+        top: constructStyle('top', { value: '0', unit: 'px'}),
+      },
       isAbsolute: false,
       styles: [createBaseStyles().backgroundColour]
     };
@@ -69,21 +75,21 @@ function ComponentFactory() {
     };
     const defaultHeight: ValueAndUnit = { value: '200', unit: 'px' };
     const defaultWidth: ValueAndUnit = { value: '100', unit: 'px' };
-    imageElement.image.scaledSize.height = { style: 'height', value: { ...defaultHeight } };
-    imageElement.image.scaledSize.width = { style: 'width', value: { ...defaultWidth } };
-    imageElement.image.naturalSize.height = { style: 'height', value: { ...defaultHeight } };
-    imageElement.image.naturalSize.width = { style: 'width', value: { ...defaultWidth } };
-    imageElement.container.naturalSize.height = { style: 'height', value: { ...defaultHeight } };
-    imageElement.container.naturalSize.width = { style: 'width', value: { ...defaultWidth } };
+    imageElement.image.scaledSize.height = constructStyle('height',  { ...defaultHeight });
+    imageElement.image.scaledSize.width = constructStyle('width',  { ...defaultWidth });
+    imageElement.image.naturalSize.height = constructStyle('height',  { ...defaultHeight });
+    imageElement.image.naturalSize.width = constructStyle('width',  { ...defaultWidth });
+    imageElement.container.naturalSize.height = constructStyle('height',  { ...defaultHeight });
+    imageElement.container.naturalSize.width = constructStyle('width',  { ...defaultWidth });
     imageElement.container.location = {
-      left: { style: 'left', value : { value: '0', unit: 'px'}},
-      top: { style: 'top', value : { value: '0', unit: 'px'}}
+      left: constructStyle('left', { value: '0', unit: 'px'}),
+      top: constructStyle('top', { value: '0', unit: 'px'}),
     };
     return imageElement;
   }
 
   function createButton(component: ToolbarComponentItem, parentReference: string): ButtonElement {
-    const buttonElement = createBaseElement(component, parentReference) as ButtonElement;
+    const buttonElement = createBaseElement<ButtonElement>(component, parentReference);
     buttonElement.content = 'Click me';
     buttonElement.isAbsolute = false;
     buttonElement.componentHTMLTag = 'span';
@@ -100,7 +106,8 @@ function ComponentFactory() {
   }
 
   function createText(component: ToolbarComponentItem, parentReference: string): TextElement {
-    const textElement = createBaseElement(component, parentReference) as TextElement;
+    const textElement = createBaseElement<TextElement>(component, parentReference);
+
     textElement.content = 'hello world';
     textElement.isAbsolute = false;
     textElement.componentHTMLTag = 'p';
@@ -112,14 +119,15 @@ function ComponentFactory() {
       left: constructStyle('left', { value: '0', unit: 'px'}),
       top: constructStyle('top', { value: '0', unit: 'px'}),
     };
+    const styles = createBaseStyles();
     textElement.styles = [
-      createBaseStyles().fontFamily, 
-      createBaseStyles().fontSize
+      styles.fontFamily, 
+      styles.fontSize,
     ];
     return textElement;
-  } 
+  }
 
-  function createBaseElement(component: ToolbarComponentItem, parentReference: string): PageElement {
+  function createBaseElement<T extends ImageElement | TextElement | ButtonElement | PageContainerInterface>(component: ToolbarComponentItem, parentReference: string): T {
     const ref = component.componentRef;
     const name = component.componentName;
     const type = component.type;
@@ -138,7 +146,7 @@ function ComponentFactory() {
       actionEvent,
       isContainer,
       componentHTMLTag: '',
-    };
+    } as T;
   }
 
   function createBaseStyles() {

@@ -14,11 +14,14 @@ function useDrag() {
   function onEnableMove(component: DragableElements, event: MouseEvent) {
     activeComponent = component;
     window.addEventListener('mousemove', onDrag);
+    window.addEventListener('mouseup', onDisableMove);
+
     mouseDelta.calcDelta(event);
   }
 
   function onDisableMove() {
     window.removeEventListener('mousemove', onDrag);
+    window.removeEventListener('mouseup', onDisableMove);
   }
 
   const onDrag = (event: MouseEvent) => {
