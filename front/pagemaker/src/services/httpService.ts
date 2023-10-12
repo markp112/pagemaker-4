@@ -49,7 +49,6 @@ async function performGet<T>(path: string, config: AxiosRequestConfig): Promise<
   try {
     const configOptions = config;
     configOptions.headers = {...config?.headers, 'Authorization': `Bearer ${getToken()}`};
-    console.log('%c⧭', 'color: #733d00', configOptions);
     const response = await backEndClient.get(route, configOptions);
     if (response.status !== 200) {
       displayMessage(response.data.data.err, 'error', 'Failed');

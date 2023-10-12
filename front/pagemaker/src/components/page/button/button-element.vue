@@ -16,7 +16,7 @@
       :this-component="thisComponent"
       @resize-started="resizeStarted()"
       @resize-stopped="isSizing =!isSizing"
-      />
+    />
     </div>
 </template>
 

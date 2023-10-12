@@ -74,7 +74,7 @@ import { PageService } from '@/services/page/page.service';
 
 const scalerSettings: SliderSettings = {
   min: 0,
-  max: 200,
+  max: 400,
   initialValue: 100,
   width: 400,
   label: 'Zoom',
@@ -142,7 +142,7 @@ const trashCan: Icon = {
       },
 
       sliderChange(newValue: number) {
-        this.zoomPage = newValue / 100;;
+        this.zoomPage = newValue / 100;
       },
 
       getPage(): Page {

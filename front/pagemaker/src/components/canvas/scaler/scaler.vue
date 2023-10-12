@@ -8,50 +8,25 @@
       v-model="sliderValue"
       :min="slider.min"
       :max="slider.max" 
-      @mousemove.self="rangeSlide()"/>
+      @mousemove.self="rangeOnSlide()"/>
     <span class="rangeValue">{{ slider.max }}</span>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import type { SliderSettings } from './model';
 
-export default defineComponent({
-    name:'slider',
-    emits: ['sliderChange'],
+  const emits = defineEmits(['sliderChange']);
+  const props = defineProps<{
+      slider: SliderSettings,
+  }>();
 
-    props: {
-      slider: {
-        type: Object as PropType<SliderSettings>,
-        required: true
-      },
-    },
+  const sliderValue = ref(props.slider.initialValue);
 
-    mounted() {
-      this.sliderValue = this.$props.slider.initialValue;
-    },
-
-    data() {
-      return {
-        sliderValue: 100,
-      }
-    },
-
-    computed: {
-      getWidth() {
-        return `width:${this.$props.slider.width};`;
-      },
-
-    },
-
-    methods: {
-
-      rangeSlide() {
-        this.$emit('sliderChange', this.sliderValue)
-      },
-    },
-  })
+  const rangeOnSlide = () => {
+    emits('sliderChange', sliderValue.value);
+  };
 </script>
 
 <style scoped lang="css">

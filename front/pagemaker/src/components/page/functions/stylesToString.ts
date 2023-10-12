@@ -1,4 +1,4 @@
-import type { BorderStyle, Style, } from '../model/pageElement/pageElement';
+import type { BorderStyle, CssStyleTypes, Style, StyleTags, } from '../model/pageElement/pageElement';
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
 
@@ -54,4 +54,13 @@ function addStyle(existingStyles: Style[], styleToAdd: Style): Style[] {
   return newStyles;
 }
 
-export { stylesToString, locationToStyle, dimensionToStyle, addStyle };
+function removeStyle(existingStyles: Style[], styleToRemove: StyleTags | CssStyleTypes): Style[] {
+  return existingStyles.filter(style => style.style !== styleToRemove);
+}
+
+export { stylesToString, 
+  locationToStyle, 
+  dimensionToStyle, 
+  addStyle,
+  removeStyle,
+};

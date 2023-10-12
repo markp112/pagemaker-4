@@ -1,7 +1,7 @@
 <template>
   <div class="border border-gray-800 page-shadow p-5 overflow-auto relative"
     :class="thisPage.classDefinition"
-    :style="getScaledPageSize"
+    :style="getStyles()"
     ref="page"
     id="page"
     @dragover.prevent
@@ -26,17 +26,17 @@
 
 
 <script lang="ts" setup>
-import { onMounted, ref,  computed, } from 'vue';
+import { onMounted, ref,  computed, onUpdated, } from 'vue';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
-import type { ComponentTypesString, Page, Style } from './model/pageElement/pageElement';
+import type { ComponentTypesString, Page } from './model/pageElement/pageElement';
 import Container from './container/container.vue';
 import imageElement from './image/imageElement.vue';
 import buttonElement from './button/button-element.vue';
 import textElement from './textElement/textElement.vue';
 import Resize from '../base/resize/resize.vue';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { stylesToString } from './functions/stylesToString';
-import type { ActiveElements } from './model/imageElement/imageElement';
+import { dimensionToStyle, stylesToString } from './functions/stylesToString';
+import type { ActiveElements, ImageElement } from './model/imageElement/imageElement';
 
 const componentMap = {
   'imageElement': imageElement,
@@ -53,44 +53,64 @@ const props = defineProps<{
 const pageBuilderService = PageBuilderService();
 const editorSettings = new EditorSettingsService();
 const thisPage = ref<Page>(props.page);
+const numElements = ref(props.page.elements.length);
+const elementRefs = Array(numElements).fill(null).map(() => ref(null));
+const currentScale = ref(props.scale);
+
+const pageElements = computed((): ActiveElements[] => {
+  return thisPage.value.elements;
+});
 
 onMounted(() => {
   pageBuilderService.initPage();
 });
 
+onUpdated(() => {
+  if (currentScale.value !== props.scale) {
+    scaleElements();
+    currentScale.value = props.scale;
+  }
+})
+
 const getComponent = (type: ComponentTypesString) => {
   return componentMap[type];
 };
 
-  const getScaledPageSize = computed((): string => {
-    if(!thisPage.value) return '';
-    let pageSize = '';
-    const scale = props.scale;
-    if (thisPage.value && scale) {
-      const scaledDimension = pageBuilderService.calcPageSize(props.scale, thisPage.value.dimension);
-      pageBuilderService.setScaledDimension(scaledDimension);
-      pageSize = `${getDimension(scaledDimension.width)}${getDimension(scaledDimension.height)}`;
-    }
-    pageSize += getStyles;
-    return pageSize;
-  });
+
+const scaleElements = (): string => {
+  if(!thisPage.value) return '';
+  if(elementRefs.length === 0) return '';
+  const scale = props.scale;
+  if (thisPage.value !== undefined && scale) {
+    thisPage.value.elements.forEach(element => {
+      if (element) {
+        if (element.type === 'imageElement') {
+          const imageElement: ImageElement = <ImageElement>element;
+          imageElement.container.styles = pageBuilderService.scaleElement(props.scale, imageElement.container.styles);
+          imageElement.image.styles = pageBuilderService.scaleElement(props.scale, imageElement.image.styles);
+        } else {
+          element.styles = pageBuilderService.scaleElement(props.scale, element.styles);
+        }
+      }
+
+    })
+  }
+  return getStyles();
+};
 
   const isActive = computed(() => {
     return editorSettings.getActiveElement()?.ref === PAGE_REF;
   });
 
   const getStyles = (): string => {
-    let styles = '';
-    styles = stylesToString(thisPage.value.styles)
+    let styles = getDimension();
+    styles = `${styles}${stylesToString(thisPage.value.styles)}`
     return styles;
   };
 
-  const pageElements = computed((): ActiveElements[] => {
-    return thisPage.value.elements;
-  });
-  
-  const getDimension = (dimension: Style): string => {
-    return `${dimension.style}:${dimension.value.value}${dimension.value.unit};`;
+  const getDimension = (): string => {
+    const dimension = thisPage.value.dimension;
+    return dimensionToStyle(dimension);
   };
 
   const onDrop = (event: DragEvent): void => {
