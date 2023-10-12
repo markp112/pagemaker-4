@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import { onMounted, ref,  computed, onUpdated, } from 'vue';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
-import type { ComponentTypesString, Page, Style } from './model/pageElement/pageElement';
+import type { ComponentTypesString, Page } from './model/pageElement/pageElement';
 import Container from './container/container.vue';
 import imageElement from './image/imageElement.vue';
 import buttonElement from './button/button-element.vue';

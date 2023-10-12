@@ -9,7 +9,7 @@ import type { CommandProperties } from '@/classes/command/model/command';
 import { CommandProcessor } from '@/classes/command/commandProcessor';
 import type { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '../editorSettings/editor.settings.service';
-import type { ActiveElements, ImageElement } from '@/components/page/model/imageElement/imageElement';
+import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 import { addStyle, removeStyle } from '@/components/page/functions/stylesToString';
 
 function PageBuilderService() {
