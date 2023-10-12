@@ -89,7 +89,8 @@ type StyleTags =
   | 'transparency'
   | 'top'
   | 'left'
-  | 'position';
+  | 'position'
+  | 'scale';
 
 type Style =  {
   style: StyleTags | CssStyleTypes;

@@ -1,6 +1,6 @@
 import { ComponentCounter } from '@/classes/componentCounter/componentCounter';
 import type { ToolbarComponentItem } from '@/components/core/toolbar/model';
-import type { PageElement } from '@/components/page/model/pageElement/pageElement';
+import type { PageElement, Style } from '@/components/page/model/pageElement/pageElement';
 import { useToolbarStore } from '@/stores/toolbars.store';
 import { usePageStore } from '@/stores/page.store';
 import { ComponentFactory } from '@/views/pageBuilder/classes/componentFactory/componentFactory';
@@ -9,7 +9,8 @@ import type { CommandProperties } from '@/classes/command/model/command';
 import { CommandProcessor } from '@/classes/command/commandProcessor';
 import type { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '../editorSettings/editor.settings.service';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { ActiveElements, ImageElement } from '@/components/page/model/imageElement/imageElement';
+import { addStyle, removeStyle } from '@/components/page/functions/stylesToString';
 
 function PageBuilderService() {
   const toolbarStore = useToolbarStore();
@@ -54,6 +55,16 @@ function PageBuilderService() {
     pageStore.setScaledDimension(dimension);
   }
 
+  function scaleElement(scalingRatio: number, styles: Style[]) {
+    const currentStyles = [...styles]
+    const cleanStyles = removeStyle(currentStyles, 'scale');
+    const style: Style = {
+      style: 'scale',
+      value: { value: scalingRatio.toString() }
+    };
+    return addStyle(cleanStyles, style);
+  }
+
   function setActiveElement(pageElement: ActiveElements): void {
     editorSettingsService.setActiveElement(pageElement);
   }
@@ -81,7 +92,8 @@ function PageBuilderService() {
       setScaledDimension,
       processButtonCommand,
       setActiveElement,
-      clearButtonCommand
+      clearButtonCommand,
+      scaleElement
     };
 }
 

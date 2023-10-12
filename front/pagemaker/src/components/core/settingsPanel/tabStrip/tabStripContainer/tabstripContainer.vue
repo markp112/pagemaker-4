@@ -60,7 +60,6 @@ export default defineComponent({
     },
 
     handleButtonClick(command: CommandProperties) {
-      console.log('%c⧭', 'color: #917399', command)
       this.$emit('onButtonClick', command);
     },
   },

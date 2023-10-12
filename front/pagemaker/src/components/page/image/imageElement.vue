@@ -1,5 +1,5 @@
 <template>
-  <div class="relative select-none overflow-hidden"
+  <div class="relative select-none  bg-red-600"
     :ref="getId()"
     :id="getId()"
     :class="thisComponent.classDefinition"
@@ -11,7 +11,6 @@
   >
     <img
       ref="image-element"
-      class="absolute w-100 h-full"
       :src="getImage()"
       :style="getStyles()"
     />
@@ -61,17 +60,17 @@ import { Style } from '../model/pageElement/pageElement';
     thisComponent.value.container.isAbsolute = true;
   };
 
-    const onDragEnd = (event: MouseEvent) => {
-      event.stopImmediatePropagation();
-      drag.onDisableMove();
-      isDragging.value = false;
-      const positionAbsolute: Style = {
-        style: 'position',
-        value: { value: 'absolute' }
-      };
-      const styles = (<ImageElement>thisComponent.value).container.styles;
-      (<ImageElement>thisComponent.value).container.styles = addStyle(styles, positionAbsolute);
+  const onDragEnd = (event: MouseEvent) => {
+    event.stopImmediatePropagation();
+    drag.onDisableMove();
+    isDragging.value = false;
+    const positionAbsolute: Style = {
+      style: 'position',
+      value: { value: 'absolute' }
     };
+    const styles = (<ImageElement>thisComponent.value).container.styles;
+    (<ImageElement>thisComponent.value).container.styles = addStyle(styles, positionAbsolute);
+  };
 
     const getDimensions = (): string => {
       let dimension = '';
@@ -101,9 +100,9 @@ import { Style } from '../model/pageElement/pageElement';
     };
     
     const getContainerStyles = (): string => {
-      let styles = '';
+      let styles = stylesToString(thisComponent.value.container.styles);
       if(thisComponent.value.container.isAbsolute) {
-        styles = locationToStyle(thisComponent.value.container.location);
+        styles = `${styles}${locationToStyle(thisComponent.value.container.location)}`;
       }
       if(thisComponent.value.container) {
         styles += dimensionToStyle(thisComponent.value.container.naturalSize);

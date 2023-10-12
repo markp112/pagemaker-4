@@ -1,5 +1,5 @@
 <template>
-  <div class="relative select-none"
+  <div class="relative"
     :ref="getId()"
     :id="getId()"
     :style="getContainerStyles()"
