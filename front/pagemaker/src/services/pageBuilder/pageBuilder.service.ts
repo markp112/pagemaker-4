@@ -66,6 +66,7 @@ function PageBuilderService() {
   }
 
   function setActiveElement(pageElement: ActiveElements): void {
+    console.log('%c⧭', 'color: #eeff00', pageElement);
     editorSettingsService.setActiveElement(pageElement);
   }
 

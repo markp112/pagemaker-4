@@ -50,6 +50,11 @@ function ComponentFactory() {
       left: constructStyle('left', { value: '0', unit: 'px'}),
       top: constructStyle('top', { value: '0', unit: 'px'}),
     };
+    console.log('%c⧭', 'color: #ff6600',  component.dimension.width.value);
+    container.dimension = {
+      width: constructStyle('width', component.dimension.width.value),
+      height: constructStyle('height', component.dimension.height.value)
+    };
     return container;
   }
 
@@ -57,15 +62,6 @@ function ComponentFactory() {
     const imageElement = createBaseElement<ImageElement>(component, parentReference);
     imageElement.content = 'imageplaceholder-100x83.png';
     imageElement.componentHTMLTag = 'img';
-    imageElement.container = {
-      naturalSize: { ...BASE_DIMENSION },
-      location: { 
-        left: constructStyle('left', { value: '0', unit: 'px'}),
-        top: constructStyle('top', { value: '0', unit: 'px'}),
-      },
-      isAbsolute: false,
-      styles: [createBaseStyles().backgroundColour]
-    };
     imageElement.image = {
       naturalSize: { ...BASE_DIMENSION },
       location: { ...BASE_LOCATION },
@@ -75,16 +71,14 @@ function ComponentFactory() {
     };
     const defaultHeight: ValueAndUnit = { value: '200', unit: 'px' };
     const defaultWidth: ValueAndUnit = { value: '100', unit: 'px' };
+    imageElement.location = {
+      left: constructStyle('left', { value: '0', unit: 'px'}),
+      top: constructStyle('top', { value: '0', unit: 'px'}),
+    };
     imageElement.image.scaledSize.height = constructStyle('height',  { ...defaultHeight });
     imageElement.image.scaledSize.width = constructStyle('width',  { ...defaultWidth });
     imageElement.image.naturalSize.height = constructStyle('height',  { ...defaultHeight });
     imageElement.image.naturalSize.width = constructStyle('width',  { ...defaultWidth });
-    imageElement.container.naturalSize.height = constructStyle('height',  { ...defaultHeight });
-    imageElement.container.naturalSize.width = constructStyle('width',  { ...defaultWidth });
-    imageElement.container.location = {
-      left: constructStyle('left', { value: '0', unit: 'px'}),
-      top: constructStyle('top', { value: '0', unit: 'px'}),
-    };
     return imageElement;
   }
 
@@ -96,7 +90,7 @@ function ComponentFactory() {
     buttonElement.dimension = {
       width: constructStyle('width', component.dimension.width.value),
       height: constructStyle('height', component.dimension.height.value)
-    }
+    };
     buttonElement.location = {
       left: constructStyle('left', { value: '0', unit: 'px'}),
       top: constructStyle('top', { value: '0', unit: 'px'}),

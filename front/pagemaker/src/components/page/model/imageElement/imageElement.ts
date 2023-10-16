@@ -12,13 +12,15 @@ interface ContainerProps  {
 
 interface ImageProps extends ContainerProps {
   scaledSize: Dimension;
-  location: Location;
+
 }
 
 interface ImageElement extends PageElement {
   ratio: number;
   maintainRatio: boolean;
-  container: ContainerProps;
+  isAbsolute: boolean;
+  // container: ContainerProps;
+  location: Location;
   image: ImageProps;
   content: string,
   styles: Style[],

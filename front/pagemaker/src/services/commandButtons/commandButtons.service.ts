@@ -25,13 +25,15 @@ function CommandsService() {
   function getTabs(): TabStrip[] {
     const command = getEditorCommand();
     if (command) {
-      return command.tabs.map(tab => {
+      const tabs = command.tabs.map(tab => {
         return {
           displayName: tab.displayName,
           commandPanels: tab.tabContent,
           id: tab.displayName
         }
       })
+      console.log('%c⧭', 'color: #33cc99', tabs);
+      return tabs;
     }
     return [];
   }

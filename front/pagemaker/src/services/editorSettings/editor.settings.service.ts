@@ -70,7 +70,7 @@ class EditorSettingsService {
   }
 
   setActiveElement(element: ActiveElements) {
-    if(this.activeElementStore.activeElement === undefined || element === undefined) {
+    if(this.activeElementStore.activeElement === undefined) {
       this.activeElementStore.setActiveElement(element);
       return;
     } 

@@ -18,9 +18,7 @@
       @drop.prevent="onDrop($event)"
       @OnClick="containedElementClick($event)"
     />
-    <Resize :is-active="isActive"
-      :this-component="thisPage"
-    />
+  
   </div>
 </template>
 
@@ -84,15 +82,8 @@ const scaleElements = (): string => {
   if (thisPage.value !== undefined && scale) {
     thisPage.value.elements.forEach(element => {
       if (element) {
-        if (element.type === 'imageElement') {
-          const imageElement: ImageElement = <ImageElement>element;
-          imageElement.container.styles = pageBuilderService.scaleElement(props.scale, imageElement.container.styles);
-          imageElement.image.styles = pageBuilderService.scaleElement(props.scale, imageElement.image.styles);
-        } else {
           element.styles = pageBuilderService.scaleElement(props.scale, element.styles);
-        }
       }
-
     })
   }
   return getStyles();
