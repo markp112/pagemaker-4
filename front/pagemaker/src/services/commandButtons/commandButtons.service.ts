@@ -25,13 +25,14 @@ function CommandsService() {
   function getTabs(): TabStrip[] {
     const command = getEditorCommand();
     if (command) {
-      return command.tabs.map(tab => {
+      const tabs = command.tabs.map(tab => {
         return {
           displayName: tab.displayName,
           commandPanels: tab.tabContent,
           id: tab.displayName
         }
       })
+      return tabs;
     }
     return [];
   }
@@ -55,13 +56,13 @@ function CommandsService() {
   async function createPageElement(pageElementName: string, tabs: string[] = []) {
     const key = pageElementName;
     const data = { [key]: { tabs } };
-    await axiosClient().post<{[key: string]: {tabs: string[]}}, string>(`${BASE_ROUTE}/page-element`, data);
+    await axiosClient().post<{[keyName: string]: {tabs: string[]}}, string>(`${BASE_ROUTE}/page-element`, data);
   }
 
   async function updatePageElementTabs(pageElement: string, tabs: string[]) {
     const key = pageElement;
     const data = { [key]: { tabs } };
-    await axiosClient().put<{[key: string]: {tabs: string[]}}, string[]>(`${BASE_ROUTE}/page-element/tabs`, data);
+    await axiosClient().put<{[keyName: string]: {tabs: string[]}}, string[]>(`${BASE_ROUTE}/page-element/tabs`, data);
   }
 
   async function createNewTabElement(tabGroupPartial:  Omit<TabGroup, 'tabContent'>): Promise<TabGroup> {

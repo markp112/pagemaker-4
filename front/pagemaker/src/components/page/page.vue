@@ -18,9 +18,6 @@
       @drop.prevent="onDrop($event)"
       @OnClick="containedElementClick($event)"
     />
-    <Resize :is-active="isActive"
-      :this-component="thisPage"
-    />
   </div>
 </template>
 
@@ -33,10 +30,9 @@ import Container from './container/container.vue';
 import imageElement from './image/imageElement.vue';
 import buttonElement from './button/button-element.vue';
 import textElement from './textElement/textElement.vue';
-import Resize from '../base/resize/resize.vue';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { dimensionToStyle, stylesToString } from './functions/stylesToString';
-import type { ActiveElements, ImageElement } from './model/imageElement/imageElement';
+import type { ActiveElements } from './model/imageElement/imageElement';
 
 const componentMap = {
   'imageElement': imageElement,
@@ -84,23 +80,12 @@ const scaleElements = (): string => {
   if (thisPage.value !== undefined && scale) {
     thisPage.value.elements.forEach(element => {
       if (element) {
-        if (element.type === 'imageElement') {
-          const imageElement: ImageElement = <ImageElement>element;
-          imageElement.container.styles = pageBuilderService.scaleElement(props.scale, imageElement.container.styles);
-          imageElement.image.styles = pageBuilderService.scaleElement(props.scale, imageElement.image.styles);
-        } else {
           element.styles = pageBuilderService.scaleElement(props.scale, element.styles);
-        }
       }
-
     })
   }
   return getStyles();
 };
-
-  const isActive = computed(() => {
-    return editorSettings.getActiveElement()?.ref === PAGE_REF;
-  });
 
   const getStyles = (): string => {
     let styles = getDimension();

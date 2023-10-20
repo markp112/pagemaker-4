@@ -1,36 +1,26 @@
 <template>
-  <div class="relative select-none  bg-red-600"
-    :ref="getId()"
-    :id="getId()"
-    :class="thisComponent.classDefinition"
-    :style="getContainerStyles()" 
-    @click.stop="onImageClick()"
-    @dragstart.stop="onDragStart($event)"
-    @mouseup.stop="onDragEnd($event)"
-    @mousedown="onDragStart($event)"
+  <Resize 
+    :is-active="isActive"
+    :thisComponent="props.thisComponent"
   >
-    <img
-      ref="image-element"
+    <img class="select-none"
+      @click.stop="onImageClick()"
+      :ref="getId()"
+      :id="getId()"
+      :class="thisComponent.classDefinition"
       :src="getImage()"
       :style="getStyles()"
     />
-    <Resize :is-active="isActive"
-      :this-component="props.thisComponent"
-      @resize-started="resizeStarted()"
-      @resize-stopped="isSizing=!isSizing"
-    />
-  </div>
+  </Resize>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import { useDrag } from '../classes/mouse/useDrag';
 import Resize from '@/components/base/resize/resize.vue';
-import { dimensionToStyle, locationToStyle, stylesToString, addStyle } from '../functions/stylesToString';
+import { dimensionToStyle, stylesToString,  } from '../functions/stylesToString';
 import type { ImageElement } from '../model/imageElement/imageElement';
 import { getImageUrl } from '@/common/getIcon';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import { Style } from '../model/pageElement/pageElement';
 
   const emits = defineEmits(['onClick']);
 
@@ -39,74 +29,38 @@ import { Style } from '../model/pageElement/pageElement';
   }>();
 
   const thisComponent = ref<ImageElement>(props.thisComponent)
-  const isSizing = ref(false);
   const editorSettings = new EditorSettingsService();
-  const isDragging = ref(false);
-  const drag = useDrag();
   const isActive = computed(() => editorSettings.getActiveElement()?.ref === thisComponent.value.ref);
     
-  const resizeStarted = () => {
-    isSizing.value = true;
-  };
-      
   const onImageClick = () => {
     emits('onClick', thisComponent.value);
   };
 
-  const onDragStart = (event: MouseEvent) => {
-    event.stopImmediatePropagation();
-    if (isSizing.value){ return };
-    drag.onEnableMove(thisComponent.value, event);
-    thisComponent.value.container.isAbsolute = true;
+  const getDimensions = (): string => {
+    let dimension = '';
+    if(thisComponent.value.dimension) {
+      dimension = dimensionToStyle(thisComponent.value.dimension);
+    }
+    return dimension;
   };
 
-  const onDragEnd = (event: MouseEvent) => {
-    event.stopImmediatePropagation();
-    drag.onDisableMove();
-    isDragging.value = false;
-    const positionAbsolute: Style = {
-      style: 'position',
-      value: { value: 'absolute' }
-    };
-    const styles = (<ImageElement>thisComponent.value).container.styles;
-    (<ImageElement>thisComponent.value).container.styles = addStyle(styles, positionAbsolute);
+  const getImage = (): string => {
+    const DEFAULT_IMAGE = 'imageplaceholder-100x83.png';
+    if(thisComponent.value.content === DEFAULT_IMAGE) {
+      return getImageUrl(thisComponent.value.content);
+    }
+    return thisComponent.value.content;
   };
 
-    const getDimensions = (): string => {
-      let dimension = '';
-      if(thisComponent.value.dimension) {
-        dimension = dimensionToStyle(thisComponent.value.dimension);
-      }
-      return dimension;
-    };
+  const getId = () => {
+    return thisComponent.value.ref;
+  };
 
-    const getImage = (): string => {
-      const DEFAULT_IMAGE = 'imageplaceholder-100x83.png';
-      if(thisComponent.value.content === DEFAULT_IMAGE) {
-        return getImageUrl(thisComponent.value.content);
-      }
-      return thisComponent.value.content;
-    };
-
-    const getId = () => {
-      return thisComponent.value.ref;
-    };
-
-    const getStyles = (): string => {
-      let styles = '';
-      styles = stylesToString(thisComponent.value.image.styles)
-      styles += getDimensions();
-      return styles;
-    };
-    
-    const getContainerStyles = (): string => {
-      let styles = stylesToString(thisComponent.value.container.styles);
-      if(thisComponent.value.container.isAbsolute) {
-        styles = `${styles}${locationToStyle(thisComponent.value.container.location)}`;
-      }
-      if(thisComponent.value.container) {
-        styles += dimensionToStyle(thisComponent.value.container.naturalSize);
-      }
-      return styles;
-    };
+  const getStyles = (): string => {
+    let styles = '';
+    styles = stylesToString(thisComponent.value.image.styles)
+    styles += getDimensions();
+    return styles;
+  };
+  
 </script>

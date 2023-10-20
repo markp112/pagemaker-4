@@ -1,30 +1,23 @@
 <template>
-  <div class="relative"
-    :ref="getId()"
-    :id="getId()"
-    :style="getContainerStyles()"
-    @mousedown="onDragStart($event)"
-    @mouseup="onDragEnd()"
-    @dragstart.stop="onDragStart($event)"
-    @dragend.stop="onDragEnd()"
-    @click.stop="onClick()"
-    @blur="isSizing=false"
-  >
-    <p
-      ref="text-element"
-      :class="getClasses()"
-      :style="getStyles()"
-      @onClick.stop="onClick()"
+  <Resize 
+    :is-active="isActive"
+    :this-component="thisComponent"
     >
-    {{ getContent() }} 
-  </p>
-    <Resize :is-active="isActive"
-      :this-component="thisComponent"
-      @resize-started="resizeStarted()"
-      @resize-stopped="isSizing=false"
-      onclick.stop=""
-    />
-  </div>
+    <div class="relative"
+      :ref="getId()"
+      :id="getId()"
+      :style="getContainerStyles()"
+    >
+      <p
+        ref="text-element"
+        :class="getClasses()"
+        :style="getStyles()"
+        @click.stop="onClick()"
+      >
+        {{ getContent() }} 
+      </p>
+    </div>
+  </Resize>
 </template>
 
 <script lang="ts" setup>
@@ -34,7 +27,6 @@ import { EditorSettingsService } from '@/services/editorSettings/editor.settings
 import { computed, ref } from '@vue/reactivity';
 import { dimensionToStyle, locationToStyle, stylesToString } from '../functions/stylesToString';
 import type { TextElement } from '../model/imageElement/imageElement';
-import { useDrag } from '../classes/mouse/useDrag';
 
 const props = defineProps<{
   thisComponent: TextElement,
@@ -42,32 +34,11 @@ const props = defineProps<{
 
 const emits = defineEmits(['onClick']);
 const editorSettingsService = new EditorSettingsService();
-const isSizing = ref(false);
-const isDragging = ref(false);
-const drag = useDrag();
 const thisComponent = ref(props.thisComponent);
 
-const isActive = computed(() => editorSettingsService.getActiveElement()?.ref === props.thisComponent.ref);
-
-const resizeStarted = () => {
-  isDragging.value = false;
-  isSizing.value = true;
-};
-  
-const onDragStart = (event: MouseEvent) => {
-  if (isSizing.value) { return };
-  drag.onEnableMove(thisComponent.value, event);
-  thisComponent.value.isAbsolute = true;
-  isDragging.value = true;
-};
-
-const onDragEnd = () => {
-  isDragging.value = false;
-  drag.onDisableMove();
-};
+const isActive = computed(() => editorSettingsService.getActiveElement()?.ref === thisComponent.value.ref);
 
 const onClick = () => {
-  isSizing.value = false;
   emits('onClick', thisComponent.value);
 }
 

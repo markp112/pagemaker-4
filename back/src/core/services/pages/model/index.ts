@@ -145,16 +145,10 @@ interface Page extends PageElementData {
   styles: Style[];
 }
 
-interface ContainerProps  {
+interface ImageProps {
+  scaledSize: Dimension;
   location: Location;
   naturalSize: Dimension;
-  styles: Style[];
-  isAbsolute: boolean;
-}
-
-interface ImageProps extends ContainerProps {
-  scaledSize: Dimension;
-  location: Location,
   styles: Style[];
   isAbsolute: boolean;
 }
@@ -162,9 +156,11 @@ interface ImageProps extends ContainerProps {
 interface ImageElement extends PageElementData {
   ratio: number;
   maintainRatio: boolean;
-  container: ContainerProps;
+  isAbsolute: boolean;
+  location: Location;
   image: ImageProps;
-  content: string;
+  content: string,
+  styles: Style[],
 }
 
 interface ButtonElement extends PageElementData {
