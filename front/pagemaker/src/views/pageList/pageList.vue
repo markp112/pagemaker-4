@@ -48,7 +48,6 @@
             <img
               src="@/assets/icons/pencil-24.png"
               alt="Edit pencil"
-              @click="editPageClick(page.name)"
               class="w-8 h-8 hover:bg-site-primary cursor-pointer"
             />
           </span>
@@ -104,9 +103,6 @@ export default defineComponent({
   },
 
   methods: {
-    
-    editPageClick(pageName: string): void {
-    },
     
     getIcon (iconName: string){
       return getImageUrl(iconName);
