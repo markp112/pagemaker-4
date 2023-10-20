@@ -39,7 +39,6 @@ const thisComponent = ref(props.thisComponent);
 const isActive = computed(() => editorSettingsService.getActiveElement()?.ref === thisComponent.value.ref);
 
 const onClick = () => {
-  console.log('%c⧭', 'color: #607339', thisComponent.value)
   emits('onClick', thisComponent.value);
 }
 

@@ -39,13 +39,6 @@ type DragableElements = TextElement | ButtonElement | PageContainerInterface | I
 type WhichDimension = 'height' | 'width';
 type WhichLocation = 'top' | 'left';
 
-  const calculateNewDimensions = {
-    'top-Left': (dx: number, dy: number) => { return { width: initialWidth.value - dx, height: initialHeight.value - dy }},
-    'top-right': (dx: number, dy: number) => { return {  width: initialWidth.value + dx, height: initialHeight.value - dy }},
-    'bottom-left': (dx: number, dy: number) => { return {  width: initialWidth.value - dx, height: initialHeight.value + dy }},
-    'bottom-right': (dx: number, dy: number) => { return {  width: initialWidth.value + dx, height: initialHeight.value + dy }},
-  };
-    
   const props = defineProps<{
     isActive: boolean,
     thisComponent: DragableElements,
@@ -71,12 +64,30 @@ type WhichLocation = 'top' | 'left';
     }
   })
 
+  const calculateNewDimensions = {
+    'top-Left': (dx: number, dy: number) => { return { width: initialWidth.value - dx, height: initialHeight.value - dy }},
+    'top-right': (dx: number, dy: number) => { return {  width: initialWidth.value + dx, height: initialHeight.value - dy }},
+    'bottom-left': (dx: number, dy: number) => { return {  width: initialWidth.value - dx, height: initialHeight.value + dy }},
+    'bottom-right': (dx: number, dy: number) => { return {  width: initialWidth.value + dx, height: initialHeight.value + dy }},
+  };
+
+  const getDimension = (whichDimension: WhichDimension) => {
+    const dimension = thisComponent.value.dimension;
+    return whichDimension === 'height' ? parseInt(dimension.height.value.value) : parseInt(dimension.width.value.value)
+  };
+
+  const setDimension = (width: number, height: number) => {
+    const dimension: Dimension = {
+      height: {style: 'height', value: { value: height.toString(), unit: getUnit('width') }},
+      width: {style: 'width', value: { value: width.toString(), unit: getUnit('height') }},
+    }
+    thisComponent.value.dimension = dimension; 
+  };
+    
   const getDimensionPosition = computed (() => {
     if(!thisComponent.value) {
       return;
     }
-    left.value = `${thisComponent.value.location.left.value.value}px`;
-    top.value = `${thisComponent.value.location.top.value.value}px`;
     return {
       left: left.value,
       top: top.value,
@@ -94,19 +105,6 @@ type WhichLocation = 'top' | 'left';
     initialY.value = event.clientY;
     document.addEventListener('mousemove', resize);
     document.addEventListener('mouseup', stopResizing);
-  };
-
-  const getDimension = (whichDimension: WhichDimension) => {
-    const dimension = thisComponent.value.dimension;
-    return whichDimension === 'height' ? parseInt(dimension.height.value.value) : parseInt(dimension.width.value.value)
-  };
-
-  const setDimension = (width: number, height: number) => {
-    const dimension: Dimension = {
-      height: {style: 'height', value: { value: height.toString(), unit: getUnit('width') }},
-      width: {style: 'width', value: { value: width.toString(), unit: getUnit('height') }},
-    }
-    thisComponent.value.dimension = dimension; 
   };
 
   const resize = (event: MouseEvent) => {
@@ -143,10 +141,12 @@ type WhichLocation = 'top' | 'left';
     if (isDragging.value) {
       const dx = event.clientX - initialX.value;
       const dy = event.clientY - initialY.value;
-      const top = getLocationValue('top') + dy;
-      const left = getLocationValue('left') + dx;
-      setLocation('top', top);
-      setLocation('left', left);
+      const currentTop = getLocationValue('top') + dy;
+      const currentleft = getLocationValue('left') + dx;
+      setLocation('top', currentTop);
+      setLocation('left', currentleft);
+      left.value = `${thisComponent.value.location.left.value.value}px`;
+      top.value = `${thisComponent.value.location.top.value.value}px`;
       initialX.value = event.clientX;
       initialY.value = event.clientY;
     }
