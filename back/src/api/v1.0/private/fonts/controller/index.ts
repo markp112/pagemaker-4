@@ -5,6 +5,8 @@ import * as secrets from '../../../../../secrets/firebase-config.json'
 import { GoogleFontItemInterface } from './model';
 import { handleError } from '@errors/handleError';
 import { memoize } from '@decorators/memoize/memoize';
+import { httpStatusCodes } from '@api/httpStatusCodes';
+import { logger } from '@logger/pino';
 
 export class FontsController {
 
@@ -14,7 +16,8 @@ export class FontsController {
   public async fetchFonts(): Promise<Response> {
     try {
       const fontData = await this.getFontsFromGoogle() as GoogleFontItemInterface[];
-      return constructResponse<GoogleFontItemInterface[]>(fontData, 200);
+      logger.info('%c⧭', 'color: #99adcc', fontData);
+      return constructResponse<GoogleFontItemInterface[]>(fontData, httpStatusCodes.OK);
     } catch (error) {
       handleError(error);
     }
@@ -30,11 +33,10 @@ export class FontsController {
 export function fontsController() {
   const GOOGLE_API = "https://www.googleapis.com/webfonts/v1/webfonts";
   const key = secrets.fontsAPIKey;
-
   async function getGoogleFonts(): Promise<Response> {
     try {
       const fontData = await getFontsFromGoogle() as GoogleFontItemInterface[];
-      return constructResponse<GoogleFontItemInterface[]>(fontData, 200);
+      return constructResponse<GoogleFontItemInterface[]>(fontData, httpStatusCodes.OK);
     } catch (error) {
       handleError(error);
     }

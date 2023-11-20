@@ -33,10 +33,6 @@ export default defineComponent({
     "Icon-Image": iconVue,
   },
 
-  props: {
-    width: String,
-  },
-
   data() {
     return {
       activeIcon: TOOLBAR_ICON_HIDE,

@@ -8,65 +8,48 @@
     />
   </div>
   <div v-for="(tab) in data">
-    <TabStripContent v-if="tab.id === activeTab"
+    <TabStripContentVue v-if="tab.id === activeTab"
       :tabContent="tab.commandPanels"
       @onButtonClick="handleButtonClick($event)"
     />
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { CommandProperties } from '@/classes/command/model/command';
-import { defineComponent, type PropType } from 'vue';
-import tab from '../tab/tab.vue';
-import  tabStripContentVue from '../tabStripContent/tabStripContent.vue';
+import Tab from '../tab/tab.vue';
+import  TabStripContentVue from '../tabStripContent/tabStripContent.vue';
 import type { TabStrip } from './model';
+import { onMounted, ref } from 'vue';
 
-export default defineComponent({
-  name: 'tabStrip-container',
-  emits: ['onClick', 'onButtonClick'],
-  props: {
-    data: {
-      type: [] as PropType<TabStrip[]>,
-      required: true,
-    }
-  },
+  const emits = defineEmits(['onClick', 'onButtonClick']);
+  const props = defineProps<{
+    data: TabStrip[]
+  }>();
   
-  components: { TabStripContent: tabStripContentVue,
-    Tab: tab,
-  },
+  const activeTab = ref('');
 
-  data() {
-    return {
-        activeTab: '',
-    };
-  },
+  onMounted(() => {
+    activeTab.value = props.data[0].id;
+  });
 
-  mounted() {
-    this.activeTab = this.$props.data[0].id;
-  },
+  const setActiveTab = (id: string) => {
+    emits('onClick', id);
+    activeTab.value = id;
+  };
 
-  methods: {
-    setActiveTab(id: string) {
-        this.$emit('onClick', id);
-        this.activeTab = id;
-    },
+  const getActiveTab = () => {
+    if(props.data.filter(tab => tab.id === activeTab.value).length === 0) {
+      activeTab.value = props.data[0].id;
+    } 
+    return activeTab.value;
+  };
 
-    getActiveTab() {
-        if(this.$props.data.filter(tab => tab.id === this.activeTab).length === 0) {
-          this.activeTab = this.$props.data[0].id;
-        } 
-        return this.activeTab;
-    },
-
-    handleButtonClick(command: CommandProperties) {
-      this.$emit('onButtonClick', command);
-    },
-  },
-})
+  const handleButtonClick = (command: CommandProperties) => {
+    emits('onButtonClick', command);
+  };
 
 </script>
-
 
 <style  lang="css" scoped>
 

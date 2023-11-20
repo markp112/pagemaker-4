@@ -30,24 +30,35 @@ const useFontStore = defineStore({
     },
 
     setFontNames() {
-      this._fonts.forEach(font => {
-        const fontItem: FontItemInterface = { fontName: font.family, fontType: font.category as FontTypes };
-        this._fontItems.push(fontItem);
-        this._fontNameList.push(fontItem.fontName);
-      })
+      this._fontItems = this._fonts.map(font => {
+        return { fontName: font.family, fontType: font.category as FontTypes };
+      });
+      this._fontNameList = this._fontItems.map(fontItem => fontItem.fontName);
     },
 
     filterFonts(fontType: string) {
       return this._fontItems.filter(font => font.fontType === fontType)
     },
 
-    async initWebFonts() {
-      await WebFont.load({
-        google: {
-          families: this.fontNameList.slice(0, 1100),
-        },
-        timeout: 1000,
-      });
+    initWebFonts() {
+      const length = this.fontNameList.length - 1;
+      try {
+        
+        console.log('%c⧭', 'color: #f27999', [...this.fontNameList]);
+        const first500 = this._fontItemList.split(0, 50);
+        WebFont.load({
+          google: {
+            families: [...first500],
+          },
+          timeout: 1000,
+          inactive() {
+
+          }
+        });
+      } catch (error) {
+        console.log('%c⧭', 'color: #5200cc', error);
+        
+      }
     }
   }
 })

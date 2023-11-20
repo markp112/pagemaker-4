@@ -1,8 +1,8 @@
 <template>
-    <span :class="getClasses()" @click.stop="buttonClick()" class="bg-site ">
+    <button :class="getClasses()" @click.stop="buttonClick()" class="bg-site" :disabled="disabled">
       <slot />
       <IconImage v-if="iconName" :icon-image="getIcon()"/>
-  </span>
+    </button>
 </template>
 
 <script lang="ts" setup>
@@ -24,8 +24,6 @@ const sizeMap = {
   large_circle: 'h-16 w-16 text-md',
 };
 
-
-
   const emits = defineEmits(['onClick']);
 
   const props = defineProps <{
@@ -36,9 +34,6 @@ const sizeMap = {
     buttonShape?: ButtonShape,
     iconName?: string,
   }> ()
-  
-
-  
   
   const getSize = (): string => {
     const key = `${props.size}_${props.buttonShape ?? 'rectangular'}`;
@@ -60,7 +55,7 @@ const sizeMap = {
     if (props.disabled && props.variant !== 'text') {
       return `bg-gray-200 text-dark ${baseStyling} ${style}`;
     }
-    if (props.variant === 'solid' || props.variant===undefined) {
+    if (props.variant === 'solid' || props.variant === undefined) {
       return `bg-site-primary-light text-site-surface ${baseStyling} ${active} shadow-md ${style}`;
     }
     if (props.variant === 'outline') {
@@ -79,8 +74,8 @@ const sizeMap = {
   })
     
   const getClasses = (): string => {
-      return getStyling();
-    }
+    return getStyling();
+  }
 
     const buttonClick = (): void => {
       emits('onClick');
@@ -94,7 +89,5 @@ const sizeMap = {
         tooltip: '',
       }
     } 
-
-
 </script>
   
