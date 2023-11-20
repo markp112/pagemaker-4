@@ -4,12 +4,14 @@
       <InputRadio label="back" 
         name="colourSelect" 
         value="background-color" 
-        :checked="selection" 
+        :checked="selection"
+        :is-validated="{isValid:true, message: ''}"
         @on-field-change="onSelectionChange($event)"/>
-      <InputRadio label="fore" name="colourSelect" value="color" @on-field-change="onSelectionChange('color')"/>
+      <InputRadio label="fore" name="colourSelect" value="color" @on-field-change="onSelectionChange('color')"  :is-validated="{isValid:true, message: ''}"/>
       <InputRadio label="border"
         name="colourSelect"
         value="border-color"
+        :is-validated="{isValid:true, message: ''}"
         @on-field-change="onSelectionChange('border-color')"
       />
     </fieldset>

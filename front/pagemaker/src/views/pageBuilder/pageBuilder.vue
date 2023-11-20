@@ -25,7 +25,7 @@
     <Toolbar/>
   </div>
   <div class="top-32 fixed z-50 -right-2">
-    <SettingsPanelVue :toolbar-hidden="false" width="w-86">
+    <SettingsPanelVue :toolbar-hidden="false">
       <span class="flex flex-row justify-end">
         <IconButton :iconImage="trashCan"
         @icon-click="deletePageElement()"
@@ -33,7 +33,7 @@
       </span>
       <TabstripContainer :data="getTabsForElement"
         @onButtonClick="handleButtonClick($event)"/>
-      </SettingsPanelVue>
+    </SettingsPanelVue>
   </div>
   <div class="flex flex-row justify-center w-100 relative">
     <div class="mt-4 bg-white w-full z-0" >

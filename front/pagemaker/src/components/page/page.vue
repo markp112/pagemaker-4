@@ -72,7 +72,6 @@ const getComponent = (type: ComponentTypesString) => {
   return componentMap[type];
 };
 
-
 const scaleElements = (): string => {
   if(!thisPage.value) return '';
   if(elementRefs.length === 0) return '';
@@ -89,7 +88,7 @@ const scaleElements = (): string => {
 
   const getStyles = (): string => {
     let styles = getDimension();
-    styles = `${styles}${stylesToString(thisPage.value.styles)}`
+    styles = `${styles}${stylesToString(thisPage.value.styles)}`;
     return styles;
   };
 

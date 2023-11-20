@@ -4,7 +4,7 @@
     variant="solid"
     @onClick="saveClicked()"
     :disabled="!isEnabled"
-    >
+  >
     save
   </BaseButton>
 </template>

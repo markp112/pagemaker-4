@@ -26,14 +26,14 @@ function ComponentFactory() {
 
   const ComponentMap = {
     'jumbo': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
-    'container': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
-    'buttonElement':(component: ToolbarComponentItem, parentReference: string) => createButton(component, parentReference),
     'navBar':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'pageTemplate':(component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
-    'textElement':(component: ToolbarComponentItem, parentReference: string) => createText(component, parentReference),
-    'imageElement':(component: ToolbarComponentItem, parentReference: string) => createImage(component, parentReference),
     'rootContainer': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
     'page': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'container': (component: ToolbarComponentItem, parentReference: string) => createContainer(component, parentReference),
+    'buttonElement':(component: ToolbarComponentItem, parentReference: string) => createButton(component, parentReference),
+    'textElement':(component: ToolbarComponentItem, parentReference: string) => createText(component, parentReference),
+    'imageElement':(component: ToolbarComponentItem, parentReference: string) => createImage(component, parentReference),
   };
 
   function createComponent(component: ToolbarComponentItem, parentReference: ParentReference): PageElement | PageContainerInterface {
