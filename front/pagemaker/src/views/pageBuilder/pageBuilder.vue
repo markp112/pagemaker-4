@@ -7,14 +7,17 @@
     <h2 class="col-span-2 font-semibold text-2xl">
       {{ pageTitle }} Page
     </h2>
-    <BaseButton buttonType="primary" 
+    <SaveButton buttonType="primary" 
       size="large"
+      :isEnabled=true
       @onClick="savePage"
     >
       Save
-    </BaseButton>
-    <BaseButton buttonType="primary" 
+    </SaveButton>
+    <BaseButton 
+      buttonType="primary" 
       size="large"
+      variant="solid"
       @on-click="previewPage"
       icon-name="preview-32.png"
     >
@@ -71,6 +74,7 @@ import type { Icon } from '@/components/utility/icon/model/model';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
 import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 import { PageService } from '@/services/page/page.service';
+import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
 
 const scalerSettings: SliderSettings = {
   min: 0,
@@ -99,6 +103,7 @@ const trashCan: Icon = {
     ImageGallery,
     IconButton: icon,
     BaseButton: baseButton,
+    SaveButton
 },
     
     data() {

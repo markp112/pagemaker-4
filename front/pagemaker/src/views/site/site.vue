@@ -61,7 +61,7 @@ import { NEW_SITE,  type SiteEntity } from '@/classes/sites/site';
 import { displayMessage } from '@/common/displayMessage';
 import { siteService } from '@/services/site/site.service';
 import { useNavMenuItemStore } from '@/stores/navMenuItems.store';
-import { onMounted, onUpdated, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { getImageUrl } from '@/common/getIcon';
 import SiteInput from './siteInput/siteInput.vue';
 import { FolderAndPage } from '@/classes/sites/site/folderAndPage';
@@ -88,9 +88,6 @@ onMounted( async () => {
   site.value = await siteService().fetchSite(siteAndUser);
 })
 
-onUpdated(() => {
-  
-})
 
 const getUserAndSiteName = (siteName: string) => {
   const siteAndUser = getSiteAndUser();
