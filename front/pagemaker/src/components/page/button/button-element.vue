@@ -10,10 +10,8 @@
       :id="getId()"
       class="flex flex-row justify-center items-center relative"
       @click.stop="onButtonClick()"
-
     >
       <span>{{ getData() }} </span>
-    />
     </div>
   </Resize>
 </template>

@@ -42,6 +42,7 @@ function ComponentFactory() {
   }
 
   function createContainer(component: ToolbarComponentItem, parentReference: ParentReference): PageContainerInterface {
+    console.log('%c⧭', 'color: #bfffc8', component);
     const container = createBaseElement<PageContainerInterface>(component, parentReference);
     container.isContainer = true;
     container.componentHTMLTag = 'div';
@@ -102,7 +103,6 @@ function ComponentFactory() {
 
   function createText(component: ToolbarComponentItem, parentReference: ParentReference): TextElement {
     const textElement = createBaseElement<TextElement>(component, parentReference);
-
     textElement.content = 'hello world';
     textElement.isAbsolute = false;
     textElement.componentHTMLTag = 'p';

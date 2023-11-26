@@ -3,30 +3,20 @@
     buttonShape="rectangular"
     variant="outline"
     size="small"
+    buttonType="secondary"
     @onClick="closeClicked()"
+    ref="BaseButton"
   >
     X
   </BaseButton>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
 import BaseButton from '../baseButton.vue';
-
-export default defineComponent({
-  name: 'CloseButton',
   
-  emits: ['onClick'],
+  const emits = defineEmits(['onClick']);
 
-  components: {
-    BaseButton,
-  },
-
-  methods: {
-
-    closeClicked() {
-      this.$emit('onClick');
-    },
-  },
-})
+  const closeClicked = () => {
+    emits('onClick');
+  }
 </script>

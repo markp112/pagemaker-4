@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { shallowMount } from '@vue/test-utils'
-import BaseButton from '../../basebutton/baseButton.vue';
-import IconImage from '../../../../components/utility/icon/icon.vue';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { shallowMount } from '@vue/test-utils';
+import BaseButton from '../../../../src/components/base/basebutton/baseButton.vue';
+import IconImage from '../../../../src/components/utility/icon/icon.vue';
 
 describe('Base button component', () => {
   let wrapper = null;
@@ -10,7 +10,6 @@ describe('Base button component', () => {
       propsData: {
         buttonType: 'primary',
         size: 'small',
-  
         variant: 'solid',
         buttonShape: 'rectangular',
         iconName: 'test',
@@ -33,6 +32,7 @@ describe('Base button component', () => {
 
   it('should emit an onClick Event when the button is clicked', () => {
     wrapper.trigger('click');
+    expect(wrapper.emitted()).toHaveProperty('onClick');
     expect(wrapper.emitted().onClick).toBeTruthy();
   })
 

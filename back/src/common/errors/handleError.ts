@@ -30,7 +30,14 @@ function handleError(err: Error | FirebaseError | AxiosError): Response {
 }
 
 function handleFireBaseError(err: FirebaseError): Response {
-  const error = errorMap[err.code]();
+  if (err.code) {
+    const error = errorMap[err.code]();
+    if (error) {
+      return constructResponse<Error>(error, error._status);
+    }
+    return constructResponse<Error>(error, error._status);
+  }
+  const error = errorMap.generic(err);
   return constructResponse<Error>(error, error._status);
 }
 

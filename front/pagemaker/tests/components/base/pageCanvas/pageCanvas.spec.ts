@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { shallowMount } from '@vue/test-utils'
-import PageCanvas from '../canvas/pageCanvas.vue';
-import { Page } from '../page/model/pageElement/pageElement';
-import PageComponent  from '../../components/page/page.vue'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { shallowMount, } from '@vue/test-utils';
+import PageCanvas from '../../../../src/components/canvas/pageCanvas.vue';
+import { Page } from '../../../../src/components/page/model/pageElement/pageElement';
+import PageComponent  from '../../../../src/components/page/page.vue'
 
 const testPage: Page = {
   pageId: '1234',

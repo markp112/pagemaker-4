@@ -1,11 +1,14 @@
 <template>
-  <div class="w-24 bg-gray-800 rounded-t-md" v-if="show.valueOf()">
-    <CloseButton
-      @click="closeMe()"
-      class="bg-site-surface text-site-primary mt-2 ml-2"
-    />
+  <div class="w-32 bg-gray-800 rounded-t-md z-40 h-72 absolute" v-if="show.valueOf()">
+    <p class="flex flex-row justify-end">
+      <CloseButton
+        @click="closeMe()"
+        class="bg-site-surface text-site-primary"
+      />
+
+    </p>
     <ul
-      class="w-24 bg-gray-800 p-2 z-10 flex flex-row flex-wrap justify-start shadow-lg rounded-b-md absolute "
+      class="bg-gray-800 p-2 z-50 flex flex-row flex-wrap justify-start shadow-lg rounded-b-md absolute "
     >
       <li v-for="(icon, idx) in icons" :key="idx" class="w-6/12 text-lg text-accent-2 p-2">
         <IconImage
@@ -14,8 +17,8 @@
         />
       </li>
     </ul>
-    </div>
-  </template>
+  </div>
+</template>
   
   <script lang="ts">
   import closeButtonVue from '../../baseButton/closeButton/closeButton.vue';
