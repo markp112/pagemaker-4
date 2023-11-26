@@ -28,7 +28,7 @@ function locationToObject(location: Location): {left: string, top: string} {
   const top = `${location.top.value.value}${location.top.value.unit};`;
   return {
     left,
-    top
+    top,
   };
 }
 
