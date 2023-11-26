@@ -1,7 +1,5 @@
 <template>
-  <Resize :is-active="isActive"
-      :this-component="thisComponent"
-  >
+  <Resize :is-active="isActive" :this-component="thisComponent">
     <div class="overflow-hidden relative select-none"
       :id="getId()"
       :ref="getId()"

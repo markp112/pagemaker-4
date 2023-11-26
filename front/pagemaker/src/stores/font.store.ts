@@ -45,10 +45,10 @@ const useFontStore = defineStore({
       try {
         
         console.log('%c⧭', 'color: #f27999', [...this.fontNameList]);
-        const first500 = this._fontItemList.split(0, 50);
+        const fonts = this._fontItemList.split(0, length);
         WebFont.load({
           google: {
-            families: [...first500],
+            families: [...fonts],
           },
           timeout: 1000,
           inactive() {

@@ -8,7 +8,6 @@ export interface TimeStamp {
 export function formatDate(date: Date): string {
   const dateDayjs = dayjs(date);
   const dateString: string = dateDayjs.format("DD MMM YYYY").toString();
-  console.log('%c⧭', 'color: #aa00ff', dateString);
   return dateString.replace(' ', '-');
 }
 

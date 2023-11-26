@@ -117,11 +117,11 @@ import FieldWrapper from './fieldWrapper.vue';
 import router from '@/router';
 
   const pageTitle = ref('');
-  const page = ref<Page>(null);
   const dateCreated = ref<Date>(new Date());  
   const showIconPicker = ref<boolean>(false);
   const formErrors = ref<string[]>([]);
   const store = usePageStore();
+  const page = ref<Page>(store.page as Page);
   const pageService = PageService();
   const pageNameIsValid = ref<ValidField>({ isValid: true, message: '' });
   const enableSave = ref<boolean>(false);

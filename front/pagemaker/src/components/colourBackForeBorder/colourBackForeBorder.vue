@@ -1,19 +1,29 @@
 <template>
     <span class="px-1 pt-1">Apply colour to:</span>
-    <fieldset class="flex flex-row justify-between flex-nowrap">
-      <InputRadio label="back" 
-        name="colourSelect" 
-        value="background-color" 
-        :checked="selection"
-        :is-validated="{isValid:true, message: ''}"
-        @on-field-change="onSelectionChange($event)"/>
-      <InputRadio label="fore" name="colourSelect" value="color" @on-field-change="onSelectionChange('color')"  :is-validated="{isValid:true, message: ''}"/>
-      <InputRadio label="border"
-        name="colourSelect"
-        value="border-color"
-        :is-validated="{isValid:true, message: ''}"
-        @on-field-change="onSelectionChange('border-color')"
-      />
+    <fieldset class="flex flex-row justify-between flex-nowrap align-middle w-6/12 pt-1">
+      <span class="w-1/3 flex justify-around">
+        <label for="back">back</label>
+        <InputRadio
+          id="back"
+          name="colourSelect" 
+          value="background-color" 
+          :checked="selection"
+          :is-validated="{isValid:true, message: ''}"
+          @on-field-change="onSelectionChange($event)"/>
+      </span>
+      <span class="w-1/3 flex justify-around">
+        <label for="fore">text</label>
+        <InputRadio name="colourSelect" value="color" @on-field-change="onSelectionChange('color')"  :is-validated="{isValid:true, message: ''}"/>
+      </span>
+      <span class="w-1/3 flex justify-around">
+        <label for="border">border</label>
+        <InputRadio
+          name="colourSelect"
+          value="border-color"
+          :is-validated="{isValid:true, message: ''}"
+          @on-field-change="onSelectionChange('border-color')"
+        />
+      </span>
     </fieldset>
 </template>
 

@@ -29,154 +29,78 @@
 </template>
 
 <script lang="ts" setup>
-import type { ButtonElement, ImageElement, TextElement } from '@/components/page/model/imageElement/imageElement';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { Dimension } from '@/classes/dimension';
-import { Location } from '@/classes/location';
-import { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-
-type DragableElements = TextElement | ButtonElement | PageContainerInterface | ImageElement;
-type WhichDimension = 'height' | 'width';
-type WhichLocation = 'top' | 'left';
+import { useDrag } from './drag';
+import { useResize } from './useResize';
+import { DragableElements } from './types';
+import { dimensionToObject } from '@/components/page/functions/stylesToString';
+import { convertPctToPx, getDimensionsOfParent, isUnitAPercentage } from './unitConvertor';
 
   const props = defineProps<{
     isActive: boolean,
     thisComponent: DragableElements,
   }> ();
 
-  const isResizing = ref(false);
-  const isDragging = ref(false);
-  const resizeDirection = ref('')
-  const initialWidth = ref(0);
-  const initialHeight = ref(0);
-  const left = ref('0px');
-  const top = ref('0px');
-  const initialX = ref(0);
-  const initialY = ref(0);
   const thisComponent = ref(props.thisComponent);
-  const width = ref('200px');
-  const height = ref('200px');
+  const { top, left, isDragging, dragStart, setInitialLocation } = useDrag(props.thisComponent.location);
+  const { dimension, startResize, setInitialDimensions } = useResize(props.thisComponent.dimension); 
 
   onMounted(() => {
-    if (thisComponent.value) {
-      width.value = `${getDimension('width')}${getUnit('width')}`;
-      height.value = `${getDimension('height')}${getUnit('height')}`;
+    setInitialLocation();
+    if (isUnitAPercentage(thisComponent.value.dimension.height)) {
+      const parentHeight = getDimensionsOfParent(thisComponent.value)?.height;
+      if (parentHeight) {
+        const heightAsPixels = convertPctToPx(thisComponent.value.dimension.height, parentHeight);
+        thisComponent.value.dimension.height.value.value = `${heightAsPixels}`;
+        thisComponent.value.dimension.height.value.unit = `px`;
+      }
     }
+    if (isUnitAPercentage(thisComponent.value.dimension.width)) {
+      const parentWidth = getDimensionsOfParent(thisComponent.value)?.height;
+      if (parentWidth) {
+        const widthAsPixels = convertPctToPx(thisComponent.value.dimension.width, parentWidth);
+        thisComponent.value.dimension.width.value.value = `${widthAsPixels}`;
+        thisComponent.value.dimension.width.value.unit = `px`;
+      }
+    }
+    setInitialDimensions();
   })
-
-  const calculateNewDimensions = {
-    'top-Left': (dx: number, dy: number) => { return { width: initialWidth.value - dx, height: initialHeight.value - dy }},
-    'top-right': (dx: number, dy: number) => { return {  width: initialWidth.value + dx, height: initialHeight.value - dy }},
-    'bottom-left': (dx: number, dy: number) => { return {  width: initialWidth.value - dx, height: initialHeight.value + dy }},
-    'bottom-right': (dx: number, dy: number) => { return {  width: initialWidth.value + dx, height: initialHeight.value + dy }},
-  };
-
-  const getDimension = (whichDimension: WhichDimension) => {
-    const dimension = thisComponent.value.dimension;
-    return whichDimension === 'height' ? parseInt(dimension.height.value.value) : parseInt(dimension.width.value.value)
-  };
-
-  const setDimension = (width: number, height: number) => {
-    const dimension: Dimension = {
-      height: {style: 'height', value: { value: height.toString(), unit: getUnit('width') }},
-      width: {style: 'width', value: { value: width.toString(), unit: getUnit('height') }},
-    }
-    thisComponent.value.dimension = dimension; 
-  };
     
   const getDimensionPosition = computed (() => {
     if(!thisComponent.value) {
       return;
     }
+    const { width, height } = dimensionToObject(thisComponent.value.dimension);
     return {
       left: left.value,
       top: top.value,
-      width: width.value,
-      height: height.value
+      width: width,
+      height: height,
     }
-  })
+  });
 
   const startResizing = (direction: string, event: MouseEvent) => {
-    isResizing.value = true;
-    resizeDirection.value = direction;
-    initialWidth.value = getDimension('width');
-    initialHeight.value = getDimension('height');
-    initialX.value = event.clientX;
-    initialY.value = event.clientY;
-    document.addEventListener('mousemove', resize);
-    document.addEventListener('mouseup', stopResizing);
+    startResize(direction, event);
   };
 
-  const resize = (event: MouseEvent) => {
-    if (isResizing.value) {
-      const dx = event.clientX - initialX.value;
-      const dy = event.clientY - initialY.value;
-      const newHeightWidth = calculateNewDimensions[resizeDirection.value](dx, dy);
-      setDimension(newHeightWidth.width, newHeightWidth.height);
-      initialX.value = event.clientX;
-      initialY.value = event.clientY;
-      width.value = `${newHeightWidth.width}${getUnit('width')}`;
-      height.value = `${newHeightWidth.height}${getUnit('height')}`;
-      initialWidth.value = newHeightWidth.width;
-      initialHeight.value = newHeightWidth.height;
-    }
-  };
+  watch(top, (newTop: string) => {
+    thisComponent.value.location.top.value.value = (newTop.replace('px', ''));
+  });
 
-  const stopResizing = () => {
-    isResizing.value = false;
-    resizeDirection.value = '';
-    document.removeEventListener('mousemove', resize);
-    document.removeEventListener('mouseup', stopResizing);
-  };
+  watch(left, (newLeft: string) => {
+    thisComponent.value.location.left.value.value = (newLeft.replace('px', ''));
+  });
+
+  watch(dimension, (newDimension: Dimension) => {
+    thisComponent.value.dimension = newDimension;
+  });
 
   const onDragStart = (event: MouseEvent) => {
     isDragging.value = true;
-    initialX.value = event.clientX;
-    initialY.value = event.clientY;
-    window.addEventListener('mousemove', handleDrag);
-    window.addEventListener('mouseup', endDrag);
+    dragStart(event);
   };
 
-  const handleDrag = (event: MouseEvent) => {
-    if (isDragging.value) {
-      const dx = event.clientX - initialX.value;
-      const dy = event.clientY - initialY.value;
-      const currentTop = getLocationValue('top') + dy;
-      const currentleft = getLocationValue('left') + dx;
-      setLocation('top', currentTop);
-      setLocation('left', currentleft);
-      left.value = `${thisComponent.value.location.left.value.value}px`;
-      top.value = `${thisComponent.value.location.top.value.value}px`;
-      initialX.value = event.clientX;
-      initialY.value = event.clientY;
-    }
-  };
-
-  const endDrag = () => {
-    isDragging.value = false;
-    window.removeEventListener('mousemove', handleDrag);
-    window.removeEventListener('mouseup', endDrag);
-  };
-
-  const getLocation = () => {
-    return (thisComponent.value).location
-  };
-
-  const getLocationValue = (whichLocation: WhichLocation) => {
-    const location: Location = getLocation();
-    if (whichLocation === 'top') {
-      return parseInt(location.top.value.value);
-    } 
-    return parseInt(location.left.value.value);
-  };
-
-  const setLocation = (whichLocation: WhichLocation, newValue: number) => {
-    const location = getLocation();
-    if (whichLocation === 'top') {
-      location.top.value.value = newValue.toString();
-    }
-    location.left.value.value = newValue.toString()
-  }
 
   const getHandlePosition = (handle: string) => {
     const offset = 10;
@@ -202,13 +126,6 @@ type WhichLocation = 'top' | 'left';
     return position;
   };
 
-  const getUnit = (dimension: WhichDimension) => {
-    const componentDimension = thisComponent.value.dimension;
-    if (dimension === 'height') {
-      return componentDimension.height.value.unit;
-    }
-    return componentDimension.width.value.unit;
-  }
 </script>
   
 <style lang="css" scoped>

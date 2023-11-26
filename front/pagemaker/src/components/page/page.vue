@@ -33,6 +33,7 @@ import textElement from './textElement/textElement.vue';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { dimensionToStyle, stylesToString } from './functions/stylesToString';
 import type { ActiveElements } from './model/imageElement/imageElement';
+import { ComponentTypeEnums } from '@/common/enums/component.enums';
 
 const componentMap = {
   'imageElement': imageElement,
@@ -40,7 +41,7 @@ const componentMap = {
   'textElement': textElement,
   'container': Container,
 };
-const PAGE_REF = 'page';
+const PAGE_REF = ComponentTypeEnums.PAGE;
 const props = defineProps<{
     page: Page,
     scale: number,

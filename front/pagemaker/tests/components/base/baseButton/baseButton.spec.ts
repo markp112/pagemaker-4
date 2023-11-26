@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
-import BaseButton from '../../basebutton/baseButton.vue';
-import IconImage from '../../../../components/utility/icon/icon.vue';
+import BaseButton from '../../../../src/components/base/basebutton/baseButton.vue';
+import IconImage from '../../../../src/components/utility/icon/icon.vue';
 
 describe('Base button component', () => {
   let wrapper = null;

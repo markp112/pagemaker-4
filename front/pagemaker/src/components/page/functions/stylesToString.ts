@@ -20,15 +20,30 @@ function stylesToString(styleCollection: Style[]): string {
 }
 
 function locationToStyle(location: Location): string {
-  const left = `${location.left.style}:${location.left.value.value}${location.left.value.unit};`;
-  const top = `${location.top.style}:${location.top.value.value}${location.top.value.unit};`;
-  return `${left}${top}`;
+  const {left, top} = locationToObject(location);
+  return `left:${left};top:${top}`;
+}
+function locationToObject(location: Location): {left: string, top: string} {
+  const left = `${location.left.value.value}${location.left.value.unit};`;
+  const top = `${location.top.value.value}${location.top.value.unit};`;
+  return {
+    left,
+    top
+  };
 }
 
 function dimensionToStyle(dimension: Dimension): string {
-  const height = `${dimension.height.style}:${dimension.height.value.value}${dimension.height.value.unit};`
-  const width = `${dimension.width.style}:${dimension.width.value.value}${dimension.width.value.unit};`;
-  return `${height}${width}`;
+  const {height, width} = dimensionToObject(dimension);
+  return `height:${height};width:${width}`;
+}
+
+function dimensionToObject(dimension: Dimension): {height: string, width: string} {
+  const height = `${dimension.height.value.value}${dimension.height.value.unit}`;
+  const width = `${dimension.width.value.value}${dimension.width.value.unit}`;
+  return {
+    height,
+    width
+  };
 }
 
 function getRegularStyles(style: Style) {
@@ -59,8 +74,10 @@ function removeStyle(existingStyles: Style[], styleToRemove: StyleTags | CssStyl
 }
 
 export { stylesToString, 
-  locationToStyle, 
-  dimensionToStyle, 
+  locationToStyle,
+  locationToObject,
+  dimensionToStyle,
+  dimensionToObject,
   addStyle,
   removeStyle,
 };
