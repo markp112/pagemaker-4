@@ -12,4 +12,5 @@ export interface ToolbarComponentItem {
   sidebarIcon: string;
   type: ComponentTypesString;
   tooltip: string;
+  componentHTMLTag: string;
 }
