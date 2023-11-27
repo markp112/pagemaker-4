@@ -49,7 +49,6 @@ beforeEach(() => {
     const factory = ComponentFactory();
     const parentReference = 'parentRef';
     const result = factory.createComponent(imageComponent, parentReference);
-    console.log('%c⧭', 'color: #735656', JSON.stringify(result, null, 2));
     expect(result).toEqual({
       ref: 'ref',
       name: 'name',

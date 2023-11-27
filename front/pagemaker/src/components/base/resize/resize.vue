@@ -31,7 +31,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
 import { Dimension } from '@/classes/dimension';
-import { useDrag } from './drag';
+import { useDrag } from './useDrag';
 import { useResize } from './useResize';
 import { DragableElements } from './types';
 import { dimensionToObject } from '@/components/page/functions/stylesToString';

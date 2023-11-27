@@ -70,7 +70,7 @@
             type="text"
             name="host-repo"
             id="host-repo"
-            v-model="site.hostingDetails.defaultUrl"
+            v-model="site.hostingDetails?.defaultUrl"
             placeholder="url for website"
           />
         </div>
