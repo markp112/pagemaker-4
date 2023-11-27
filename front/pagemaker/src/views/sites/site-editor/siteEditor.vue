@@ -27,7 +27,7 @@
             placeholder="Description of your site"
           ></textarea>
         </div>
-        <div class="field-wrapper">
+        <div class="field-wrapper h-72">
           <label for="image">Site Image</label>
           <div class="w-10/12">
             <UploadImage
@@ -70,7 +70,7 @@
             type="text"
             name="host-repo"
             id="host-repo"
-            v-model="site.hostingDetails?.defaultUrl"
+            v-model="site.hostingDetails.defaultUrl"
             placeholder="url for website"
           />
         </div>
