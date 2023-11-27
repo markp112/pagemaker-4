@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { WhichLocation } from './types';
 import { Location } from '@/classes/location';
 
+
 export function useDrag(currentLocation: Location) {
   
   const location = ref(currentLocation);
