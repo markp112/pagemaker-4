@@ -4,7 +4,6 @@
       <base-button
         variant="outline"
         size="small"
-        buttonType="secondary"
         @click="cancelClick"
       >Cancel</base-button>
     </span>
@@ -12,7 +11,6 @@
       <base-button
         variant="solid"
         size="small"
-        buttonType="primary"
         @click="submitClick()"
       >Submit</base-button>
     </span>

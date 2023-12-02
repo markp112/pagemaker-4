@@ -3,7 +3,6 @@
     buttonShape="rectangular"
     variant="outline"
     size="small"
-    buttonType="secondary"
     @onClick="closeClicked()"
     ref="BaseButton"
   >
