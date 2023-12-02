@@ -1,0 +1,10 @@
+export const CLIENT_X_MOVE = 10;
+export const CLIENT_Y_MOVE = 20;
+export const CLIENT_Y_ZERO = 0;
+export const CLIENT_X_ZERO = 0;
+export const INITIAL_LEFT = '30';
+export const INITIAL_TOP = '40';
+export const MOVE_LEFT = `${CLIENT_X_MOVE}`;
+export const MOVE_TOP = `${CLIENT_Y_MOVE}`;
+export const ZERO_LEFT = `${CLIENT_X_ZERO}`;
+export const ZERO_TOP = `${CLIENT_Y_ZERO}`;
