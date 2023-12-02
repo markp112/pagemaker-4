@@ -40,7 +40,7 @@
   </div>
   <div class="flex flex-row justify-center w-100 relative">
     <div class="mt-4 bg-white w-full z-0" >
-      <PageCanvas :zoom-page="zoomPage" :page="getPage()"/>
+      <PageCanvas :scale="zoomPage" :page="getPage()"/>
     </div>
 
     <ImageGallery :image-details="getImagesForGallery" 
