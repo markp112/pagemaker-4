@@ -50,7 +50,6 @@ const props = defineProps<{
 const pageBuilderService = PageBuilderService();
 const editorSettings = new EditorSettingsService();
 const thisPage = ref<Page>(props.page);
-const countOfElements = ref(props.page.elements.length);
 const currentScale = ref(props.scale);
 
 const pageElements = computed((): ActiveElements[] => {
@@ -74,12 +73,11 @@ const getComponent = (type: ComponentTypesString) => {
 
 const scaleElements = (): string => {
   if(!thisPage.value) return '';
-  if(countOfElements.value === 0) return '';
   const scale = props.scale;
   if (thisPage.value !== undefined && scale) {
     thisPage.value.elements.forEach(element => {
-      if (element) {
-          element.styles = pageBuilderService.scaleElement(props.scale, element.styles);
+      if (element && element.styles) {
+        element.styles = pageBuilderService.scaleElement(props.scale, element.styles);
       }
     })
   }
