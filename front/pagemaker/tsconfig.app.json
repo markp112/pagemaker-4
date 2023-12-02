@@ -5,6 +5,7 @@
     "target": "es2017",
     "noUnusedLocals": true,
     "strictNullChecks": true,
+    "noImplicitAny": true,
     "module": "commonjs",
         "composite": true,
         "baseUrl": ".",

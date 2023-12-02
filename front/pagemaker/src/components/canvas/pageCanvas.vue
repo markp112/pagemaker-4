@@ -2,8 +2,8 @@
 <template>
   <div class="bg-gray-100 w-full h-screen flex flex-row justify-center mt-4 pt-5 overflow-auto relative">
     <PageComponent :page="page" 
-      :scale="zoomPage"
-      v-if="zoomPage !== 0" />
+      :scale="scale"
+      v-if="scale !== 0" />
   </div>
 </template>
 
@@ -13,8 +13,8 @@ import type { Page } from '../page/model/pageElement/pageElement';
 import PageComponent from "../page/page.vue";
 
 defineProps<{
-  zoomPage: number,
-    page: Page
-  }>();
+  scale: number,
+  page: Page
+}>();
 
 </script>
