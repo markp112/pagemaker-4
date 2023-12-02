@@ -1,5 +1,5 @@
-import type { ActiveElements, ImageElement } from '@/components/page/model/imageElement/imageElement';
-import type { Command } from '../model/command';
+import type { ImageElement } from '@/components/page/model/imageElement/imageElement';
+import type { Command, ActiveElements } from '../model/command';
 const IMAGE_ELEMENT = 'imageElement';
 
 export class ImageCommand implements Command {

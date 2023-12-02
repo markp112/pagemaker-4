@@ -1,4 +1,6 @@
 import type { CssStyleNames } from '@/classes/cssStyles';
+import { ImageElement, TextElement, ButtonElement } from '@/components/page/model/imageElement/imageElement';
+import { PageContainerInterface } from '@/components/page/model/pageContainer/container';
 import type { Page, StyleTags } from '@/components/page/model/pageElement/pageElement';
 
 type CommandName = | 'border'
@@ -30,7 +32,8 @@ type CommandName = | 'border'
   | 'upload-image-file';
 
 type CommandParameter = StyleTags | CssStyleNames | number | string | boolean | File | Page;
-
+type ActiveElements =  Page | ImageElement | TextElement | ButtonElement | PageContainerInterface;
+type  CommandKey = { [commandName in CommandName]: (ActiveElements: ActiveElements) => unknown };
 interface Command {
   execute(styleToApply: CommandParameter ): void;
   undo(styleToRemove?: CommandParameter): void;
@@ -44,4 +47,4 @@ interface CommandProperties {
   payload: CommandParameter;
 }
 
-export type { Command, CommandProperties, CommandName, CommandTypes };
+export type { Command, CommandProperties, CommandName, CommandTypes, ActiveElements, CommandKey };

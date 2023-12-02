@@ -1,9 +1,8 @@
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
-import type {  Command } from '../model/command';
+import type {  Command, ActiveElements } from '../model/command';
 
 class ZindexCommand implements Command {
 
-  constructor(private pageElement: ActiveElements) {};
+  constructor(private pageElement: ActiveElements) {}
 
   execute(payload: string): ActiveElements {
     let twClasses = this.pageElement.classDefinition;

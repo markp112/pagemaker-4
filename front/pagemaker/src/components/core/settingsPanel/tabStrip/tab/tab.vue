@@ -1,15 +1,15 @@
 <template>
-    <div class="tab">
+    <div class="tab" :class="{ activeTab: tab.id === activeTab }">
       <input type="radio" 
         :name="`tab-${tab.id}`" 
         :id="`tab.id`"
         class="tab-switch" 
         />
-      <label for="`tab-${index}`"
+      <span for="`tab-${index}`"
         class="tab-label"
         :class="{ activeTab: tab.id === activeTab }"
         @click="setActiveTab(tab.id)"
-      >{{ tab.displayName }}</label>
+      >{{ tab.displayName }}</span>
     </div>
 </template>
 
@@ -29,26 +29,19 @@
   };
 </script>
 <style lang="css" scoped>
-.tabs::before,
-.tabs::after {
-  content: "";
-}
-.tabs::after {
-  clear: both;
-}
+
 .tab {
-  @apply w-20;
   @apply rounded-tr-lg;
   @apply bg-slate-300;
   @apply border-r-2 border-r-site-primary-dark;
+  @apply p-2 w-full;
 }
 .tab-switch {
   display: none;
 }
 .tab-label {
   @apply relative; 
-  @apply leading-10;
-  @apply h-12 p-2 w-20;  
+  @apply p-2 w-full;  
   @apply cursor-pointer;
   @apply top-0;
   @apply text-on-surface;

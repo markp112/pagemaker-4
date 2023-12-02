@@ -1,109 +1,115 @@
 <template>
-  <input
-    :type="inputType"
-    id="input-field"
-    :value="getLocalValue"
-    @input="updateLocalValue($event)"
-    :placeholder="placeHolder"
-    class="border disabled:bg-gray-200 disabled:border-gray-400 relative"
-    :name="name"
-    :disabled="disabled"
-    @change="onFieldChange($event)"
-    @blur="checkIsValid()"
-  />
-  <p v-if="isValid === 'invalid'"
-    class="bg-red-300 leading-6 ml-44 p-2 rounded-md w-9/12 absolute"
-  >
-    {{ isValidated?.message }}
-  </p>
+  <div class="relative h-8 bg-transparent">
+    <input
+      :type="inputType"
+      id="input-field"
+      :value="getLocalValue"
+      @input="updateLocalValue($event)"
+      :placeholder="placeHolder"
+      class="border disabled:bg-gray-200 disabled:border-gray-400 rounded-sm w-auto"
+      :name="name"
+      :disabled="disabled"
+      @change="onFieldChange($event)"
+      @blur="validateinput()"
+    />
+    <p v-show="isValid === 'invalid'"
+      class="bg-red-300 leading-6 text-red-800 p-2 rounded-md w-auto z-10 absolute mt-2"
+    >
+      {{ failedValidationMessage }}
+    </p>
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import type { ValidField } from '../inputText/model';
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
+import type { ValidateStates, ValidationProperties } from '../inputText/model';
 
-type ValidateStates = 'valid' | 'invalid';
+  const props = defineProps<{
+    inputType: string,
+    value: string,
+    placeHolder: string,
+    name: string,
+    disabled: boolean,
+    validationProperties?: ValidationProperties
+  }>();
 
-export default defineComponent({
-  name: 'base-input-field',
+    const emits = defineEmits(['onFieldChange', 'validateField']);
+    const inputValue = ref(props.value);
+    const isValid = ref<ValidateStates>('valid');
+    const failedValidationMessage = ref('');
+    const getLocalValue = computed(() => inputValue.value === '' ? props.value : inputValue.value);
 
-  props: {
-    inputType: {
-      type: String, 
-      default: 'text',
-    },
-    value: {
-      type: String,
-      default: ''
-    },
-    placeHolder: {
-      type: String,
-      default: '', 
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    isValidated: {
-      type:  Object as PropType<ValidField>,
-      default: undefined,
-    },
-    name: {
-      type: String,
-      default: '',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    }
-  },
-
-  emits: ['onFieldChange', 'validateField'],
-
-  data() {
-    return {
-      inputValue: this.$props.value,
-      isValid: 'valid' as ValidateStates,
-      failedValidationMessage: '',
-    }
-  },
-
-  computed: {
-    getLocalValue() {
-      return this.inputValue === '' ? this.value : this.inputValue;
-    }
-  },
-
-  watch: {
-    isValidated() {
-      if(this.isValidated) {
-        this.isValid = this.isValidated.isValid ? 'valid' : 'invalid';
-        this.failedValidationMessage = this.isValidated.message;
+    const onFieldChange = (event: Event) => {
+      const value = inputValue.value;
+      if (props.validationProperties) {
+        validateinput();
       }
+      emits('onFieldChange', value);
+    };
+
+    const updateLocalValue = (event: Event) => {
+      inputValue.value = (event.target as HTMLInputElement).value;
+    };
+
+    const validateinput = () => {
+      isValid.value = 'valid';
+      const value = inputValue.value;
+      const validationState = {
+        isEmpty: true,
+        isRequiredLength: false,
+        isRequiredType: false
+      }
+      if (props.validationProperties) {
+        validationState.isEmpty = isEmptyField(value);
+        validationState.isRequiredLength = isRequiredLength(value);
+        validationState.isRequiredType = isRequiredType(value);
+      }
+      if (validationState.isEmpty) {
+        isValid.value = 'invalid';
+      }
+    };
+
+    const isEmptyField = (value: string) => {
+      if (value === '') {
+        failedValidationMessage.value = `Field ${props.name} is required`;
+        return true;
+      }
+      return false;
+    };
+
+    const isRequiredLength = (value: string) => {
+      const { inputType, name, validationProperties } = props;
+      if (inputType === 'string') {
+        const { minLength, maxLength } = validationProperties || {};
+        if (minLength && value.length < minLength) {
+          failedValidationMessage.value = `Field ${name} must be at least ${minLength} characters`;
+          return false;
+        }
+        if (maxLength && value.length > maxLength) {
+          failedValidationMessage.value = `Field ${name} must be less than ${maxLength} characters`;
+          return false;
+        }
+      }
+      return true;
+    };
+
+    const isRequiredType = (value: string) => {
+      const { inputType, name } = props;
+      if (inputType === 'number') {
+        try {
+          parseInt(value);
+        } catch (err) {
+          failedValidationMessage.value = `Field ${name} must be a number`;
+          return false;
+        }
+      }
+      return true;
     }
-  },
 
-  methods: {
-    onFieldChange(event: Event) {
-      this.$emit('onFieldChange', (event.target as HTMLInputElement).value)
-    },
-
-    updateLocalValue(event: Event) {
-      this.inputValue = (event.target as HTMLInputElement).value;
-    },
-
-    checkIsValid() {
-      this.$emit('validateField', this.inputValue);
-    },
-  }
-
-})
 </script>
 
 <style lang="css" scoped>
   input[type="text"] {
-    @apply bg-site-surface;
-    @apply text-site-primary-dark;
     @apply h-8;
   }
 

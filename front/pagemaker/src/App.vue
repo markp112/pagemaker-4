@@ -55,23 +55,6 @@ export default defineComponent({
 
   async mounted() {
     router.push('/login');
-    // if (this.authStore.user.tokenId === undefined) {
-    //   const user = auth().getCachedUser();
-    //   console.log('%c⧭', 'color: #733d00', user)
-    //   if (user === null) {
-    //     router.push('/login');
-    //   } else {
-    //     if (user.tokenId !== null) {
-    //       if (this.authService.isTokenExpired(user.expiry)) {
-    //         router.push('login');
-    //       } else {
-    //         auth().cacheUser(user);
-    //         this.$router.push('/sites');
-    //       }
-    //     }
-    //   }
-    // }
-  
     await this.store.fetchMenuItems(true);
   },
 

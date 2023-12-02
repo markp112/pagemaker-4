@@ -33,11 +33,6 @@ import { onMounted, ref } from 'vue';
     activeTab.value = props.data[0].id;
   });
 
-  const setActiveTab = (id: string) => {
-    emits('onClick', id);
-    activeTab.value = id;
-  };
-
   const getActiveTab = () => {
     if(props.data.filter(tab => tab.id === activeTab.value).length === 0) {
       activeTab.value = props.data[0].id;
@@ -59,6 +54,7 @@ import { onMounted, ref } from 'vue';
   @apply m-1 pr-3;
   @apply flex flex-row justify-start;
   min-width: 18em;
+  overflow: hidden;
 }
 
 </style>

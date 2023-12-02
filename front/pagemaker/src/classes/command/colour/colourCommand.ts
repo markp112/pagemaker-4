@@ -1,10 +1,9 @@
 import type { Style, StyleTags } from '@/components/page/model/pageElement/pageElement';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import type { Command } from '../model/command';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { Command, ActiveElements } from '../model/command';
 
 class ColourCommand implements Command {
-  constructor(private readonly pageElement: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly pageElement: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {}
   
   execute(colour: string) {
     if(!this.pageElement) return;

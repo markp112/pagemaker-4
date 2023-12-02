@@ -1,17 +1,19 @@
 <template>
   <div class="tab-wrapper">
     <div class="tabs">
-      <div class="tab" v-for="(label, index) in labels " :key="index">
+      <div class="tab" v-for="(label, index) in labels " :key="index"
+      :class="{ 'active-tab': index === activeTab }"
+      >
         <input type="radio" 
           :name="`tab-${index}`" 
           :id="`tab-${index}`"
           class="tab-switch" 
         />
-        <label for="`tab-${index}`"
+        <span
           class="tab-label"
-          :class="{ activeTab: index === activeTab }"
+          :class="{ 'active-tab': index === activeTab }"
           @click="setActiveTab(index)"
-        >{{ label }}</label>
+        >{{ label }}</span>
       </div>
     </div>
   </div>
@@ -51,6 +53,14 @@ export default defineComponent({
 
 
 <style  lang="css" scoped>
+.tab-wrapper {
+  @apply w-full;
+  @apply h-auto;
+  @apply m-1 pr-3;
+  @apply flex flex-row justify-start;
+  min-width: 18em;
+  overflow: hidden;
+}
 .tabs {
   @apply relative;
   @apply bg-site-surface;
@@ -66,26 +76,27 @@ export default defineComponent({
   clear: both;
 }
 .tab {
-  @apply w-24;
+  @apply w-full;
   @apply rounded-tr-lg;
   @apply bg-slate-300;
   @apply border-r-2 border-r-site-primary-dark;
+  @apply p-2;
 }
 .tab-switch {
   display: none;
 }
 .tab-label {
   @apply relative; 
-  @apply leading-10;
-  @apply h-12 p-2 w-24;  
+  @apply h-12 p-2 w-full;  
   @apply cursor-pointer;
   @apply top-0;
-  @apply text-on-surface;
+  @apply text-site-primary;
   @apply text-center;
   @apply overflow-hidden;
   transition: all 0.25s;
 }
 .tab-label:hover {
+  @apply h-12 p-2 w-full;  
   top: -0.30rem;
   transition: top 0.25s;
   font-weight: 700;
@@ -97,10 +108,24 @@ export default defineComponent({
   @apply mt-2;
 }
 
-.activeTab {
+.tab-switch:checked + .tab-label {
+  @apply bg-site-primary-dark;
+  @apply text-site-surface;
+  border-bottom: 0;
+  transition: all 0.35s;
+  z-index: 1;
+  @apply rounded-tr-lg;
+}
+.tab-switch:checked + label + .tab-content {
+  z-index: 2;
+  opacity: 1;
+  transition: all 0.35s;
+}
+
+.active-tab {
   @apply bg-site-primary-dark;
   @apply text-site-surface;
   @apply rounded-tr-lg;
-  @apply h-12 p-2 w-24;  
+  @apply h-auto p-2 w-full;  
 }
 </style>

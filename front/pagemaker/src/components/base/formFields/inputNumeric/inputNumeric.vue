@@ -1,56 +1,51 @@
 <template>
   <InputBase input-type="number"
-    :is-validated="isValidated"
-    :label="label"
     :value="value.toString()"
     :place-holder="placeHolder"
+    :validation-properties="validationProperties"
+    :disabled="disabled"
+    :name="name"
     @on-field-change="onFieldChange($event)"
     @validate-field="validateField($event)"
   />
 </template>
 
-<script lang="ts">
-  import { defineComponent, type PropType } from 'vue';
-  import type { ValidField } from '../inputText/model';
-  import inputBaseVue from '../inputBase/inputBase.vue';
+<script lang="ts" setup>
+  import { onMounted } from 'vue';
+  import type { ValidationProperties } from '../inputText/model';
+  import InputBase from '../inputBase/inputBase.vue';
 
-  export default defineComponent({
-  name: 'base-input-field',
 
-  props: {
-    label: {
-      type: String,
-      default: '',
-    },
-    value: {
-      type: Number,
-      default: 0
-    },
-    placeHolder: {
-      type: String,
-      default: '', 
-    },
-    isValidated: {
-      type:  Object as PropType<ValidField>,
-      default: undefined,
-    }
-  },
 
-  components: {
-    InputBase: inputBaseVue,
-  },
+  const props = defineProps<{
+    value: number,
+    placeHolder: string,
+    name: string,
+    disabled: boolean,
+    validationProperties?: ValidationProperties
+  }>();
 
-  emits: ['onFieldChange', 'validateField'],
+  const emits = defineEmits(['onFieldChange', 'validateField']);
   
-    methods: {
-      onFieldChange(value: number) {
-        this.$emit('onFieldChange', value);
-      },
-
-      validateField(value: number) {
-        this.$emit('validateField', value)
+  let validationProperties: ValidationProperties;
+  
+  onMounted(() => {
+    if (!props.validationProperties) {
+      validationProperties = {
+        type: 'number',
       }
+    } else {
+      validationProperties = props.validationProperties;
+      validationProperties.type = 'number';
     }
   });
+
+  const onFieldChange = (value: number) => {
+    emits('onFieldChange', value);
+  };
+
+  const validateField = (value: number) => {
+    emits('validateField', value);
+  };
 
 </script>

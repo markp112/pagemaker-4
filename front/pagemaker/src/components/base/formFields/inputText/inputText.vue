@@ -1,59 +1,36 @@
 <template>
-  <InputBase input-type="text"
-    :is-validated="isValidated"
-    :label="label"
+  <InputBase 
+    input-type="text"
     :value="value"
     :place-holder="placeHolder"
     :disabled="disabled"
+    :name="name"
+    :validationProperties="validationProperties"
     @on-field-change="onFieldChange($event)"
     @validate-field="validateField($event)"
   />
 </template>
 
-<script lang="ts">
-  import { defineComponent, type PropType } from 'vue';
-  import type { ValidField } from '../inputText/model';
-  import inputBaseVue from '../inputBase/inputBase.vue';
+<script lang="ts" setup>
+  import { } from 'vue';
+  import InputBase from '../inputBase/inputBase.vue';
+import { ValidationProperties } from './model';
 
-  export default defineComponent({
-  name: 'text-input-field',
+defineProps<{
+    value: string,
+    placeHolder: string,
+    name: string,
+    disabled: boolean,
+    validationProperties?: ValidationProperties
+  }>();
 
-  props: {
-    label: {
-      type: String,
-      default: '',
-    },
-    value: {
-      type: String,
-      default: ''
-    },
-    placeHolder: {
-      type: String,
-      default: '', 
-    },
-    isValidated: {
-      type:  Object as PropType<ValidField>,
-      default: undefined,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  components: {
-    InputBase: inputBaseVue,
-  },
-
-  emits: ['onFieldChange', 'validateField'],
+  const emits = defineEmits(['onFieldChange', 'validateField']);
   
-  methods: {
-    onFieldChange(value: string) {
-      this.$emit('onFieldChange', value);
-    },
+  const onFieldChange = (value: string) => {
+    emits('onFieldChange', value);
+  };
 
-    validateField(value: string) {
-      this.$emit('validateField', value)
-    }
-  }
-  });
+  const validateField = (value: string) => {
+    emits('validateField', value)
+  };
 </script>

@@ -1,4 +1,4 @@
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import { ActiveElements } from '@/classes/command/model/command';
 import type { Style } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia';
 
