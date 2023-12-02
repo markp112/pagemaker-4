@@ -1,7 +1,6 @@
 import type { Dimension } from '@/classes/dimension';
 import type { Location } from '@/classes/location';
-import type { Page, PageElement, Style } from '../pageElement/pageElement';
-import type { PageContainerInterface } from '../pageContainer/container';
+import type { PageElement, Style } from '../pageElement/pageElement';
 
 interface ImageProps {
   scaledSize: Dimension;
@@ -36,4 +35,3 @@ interface TextElement extends PageElement {
 }
 
 export type { ImageProps, ImageElement, ButtonElement, TextElement };
-export type ActiveElements =  Page | ImageElement | TextElement | ButtonElement | PageContainerInterface;

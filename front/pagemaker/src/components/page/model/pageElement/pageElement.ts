@@ -1,7 +1,7 @@
 import type { ActionEvent } from '@/classes/actionEvent';
+import { ActiveElements } from '@/classes/command/model/command';
 import type { Dimension } from '@/classes/dimension';
 import type { ValueAndUnit } from '@/classes/units';
-import type { ActiveElements } from '../imageElement/imageElement';
 
 type CssStyleTypes =
   | 'background-color'

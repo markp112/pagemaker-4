@@ -10,7 +10,7 @@ import { ItemsAlignmentCommand } from './itemsAlignment/itemsAlignment';
 import { justifyCommand } from './jusftify/justifyCommand';
 import { LineStyleCommand } from './lineStyle/lineStyle.command';
 import { LineThicknessCommand } from './lineThickness/lineThickness.command';
-import type { CommandName, CommandProperties } from './model/command';
+import type { ActiveElements, Command, CommandKey, CommandProperties } from './model/command';
 import { UnitsCommand } from './units/units.command';
 import { UploadImageCommand } from './uploadImageFile/uploadImageFile.command';
 import { ZindexCommand } from './zIndex/zindexCommand';
@@ -18,15 +18,13 @@ import { FontCommand } from './fontCommand/fontCommand';
 import { DropShadowCommand } from './dropShadow/dropShadow.command';
 import { DeleteElementCommand } from './deleteElement/deleteElement';
 import { SavePageCommand } from './savePage/savePage';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 import type { Page } from '@/components/page/model/pageElement/pageElement';
 
-// rome-ignore lint/suspicious/noExplicitAny: <explanation>
-type  CommandKey = { [commandName in CommandName]: (ActiveElements: ActiveElements) => any }
+
 
 class CommandProcessor {
   
-  constructor(private ActiveElements: ActiveElements, private commandHistory: CommandHistory<CommandProperties>) {};
+  constructor(private ActiveElements: ActiveElements, private commandHistory: CommandHistory<CommandProperties>) {}
   
   private readonly commandMap: CommandKey = {
     'border': (ActiveElements: ActiveElements) => new BordersCommand(ActiveElements),
@@ -59,21 +57,20 @@ class CommandProcessor {
   };
 
   processCommand(commandProperties: CommandProperties) {
-  
     const getCommand = (this.commandMap[commandProperties.commandName]);
-    const command = getCommand(this.ActiveElements);
+    const command = getCommand(this.ActiveElements) as unknown as Command;
     if (commandProperties.commandType === 'direct') {
-      this.ActiveElements = command.execute(commandProperties.payload);
+      this.ActiveElements = command.execute(commandProperties.payload) as unknown as ActiveElements;
     } else {
       command.execute(commandProperties.payload);
       this.applyPropertyToLastDirectComand();
     }
     this.commandHistory.add(commandProperties);
-  };
+  }
 
   undoCommand(commandProperties: CommandProperties) {
     const getCommand = (this.commandMap[commandProperties.commandName]);
-    const command = getCommand(this.ActiveElements);
+    const command = getCommand(this.ActiveElements) as unknown as Command;
     command.undo(commandProperties.payload);
     this.commandHistory.pop();
   }

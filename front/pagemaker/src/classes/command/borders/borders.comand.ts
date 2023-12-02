@@ -1,10 +1,9 @@
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import type { Command } from '../model/command';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { Command, ActiveElements } from '../model/command';
 import type { StyleTags, BorderStyle, LineStyle } from '@/components/page/model/pageElement/pageElement';
 
 class BordersCommand implements Command {
-  constructor(private readonly ActiveElements: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {};
+  constructor(private readonly ActiveElements: ActiveElements, private readonly service: EditorSettingsService = new EditorSettingsService()) {}
   
   execute(styleRequested: StyleTags): ActiveElements {
     if(styleRequested === 'border-none') {

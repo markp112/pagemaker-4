@@ -5,11 +5,10 @@ import { useToolbarStore } from '@/stores/toolbars.store';
 import { usePageStore } from '@/stores/page.store';
 import { ComponentFactory } from '@/views/pageBuilder/classes/componentFactory/componentFactory';
 import type { Dimension } from '@/classes/dimension';
-import type { CommandProperties } from '@/classes/command/model/command';
+import type { ActiveElements, CommandProperties } from '@/classes/command/model/command';
 import { CommandProcessor } from '@/classes/command/commandProcessor';
 import type { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '../editorSettings/editor.settings.service';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 import { addStyle, removeStyle } from '@/components/page/functions/stylesToString';
 
 function PageBuilderService() {

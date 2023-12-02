@@ -1,10 +1,9 @@
-import type { Command } from '../model/command';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { Command, ActiveElements } from '../model/command';
 
 const CSS_CLASS_NAME_PART = 'justify-';
 
 class justifyCommand implements Command {
-  constructor(private readonly pageElement: ActiveElements) {};
+  constructor(private readonly pageElement: ActiveElements) {}
 
   execute(tailwindClass: string): ActiveElements {
     let twClasses = this.removeJustifyClasses();

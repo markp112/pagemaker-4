@@ -1,4 +1,4 @@
-import type { ActiveElements } from '../imageElement/imageElement';
+import { ActiveElements } from '@/classes/command/model/command';
 import type {  PageElement, Style } from '../pageElement/pageElement';
 import type { Location  } from '@/classes/location';
 

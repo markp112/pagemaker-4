@@ -7,8 +7,8 @@ import { FileUploadService } from '@/services/fileUpload/fileUpload.service';
 import { userService } from '@/services/user/userService';
 import { useAuthStore } from '@/stores/auth.store';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 import { useActiveElementStore } from '@/stores/activeElement.store';
+import { ActiveElements } from '@/classes/command/model/command';
 
 class EditorSettingsService {
 

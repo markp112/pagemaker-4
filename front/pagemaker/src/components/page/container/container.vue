@@ -30,8 +30,8 @@ import buttonElement from '../button/button-element.vue';
 import textElement from '../textElement/textElement.vue';
 import type { PageContainerInterface } from '../model/pageContainer/container';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
-import type { ActiveElements } from '../model/imageElement/imageElement';
 import { ComponentTypesString } from '../model/pageElement/pageElement';
+import { ActiveElements } from '@/classes/command/model/command';
 
 const componentMap = {
   'imageElement': imageElement,

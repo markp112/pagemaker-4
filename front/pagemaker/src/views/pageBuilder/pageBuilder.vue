@@ -31,7 +31,7 @@
     <SettingsPanelVue :toolbar-hidden="false">
       <span class="flex flex-row justify-end">
         <IconButton :iconImage="trashCan"
-        @icon-click="deletePageElement()"
+          @icon-click="deletePageElement()"
         />
       </span>
       <TabstripContainer :data="getTabsForElement"
@@ -62,7 +62,7 @@ import type { Page } from '@/components/page/model/pageElement/pageElement';
 import PageCanvas from '@/components/canvas/pageCanvas.vue';
 import settingsPanelVue from '@/components/core/settingsPanel/settingsPanel.vue';
 import tabstripContainer from '@/components/core/settingsPanel/tabStrip/tabStripContainer/tabstripContainer.vue';
-import type { CommandProperties } from '@/classes/command/model/command';
+import type { ActiveElements, CommandProperties } from '@/classes/command/model/command';
 import { PageBuilderService } from '@/services/pageBuilder/pageBuilder.service';
 import { CommandHistory } from '@/classes/history/history';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
@@ -72,7 +72,6 @@ import ImageGallery from '@/components/base/pickers/imageGallery/imageGallery.vu
 import icon from '@/components/utility/icon/icon.vue';
 import type { Icon } from '@/components/utility/icon/model/model';
 import baseButton from '@/components/base/baseButton/baseButton.vue';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
 import { PageService } from '@/services/page/page.service';
 import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
 

@@ -32,8 +32,8 @@ import buttonElement from './button/button-element.vue';
 import textElement from './textElement/textElement.vue';
 import { EditorSettingsService } from '@/services/editorSettings/editor.settings.service';
 import { dimensionToStyle, stylesToString } from './functions/stylesToString';
-import type { ActiveElements } from './model/imageElement/imageElement';
 import { ComponentTypeEnums } from '@/common/enums/component.enums';
+import { ActiveElements } from '@/classes/command/model/command';
 
 const componentMap = {
   'imageElement': imageElement,
@@ -50,8 +50,7 @@ const props = defineProps<{
 const pageBuilderService = PageBuilderService();
 const editorSettings = new EditorSettingsService();
 const thisPage = ref<Page>(props.page);
-const numElements = ref(props.page.elements.length);
-const elementRefs = Array(numElements).fill(null).map(() => ref(null));
+const countOfElements = ref(props.page.elements.length);
 const currentScale = ref(props.scale);
 
 const pageElements = computed((): ActiveElements[] => {
@@ -75,7 +74,7 @@ const getComponent = (type: ComponentTypesString) => {
 
 const scaleElements = (): string => {
   if(!thisPage.value) return '';
-  if(elementRefs.length === 0) return '';
+  if(countOfElements.value === 0) return '';
   const scale = props.scale;
   if (thisPage.value !== undefined && scale) {
     thisPage.value.elements.forEach(element => {

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-32 bg-gray-800 rounded-t-md z-40 h-72 absolute" v-if="show.valueOf()">
+  <div class="w-32 bg-gray-800 rounded-t-md z-40 h-72 absolute" v-if="show">
     <p class="flex flex-row justify-end">
       <CloseButton
         @click="closeMe()"
@@ -56,142 +56,40 @@
   
     methods: {
 
-      buildIcons() {
+      buildIcon(icon: string) {
         const classDef = "transform cursor-pointer hover:shadow-xl hover:-translate-x-1 hover:-translate-y-1 hover:text-accent-1";
+        return {
+          icon: icon,
+          classDef: classDef,
+          id: icon,
+          tooltip: '',
+        }
+      },
+
+      buildIcons() {
         this.icons = [
-          {
-            icon: `home-32.png`,
-            classDef: classDef,
-            id: `home-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `faq-32.png`,
-            classDef: classDef,
-            id: `faq-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `help-32.png`,
-            classDef: classDef,
-            id: `help-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `blog-32.png`,
-            classDef: classDef,
-            id: `blog-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `compass-32.png`,
-            classDef: classDef,
-            id: `compass-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `video_library2-32.png`,
-            classDef: classDef,
-            id: `video_library2-32.png`,
-            tooltip: '',
-          },
-          {
-            icon:  `camera-32.png`,
-            classDef: classDef,
-            id:  `camera-32.png`,
-            tooltip: '',
-          },
-          {
-            icon:  `camera_view-32.png`,
-            classDef: classDef,
-            id:  `camera_view-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `gallery-32.png`,
-            classDef: classDef,
-            id: `gallery-32.png`,
-            tooltip: '',
-          },
-          
-          {
-            icon: `image-32.png`,
-            classDef: classDef,
-            id: `image-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `id-32.png`,
-            classDef: classDef,
-            id: `id-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `phone_vintage-32.png`,
-            classDef: classDef,
-            id: `phone_vintage-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `phone-32.png`,
-            classDef: classDef,
-            id: `phone-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `envelope-32.png`,
-            classDef: classDef,
-            id: `envelope-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `icons8-page-32.png`,
-            classDef: classDef,
-            id: `icons8-page-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `icons8-group-objects-32.png`,
-            classDef: classDef,
-            id: `icons8-group-objects-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `icons8-text-32.png`,
-            classDef: classDef,
-            id: `icons8-text-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `edit-text.png`,
-            classDef: classDef,
-            id: `edit-text.png`,
-            tooltip: '',
-          },
-          {
-            icon: `elephant.png`,
-            classDef: classDef,
-            id: `elephant.png`,
-            tooltip: '',
-          },
-          {
-            icon: `icons8-button-36.png`,
-            classDef: classDef,
-            id: `icons8-button-36.png`,
-            tooltip: '',
-          },
-          {
-            icon: `check_mark-32.png`,
-            classDef: classDef,
-            id: `check_mark-32.png`,
-            tooltip: '',
-          },
-          {
-            icon: `send_container-32.png`,
-            classDef: classDef,
-            id: `send_container-32.png`,
-            tooltip: '',
-          },
+          this.buildIcon('home-32.png'),
+          this.buildIcon('faq-32.png'),
+          this.buildIcon('help-32.png'),
+          this.buildIcon('blog-32.png'),
+          this.buildIcon('compass-32.png'),
+          this.buildIcon('video_library-32.png'),
+          this.buildIcon('camera-32.png'),
+          this.buildIcon('camera_view-32.png'),
+          this.buildIcon('gallery-32.png'),
+          this.buildIcon('image-32.png'),
+          this.buildIcon('id-32.png'),
+          this.buildIcon('phone_vintage-32.png'),
+          this.buildIcon('phone-32.png'),
+          this.buildIcon('envelope-32.png'),
+          this.buildIcon('icons8-page-32.png'),
+          this.buildIcon('icons8-group-objects-32.png'),
+          this.buildIcon('icons8-text-32.png'),
+          this.buildIcon('edit-text.png'),
+          this.buildIcon('elephant.png'),
+          this.buildIcon('icons8-button-32.png'),
+          this.buildIcon('check_mark-32.png'),
+          this.buildIcon('send_container-32.png'),
       ];
     },
     

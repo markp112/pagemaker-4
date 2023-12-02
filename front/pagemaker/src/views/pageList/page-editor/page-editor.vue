@@ -1,28 +1,32 @@
 <template>
-  <div class="mt-24 grid grid-cols-4">
-        <p class="m-4 text-site-primary text-3xl col-start-2">Page Editor</p>
-    </div>
+  <div class="mt-24 grid grid-cols-4 ">
+    <p class="m-4 text-site-primary text-3xl col-start-2 col-span-3">Page Editor</p>
+  </div>
     <div class="flex flex-row justify-center">
       <form
         @submit.prevent="saveClick"
-        class=" w-2/5 border-2 p-10"
+        class="w-3/6 border-2 p-4 pl-10"
       >
       <FieldWrapper>
-        <label  for="pageName" class="col-span-2 w-full p-2">Page Name:</label>
-        <span class="col-span-3">
-          <TextInput :value="page.name"
+        <template #label>
+          <label  for="pageName" class=" w-full p-2">Page Name:</label>
+        </template>
+        <template #field>
+          <TextInput 
+            :value="page.name"
+            :disabled="false"
+            name="page name"
             id="pageName"
-            :required="true"
             place-holder="e.g Home, Blog Home and must be unique"
-            :is-validated="pageNameIsValid"
-            @validate-field="validatePageName($event)"
             @onFieldChange="($event) => page.name = $event"
           />
-        </span>
+          </template>
       </FieldWrapper>
       <FieldWrapper>
-        <label for="icon" class="col-span-2 w-full p-2">Select Page Icon:</label>
-        <div class="col-span-3 w-full relative">
+        <template #label>
+          <label for="icon" class="w-full p-2">Select Page Icon:</label>
+        </template>
+        <template #field>
           <span
             class="h-8 w-8 bg-accent1 text-center font-bold align-middle border cursor-pointer relative inline-block bg-site-primary"
             @click="iconPickerClicked()"
@@ -30,53 +34,81 @@
             ...
           </span>
           <img :src="getIcon(page.icon)" alt="" class="inline-block h-12 w-12 ml-2">
-          <IconPicker @iconClick="iconClick($event)"
-            class=""
-            @on-close-click="showIconPicker = !showIconPicker"
-            id="icon" 
-            :show="showIconPicker"
-          />
-        </div>
+        </template>
+      </FieldWrapper>
+      <div class="w-full relative">
+        <IconPicker @iconClick="iconClick($event)"
+          @on-close-click="showIconPicker = !showIconPicker"
+          id="icon" 
+          :show="showIconPicker"
+        />
+      </div>
+      <FieldWrapper>
+        <template #label>
+          <label for="created" class="p-2">Created:</label>
+        </template>
+        <template #field>
+          <DatePicker
+            v-model="page.created"
+            name="created"
+            class="border-solid border bg-white py-1 px-2 text-site-primary-light w-auto h-8 "
+            inputFormat="dd-MMM-yyyy">
+          </DatePicker>
+        </template>
       </FieldWrapper>
       <FieldWrapper>
-        <label for="created" class="col-span-2 p-2">Created:</label>
-        <DatePicker
-          v-model="page.created"
-          name="created"
-          class="border-solid border bg-white py-1 px-2 text-site-primary-light w-full h-8 "
-          inputFormat="dd-MMM-yyyy">
-        </DatePicker>
-      </FieldWrapper>
-      <FieldWrapper>
-          <label for="edited" class="col-span-2 p-2 w-full">Background Colour:</label>
-          <span class="h-8 w-8 col-span-3" :style="{ 'background-color': page.backgroundColour }">
-          </span>
+        <template #label>
+          <label for="edited" class="p-2 w-full">Back Colour:</label>
+        </template>
+        <template #field>
+          <span class="h-8 w-8 inline-block" :style="{ 'background-color': page.backgroundColour }"></span>
+        </template>
       </FieldWrapper> 
       <FieldWrapper>
-          <label for="edited" class="col-span-2 w-full p-2">Text Colour:</label>
-          <span class="h-8 w-8 col-span-3" :style="{ 'background-color': page.colour }"></span>
+        <template #label>
+          <label for="edited" class=" w-full p-2">Text Colour:</label>
+        </template>
+        <template #field>
+          <span class="h-8 w-8 inline-block" :style="{ 'background-color': page.colour }"></span>
+        </template>
       </FieldWrapper>
       <FieldWrapper>
-        <label for="edited" class="col-span-2 w-full p-2">Screen Width (px):</label>
+        <template #label>
+          <label for="edited" class="w-full p-2">Screen Width (px):</label>
+        </template>
+        <template #field>
           <NumberInput 
-            :value="parseInt(page.dimension.width.value.value)"
-            place-holder="Enter max width for page width"
-            @on-field-change="($event) => page.dimension.width.value.value= `${$event}`"
+          :value="parseInt(page.dimension.width.value.value)"
+          :disabled="false"
+          name="page name"
+          place-holder="Enter max width for page width"
+          @on-field-change="($event) => page.dimension.width.value.value= `${$event}`"
           /> 
+        </template>
       </FieldWrapper>
       <FieldWrapper>
-        <label for="edited" class="col-span-2 w-full p-2">Screen Height (px):</label>
-        <NumberInput 
+        <template #label>
+          <label for="edited" class="w-full p-2">Screen Height (px):</label>
+        </template>
+        <template #field>
+          <NumberInput 
           :value="parseInt(page.dimension.height.value.value)"
+          :disabled="false"
+          name="Screen height"
           place-holder="Enter max height for page height"
           @on-field-change="($event) => page.dimension.height.value.value = `${$event}`"
-        />
+          />
+        </template>
       </FieldWrapper> 
       <FieldWrapper >
-        <label for="edited" class="w-full col-span-2 p-2">Last Edited:</label>
-        <span class="bg-white text-site-primary-light w-full pt-1 px-2 h-8">
-          {{ formatedDate(page.edited) }}
-        </span>
+        <template #label>
+          <label for="edited" class="w-full col-span-2 p-2">Last Edited:</label>
+        </template>
+        <template #field>
+          <span class="bg-white text-site-primary-light w-full pt-1 px-2 h-8">
+            {{ formatedDate(page.edited) }}
+          </span>
+        </template>
       </FieldWrapper>
       <hr/>
       <div class="w-full mt-8 flex justify-between">
@@ -113,7 +145,7 @@ import { usePageStore } from '@/stores/page.store';
 import type { ValidField } from '@/components/base/formFields/inputText/model';
 import { PageService } from '@/services/page/page.service';
 import type { Page } from '@/components/page/model/pageElement/pageElement';
-import FieldWrapper from './fieldWrapper.vue';
+import FieldWrapper from '@/components/base/fieldWrapper/fieldWrapper.vue';
 import router from '@/router';
 
   const pageTitle = ref('');
@@ -137,10 +169,6 @@ import router from '@/router';
     enableSave.value = pageNameIsValid.value.isValid;
   });
 
-const validatePageName = (value: string): void => {
-  pageNameIsValid.value = pageService.validatePageName(value);
-};
-
   const getIcon = (iconName: string | undefined): string => {
     if (!iconName || iconName === '') iconName = 'faq-32.png';
     return getImageUrl(iconName);
@@ -151,7 +179,7 @@ const validatePageName = (value: string): void => {
   };
     
     const iconPickerClicked = () => {
-      showIconPicker.value = !showIconPicker;
+      showIconPicker.value = true;
     };
     
     const iconClick = (icon: string) => {

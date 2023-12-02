@@ -1,5 +1,4 @@
-import type { Command } from '../model/command';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { ActiveElements, Command } from '../model/command';
 
 export class AlignmentCommand implements Command {
   constructor(private readonly pageElement: ActiveElements) {};

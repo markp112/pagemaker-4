@@ -1,5 +1,4 @@
-import type { Command } from '../model/command';
-import type { ActiveElements } from '@/components/page/model/imageElement/imageElement';
+import type { Command, ActiveElements } from '../model/command';
 
 const CSS_CLASS_NAME_PART = 'items-';
 

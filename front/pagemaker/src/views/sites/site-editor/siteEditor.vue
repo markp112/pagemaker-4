@@ -1,35 +1,47 @@
 <template>
-  <div class="relative">
-    <p class="m-4 text-site-primary text-3xl text-center mb-8">Site Editor</p>
-    <div class="flex flex-row items-center flex-wrap justify-evenly">
+  <div class="mt-24 grid grid-cols-4">
+    <p class="m-4 text-site-primary text-3xl col-start-2">Site Editor</p>
+  </div>
+    <div class="flex flex-row justify-center">
       <form
         @submit.prevent="saveClicked"
-        class="w-6/12 border-2 p-6 bg-site-primary-dark h-2/3 relative shadow-2xl text-site-background font-medium"
+        class="w-5/12 border-2 p-4 text-site-primary-dark h-2/3 shadow-2xl bg-site-background font-medium"
       >
-        <div class="field-wrapper">
-          <label for="name">Site Name:</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            v-model="site.name"
-            placeholder="The name of your site"
-            required
-          />
-        </div>
-        <div class="field-wrapper">
-          <label for="description">Description</label>
-          <textarea
-            rows="4"
-            name="name"
-            id="name"
-            v-model="site.description"
-            placeholder="Description of your site"
-          ></textarea>
-        </div>
-        <div class="field-wrapper h-72">
-          <label for="image">Site Image</label>
-          <div class="w-10/12">
+        <FieldWrapper>
+          <template #label>
+            <label  for="pageName">Site Name:</label>
+          </template>
+          <template #field>
+            <TextInput 
+              :value="site.name"
+              place-holder="The name of your site"
+              :disabled="false"
+              :validationProperties="{ type: 'string', required: true }"
+              name="site name"
+              id="siteName"
+              @onFieldChange="($event) => site.name = $event"
+            />
+          </template>
+        </FieldWrapper>
+        <FieldWrapper>
+          <template #label>
+            <label for="description">Description</label>
+          </template>
+          <template #field>
+            <textarea
+              rows="4"
+              name="name"
+              id="name"
+              v-model="site.description"
+              placeholder="Description of your site"
+            ></textarea>
+          </template>
+        </FieldWrapper>
+        <FieldWrapper>
+          <template #label>
+            <label for="image">Site Image</label>
+          </template>
+          <template #field>
             <UploadImage
               :url-edited="site.image"
               :user-id="userId"
@@ -37,49 +49,71 @@
               class="mt-4 mb-2"
               @on-change="updateFileRef($event)"
             />
-          </div>
-        </div>
-        <div class="field-wrapper">
-          <label for="created">Created:</label>
-          <input type="date" name="created" id="created" v-model="dateCreated" @change="site.created = new Date(dateCreated)" />
-        </div>
-        <div class="field-wrapper">
-          <label for="Url">Url:</label>
-          <input
-            type="text"
-            name="Url"
-            id="url"
-            v-model="site.url"
-            placeholder="url for website"
-          />
-        </div>
-        <div class="field-wrapper">
-          <label for="published">Published:</label>
-          <input
-            type="date"
-            name="published"
-            id="published"
-            v-model="datePublished"
-            placeholder="date site was last published"
-            @change="site.published = new Date(datePublished)"
-          />
-        </div>
-        <div class="field-wrapper">
-          <label for="host-repo">Host URL:</label>
-          <input
-            type="text"
-            name="host-repo"
-            id="host-repo"
-            v-model="site.hostingDetails.defaultUrl"
-            placeholder="url for website"
-          />
-        </div>
+          </template>
+        </FieldWrapper>
+        <FieldWrapper>
+          <template #label>
+            <label for="created" >Created:</label>
+          </template>
+            <template #field>
+              <input type="date" name="created" id="created" v-model="dateCreated" @change="site.created = new Date(dateCreated)" />
+            </template>
+        </FieldWrapper>
+        <FieldWrapper>
+          <template #label>
+            <label for="siteUrl">Url:</label>
+          </template>
+          <template #field>
+            <TextInput 
+              :value="site.url"
+              place-holder="Site url - www.example.com"
+              :disabled="false"
+              name="site url"
+              id="siteUrl"
+              @onFieldChange="($event) => site.url = $event"
+              class="bg-site-primary"
+            />
+          </template>
+        </FieldWrapper>
+        <FieldWrapper>
+          <template #label>
+            <label for="published">Published:</label>
+          </template>
+          <template #field>
+            <input
+              type="date"
+              name="published"
+              id="published"
+              v-model="datePublished"
+              placeholder="date site was last published"
+              @change="site.published = new Date(datePublished)"
+            />
+          </template>
+        </FieldWrapper>
+        <FieldWrapper>
+          <template #label>
+            <label for="host-repo">Host URL:</label>
+          </template>
+          <template #field>
+            <TextInput 
+              :value="site.hostingDetails.defaultUrl "
+              place-holder="url for website"
+              :disabled="false"
+              name="host-repo"
+              id="host-repo"
+              @onFieldChange="($event) => site.hostingDetails.defaultUrl = $event"
+              class="bg-site-primary"
+            />
+          </template>
+
+        </FieldWrapper>
+        <hr/>
         <div class="flex justify-between flex-row mt-8">
           <p class="w-16">
             <BaseButton
               buttonType="primary"
               variant="outline"
-              size="small"
+              size="medium"
               @onClick="cancelClicked()"
             >
                 Cancel
@@ -91,7 +125,7 @@
         </div>
       </form>
     </div>
-    <settingsPanelVue width="w-4/12">
+    <settingsPanelVue width="w-6/12">
       <TabstripContainerEditor :labels="['Palette Editor', 'Material colours', 'Typography']">
         <template v-slot:tab-0>
           <ColourPalettes :sitePalette="colourSwatches"
@@ -119,7 +153,6 @@
         </template>
       </TabstripContainerEditor>
     </settingsPanelVue>
-</div>
 </template>
 
 <script lang="ts">
@@ -142,6 +175,8 @@ import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
 import type { UploadImage } from '@/components/base/pickers/uploadImage/model';
 import { swatchesService } from '@/services/swatches/swatches.service';
 import TabstripContainerEditor from '@/components/core/settingsPanel/tabStripContainerEditor/tabStripContainerEditor.vue'
+import inputTextVue from '@/components/base/formFields/inputText/inputText.vue';
+import FieldWrapper from '@/components/base/fieldWrapper/fieldWrapper.vue';
 
 const NEW_SITE = -1;
 
@@ -156,7 +191,9 @@ export default defineComponent({
     ColourPalettes,
     TabstripContainerEditor,
     Typography: typographyVue,
-    SaveButton
+    SaveButton,
+    TextInput: inputTextVue,
+    FieldWrapper
 },
 
   data() {
@@ -327,24 +364,16 @@ export default defineComponent({
 </script>
 
 <style lang="css">
-label {
-  @apply text-sm self-start inline-block w-2/12;
-}
 
-input,
+
 textarea {
-  @apply w-10/12 self-end;
-  @apply bg-site-primary;
-  @apply leading-6;
+  @apply border disabled:bg-gray-200 disabled:border-gray-400 rounded-sm;
+  @apply w-full;
 }
 
-.field-wrapper {
-  @apply flex flex-row justify-start mb-2 ml-1;
-}
-
-input[type="text"],
 input[type="date"]
 {
   @apply p-2;
+  @apply border disabled:bg-gray-200 disabled:border-gray-400 rounded-sm;
 }
 </style>
