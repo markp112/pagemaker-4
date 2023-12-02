@@ -1,5 +1,5 @@
 <template>
-  <BaseButton buttonType="primary"
+  <BaseButton
     size="medium"
     variant="solid"
     @onClick="saveClicked()"

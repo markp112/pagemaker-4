@@ -21,7 +21,6 @@ import { SavePageCommand } from './savePage/savePage';
 import type { Page } from '@/components/page/model/pageElement/pageElement';
 
 
-
 class CommandProcessor {
   
   constructor(private ActiveElements: ActiveElements, private commandHistory: CommandHistory<CommandProperties>) {}

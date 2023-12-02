@@ -51,13 +51,13 @@ describe('PageCanvas.vue Implementation Test', () => {
     expect(wrapper.findComponent(PageComponent).exists()).toBe(true);
   })
 
-  it('processes valid props data', async () => {
+  it('processes valid props data', () => {
     expect(wrapper.vm.zoomPage).equal(ZOOM_PAGE);
     expect(wrapper.vm.page.pageId).equal(testPage.pageId);
     expect(wrapper.vm.page.siteId).equal(testPage.siteId);
   })
 
-  it('passes the page props to the child component page', async () => {
+  it('passes the page props to the child component page', () => {
     const pageComponent = wrapper.findComponent(PageComponent);
     expect(pageComponent.vm.page.pageId).equal(testPage.pageId);
   })
