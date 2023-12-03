@@ -137,7 +137,7 @@ async function performDelete(path: string, config: AxiosRequestConfig = {}): Pro
   }
 }
 
-function  axiosClient() {
+function axiosClient() {
 
   async function get<T>(path: string, config: AxiosRequestConfig = {}): Promise<T> {
     return performGet<T>(path, config);
