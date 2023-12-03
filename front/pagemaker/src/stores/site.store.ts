@@ -10,7 +10,7 @@ const useSiteStore = defineStore({
   state: () => {
     return {
       _site: {} as SiteEntity,
-      _materialColours: {} as MaterialColours,
+      _materialColours: [] as MaterialColours,
       _typography: {} as SiteTypography,
       _colourSwatches: {} as ColourSwatches,
     }

@@ -3,14 +3,16 @@ import type { ToolbarComponentItem } from '../../../../src/components/core/toolb
 const primaryPalette = {
   paletteName: 'Primary',
   colours: [
-    { hexColourBackground: '#000000', hexColourText: '#FFFFFF' },
+    { hexColourBackground: '#000000', hexColourText: '#FFFFFF', name: 'Dark' },
+    { hexColourBackground: '#000000', hexColourText: '#FFFFFF', name: 'Neutral' },
   ]
 };
 
 const surfacePalette = {
   paletteName: 'Surface',
   colours: [
-    { hexColourBackground: '#FFFFFF', hexColourText: '#000000' },
+    { hexColourBackground: '#FFFFFF', hexColourText: '#000000', name: 'Dark' },
+    { hexColourBackground: '#FFFFFF', hexColourText: '#000000', name: 'Neutral' },
   ]
 };
 const dimension =  {

@@ -6,6 +6,7 @@ import { useSiteStore } from '@/stores/site.store';
 import { axiosClient } from '../httpService';
 import type { PageContainerInterface } from '@/components/page/model/pageContainer/container';
 import type { Page } from '@/components/page/model/pageElement/pageElement';
+import { getDefaultPage } from '@/components/page/model/pageElement/constants';
 
 function PageService() {
   const NEW_PAGE = '-1';
@@ -26,35 +27,7 @@ function PageService() {
   }
 
   function createNewPage(newSiteId: string) {
-    const created = new Date(); 
-    const edited = new Date();
-    const icon = '';
-    const pageId = NEW_PAGE;
-    const siteId = newSiteId;
-    const name = '';
-    const backgroundColour = getSiteBackgroundColour();
-    const colour = getSiteTextColour();
-    const page: Page = {
-      created,
-      edited,
-      icon,
-      pageId,
-      siteId,
-      name,
-      backgroundColour,
-      colour,
-      classDefinition: '',
-      componentHTMLTag: 'page',
-      dimension: { width: { style: 'width', value:{ value: '1280', unit: 'px'}}, 
-        height: { style: 'height', value: { value: '1080', unit: 'px' }}},
-      isContainer: true,
-      elements: [],
-      parentRef: '',
-      ref: 'root',
-      styles: [],
-      type: 'page',
-      lastPublished: new Date('Jan 01 1970')
-    };
+    const page: Page = getDefaultPage(newSiteId, getSiteBackgroundColour(), getSiteTextColour());
     store.setPage(page);
   }
 
@@ -79,7 +52,6 @@ async function upadatePage(page: Page) {
   } catch (err) {
     displayMessage((err as Error).message, 'error', 'Error');
   }
-  
 }
 
 async function createPageContent(page: Page) {
