@@ -12,7 +12,6 @@
 </template>
 
 <script lang="ts" setup>
-import {} from 'vue';
 import InputBase from '../inputBase/inputBase.vue';
 import type { ValidationProperties } from '../inputText/model';
 

@@ -1,12 +1,15 @@
 import type { Page } from '@/components/page/model/pageElement/pageElement';
 import { defineStore } from 'pinia'
 
-const usePagesStore = defineStore({
-  id: 'pagesStore',
+interface PagesStore {
+  _pages: Page[],
+}
 
-  state: () => {
+const usePagesStore = defineStore('pagesStore', {
+
+  state: (): PagesStore => {
     return {
-      _pages: [] as Page[],
+      _pages: [],
     }
   },
 
