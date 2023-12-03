@@ -22,7 +22,7 @@ function pagesService() {
   }
 
   function isUniquePageName(pageNameToCheck: string) {
-    return store.pages.find(page => page.name === pageNameToCheck) === undefined;
+    return !store.pages.find(page => page.name === pageNameToCheck);
   }
 
   return {
