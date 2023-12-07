@@ -94,118 +94,87 @@
   
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 
-import { type PropType, defineComponent} from 'vue';
 import PaletteStrip from './paletteStrip/paletteStrip.vue';
 import ColourDropdown from '../../colourPicker/colourDropdown/colourDropDown.vue';
-import saveButtonVue from '@/components/base/baseButton/saveButton/saveButton.vue';
+import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
 import BaseButton from '@/components/base/baseButton/baseButton.vue';
-import type { ColourSwatch, ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
-import { useSnackbarStore } from '@/stores/snackbar.store';
-import type { SupportedColourModels } from '@/classes/colourPalette/colourModel';
+import { type ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
+import { type SupportedColourModels } from '@/classes/colourModel/colourModel';
 import { swatchesService } from '@/services/swatches/swatches.service';
-
-export default defineComponent({
-  name: 'colour-palettes',
+import { ref } from 'vue';
   
-  emits: ['resetClicked', 'saveClicked', 'onChange', 'onSaturationChange'],
+  const emits = defineEmits(['resetClicked', 'saveClicked', 'onChange', 'onSaturationChange']);
 
-  components: {
-    ColourDropdown,
-    PaletteStrip,
-    SaveButton: saveButtonVue,
-    BaseButton,
-  },
+  const props = defineProps<{
+    sitePalette: ColourSwatches,
+    simple: boolean,
+    saveEnabled: boolean,
+  }> ();
 
-  props: {
-    sitePalette: {
-      type: Object as PropType<ColourSwatches>,
-      required: true,
-    },
-    simple: {
-      type: Boolean,
-      default: false
-    },
-    saveEnabled: Boolean,
-  },
+  const scheme = ref(props.sitePalette.colourScheme);
+  const saturationPreviousValue = ref(0);
+  const saturationValue = ref(50);
+  const stripHeightAndWidth = { height: 'h-14', width: 'w-14' };
+  const selectedColour = ref('');
+  const swatchesLocal = ref(props.sitePalette);
+    
+  const isThisColourScheme = (colourScheme: SupportedColourModels): boolean => {
+    return scheme.value === colourScheme;
+  };
 
-  data() {
-    return {
-      SAVE_ICON: 'diskette-dark-48.png',
-      SAVE_ICON_HOVER: 'diskette-light-48.png',
-      scheme: this.$props.sitePalette.colourScheme,
-      showDefaultIcon: true,
-      saturationPreviousValue: 0,
-      saturationValue: 50,
-      snackbarStore: useSnackbarStore(),
-      stripHeightAndWidth: { height: 'h-14', width: 'w-14' },
-      selectedColour: '',
-      swatchesLocal: this.sitePalette,
+  const paletteColourClicked = (colour: string) => {
+    onColourChange(colour);
+  };
+
+  const onColourChange = async (colour: string) => {
+    const swatches: ColourSwatches = {
+      baseColourHex: colour,
+      colourScheme: swatchesLocal.value.colourScheme,
+      colourSwatches: swatchesLocal.value.colourSwatches,
     };
-  },
-
-  methods: {
+    saturationValue.value = 50;
+    saturationPreviousValue.value = 50;
+    selectedColour.value = colour;
+    swatchesLocal.value.baseColourHex = colour;
+    emits('onChange', swatches);
+  };
     
-    isThisColourScheme(colourScheme: SupportedColourModels): boolean {
-      return this.scheme === colourScheme;
-    },
+  const resetPalette = () => {
+    emits('resetClicked');
+  };
 
-    getColourSwatches(): ColourSwatch[] {
-      return this.swatchesLocal.colourSwatches;
-    },
+  const savePaletteSelection = async () => {
+    emits('saveClicked',swatchesLocal.value);
+  };
 
-    paletteColourClicked(colour: string) {
-      this.onColourChange(colour);
-    },
-
-    async onColourChange(colour: string) {
-      const swatches: ColourSwatches = {
-        baseColourHex: colour,
-        colourScheme: this.swatchesLocal.colourScheme,
-        colourSwatches: this.swatchesLocal.colourSwatches,
-      };
-      this.saturationValue = 50;
-      this.saturationPreviousValue = 50;
-      this.selectedColour = colour;
-      this.$emit('onChange', swatches);
-    },
+  const onSaturationChange = async () => {
+    const value = saturationValue.value > saturationPreviousValue.value ? 1 : -1;
+    saturationPreviousValue.value = saturationValue.value;
+    const swatches =swatchesLocal.value.colourSwatches;
+    if(value > 0) {
+      swatchesLocal.value.colourSwatches = await swatchesService().increaseSaturation(swatches);
+    } else {
+      swatchesLocal.value.colourSwatches = await swatchesService().decreaseSaturation(swatches);
+    }
+    emits('onSaturationChange', swatchesLocal.value);
+  };
     
-    resetPalette() {
-      this.$emit('resetClicked');
-    },
+  const changeScheme = async (scheme: SupportedColourModels) => {
+    const swatches = { ...swatchesLocal.value };
+    console.log('%c⧭', 'color: #00e600', swatches.baseColourHex)
+    swatches.colourScheme = scheme;
+    swatchesLocal.value = await swatchesService().changeColourModel(swatches);
+    emits('onChange', swatchesLocal.value);
+  };
 
-    async savePaletteSelection() {
-      this.$emit('saveClicked', this.swatchesLocal);
-    },
-
-    async onSaturationChange() {
-      const value = this.saturationValue > this.saturationPreviousValue ? 1 : -1;
-      this.saturationPreviousValue = this.saturationValue;
-      const swatches = this.swatchesLocal.colourSwatches;
-      if(value > 0) {
-        this.swatchesLocal.colourSwatches = await swatchesService().increaseSaturation(swatches);
-      } else {
-        this.swatchesLocal.colourSwatches = await swatchesService().decreaseSaturation(swatches);
-      }
-      this.$emit('onSaturationChange', this.swatchesLocal);
-    },
-    
-    async changeScheme(scheme: SupportedColourModels) {
-      this.scheme = scheme;
-      const swatches = this.swatchesLocal;
-      swatches.colourScheme = scheme;
-      this.swatchesLocal = await swatchesService().changeColourModel(swatches);
-      this.$emit('onChange', this.swatchesLocal);
-    },
-
-  },
-})
 </script>
 
 <style scoped>
 .slider {
   -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 12px;
   border-radius: 5px;  

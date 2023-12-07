@@ -14,7 +14,6 @@ describe('hosting.repository', () => {
   describe('getNewSiteVersion', () => {
       it('should call the firebase version API and get back a new version', async () => {
         const version = await firebaseHost.getNewSiteVersion(VERSIONS_URL);
-        console.log('%c⧭', 'color: #807160', version);
         expect(version.status).toBe('CREATED');
         expect(version.name).toBeDefined();
     });

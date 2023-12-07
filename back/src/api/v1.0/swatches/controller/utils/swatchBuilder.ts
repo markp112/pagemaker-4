@@ -10,9 +10,11 @@ function SwatchBuilder(colourSwatches: ColourSwatches, maxShades = 10) {
   function createSwatchesFromColour(colour: string): ColourSwatch[] {
     const swatches: ColourSwatch[] = [];
     const colourModel = colourSwatches.colourScheme;
+    if (colourSwatches.colourSwatches.length === 0) { 
+      return []
+    }
     colourSwatches.colourSwatches.forEach(swatch => {
       if(swatch.swatchName !== 'utility') {
-        
         const baseColour = getColourFromModel(colour, colourModel, swatch.swatchName);
         const newSwatch: ColourSwatch = {
           swatch: createNewSwatchFromColour(baseColour),

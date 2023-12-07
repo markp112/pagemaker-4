@@ -13,15 +13,4 @@ describe('fileUtils', () => {
     });
   });
 
-  // describe('calculateFileSha', () => {
-  //   it('should calculate a Sha256 value for the contents of the file', async () => {
-  //     const pathAndFile: FilePathAndName = {
-  //       path: 'tests/core/services/fileUtils/data',
-  //       filename: 'testfile.zip'
-  //     };
-  //     const sha256 = await fileUtils.calculateFileSHA(pathAndFile);
-  //     console.log('%c⧭', 'color: #f200e2', sha256);
-  //     expect(sha256).toBe(TEST_FILE_SHA);
-  //   })
-  // })
 })
