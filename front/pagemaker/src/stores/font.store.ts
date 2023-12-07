@@ -41,11 +41,10 @@ const useFontStore = defineStore({
     },
 
     initWebFonts() {
-      const length = this.fontNameList.length - 1;
+      // const length = this.fontNameList.length - 1;
       try {
         
-        console.log('%c⧭', 'color: #f27999', [...this.fontNameList]);
-        const fonts = this._fontItemList.split(0, length);
+        const fonts = this._fontNameList;
         WebFont.load({
           google: {
             families: [...fonts],
