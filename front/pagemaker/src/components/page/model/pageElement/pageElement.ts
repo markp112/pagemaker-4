@@ -123,6 +123,8 @@ type ComponentTypesString =
   | 'rootContainer'
   | 'page';
 
+
+
 interface PageElement {
   name: string;
   ref: string;
