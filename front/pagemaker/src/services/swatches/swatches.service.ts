@@ -22,6 +22,6 @@ function swatchesService() {
 
   return { increaseSaturation, decreaseSaturation, getNewSwatchesFromColour, changeColourModel }
 
-};
+}
 
 export { swatchesService };
