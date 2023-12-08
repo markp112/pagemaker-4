@@ -1,5 +1,5 @@
 <template>
-  <button :class="getClasses()" @click.stop="buttonClick()"  :disabled="disabled">
+  <button :class="getClasses()" @click.stop="buttonClick()" :disabled="disabled">
     <slot />
     <IconImage v-if="iconName" :icon-image="getIcon()"/>
   </button>
@@ -9,7 +9,7 @@
 import { onMounted } from 'vue';
 import { Icon } from '@/components/utility/icon/model/model';
 import IconImage from '@/components/utility/icon/icon.vue';
-import { disabledMap, sizeMap, variantMap, ButtonShape, ButtonSize, Variants } from './model/model';
+import { disabledMap, sizeMap, variantMap, ButtonShape, ButtonSize, Variants, ButtonShapeKey } from './model/model';
 
   const props = defineProps<{
     disabled?: boolean,
@@ -21,7 +21,7 @@ import { disabledMap, sizeMap, variantMap, ButtonShape, ButtonSize, Variants } f
   const emits = defineEmits(['onClick']);
 
   const getSize = (): string => {
-    const key = `${props.size}_${props.buttonShape ?? 'rectangular'}`;
+    const key = `${props.size}_${props.buttonShape ?? 'rectangular'}` as ButtonShapeKey;
     return sizeMap[key];
   };
   

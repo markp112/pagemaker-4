@@ -2,7 +2,7 @@
   <div class="relative h-8 bg-transparent">
     <input
       :type="inputType"
-      id="input-field"
+      :id="id"
       :value="getLocalValue"
       @input="updateLocalValue($event)"
       :placeholder="placeHolder"
@@ -11,8 +11,9 @@
       :disabled="disabled"
       @change="onFieldChange($event)"
       @blur="validateinput()"
+      :checked="isChecked"
     />
-    <p v-show="isValid === 'invalid'"
+    <p v-show="isValid === 'invalid' && validationProperties"
       class="bg-red-300 leading-6 text-red-800 p-2 rounded-md w-auto z-10 absolute mt-2"
     >
       {{ failedValidationMessage }}
@@ -30,7 +31,9 @@ import type { ValidateStates, ValidationProperties } from '../inputText/model';
     placeHolder: string,
     name: string,
     disabled: boolean,
-    validationProperties?: ValidationProperties
+    validationProperties?: ValidationProperties,
+    isChecked?: boolean,
+    id?: string,
   }>();
 
     const emits = defineEmits(['onFieldChange', 'validateField']);

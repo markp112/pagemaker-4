@@ -1,4 +1,4 @@
-import type { SupportedColourModels } from '@/classes/colourPalette/colourModel';
+import { SupportedColourModels } from '@/classes/colourModel/colourModel';
 
 type Colours = string[];
 
