@@ -2,10 +2,9 @@
 <template>
   <InputBase input-type="radio"
     :value="value.toString()"
-    :place-holder="placeHolder"
+    place-holder=""
     :name="name"
     :disabled="disabled"
-    :validation-properties="validationProperties"
     @on-field-change="onFieldChange($event)"
     @validate-field="validateField($event)"
   />
@@ -16,9 +15,7 @@ import InputBase from '../inputBase/inputBase.vue';
 import type { ValidationProperties } from '../inputText/model';
 
   defineProps<{
-    inputType: string,
     value: string,
-    placeHolder: string,
     name: string,
     disabled: boolean,
     validationProperties?: ValidationProperties

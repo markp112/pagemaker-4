@@ -38,46 +38,13 @@
     <div v-if="!simple">
       <p class="w-full font-semibold">scheme</p>
       <div class="flex flex-row flex-wrap justify-start w-full ml-2 mb-6 mt-1">
-        <span class="w-6/12 flex flex-row justify-start">
-          <label for="complementary" class="w-auto mr-2">complementary</label>
-          <input type="radio"
-            class="self-start"
-            name="colour-scheme"
-            id="complementary"
-            value="complementary"
-            :checked="isThisColourScheme('complementary')"
-            @change="changeScheme('complementary')">
-        </span>
-        <span class="w-6/12 flex flex-row justify-start">
-          <label for="analagous" class="w-auto mr-2">analogous</label>
-          <input
-            type="radio"
-            name="colour-scheme"
-            id="analagous"
-            value="analogous"
-            :checked="isThisColourScheme('analogous')"
-            @change="changeScheme('analogous')">
-        </span>
-        <span class="w-6/12 flex flex-row justify-start">
-          <label for="triadic" class="w-auto mr-2">triadic</label>
-          <input
-          type="radio"
-          name="colour-scheme"
-          id="triadic"
-          value="triadic"
-          :checked="isThisColourScheme('triadic')"
-          @change="changeScheme('triadic')">
-        </span>
-        <span class="w-6/12 flex flex-row justify-start">
-          <label for="compound" class="w-auto mr-2">compound</label>
-          <input
-          type="radio"
-          name="colour-scheme"
-          id="compound"
-          value="compound"
-          :checked="isThisColourScheme('compound')"
-          @change="changeScheme('compound')">
-        </span>
+        <ColourSchemeOption v-for="scheme in ColourSchemes"
+          :label="scheme"
+          :value="scheme"
+          :isChecked="isThisColourScheme(scheme)"
+          @change="changeScheme(scheme)"
+        ></ColourSchemeOption>
+      
       </div>
     </div>
     <div class="flex flex-col justify-start ml-8">
@@ -96,6 +63,7 @@
 
 <script lang="ts" setup>
 
+import { ref } from 'vue';
 import PaletteStrip from './paletteStrip/paletteStrip.vue';
 import ColourDropdown from '../../colourPicker/colourDropdown/colourDropDown.vue';
 import SaveButton from '@/components/base/baseButton/saveButton/saveButton.vue';
@@ -103,8 +71,9 @@ import BaseButton from '@/components/base/baseButton/baseButton.vue';
 import { type ColourSwatches } from '@/classes/sites/siteColours/colour/colourPalette';
 import { type SupportedColourModels } from '@/classes/colourModel/colourModel';
 import { swatchesService } from '@/services/swatches/swatches.service';
-import { ref } from 'vue';
-  
+import ColourSchemeOption from './colourSchemeOption/colourSchemeOption.vue';
+import { ColourSchemes } from './constants';
+
   const emits = defineEmits(['resetClicked', 'saveClicked', 'onChange', 'onSaturationChange']);
 
   const props = defineProps<{
