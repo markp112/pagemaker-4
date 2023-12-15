@@ -1,7 +1,7 @@
 <template>
   <button :class="getClasses()" @click.stop="buttonClick()" :disabled="disabled">
     <slot />
-    <IconImage v-if="iconName" :icon-image="getIcon()"/>
+    <IconImage v-if="iconName" :icon-image="getIcon()" class="ml-2"/>
   </button>
 </template>
 
