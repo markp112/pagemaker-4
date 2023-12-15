@@ -1,5 +1,5 @@
 <template>
-  <tooltip :showToolTip="showToolTip" :tooltip="iconImage.tooltip">
+  <Tooltip :showToolTip="showToolTip" :tooltip="iconImage.tooltip">
     <div class="w-8 inline-block">
       <img
         :id="iconImage.id"
@@ -11,72 +11,38 @@
         @mouseleave="displayTooltip(false)"
       />
     </div>
-</tooltip>
+  </Tooltip>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { getImageUrl } from '@/common/getIcon';
 import errorMessages from '@/globals/errors/error-messqges';
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import tootlipVue from '../notifications/tooltip/toolTip.vue';
+import Tooltip from '@/components/utility/notifications/tooltip/toolTip.vue';
 import type { Icon } from './model/model';
+import { computed, ref } from 'vue';
 
-export default defineComponent ({
-  name: 'icon',
+  const props = defineProps<{
+    iconImage: Icon,
+  }>();
+  const emits = defineEmits(['iconClick']);
 
-  emits: ['iconClick'],
-
-  props: {
-    iconImage: {
-      type: Object as PropType<Icon>,
-      required: true,
-    },
-  },
-
-  setup() {
-    return { getImageUrl }
-  },
-
-  components: {
-    Tooltip: tootlipVue,
-  },
-
-  data() {
-    return {
-      showToolTip: false,
-      tooltipPosition:  ' left',
-    }
-  },
-
-
-  computed: {
-
-    getIcon(): string {
-      try {
-        const icon =
-          this.$props.iconImage.icon !== ''
-            ? this.getImageUrl(`${this.$props.iconImage.icon}`)
-            : this.getImageUrl(`emoji_waiting-32.png`);
-        return icon;
-      } catch (error) {
-        throw new Error(`${errorMessages.files.icons.missingIcon}${this.$props.iconImage.icon}`);
+  const showToolTip = ref(false);
+  const getIcon = computed(() => {
+    try {
+      if (props.iconImage.icon) {
+        return getImageUrl(`${props.iconImage.icon}`);
       }
-    }
-  },
+      return '';
+    }  catch (error) {
+        throw new Error(`${errorMessages.files.icons.missingIcon}${props.iconImage.icon}`);
+      }
+    });
 
-  methods: {
+    const iconClick = (): void => {
+      return emits('iconClick', props.iconImage.id);
+    };
 
-    iconClick(): void {
-      return this.$emit('iconClick', this.$props.iconImage.id);
-    },
-
-    displayTooltip(show: boolean): void {
-  
-      this.showToolTip = show && this.$props.iconImage.tooltip !== undefined;
-    },
-
-  },
-
-})
+    const displayTooltip = (show: boolean): void  => {
+      showToolTip.value = show && props.iconImage.tooltip !== '';
+    };
 </script>

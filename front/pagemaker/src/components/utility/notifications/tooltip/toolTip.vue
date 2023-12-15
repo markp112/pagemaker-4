@@ -1,81 +1,69 @@
 <template>
-  <div class="tooltip-container" ref="tooltipContainer">
-    <span class="tooltip-trigger" @mouseenter="setTooltipPosition($event)">
-    <slot></slot>
-  </span>
+  <div class="tooltip-container" ref="tooltipContainerRef">
+    <span class="tooltip-trigger" @mouseenter="setTooltipPosition()">
+      <slot></slot>
+    </span>
     <div class="tooltip tooltip-box"
-      v-if="show"
+      v-if="showToolTip" 
       :style="{ top: tooltipTop , left: tooltipLeft }"
-      ref="tooltip"
-    >{{ tooltip }}
-  </div>
+      ref="tooltipRef"
+    >
+      {{ tooltip }}
+    </div>
   </div>
 </template>
 
-<script lang="ts">
 
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { TooltipProps } from './constants';
 
-export default defineComponent({
-  name: 'tool-tip',
+  defineProps<TooltipProps>();
 
-  props: {
-    showToolTip: Boolean,
-    tooltip: String,
-  },
+  const tooltipLeft = ref('0px');
+  const tooltipTop = ref('0px');
+  const tooltipRef = ref(null);
+  const tooltipContainerRef = ref(null);
 
-  data() {
-    return {
-      tooltipLeft: '0px',
-      tooltipTop: '0px',
+  const setTooltipPosition = () => {
+    console.log('heppy')
+    if (!tooltipRef.value) {
+      return;
     }
-  },
-
-  computed: {
-    show(): boolean {
-      if (this.$props.tooltip) {
-        return this.$props.showToolTip ;
-      }
-      return false;
-    },
-  },
-
-  methods: {
-
-    setTooltipPosition(event: MouseEvent) {
-      const tooltipElement = <HTMLElement>(this.$refs.tooltip);
-      if(!tooltipElement) {
+    const tooltipElement = tooltipRef.value as HTMLElement;
+    if (!tooltipElement) {
+      return;
+    }
+    if (!tooltipContainerRef.value) {
         return;
       }
-      const tooltipWidth = tooltipElement.offsetWidth;
-      const tooltipHeight = tooltipElement.offsetHeight;
-      const containerElement = this.$refs.tooltipContainer as HTMLElement;
-      const containerRect = containerElement.getBoundingClientRect();
-      const availableSpace = {
-        top: containerRect.top,
-        right: window.innerWidth - containerRect.right,
-        bottom: window.innerHeight - containerRect.bottom,
-        left: containerRect.left
-      };
-      if (availableSpace.bottom >= tooltipHeight) {
-        this.tooltipTop = containerRect.bottom - containerRect.top + 'px';
-      } else if (availableSpace.top >= tooltipHeight) {
-        this.tooltipTop = (containerRect.top - tooltipHeight) + 'px';
-      } else {
-        this.tooltipTop = (window.innerHeight - tooltipHeight) + 'px';
-      }
+    const containerElement = tooltipContainerRef.value as HTMLElement;
+    const tooltipWidth = tooltipElement.offsetWidth;
+    const tooltipHeight = tooltipElement.offsetHeight;
+    const containerRect = containerElement.getBoundingClientRect();
+    const availableSpace = {
+      top: containerRect.top,
+      right: window.innerWidth - containerRect.right,
+      bottom: window.innerHeight - containerRect.bottom,
+      left: containerRect.left
+    };
+    if (availableSpace.bottom >= tooltipHeight) {
+      tooltipTop.value = containerRect.bottom - containerRect.top + 'px';
+    } else if (availableSpace.top >= tooltipHeight) {
+      tooltipTop.value = (containerRect.top - tooltipHeight) + 'px';
+    } else {
+      tooltipTop.value = (window.innerHeight - tooltipHeight) + 'px';
+    }
 
-      if (availableSpace.right <= tooltipWidth) {
-        this.tooltipLeft = containerRect.right - containerRect.left - (tooltipWidth / 2) + 'px';
-      } else if (containerRect.left <= tooltipWidth) {
-        this.tooltipLeft = (containerRect.right + (tooltipWidth)) + 'px';
-      } else {
-        this.tooltipLeft = '0';
-      }
-    },
+    if (availableSpace.right <= tooltipWidth) {
+      tooltipLeft.value = containerRect.right - containerRect.left - (tooltipWidth / 2) + 'px';
+    } else if (containerRect.left <= tooltipWidth) {
+      tooltipLeft.value = (containerRect.right + (tooltipWidth)) + 'px';
+    } else {
+      tooltipLeft.value = '0px';
+    }
+  };
   
-  }
-})
 </script>
 <style lang="css">
 

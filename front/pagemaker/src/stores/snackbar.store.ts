@@ -1,4 +1,4 @@
-import type { SnackbarActions, SnackbarTypes } from '@/components/base/notifications/snackbar/models'
+import type { SnackbarActions, SnackbarTypes } from '@/components/base/notifications/snackbar/models';
 import { defineStore } from 'pinia'
 
 const useSnackbarStore = defineStore({
@@ -44,7 +44,7 @@ const useSnackbarStore = defineStore({
             show: false
           };
           break;
-      };
+      }
     },
   },
 });
